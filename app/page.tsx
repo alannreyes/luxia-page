@@ -1,6 +1,7 @@
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
 import TrustIndicators from '@/components/TrustIndicators'
+import DemoPreview from '@/components/DemoPreview'
 import Services from '@/components/Services'
 import CaseStudies from '@/components/CaseStudies'
 import Insights from '@/components/Insights'
@@ -14,6 +15,7 @@ export default function Home() {
       <main>
         <Hero />
         <TrustIndicators />
+        <DemoPreview />
         <Services />
         <CaseStudies />
         <Insights />
