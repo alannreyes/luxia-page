@@ -10,8 +10,8 @@ export const siteConfig = {
   // Configuración del Hero
   hero: {
     mainTitle: 'Tu empresa es única. Tu IA también',
-    subtitle: 'En luxIA construimos soluciones a medida, justo donde las necesitas.',
-    description: 'Lleva tus ideas ambiciosas a la realidad con IA diseñada específicamente para ti. Sin plantillas, sin soluciones que no encajan. Solo herramientas inteligentes que multiplican tu fuerza.',
+    subtitle: 'En luxIA construimos soluciones a medida, justo donde las necesitas',
+    description: 'Somos tu partner para implementar IA que realmente funciona',
     callToAction: '¿Listo para transformar tu visión en resultados?',
     primaryCTA: 'Ver Demos en Vivo',
     secondaryCTA: 'Agendar Consulta Gratuita',
