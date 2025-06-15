@@ -3,25 +3,25 @@ import { motion } from 'framer-motion'
 
 const cases = [
   {
-    industry: 'Fintech Internacional',
+    industry: 'Fintech',
     title: 'Sistema de Resúmenes Inteligentes',
     description: 'Integración con ERP para generar resúmenes automáticos de documentos en 2 idiomas y 3 formatos distintos.',
-    impact: '80% menos tiempo de procesamiento',
-    tags: ['ERP Integration', 'NLP', 'Multi-idioma']
+    impact: 'Menos tiempo de procesamiento',
+    tags: ['ERP Integration', 'Webhooks', 'OpenAI','API','N8N']
   },
   {
     industry: 'Empresa Comercial',
     title: 'Búsqueda Semántica de Alta Precisión',
-    description: 'Motor de búsqueda que comprende intención y contexto para recuperación de información crítica del negocio.',
-    impact: '98% de precisión en búsquedas',
-    tags: ['RAG', 'Vector Search', 'Real-time']
+    description: 'Motor de búsqueda que comprende intención y contexto para recuperación de información de catálogo de productos.',
+    impact: 'Precisión en búsquedas y menor tiempo de procesamiento',
+    tags: ['Embedding', 'Vector Search', 'OpenAI']
   }
 ]
 
 const metrics = [
   { value: '40%', label: 'Reducción promedio en costos operativos' },
-  { value: '3x', label: 'Aumento en velocidad de procesamiento' },
-  { value: '95%', label: 'Satisfacción del cliente' }
+  { value: '2x', label: 'Aumento en velocidad de procesamiento' },
+  { value: '80%', label: 'Satisfacción del cliente' }
 ]
 
 export default function Proof() {
