@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tarjeta de Presentación luxIA</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 40px; 
+            font-family: Inter, sans-serif; 
+            background: #f5f5f5;
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .card {
+            width: 85mm;
+            height: 55mm;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Frente de la tarjeta */
+        .card-front {
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 8px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
+        .person-info {
+            text-align: right;
+        }
+        
+        .name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        
+        .position {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+        
+        /* Reverso de la tarjeta */
+        .card-back {
+            padding: 16px;
+            background: white;
+            color: #1f2937;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 9px;
+            color: #6b7280;
+        }
+        
+        .contact-icon {
+            font-size: 10px;
+            color: #3b82f6;
+            width: 12px;
+        }
+        
+        .contact-link {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .decorative-sparkles {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 12px;
+            opacity: 0.3;
+        }
+        
+        .instructions {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Frente de la tarjeta -->
+    <div class="card">
+        <div class="card-front">
+            <div class="decorative-sparkles">✨⭐</div>
+            <div class="logo-section">
+                <div class="logo-icon">✨</div>
+                <div>
+                    <div class="logo-text">luxIA</div>
+                    <div class="tagline">La IA es tu superpoder</div>
+                </div>
+            </div>
+            <div class="person-info">
+                <div class="name">[TU NOMBRE]</div>
+                <div class="position">[TU CARGO]</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reverso de la tarjeta -->
+    <div class="card">
+        <div class="card-back">
+            <div class="contact-item">
+                <span class="contact-icon">📧</span>
+                <a href="mailto:[TU-EMAIL]" class="contact-link">[TU-EMAIL]</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-icon">📱</span>
+                <a href="tel:[TU-TELEFONO]" class="contact-link">[TU-TELEFONO]</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-icon">🌐</span>
+                <a href="https://luxiabrands.com" class="contact-link">luxiabrands.com</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-icon">💼</span>
+                <a href="https://linkedin.com/in/tu-perfil" class="contact-link">linkedin.com/in/tu-perfil</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-icon">📍</span>
+                <span>[TU CIUDAD, PAÍS]</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instrucciones -->
+    <div class="instructions">
+        <h3>📋 Especificaciones Tarjeta</h3>
+        <ul style="font-size: 14px; line-height: 1.6;">
+            <li><strong>Dimensiones:</strong> 85mm x 55mm (estándar)</li>
+            <li><strong>Resolución:</strong> 300 DPI para impresión</li>
+            <li><strong>Formato:</strong> PDF o PNG de alta calidad</li>
+            <li><strong>Papel:</strong> Couché 300g recomendado</li>
+        </ul>
+        
+        <h3>✏️ Personalización</h3>
+        <ol style="font-size: 14px; line-height: 1.6;">
+            <li>Reemplaza [TU NOMBRE] con tu nombre completo</li>
+            <li>Cambia [TU CARGO] por tu posición</li>
+            <li>Actualiza todos los datos de contacto</li>
+            <li>Exporta como PDF para imprenta</li>
+        </ol>
+        
+        <h3>🖨️ Impresión</h3>
+        <p style="font-size: 14px; line-height: 1.6;">
+            Para mejores resultados, usa una imprenta profesional con papel couché de 300g y acabado mate o brillante.
+        </p>
+    </div>
+</body>
+</html> 

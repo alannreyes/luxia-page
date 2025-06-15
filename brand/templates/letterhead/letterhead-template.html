@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Membrete luxIA</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #1f2937;
+            background: white;
+        }
+        
+        .letterhead {
+            width: 210mm;
+            height: 297mm;
+            position: relative;
+            background: white;
+        }
+        
+        .header {
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            color: white;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+        
+        .contact-info {
+            text-align: right;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        
+        .content-area {
+            padding: 40px;
+            min-height: 600px;
+        }
+        
+        .date {
+            text-align: right;
+            margin-bottom: 30px;
+            color: #6b7280;
+        }
+        
+        .recipient {
+            margin-bottom: 30px;
+        }
+        
+        .subject {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        
+        .letter-content {
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+        
+        .signature-area {
+            margin-top: 60px;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #f9fafb;
+            border-top: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #6b7280;
+        }
+        
+        .decorative-element {
+            position: absolute;
+            right: 40px;
+            top: 120px;
+            font-size: 100px;
+            color: #3b82f6;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="letterhead">
+        <!-- Encabezado -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo-icon">✨</div>
+                <div>
+                    <div class="logo-text">luxIA</div>
+                    <div class="tagline">La IA es tu superpoder</div>
+                </div>
+            </div>
+            <div class="contact-info">
+                <div>[TU-EMAIL]</div>
+                <div>[TU-TELEFONO]</div>
+                <div>luxiabrands.com</div>
+                <div>[TU CIUDAD, PAÍS]</div>
+            </div>
+        </div>
+        
+        <!-- Elemento decorativo -->
+        <div class="decorative-element">✨</div>
+        
+        <!-- Área de contenido -->
+        <div class="content-area">
+            <div class="content-wrapper">
+                <div class="date">
+                    [FECHA]
+                </div>
+                
+                <div class="recipient">
+                    <strong>[NOMBRE DEL DESTINATARIO]</strong><br>
+                    [CARGO DEL DESTINATARIO]<br>
+                    [EMPRESA DEL DESTINATARIO]<br>
+                    [DIRECCIÓN DEL DESTINATARIO]
+                </div>
+                
+                <div class="subject">
+                    <strong>Asunto:</strong> [ASUNTO DE LA CARTA]
+                </div>
+                
+                <div class="letter-content">
+                    <p>Estimado/a [NOMBRE DEL DESTINATARIO],</p>
+                    
+                    <p>[CONTENIDO DEL PRIMER PÁRRAFO - Introduce el propósito de la carta y establece el contexto.]</p>
+                    
+                    <p>[CONTENIDO DEL SEGUNDO PÁRRAFO - Desarrolla los puntos principales, proporciona detalles específicos y argumentos de apoyo.]</p>
+                    
+                    <p>[CONTENIDO DEL TERCER PÁRRAFO - Concluye con los próximos pasos, llamada a la acción o resumen de puntos clave.]</p>
+                    
+                    <p>Agradecemos su tiempo y consideración. Esperamos tener la oportunidad de colaborar y demostrar cómo la inteligencia artificial puede transformar su negocio.</p>
+                    
+                    <p>Atentamente,</p>
+                </div>
+                
+                <div class="signature-area">
+                    <div style="margin-bottom: 40px;">
+                        <div style="border-bottom: 1px solid #e5e7eb; width: 200px; margin-bottom: 5px;"></div>
+                        <strong>[TU NOMBRE COMPLETO]</strong><br>
+                        [TU CARGO]<br>
+                        luxIA
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pie de página -->
+        <div class="footer">
+            <div>
+                luxIA - Transformando la complejidad empresarial en decisiones inteligentes | 
+                [TU-EMAIL] | [TU-TELEFONO] | luxiabrands.com
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instrucciones (no se imprimirán) -->
+    <div style="page-break-before: always; padding: 40px; background: #f9fafb;">
+        <h2>📋 Instrucciones de Uso - Membrete luxIA</h2>
+        
+        <h3>✏️ Personalización</h3>
+        <ol>
+            <li>Reemplaza todos los campos entre corchetes [ ] con tu información</li>
+            <li>Ajusta el contenido de la carta según tus necesidades</li>
+            <li>Mantén el formato y estilo para consistencia de marca</li>
+        </ol>
+        
+        <h3>🖨️ Impresión</h3>
+        <ul>
+            <li><strong>Formato:</strong> A4 (210 x 297 mm)</li>
+            <li><strong>Papel:</strong> Bond blanco 90g o superior</li>
+            <li><strong>Impresión:</strong> A color para mejor impacto</li>
+            <li><strong>Márgenes:</strong> Ya configurados en la plantilla</li>
+        </ul>
+        
+        <h3>💾 Guardado</h3>
+        <ul>
+            <li>Guarda como PDF para envío digital</li>
+            <li>Mantén una versión editable para futuras cartas</li>
+            <li>Usa nombres descriptivos: "Carta_Cliente_Fecha"</li>
+        </ul>
+        
+        <h3>🎯 Casos de Uso</h3>
+        <ul>
+            <li>Propuestas comerciales</li>
+            <li>Comunicaciones formales</li>
+            <li>Contratos y acuerdos</li>
+            <li>Correspondencia oficial</li>
+        </ul>
+    </div>
+</body>
+</html> 

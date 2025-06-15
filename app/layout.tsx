@@ -6,14 +6,28 @@ import AnalyticsProvider from '@/components/AnalyticsProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'luxIA - La IA es tu superpoder | Demos Interactivas',
+  title: 'luxIA - La IA a tu medida',
   description: 'Actúa primero, decide mejor, lidera con inteligencia. Descubre el poder de la IA empresarial con nuestras demos interactivas. Chat con ERP, análisis de documentos, automatización n8n y más.',
   keywords: 'IA empresarial, RAG, n8n, automatización, ERP, chatbot, transformación digital, demos IA, consulta gratuita, fintech IA, análisis documentos, superpoder IA',
   authors: [{ name: 'luxIA', url: 'https://luxiabrands.com' }],
   creator: 'luxIA',
   publisher: 'luxIA',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' }
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
+    other: [
+      { rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#3b82f6' }
+    ]
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
-    title: 'luxIA - La IA es tu superpoder | Demos Interactivas',
+    title: 'luxIA - La IA a tu medida',
     description: 'Actúa primero, decide mejor, lidera con inteligencia. Experimenta el futuro de la IA empresarial con nuestras demos en vivo.',
     url: 'https://luxiabrands.com',
     siteName: 'luxIA',
@@ -24,7 +38,7 @@ export const metadata: Metadata = {
         url: '/og-image.jpg', // Agregar imagen OG
         width: 1200,
         height: 630,
-        alt: 'luxIA - La IA es tu superpoder'
+        alt: 'luxIA - La IA a tu medida'
       }
     ]
   },
@@ -40,7 +54,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: 'luxIA - La IA es tu superpoder | Demos Interactivas',
+    title: 'luxIA - La IA a tu medida',
     description: 'Actúa primero, decide mejor, lidera con inteligencia. Experimenta el futuro de la IA empresarial.',
     card: 'summary_large_image',
     images: ['/og-image.jpg']
@@ -76,7 +90,7 @@ export default function RootLayout({
               "name": "luxIA",
               "url": "https://luxiabrands.com",
               "logo": "https://luxiabrands.com/logo.png",
-              "description": "La IA es tu superpoder: Actúa primero, decide mejor, lidera con inteligencia. Partner estratégico en IA para empresas.",
+              "description": "La IA a tu medida: Actúa primero, decide mejor, lidera con inteligencia. Partner estratégico en IA para empresas.",
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+1-555-123-4567",
@@ -90,7 +104,7 @@ export default function RootLayout({
               "offers": {
                 "@type": "Offer",
                 "name": "Consulta Gratuita de IA",
-                "description": "Consulta gratuita de 30 minutos para explorar cómo la IA puede ser tu superpoder empresarial",
+                "description": "Consulta gratuita de 30 minutos para explorar cómo la IA puede adaptarse a tu medida empresarial",
                 "price": "0",
                 "priceCurrency": "USD"
               }

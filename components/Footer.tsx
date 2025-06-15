@@ -1,25 +1,28 @@
-import { Mail, Linkedin, MessageCircle } from 'lucide-react'
+import { siteConfig } from '@/lib/config'
+import Logo from './Logo'
 
 export default function Footer() {
   return (
-    <footer className="py-12 px-6 bg-white border-t border-gray-100">
+    <footer className="bg-gray-900 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="text-2xl font-bold gradient-text mb-4 md:mb-0">Luxia</div>
-          <div className="flex space-x-6 text-sm text-gray-600">
-            <a href="#" className="hover:text-gray-900 flex items-center gap-2">
-              <Linkedin size={18} /> LinkedIn
+          <Logo variant="white" />
+          
+          <div className="flex space-x-6 mt-4 md:mt-0">
+            <a href="#servicios" className="text-gray-300 hover:text-white transition-colors">
+              Servicios
             </a>
-            <a href="#" className="hover:text-gray-900 flex items-center gap-2">
-              <Mail size={18} /> Email
+            <a href="#casos" className="text-gray-300 hover:text-white transition-colors">
+              Casos
             </a>
-            <a href="#" className="hover:text-gray-900 flex items-center gap-2">
-              <MessageCircle size={18} /> WhatsApp Business
+            <a href="#insights" className="text-gray-300 hover:text-white transition-colors">
+              Insights
             </a>
           </div>
         </div>
-        <div className="mt-8 text-center text-sm text-gray-500">
-          © 2025 Luxia. Transformación digital inteligente.
+        
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          © 2025 luxIA. Transformación digital inteligente.
         </div>
       </div>
     </footer>

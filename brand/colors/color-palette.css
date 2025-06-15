@@ -1,0 +1,42 @@
+/* 🎨 Paleta de Colores luxIA */
+
+:root {
+  /* Colores Primarios */
+  --luxia-blue-primary: #3b82f6;
+  --luxia-blue-dark: #1d4ed8;
+  --luxia-white: #ffffff;
+  
+  /* Colores Secundarios */
+  --luxia-gray-dark: #1f2937;
+  --luxia-gray-medium: #6b7280;
+  --luxia-gray-light: #f9fafb;
+  --luxia-gray-border: #e5e7eb;
+  
+  /* Gradientes */
+  --luxia-gradient-primary: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  --luxia-gradient-soft: linear-gradient(180deg, #f9fafb, #e5e7eb);
+  
+  /* Estados */
+  --luxia-blue-hover: #2563eb;
+  --luxia-blue-active: #1e40af;
+  --luxia-success: #10b981;
+  --luxia-warning: #f59e0b;
+  --luxia-error: #ef4444;
+  
+  /* Transparencias */
+  --luxia-blue-10: rgba(59, 130, 246, 0.1);
+  --luxia-blue-20: rgba(59, 130, 246, 0.2);
+  --luxia-blue-50: rgba(59, 130, 246, 0.5);
+}
+
+/* Clases de utilidad */
+.luxia-bg-primary { background-color: var(--luxia-blue-primary); }
+.luxia-bg-dark { background-color: var(--luxia-blue-dark); }
+.luxia-bg-gradient { background: var(--luxia-gradient-primary); }
+
+.luxia-text-primary { color: var(--luxia-blue-primary); }
+.luxia-text-dark { color: var(--luxia-gray-dark); }
+.luxia-text-medium { color: var(--luxia-gray-medium); }
+
+.luxia-border-primary { border-color: var(--luxia-blue-primary); }
+.luxia-border-light { border-color: var(--luxia-gray-border); } 

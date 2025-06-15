@@ -1,0 +1,29 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icono Sparkles -->
+  <g transform="translate(10, 10)">
+    <!-- Estrella principal -->
+    <path d="M20 5L23 15L33 18L23 21L20 31L17 21L7 18L17 15L20 5Z" fill="url(#gradient)" opacity="0.9"/>
+    <!-- Estrella pequeña superior -->
+    <path d="M30 8L31 11L34 12L31 13L30 16L29 13L26 12L29 11L30 8Z" fill="url(#gradient)" opacity="0.7"/>
+    <!-- Estrella pequeña inferior -->
+    <path d="M10 24L11 27L14 28L11 29L10 32L9 29L6 28L9 27L10 24Z" fill="url(#gradient)" opacity="0.7"/>
+  </g>
+  
+  <!-- Texto luxIA -->
+  <text x="60" y="38" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="url(#textGradient)">
+    lux<tspan fill="url(#gradient)">IA</tspan>
+  </text>
+  
+  <!-- Gradientes -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#1f2937;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg> 

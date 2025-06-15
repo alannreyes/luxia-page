@@ -1,8 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { Menu, X, Sparkles } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { siteConfig } from '@/lib/config'
 import AppointmentModal from './AppointmentModal'
+import Logo from './Logo'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,10 +26,7 @@ export default function Navigation() {
       <nav className="fixed w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-6 h-6 text-blue-600" />
-              <div className="text-2xl font-bold gradient-text">{siteConfig.navigation.logo}</div>
-            </div>
+            <Logo />
             
             <div className="hidden md:flex space-x-8 items-center">
               {siteConfig.navigation.links.map((link) => (
