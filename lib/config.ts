@@ -20,7 +20,6 @@ export const siteConfig = {
       { value: '78%', label: 'de empresas que adoptan IA superan a competidores', suffix: '' },
       { value: '40%', label: 'reducción en costos operativos con IA', suffix: '' },
       { value: '2.6x', label: 'más productividad con herramientas IA', suffix: '' },
-      { value: '67%', label: 'de líderes consideran IA crítica para supervivencia', suffix: '' },
     ],
   },
 
@@ -171,8 +170,7 @@ export const siteConfig = {
     logo: 'luxIA',
     links: [
       { href: '#servicios', label: 'Servicios' },
-      { href: '#demos', label: 'Demos' },
-      { href: '#casos', label: 'Casos de Éxito' },
+      { href: '#casos', label: 'Casos' },
       { href: '#insights', label: 'Insights' },
     ]
   }

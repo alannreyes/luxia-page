@@ -12,11 +12,11 @@ export default function Services() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
-            Rediseño de tus servicios con enfoque humano
+          <h2 className="text-4xl font-light text-gray-900 mb-6">
+            Cómo potenciamos tu equipo
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Soluciones que potencian a tu equipo, no que lo reemplazan
+            Soluciones que multiplican el talento humano
           </p>
         </motion.div>
         

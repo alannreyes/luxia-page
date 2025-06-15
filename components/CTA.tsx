@@ -61,7 +61,7 @@ export default function CTA() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
-              ¿Listo para transformar tu empresa?
+              Comienza tu transformación
             </h2>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
               Agenda una consulta gratuita y descubre cómo la IA puede revolucionar 

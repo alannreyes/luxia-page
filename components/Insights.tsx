@@ -32,7 +32,7 @@ export default function Insights() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          Insights y conocimiento
+          Conocimiento que impulsa
         </motion.h2>
         
         <div className="grid md:grid-cols-3 gap-8">
