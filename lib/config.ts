@@ -1,10 +1,11 @@
 // Configuración centralizada de Luxia Web
 export const siteConfig = {
-  // Información de contacto
+  // Información de contacto y redes sociales
   contact: {
     email: 'alann@luxiabrands.com',
-    phone: '+1 (555) 123-4567', // Actualizar con tu número real
-    calendlyUrl: '', // Se usará el sistema custom
+    phone: '+51 993131883', // Tu número de teléfono
+    calcomUrl: 'https://cal.luxiabrands.com/alann-luxiabrands.com/30min', // URL de Cal.com validada
+    linkedinUrl: 'https://www.linkedin.com/company/luxiabrands/',
   },
 
   // Configuración del Hero
@@ -23,7 +24,7 @@ export const siteConfig = {
     ],
   },
 
-  // Servicios con enfoque humano
+  // Servicios
   services: [
     {
       icon: '💬',
@@ -60,90 +61,23 @@ export const siteConfig = {
     }
   ],
 
-  // Diferencial humano
+  // Diferencial
   humanDifferential: {
     quote: 'Tu equipo trabajando EN el negocio, no PARA el negocio. Más tiempo para pensar, conectar y crear el futuro.',
     emphasis: 'El diferencial humano:'
   },
 
-  // Trust Indicators mejorados con estadísticas reales
+  // Indicadores de Confianza
   trustIndicators: [
-    { value: '71%', label: 'Empresas usan IA generativa regularmente' }, // McKinsey 2024
-    { value: '6-10%', label: 'Aumento de ingresos con IA' }, // Estudios industria
-    { value: '66%', label: 'Mejora en rendimiento empleados' }, // ChatGPT studies
-    { value: '50%', label: 'Empresas adoptaron IA en 2024' }, // McKinsey Global Survey
-    { value: '37.7%', label: 'Crecimiento anual mercado IA' }, // Grand View Research
+    { value: '71%', label: 'Empresas usan IA generativa regularmente' },
+    { value: '6-10%', label: 'Aumento de ingresos con IA' },
+    { value: '66%', label: 'Mejora en rendimiento empleados' },
+    { value: '50%', label: 'Empresas adoptaron IA en 2024' },
+    { value: '37.7%', label: 'Crecimiento anual mercado IA' },
     { value: '24/7', label: 'Disponibilidad sistemas IA' },
   ],
 
-  // Configuración de citas
-  appointment: {
-    duration: 30, // minutos
-    timeSlots: [
-      '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-      '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
-    ],
-    timezone: 'America/Mexico_City',
-    workingDays: [1, 2, 3, 4, 5], // Lunes a Viernes
-    formFields: [
-      {
-        name: 'fullName',
-        label: 'Nombre Completo',
-        type: 'text',
-        required: true,
-        placeholder: 'Juan Pérez'
-      },
-      {
-        name: 'email',
-        label: 'Email Corporativo',
-        type: 'email',
-        required: true,
-        placeholder: 'juan@empresa.com'
-      },
-      {
-        name: 'company',
-        label: 'Empresa',
-        type: 'text',
-        required: true,
-        placeholder: 'TechCorp Solutions'
-      },
-      {
-        name: 'companySize',
-        label: 'Tamaño de Empresa',
-        type: 'select',
-        required: true,
-        options: [
-          { value: 'startup', label: 'Startup (1-10 empleados)' },
-          { value: 'small', label: 'Pequeña (11-50 empleados)' },
-          { value: 'medium', label: 'Mediana (51-200 empleados)' },
-          { value: 'large', label: 'Grande (201-1000 empleados)' },
-          { value: 'enterprise', label: 'Empresa (1000+ empleados)' }
-        ]
-      },
-      {
-        name: 'problem',
-        label: 'Problema o Necesidad Específica',
-        type: 'textarea',
-        required: true,
-        placeholder: 'Describe el desafío que quieres resolver con IA...'
-      },
-      {
-        name: 'budget',
-        label: 'Presupuesto Estimado (Opcional)',
-        type: 'select',
-        required: false,
-        options: [
-          { value: 'under-10k', label: 'Menos de $10,000 USD' },
-          { value: '10k-50k', label: '$10,000 - $50,000 USD' },
-          { value: '50k-100k', label: '$50,000 - $100,000 USD' },
-          { value: 'over-100k', label: 'Más de $100,000 USD' },
-          { value: 'not-sure', label: 'No estoy seguro' }
-        ]
-      }
-    ]
-  },
-
-  // Tecnologías y partnerships
+  // Tecnologías
   technologies: [
     { name: 'OpenAI', logo: '/logos/openai.svg' },
     { name: 'AWS', logo: '/logos/aws.svg' },
@@ -153,10 +87,10 @@ export const siteConfig = {
     { name: 'Docker', logo: '/logos/docker.svg' },
   ],
 
-  // Configuración de tracking
+  // Configuración de tracking (opcional pero recomendado para MVP)
   tracking: {
-    googleAnalytics: '', // Agregar GA4 ID
-    hotjar: '', // Agregar Hotjar ID
+    googleAnalytics: '', // Añadir tu ID de GA4 aquí
+    hotjar: '', // Añadir tu ID de Hotjar aquí
     events: {
       heroCtaClick: 'hero_cta_click',
       appointmentBooked: 'appointment_booked',
@@ -165,7 +99,7 @@ export const siteConfig = {
     }
   },
 
-  // URLs y navegación
+  // Navegación
   navigation: {
     logo: 'luxIA',
     links: [
@@ -176,8 +110,7 @@ export const siteConfig = {
   }
 }
 
-// Tipos TypeScript para mejor desarrollo
+// Tipos TypeScript
 export type SiteConfig = typeof siteConfig
-export type AppointmentFormField = typeof siteConfig.appointment.formFields[0]
 export type TrustIndicator = typeof siteConfig.trustIndicators[0]
-export type HeroMetric = typeof siteConfig.hero.metrics[0] 
+export type HeroMetric = typeof siteConfig.hero.metrics[0]

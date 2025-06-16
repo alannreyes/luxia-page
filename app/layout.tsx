@@ -93,13 +93,12 @@ export default function RootLayout({
               "description": "La IA a tu medida: Actúa primero, decide mejor, lidera con inteligencia. Partner estratégico en IA para empresas.",
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+1-555-123-4567",
+                "telephone": "+51 993131883",
                 "contactType": "customer service",
                 "email": "alann@luxiabrands.com"
               },
               "sameAs": [
-                "https://linkedin.com/company/luxia-ai",
-                "https://twitter.com/luxia_ai"
+                "https://www.linkedin.com/company/luxiabrands/"
               ],
               "offers": {
                 "@type": "Offer",
