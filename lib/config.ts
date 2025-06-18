@@ -11,16 +11,22 @@ export const siteConfig = {
   // Configuración del Hero
   hero: {
     mainTitle: 'Tu empresa es única. Tu IA también',
-    subtitle: 'En luxIA construimos soluciones a medida, justo donde las necesitas',
-    description: 'Somos tu partner para implementar IA que realmente funciona',
-    callToAction: '¿Listo para transformar tu visión en resultados?',
-    primaryCTA: 'Ver Demos en Vivo',
-    secondaryCTA: 'Agendar Consulta Gratuita',
+    subtitle: 'IA personalizada que funciona desde el día 1',
+    description: '', // Eliminado como solicitado
+    callToAction: '', // Eliminado como solicitado
+    primaryCTA: 'Ver Demo en Vivo',
+    secondaryCTA: 'Agenda 30 min gratis',
     // Métricas animadas basadas en estudios reales
     metrics: [
       { value: '78%', label: 'de empresas que adoptan IA superan a competidores', suffix: '' },
       { value: '40%', label: 'reducción en costos operativos con IA', suffix: '' },
       { value: '2.6x', label: 'más productividad con herramientas IA', suffix: '' },
+    ],
+    // Beneficios con checkmarks
+    benefits: [
+      'Consulta gratis 30 min',
+      'Propuesta completa en 24h',
+      'Sin compromisos'
     ],
   },
 

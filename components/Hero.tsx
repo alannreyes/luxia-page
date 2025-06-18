@@ -94,30 +94,13 @@ export default function Hero() {
                 </span>
               </motion.h1>
               
-              <motion.p 
-                className="text-xl text-gray-600 mb-8 leading-relaxed"
+
+              
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                {siteConfig.hero.description}
-              </motion.p>
-              
-              {/* Call to Action */}
-              <motion.p 
-                className="text-2xl font-semibold text-gray-900 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-              >
-                {siteConfig.hero.callToAction}
-              </motion.p>
-              
-              <motion.div 
-                className="flex flex-col sm:flex-row gap-4 mb-12"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
               >
                 <motion.button 
                   onClick={handleDemoClick}
@@ -137,25 +120,21 @@ export default function Hero() {
                 </motion.button>
               </motion.div>
 
-              {/* Trust badges */}
+              {/* Benefits with checkmarks */}
               <motion.div 
-                className="flex flex-wrap items-center gap-6 text-sm text-gray-500"
+                className="flex flex-wrap items-center gap-6 text-sm text-gray-600"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-                  Consulta gratuita de 30 min
-                </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-2" />
-                  Sin compromisos
-                </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-2" />
-                  Respuesta en 24h
-                </span>
+                {siteConfig.hero.benefits.map((benefit, index) => (
+                  <span key={index} className="flex items-center">
+                    <div className="w-4 h-4 bg-green-500 rounded-full mr-2 flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">✓</span>
+                    </div>
+                    {benefit}
+                  </span>
+                ))}
               </motion.div>
             </motion.div>
 
