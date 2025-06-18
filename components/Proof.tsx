@@ -5,24 +5,20 @@ const cases = [
   {
     industry: 'Fintech',
     title: 'Sistema de Resúmenes Inteligentes',
-    description: 'Integración con ERP para generar resúmenes automáticos de documentos en 2 idiomas y 3 formatos distintos.',
+    description: 'Integración con ERP para generar resúmenes automáticos de documentos en 2 idiomas y 3 formatos distintos. Imposible sin IA.',
     impact: 'Menos tiempo de procesamiento',
     tags: ['ERP Integration', 'Webhooks', 'OpenAI','API','N8N']
   },
   {
     industry: 'Empresa Comercial',
     title: 'Búsqueda Semántica de Alta Precisión',
-    description: 'Motor de búsqueda que comprende intención y contexto para recuperación de información de catálogo de productos.',
+    description: 'Motor de búsqueda que comprende intención y contexto para recuperación de información de catálogo de productos. Imposible sin IA.',
     impact: 'Precisión en búsquedas y menor tiempo de procesamiento',
     tags: ['Embedding', 'Vector Search', 'OpenAI']
   }
 ]
 
-const metrics = [
-  { value: '40%', label: 'Reducción promedio en costos operativos' },
-  { value: '2x', label: 'Aumento en velocidad de procesamiento' },
-  { value: '80%', label: 'Satisfacción del cliente' }
-]
+
 
 export default function Proof() {
   return (
@@ -38,28 +34,11 @@ export default function Proof() {
             Casos reales, resultados medibles
           </h2>
           <p className="text-xl text-gray-600">
-            Transformaciones que hablan por sí solas
+            Lo que antes era imposible, ahora en producción
           </p>
         </motion.div>
 
-        {/* Métricas de impacto */}
-        <motion.div 
-          className="grid md:grid-cols-3 gap-8 mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          {metrics.map((metric, index) => (
-            <div key={index} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold gradient-text mb-2">
-                {metric.value}
-              </div>
-              <div className="text-gray-600">
-                {metric.label}
-              </div>
-            </div>
-          ))}
-        </motion.div>
+
         
         {/* Casos de estudio */}
         <div className="grid md:grid-cols-2 gap-12">
