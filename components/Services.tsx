@@ -1,8 +1,23 @@
 'use client'
 import { motion } from 'framer-motion'
 import { siteConfig } from '@/lib/config'
+import { useState } from 'react'
+import AppointmentModal from './AppointmentModal'
 
 export default function Services() {
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
+
+  const handleReserveClick = () => {
+    setIsAppointmentModalOpen(true)
+    
+    // Tracking
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'services_cta_click', {
+        button_text: 'Reserva 30 minutos'
+      })
+    }
+  }
+
   return (
     <section id="servicios" className="py-20 px-6 bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="max-w-7xl mx-auto">
@@ -13,10 +28,10 @@ export default function Services() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl font-light text-gray-900 mb-6">
-            Cómo potenciamos tu equipo
+            Potencia tu empresa con IA a medida
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Soluciones que multiplican el talento humano
+            Integración directa con tus sistemas actuales
           </p>
         </motion.div>
         
@@ -49,11 +64,8 @@ export default function Services() {
                 {service.description}
               </p>
               
-              {/* Results */}
+              {/* Features */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">
-                  Resultados que importan:
-                </h4>
                 <ul className="space-y-2">
                   {service.results.map((result, idx) => (
                     <li key={idx} className="flex items-start">
@@ -67,22 +79,32 @@ export default function Services() {
           ))}
         </div>
 
-        {/* Diferencial Humano */}
+        {/* CTA Principal */}
         <motion.div
-          className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white"
+          className="text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <h3 className="text-2xl font-bold mb-4">
-            {siteConfig.humanDifferential.emphasis}
-          </h3>
-          <p className="text-xl md:text-2xl font-light leading-relaxed max-w-4xl mx-auto">
-            &ldquo;{siteConfig.humanDifferential.quote}&rdquo;
-          </p>
+          <motion.button
+            onClick={handleReserveClick}
+            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Reserva 30 minutos
+          </motion.button>
         </motion.div>
       </div>
+
+      {/* Modal de cita */}
+      {isAppointmentModalOpen && (
+        <AppointmentModal 
+          isOpen={isAppointmentModalOpen}
+          onClose={() => setIsAppointmentModalOpen(false)}
+        />
+      )}
     </section>
   )
 }

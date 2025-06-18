@@ -114,36 +114,36 @@ export const siteConfig = {
   // Servicios
   services: [
     {
-      icon: '💬',
-      title: 'Más Ventas, Menos Fricción',
-      subtitle: 'Convierte cada conversación en una oportunidad',
-      description: 'Tu equipo vendiendo ideas estratégicas mientras la IA maneja consultas rutinarias 24/7. Sin códigos, sin esperas. Clientes atendidos al instante, equipo enfocado en cerrar deals importantes.',
+      icon: '🔌',
+      title: 'Tu ERP con superpoderes',
+      subtitle: 'Integración directa con tus sistemas actuales',
+      description: 'Tu ERP/CRM sigue igual, pero ahora entiende lenguaje natural. Pregunta "¿Cuánto vendimos en Lima este mes?" y obtén respuestas al instante.',
       results: [
-        'más satisfacción del cliente',
-        'Respuestas instantáneas = más conversiones',
-        'Tu equipo cerrando, no explicando'
+        'Integración por API y Webhooks',
+        'Sin cambiar tu sistema actual',
+        'Incorpora todo el poder de ChatGPT'
       ]
     },
     {
       icon: '🔍',
-      title: 'Decisiones que Generan Ingresos',
-      subtitle: 'De datos perdidos a oportunidades encontradas',
-      description: 'Cada insight escondido es dinero no ganado. Encuentra patrones de compra, predicciones de demanda, oportunidades ocultas. Tu equipo tomando decisiones con información que antes tardaba semanas en procesar.',
+      title: 'Busca en todos tus archivos',
+      subtitle: 'Integración directa con tus sistemas actuales',
+      description: 'Busca en español, inglés o spanglish. La IA entiende conceptos: busca "contratos de arriendo" y encuentra "lease agreements" también.',
       results: [
-        'Decisiones más rápidas',
-        'Oportunidades detectadas automáticamente',
-        'Equipos actuando, no buscando'
+        'PDFs, Excel, Word, emails',
+        'Entiende sinónimos y contexto',
+        'Respuestas con la fuente exacta'
       ]
     },
     {
-      icon: '⚡',
-      title: 'Escala sin Quemar a tu Equipo',
-      subtitle: 'Crece sin contratar a más personas',
-      description: 'La IA elimina lo tedioso para que tu gente haga lo que aman: innovar, conectar, crear. Sin burnout, sin rotación, solo crecimiento sostenible.',
+      icon: '💬',
+      title: 'Asistente multicanal 24/7',
+      subtitle: 'Integración directa con tus sistemas actuales',
+      description: 'La misma IA responde en WhatsApp, web, email. Conoce inventario, precios, políticas. Escala a humano cuando es necesario.',
       results: [
-        'Mejora en productividad',
-        'Equipos más felices = mejor retención',
-        'Crecimiento sin límites operativos'
+        'Configuración sin código',
+        'Respuestas consistentes',
+        'Métricas en tiempo real'
       ]
     }
   ],
