@@ -30,10 +30,10 @@ export default function Proof() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-light text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
             Casos reales, resultados medibles
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-lg md:text-xl text-gray-600">
             Lo que antes era imposible, ahora en producción
           </p>
         </motion.div>
@@ -41,31 +41,31 @@ export default function Proof() {
 
         
         {/* Casos de estudio */}
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
           {cases.map((case_, index) => (
             <motion.div
               key={index}
-              className="border-l-4 border-blue-600 pl-6"
+              className="border-l-4 border-blue-600 pl-4 md:pl-6"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <div className="text-sm text-gray-500 uppercase tracking-wide mb-2">
+              <div className="text-xs md:text-sm text-gray-500 uppercase tracking-wide mb-2">
                 {case_.industry}
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 leading-tight">
                 {case_.title}
               </h3>
-              <p className="text-gray-600 mb-3">
+              <p className="text-sm md:text-base text-gray-600 mb-3 leading-relaxed">
                 {case_.description}
               </p>
-              <div className="text-lg font-semibold text-blue-600 mb-4">
+              <div className="text-base md:text-lg font-semibold text-blue-600 mb-4">
                 {case_.impact}
               </div>
-              <div className="flex gap-4 text-sm">
+              <div className="flex flex-wrap gap-2 md:gap-3 text-xs md:text-sm">
                 {case_.tags.map((tag, idx) => (
-                  <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
+                  <span key={idx} className="bg-gray-100 px-2 md:px-3 py-1 rounded whitespace-nowrap">
                     {tag}
                   </span>
                 ))}
