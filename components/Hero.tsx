@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { siteConfig } from '@/lib/config'
 import AppointmentModal from './AppointmentModal'
+import { Info } from 'lucide-react'
 
 // Hook para animar números
 function useCountUp(end: number, duration: number = 2000) {
@@ -33,10 +34,36 @@ function useCountUp(end: number, duration: number = 2000) {
 export default function Hero() {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [currentMetricIndex, setCurrentMetricIndex] = useState(0)
+  const [selectedMetric, setSelectedMetric] = useState<any>(null)
+  const [showMetricModal, setShowMetricModal] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
+
+  // Rotación automática de métricas cada 5 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMetricIndex((prev) => (prev + 1) % siteConfig.hero.metrics.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleMetricClick = (metric: any) => {
+    setSelectedMetric(metric)
+    setShowMetricModal(true)
+  }
+
+  // Obtener métricas para mostrar según el tamaño de pantalla
+  const getDisplayMetrics = () => {
+    // En móvil: solo una métrica rotativa
+    // En desktop: 4 métricas con rotación en lote
+    const metricsToShow = 4
+    const startIndex = Math.floor(currentMetricIndex / metricsToShow) * metricsToShow
+    return siteConfig.hero.metrics.slice(startIndex, startIndex + metricsToShow)
+  }
 
   const handleDemoClick = () => {
     // Scroll to demos section when it exists
@@ -138,21 +165,39 @@ export default function Hero() {
               </motion.div>
             </motion.div>
 
-            {/* Metrics */}
+            {/* Metrics - Responsive Design */}
             <motion.div 
-              className="grid grid-cols-2 gap-4 lg:gap-6"
+              className="w-full"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              {siteConfig.hero.metrics.map((metric, index) => (
+              {/* Mobile: Single rotating metric */}
+              <div className="block md:hidden">
                 <MetricCard 
-                  key={index} 
-                  metric={metric} 
-                  delay={index * 0.1}
+                  key={currentMetricIndex}
+                  metric={siteConfig.hero.metrics[currentMetricIndex]}
+                  delay={0}
                   isVisible={isVisible}
+                  onClick={() => handleMetricClick(siteConfig.hero.metrics[currentMetricIndex])}
+                  showIndicator={true}
+                  currentIndex={currentMetricIndex}
+                  totalMetrics={siteConfig.hero.metrics.length}
                 />
-              ))}
+              </div>
+
+              {/* Desktop: Grid of 4 rotating metrics */}
+              <div className="hidden md:grid grid-cols-2 gap-4 lg:gap-6">
+                {getDisplayMetrics().map((metric, index) => (
+                  <MetricCard 
+                    key={`${Math.floor(currentMetricIndex / 4)}-${index}`}
+                    metric={metric} 
+                    delay={index * 0.1}
+                    isVisible={isVisible}
+                    onClick={() => handleMetricClick(metric)}
+                  />
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
@@ -169,15 +214,36 @@ export default function Hero() {
           onClose={() => setIsAppointmentModalOpen(false)}
         />
       )}
+
+      {/* Modal de información de métricas */}
+      {showMetricModal && selectedMetric && (
+        <MetricInfoModal 
+          metric={selectedMetric}
+          isOpen={showMetricModal}
+          onClose={() => setShowMetricModal(false)}
+        />
+      )}
     </>
   )
 }
 
 // Componente para métricas animadas
-function MetricCard({ metric, delay, isVisible }: { 
+function MetricCard({ 
+  metric, 
+  delay, 
+  isVisible, 
+  onClick,
+  showIndicator = false,
+  currentIndex = 0,
+  totalMetrics = 0
+}: { 
   metric: typeof siteConfig.hero.metrics[0], 
   delay: number,
-  isVisible: boolean 
+  isVisible: boolean,
+  onClick?: () => void,
+  showIndicator?: boolean,
+  currentIndex?: number,
+  totalMetrics?: number
 }) {
   // Extraer número para animación
   const numericValue = parseInt(metric.value.replace(/[^\d]/g, '')) || 0
@@ -190,18 +256,113 @@ function MetricCard({ metric, delay, isVisible }: {
 
   return (
     <motion.div
-      className="bg-white/90 backdrop-blur-sm rounded-xl p-4 lg:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 text-center"
+      className={`bg-white/90 backdrop-blur-sm rounded-xl p-4 lg:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 text-center relative ${onClick ? 'cursor-pointer' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay }}
       whileHover={{ y: -5, scale: 1.02 }}
+      onClick={onClick}
     >
+      {/* Icono de información */}
+      {onClick && (
+        <div className="absolute top-3 right-3">
+          <Info className="w-4 h-4 text-gray-400 hover:text-blue-600 transition-colors" />
+        </div>
+      )}
+
       <div className="text-2xl lg:text-3xl font-bold gradient-text mb-2">
         {displayValue}
       </div>
       <div className="text-xs lg:text-sm text-gray-600 leading-tight">
         {metric.label}
       </div>
+
+      {/* Indicador de progreso para móvil */}
+      {showIndicator && (
+        <div className="mt-4 flex justify-center">
+          <div className="flex space-x-1">
+            {Array.from({ length: Math.min(totalMetrics, 5) }).map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentIndex % 5 ? 'bg-blue-600' : 'bg-gray-300'
+                }`}
+              />
+            ))}
+            {totalMetrics > 5 && (
+              <span className="text-xs text-gray-400 ml-2">
+                {currentIndex + 1}/{totalMetrics}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </motion.div>
+  )
+}
+
+// Modal para mostrar información detallada de métricas
+function MetricInfoModal({ metric, isOpen, onClose }: {
+  metric: typeof siteConfig.hero.metrics[0],
+  isOpen: boolean,
+  onClose: () => void
+}) {
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <motion.div
+        className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+      >
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Estadística de IA Empresarial
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-xl"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div className="text-center p-4 bg-blue-50 rounded-lg">
+            <div className="text-3xl font-bold text-blue-600 mb-1">
+              {metric.value}
+            </div>
+            <div className="text-sm text-gray-700">
+              {metric.label}
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Descripción</h4>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {metric.description}
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-medium text-gray-900 mb-1">Fuente</h4>
+            <p className="text-sm text-blue-600 font-medium">
+              {metric.source}
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <button
+              onClick={onClose}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   )
 }

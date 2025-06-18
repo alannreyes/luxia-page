@@ -5,14 +5,16 @@ import AnalyticsProvider from '@/components/AnalyticsProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL('https://luxiabrands.com'),
   title: 'luxIA - La IA a tu medida',
   description: 'Actúa primero, decide mejor, lidera con inteligencia. Descubre el poder de la IA empresarial con nuestras demos interactivas. Chat con ERP, análisis de documentos, automatización n8n y más.',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
   keywords: 'IA empresarial, RAG, n8n, automatización, ERP, chatbot, transformación digital, demos IA, consulta gratuita, fintech IA, análisis documentos, superpoder IA',
   authors: [{ name: 'luxIA', url: 'https://luxiabrands.com' }],
   creator: 'luxIA',
