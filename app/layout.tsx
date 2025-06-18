@@ -14,7 +14,7 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://luxiabrands.com'),
   title: 'luxIA - La IA a tu medida',
-  description: 'Actúa primero, decide mejor, lidera con inteligencia. Descubre el poder de la IA empresarial con nuestras demos interactivas. Chat con ERP, análisis de documentos, automatización n8n y más.',
+  description: 'Soluciones de IA personalizadas que funcionan desde el primer día. Optimiza procesos, reduce costos y acelera decisiones. Consulta gratuita de 30 min.',
   keywords: 'IA empresarial, RAG, n8n, automatización, ERP, chatbot, transformación digital, demos IA, consulta gratuita, fintech IA, análisis documentos, superpoder IA',
   authors: [{ name: 'luxIA', url: 'https://luxiabrands.com' }],
   creator: 'luxIA',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
   openGraph: {
     title: 'luxIA - La IA a tu medida',
-    description: 'Actúa primero, decide mejor, lidera con inteligencia. Experimenta el futuro de la IA empresarial con nuestras demos en vivo.',
+    description: 'Soluciones de IA personalizadas que funcionan desde el primer día. Optimiza procesos, reduce costos y acelera decisiones.',
     url: 'https://luxiabrands.com',
     siteName: 'luxIA',
     locale: 'es_ES',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: 'luxIA - La IA a tu medida',
-    description: 'Actúa primero, decide mejor, lidera con inteligencia. Experimenta el futuro de la IA empresarial.',
+    description: 'Soluciones de IA personalizadas que funcionan desde el primer día. Optimiza procesos, reduce costos y acelera decisiones.',
     card: 'summary_large_image',
     images: ['/og-image.jpg']
   },
@@ -97,7 +97,7 @@ export default function RootLayout({
               "name": "luxIA",
               "url": "https://luxiabrands.com",
               "logo": "https://luxiabrands.com/logo.png",
-              "description": "La IA a tu medida: Actúa primero, decide mejor, lidera con inteligencia. Partner estratégico en IA para empresas.",
+              "description": "La IA a tu medida: soluciones personalizadas que funcionan desde el primer día. Partner estratégico en IA para empresas.",
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+51 993131883",
