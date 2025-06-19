@@ -4,7 +4,7 @@ export const siteConfig = {
   contact: {
     email: 'alann@luxiabrands.com',
     phone: '+51 993131883', // Tu número de teléfono
-    calcomUrl: 'https://cal.luxiabrands.com/alann-luxiabrands.com/30min', // URL de Cal.com validada
+    calcomUrl: 'https://cal.luxia.us/alann/30min', // URL de Cal.com validada
     linkedinUrl: 'https://www.linkedin.com/company/luxiabrands/',
   },
 
