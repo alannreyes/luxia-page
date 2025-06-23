@@ -1,6 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
-import { MessageSquare, Database, FileText, Utensils, Workflow, Calendar } from 'lucide-react'
+import { Database, FileText, Utensils, Workflow, Calendar } from 'lucide-react'
 import { useState } from 'react'
 import AppointmentModal from './AppointmentModal'
 

@@ -3,7 +3,7 @@ import Logo from './Logo'
 import { Linkedin } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
-export default function Footer({ locale, dictionary }: BaseComponentProps) {
+export default function Footer({ dictionary }: BaseComponentProps) {
   return (
     <footer className="bg-gray-900 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto">

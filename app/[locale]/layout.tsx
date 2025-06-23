@@ -4,7 +4,7 @@ import '../globals.css'
 import AnalyticsProvider from '@/components/AnalyticsProvider'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { getServerDictionary, generateLocalizedMetadata, type PageParams } from '@/lib/i18n'
-import { locales, type Locale } from '@/middleware'
+import { locales } from '@/middleware'
 import { notFound } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -81,17 +81,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   return (
     <html lang={resolvedParams.locale} className="scroll-smooth">
       <head>
-        {/* Preload critical fonts */}
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          as="style"
-        />
         
-        {/* DNS prefetch for external domains */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="//cal.luxia.us" />
         
         {/* Structured Data */}
         <script

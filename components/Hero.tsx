@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { siteConfig } from '@/lib/config'
 import AppointmentModal from './AppointmentModal'
 import { Info } from 'lucide-react'
 import type { Metric, MetricCardProps, MetricInfoModalProps, BaseComponentProps } from '@/types'
@@ -35,7 +34,7 @@ function useCountUp(end: number, duration: number = 2000) {
 export default function Hero({ locale, dictionary }: BaseComponentProps) {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-  const [currentMetricIndex, setCurrentMetricIndex] = useState(0)
+  const [currentMetricIndex] = useState(0)
   const [selectedMetric, setSelectedMetric] = useState<Metric | null>(null)
   const [showMetricModal, setShowMetricModal] = useState(false)
 

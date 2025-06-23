@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Calendar, ArrowRight } from 'lucide-react'
 import { siteConfig } from '@/lib/config'
 import { useParams } from 'next/navigation'
-import { getDictionary } from '@/lib/i18n/dictionaries'
 import type { Locale } from '@/middleware'
 
 interface AppointmentModalProps {
@@ -14,12 +13,11 @@ interface AppointmentModalProps {
 export default function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
   const params = useParams()
   const locale = (params?.locale as Locale) || 'es'
-  const dictionary = getDictionary(locale)
   
   const handleScheduleClick = () => {
     // Tracking
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', siteConfig.tracking.events.appointmentBooked, {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', siteConfig.tracking.events.appointmentBooked, {
         method: 'Cal.com'
       })
     }

@@ -1,5 +1,5 @@
 import { siteConfig } from './config'
-import type { TrackingEvent, WebVitals, ScrollDepthEvent, UserSession } from '@/types'
+import type { TrackingEvent, WebVitals } from '@/types'
 
 // Función para enviar eventos a Google Analytics
 export const trackEvent = (event: TrackingEvent) => {
@@ -134,8 +134,8 @@ export const initializeAnalytics = () => {
 
     // Configurar gtag
     window.dataLayer = window.dataLayer || []
-    window.gtag = function() {
-      window.dataLayer.push(arguments)
+    window.gtag = function(...args: unknown[]) {
+      window.dataLayer.push(args)
     }
     window.gtag('js', new Date())
     window.gtag('config', siteConfig.tracking.googleAnalytics, {
@@ -246,7 +246,7 @@ const basicPerfTracking = () => {
   
   try {
     perfObserver.observe({ entryTypes: ['navigation'] })
-  } catch (e) {
+  } catch {
     // PerformanceObserver no soportado
   }
 }

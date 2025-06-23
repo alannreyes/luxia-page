@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 import type { BaseComponentProps } from '@/types'
 
-export default function Insights({ locale, dictionary }: BaseComponentProps) {
+export default function Insights({ dictionary }: BaseComponentProps) {
   return (
     <section id="insights" className="py-20 px-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">

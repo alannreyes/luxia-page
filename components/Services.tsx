@@ -1,19 +1,18 @@
 'use client'
 import { motion } from 'framer-motion'
-import { siteConfig } from '@/lib/config'
 import { useState } from 'react'
 import AppointmentModal from './AppointmentModal'
 import type { BaseComponentProps } from '@/types'
 
-export default function Services({ locale, dictionary }: BaseComponentProps) {
+export default function Services({ dictionary }: BaseComponentProps) {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
 
   const handleReserveClick = () => {
     setIsAppointmentModalOpen(true)
     
     // Tracking
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'services_cta_click', {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'services_cta_click', {
         button_text: dictionary.services.cta
       })
     }

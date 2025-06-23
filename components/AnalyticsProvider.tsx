@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from 'react'
-import { initializeAnalytics, initializeAdvancedTracking, usePageTracking } from '@/lib/analytics'
+import { initializeAnalytics, initializeAdvancedTracking } from '@/lib/analytics'
 import type { Locale } from '@/middleware'
 
 interface AnalyticsProviderProps {
@@ -25,13 +25,9 @@ export default function AnalyticsProvider({ children, locale = 'es' }: Analytics
     // Inicializar tracking avanzado (scroll, secciones, engagement, etc.)
     const cleanupAdvanced = initializeAdvancedTracking()
     
-    // Inicializar tracking de tiempo en página
-    const cleanupPageTracking = usePageTracking()
-    
     // Cleanup
     return () => {
       if (cleanupAdvanced) cleanupAdvanced()
-      if (cleanupPageTracking) cleanupPageTracking()
     }
   }, [locale])
 

@@ -13,8 +13,8 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
     setIsAppointmentModalOpen(true)
     
     // Tracking
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', siteConfig.tracking.events.heroCtaClick, {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', siteConfig.tracking.events.heroCtaClick, {
         button_text: 'CTA Final',
         source: 'bottom_cta'
       })

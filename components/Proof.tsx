@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 import type { BaseComponentProps } from '@/types'
 
-export default function Proof({ locale, dictionary }: BaseComponentProps) {
+export default function Proof({ dictionary }: BaseComponentProps) {
   return (
     <section id="casos" className="py-20 px-6 bg-white">
       <div className="max-w-7xl mx-auto">

@@ -36,7 +36,7 @@ export function createClientDictionary(dictionary: Dictionary) {
     
     // Helper para obtener valor anidado
     get: (path: string) => {
-      return path.split('.').reduce((obj: any, key) => obj?.[key], dictionary)
+      return path.split('.').reduce((obj: Record<string, unknown>, key) => obj?.[key] as Record<string, unknown>, dictionary as unknown as Record<string, unknown>)
     },
     
     // Helper para interpolación
