@@ -3,8 +3,9 @@ import { motion } from 'framer-motion'
 import { siteConfig } from '@/lib/config'
 import { useState } from 'react'
 import AppointmentModal from './AppointmentModal'
+import type { BaseComponentProps } from '@/types'
 
-export default function Services() {
+export default function Services({ locale, dictionary }: BaseComponentProps) {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
 
   const handleReserveClick = () => {
@@ -13,7 +14,7 @@ export default function Services() {
     // Tracking
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'services_cta_click', {
-        button_text: 'Reserva 30 minutos'
+        button_text: dictionary.services.cta
       })
     }
   }
@@ -28,55 +29,67 @@ export default function Services() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl font-light text-gray-900 mb-6">
-            Potencia tu empresa con IA a medida
+            {dictionary.services.title}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Integración directa con tus sistemas actuales
+            {dictionary.services.subtitle}
           </p>
         </motion.div>
         
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
-          {siteConfig.services.map((service, index) => (
-            <motion.div
-              key={index}
-              className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              whileHover={{ y: -5, scale: 1.02 }}
-            >
-              {/* Icon */}
-              <div className="text-4xl mb-6">{service.icon}</div>
-              
-              {/* Title */}
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                {service.title}
-              </h3>
-              
-              {/* Subtitle */}
-              <p className="text-lg font-medium text-blue-600 mb-4">
-                {service.subtitle}
-              </p>
-              
-              {/* Description */}
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                {service.description}
-              </p>
-              
-              {/* Features */}
-              <div className="space-y-3">
-                <ul className="space-y-2">
-                  {service.results.map((result, idx) => (
-                    <li key={idx} className="flex items-start">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700 text-sm font-medium">{result}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          ))}
+          {/* ERP Service */}
+          <motion.div
+            className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0 }}
+            whileHover={{ y: -5, scale: 1.02 }}
+          >
+            <div className="text-4xl mb-6">🚀</div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              {dictionary.services.erp.title}
+            </h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              {dictionary.services.erp.description}
+            </p>
+          </motion.div>
+
+          {/* Search Service */}
+          <motion.div
+            className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ y: -5, scale: 1.02 }}
+          >
+            <div className="text-4xl mb-6">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              {dictionary.services.search.title}
+            </h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              {dictionary.services.search.description}
+            </p>
+          </motion.div>
+
+          {/* Assistant Service */}
+          <motion.div
+            className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            whileHover={{ y: -5, scale: 1.02 }}
+          >
+            <div className="text-4xl mb-6">🤖</div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              {dictionary.services.assistant.title}
+            </h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              {dictionary.services.assistant.description}
+            </p>
+          </motion.div>
         </div>
 
         {/* CTA Principal */}
@@ -93,7 +106,7 @@ export default function Services() {
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
           >
-            Reserva 30 minutos
+            {dictionary.services.cta}
           </motion.button>
         </motion.div>
       </div>

@@ -1,26 +1,8 @@
 'use client'
 import { motion } from 'framer-motion'
+import type { BaseComponentProps } from '@/types'
 
-const cases = [
-  {
-    industry: 'Fintech',
-    title: 'Sistema de Resúmenes Inteligentes',
-    description: 'Integración con ERP para generar resúmenes automáticos de documentos en 2 idiomas y 3 formatos distintos. Imposible sin IA.',
-    impact: 'Menos tiempo de procesamiento',
-    tags: ['ERP Integration', 'Webhooks', 'OpenAI','API','N8N']
-  },
-  {
-    industry: 'Empresa Comercial',
-    title: 'Búsqueda Semántica de Alta Precisión',
-    description: 'Motor de búsqueda que comprende intención y contexto para recuperación de información de catálogo de productos. Imposible sin IA.',
-    impact: 'Precisión en búsquedas y menor tiempo de procesamiento',
-    tags: ['Embedding', 'Vector Search', 'OpenAI']
-  }
-]
-
-
-
-export default function Proof() {
+export default function Proof({ locale, dictionary }: BaseComponentProps) {
   return (
     <section id="casos" className="py-20 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -31,47 +13,82 @@ export default function Proof() {
           viewport={{ once: true }}
         >
           <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-            Casos reales, resultados medibles
+            {dictionary.cases.title}
+            <span className="block text-blue-600 mt-2">
+              {dictionary.cases.subtitle}
+            </span>
           </h2>
-          <p className="text-lg md:text-xl text-gray-600">
-            Lo que antes era imposible, ahora en producción
-          </p>
         </motion.div>
 
 
         
         {/* Casos de estudio */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-          {cases.map((case_, index) => (
-            <motion.div
-              key={index}
-              className="border-l-4 border-blue-600 pl-4 md:pl-6"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-            >
-              <div className="text-xs md:text-sm text-gray-500 uppercase tracking-wide mb-2">
-                {case_.industry}
-              </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3 leading-tight">
-                {case_.title}
-              </h3>
-              <p className="text-sm md:text-base text-gray-600 mb-3 leading-relaxed">
-                {case_.description}
-              </p>
-              <div className="text-base md:text-lg font-semibold text-blue-600 mb-4">
-                {case_.impact}
-              </div>
-              <div className="flex flex-wrap gap-2 md:gap-3 text-xs md:text-sm">
-                {case_.tags.map((tag, idx) => (
-                  <span key={idx} className="bg-gray-100 px-2 md:px-3 py-1 rounded whitespace-nowrap">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Fintech Case */}
+          <motion.div
+            className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0 }}
+          >
+            <div className="text-xs text-gray-500 uppercase tracking-wide mb-2">
+              {dictionary.cases.fintech.industry}
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
+              {dictionary.cases.fintech.challenge}
+            </h3>
+            <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+              {dictionary.cases.fintech.solution}
+            </p>
+            <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+              {dictionary.cases.fintech.badge}
+            </span>
+          </motion.div>
+
+          {/* Healthcare Case */}
+          <motion.div
+            className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="text-xs text-gray-500 uppercase tracking-wide mb-2">
+              {dictionary.cases.healthcare.industry}
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
+              {dictionary.cases.healthcare.challenge}
+            </h3>
+            <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+              {dictionary.cases.healthcare.solution}
+            </p>
+            <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+              {dictionary.cases.healthcare.badge}
+            </span>
+          </motion.div>
+
+          {/* E-commerce Case */}
+          <motion.div
+            className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <div className="text-xs text-gray-500 uppercase tracking-wide mb-2">
+              {dictionary.cases.ecommerce.industry}
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
+              {dictionary.cases.ecommerce.challenge}
+            </h3>
+            <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+              {dictionary.cases.ecommerce.solution}
+            </p>
+            <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+              {dictionary.cases.ecommerce.badge}
+            </span>
+          </motion.div>
         </div>
       </div>
     </section>

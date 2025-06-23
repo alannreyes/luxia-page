@@ -1,0 +1,226 @@
+# Plan de Mejoras - Luxia Web
+## Generado por Claude Code - 2025-06-23
+
+### 🎯 OBJETIVO
+Optimizar la aplicación Luxia Web para producción con mejor rendimiento, calidad de código, SEO y seguimiento analytics avanzado.
+
+### 📊 ESTADO INICIAL
+- Next.js 15.3.3 con React 19
+- TypeScript y ESLint deshabilitados en build
+- 14 componentes client-side
+- Tipos `any` en múltiples lugares
+- Google Analytics básico configurado
+- Sin error boundaries ni lazy loading
+
+---
+
+## 🚀 PLAN DE MEJORAS (10 TAREAS)
+
+### ✅ COMPLETADAS
+- [x] 1. Crear plan de mejoras detallado ✅
+- [x] 2. Habilitar verificaciones TypeScript y ESLint ✅
+- [x] 3. Crear tipos TypeScript para reemplazar any ✅
+- [x] 4. Configurar ESLint con reglas estrictas ✅
+- [x] 5. Optimizar componentes a Server Components ✅
+- [x] 6. Implementar lazy loading con dynamic imports ✅
+- [x] 7. Crear error boundaries ✅
+- [x] 8. Agregar archivos SEO (sitemap, robots.txt) ✅
+- [x] 9. Optimizar Google Analytics y agregar más eventos ✅
+- [x] 10. Implementar optimizaciones de performance ✅
+
+**🎉 TODAS LAS TAREAS COMPLETADAS - 100% PROGRESO**
+
+---
+
+## 📋 DETALLE DE MEJORAS
+
+### 🔧 TAREA 1: Plan de Mejoras
+**Estado:** 🟡 En Progreso
+**Archivos:** plan-claude.txt
+**Descripción:** Crear documento con roadmap completo de mejoras
+
+### 🔧 TAREA 2: Verificaciones de Calidad
+**Estado:** ⏳ Pendiente
+**Archivos:** next.config.js
+**Problemas identificados:**
+- `ignoreDuringBuilds: true` en ESLint
+- `ignoreBuildErrors: true` en TypeScript
+**Solución:** Habilitar verificaciones para detectar errores temprano
+
+### 🔧 TAREA 3: Tipos TypeScript
+**Estado:** ⏳ Pendiente
+**Archivos:** types/, Hero.tsx, Navigation.tsx, lib/analytics.ts
+**Problemas identificados:**
+- `selectedMetric: any` en Hero.tsx:38
+- `(window as any).gtag` en múltiples archivos
+**Solución:** Crear interfaces específicas y tipado estricto
+
+### 🔧 TAREA 4: Configuración ESLint
+**Estado:** ⏳ Pendiente
+**Archivos:** .eslintrc.json (nuevo)
+**Problemas identificados:**
+- Sin configuración ESLint personalizada
+- No hay reglas para TypeScript estricto
+**Solución:** Configurar reglas estrictas y mejores prácticas
+
+### 🔧 TAREA 5: Server Components
+**Estado:** ⏳ Pendiente
+**Archivos:** app/page.tsx, components/Footer.tsx, etc.
+**Problemas identificados:**
+- Todos los componentes son Client Components
+- page.tsx puede ser Server Component
+**Solución:** Optimizar componentes que no necesitan interactividad
+
+### 🔧 TAREA 6: Lazy Loading
+**Estado:** ⏳ Pendiente
+**Archivos:** app/page.tsx, componentes pesados
+**Problemas identificados:**
+- Sin code splitting
+- Componentes cargan todos al inicio
+**Solución:** Dynamic imports y React.lazy()
+
+### 🔧 TAREA 7: Error Boundaries
+**Estado:** ⏳ Pendiente
+**Archivos:** components/ErrorBoundary.tsx (nuevo)
+**Problemas identificados:**
+- Sin manejo de errores React
+- Fallos pueden romper toda la app
+**Solución:** Implementar error boundaries estratégicos
+
+### 🔧 TAREA 8: SEO Avanzado
+**Estado:** ⏳ Pendiente
+**Archivos:** app/sitemap.ts, app/robots.ts, public/og-image.jpg
+**Problemas identificados:**
+- Sin sitemap automático
+- Sin robots.txt
+- Imagen OG referenciada pero no existe
+**Solución:** Generar archivos SEO automáticamente
+
+### 🔧 TAREA 9: Analytics Avanzado
+**Estado:** ⏳ Pendiente
+**Archivos:** lib/analytics.ts, components/AnalyticsProvider.tsx
+**Problemas identificados:**
+- Analytics básico
+- Falta tracking de user journey
+- Sin métricas de rendimiento
+**Solución:** 
+- Eventos de scroll depth
+- Heat mapping básico
+- User session tracking
+- Conversion funnel tracking
+- Performance metrics (Core Web Vitals)
+- Error tracking
+- A/B testing setup
+
+### 🔧 TAREA 10: Optimizaciones Performance
+**Estado:** ⏳ Pendiente
+**Archivos:** Múltiples
+**Problemas identificados:**
+- Sin optimización de imágenes
+- Animaciones pesadas en móvil
+- Sin preload de recursos críticos
+**Solución:** 
+- next/image para optimización
+- Preload de fuentes críticas
+- Optimización CSS
+- Bundle analysis
+
+---
+
+## 📈 MEJORAS DE GOOGLE ANALYTICS
+
+### 🎯 EVENTOS ACTUALES
+- Hero CTA clicks
+- Contact form submits
+- Basic page views
+
+### 🎯 EVENTOS NUEVOS A IMPLEMENTAR
+1. **User Journey Tracking**
+   - Section visibility (Hero, Services, Proof, etc.)
+   - Time spent per section
+   - Scroll depth (25%, 50%, 75%, 100%)
+   - Exit intent detection
+
+2. **Engagement Metrics**
+   - Button hover events
+   - Modal opens/closes
+   - Video/demo interactions
+   - Mobile vs Desktop behavior
+
+3. **Conversion Funnel**
+   - Landing → Services view
+   - Services → Case studies
+   - Case studies → Contact
+   - Contact → Appointment booked
+
+4. **Performance Tracking**
+   - Page load times
+   - Largest Contentful Paint (LCP)
+   - First Input Delay (FID)
+   - Cumulative Layout Shift (CLS)
+
+5. **Business Intelligence**
+   - Traffic sources analysis
+   - Geographic data
+   - Device/browser analytics
+   - Peak usage times
+
+6. **Error Tracking**
+   - JavaScript errors
+   - Failed form submissions
+   - API call failures
+   - 404 errors
+
+### 🛠️ HERRAMIENTAS ADICIONALES RECOMENDADAS
+- Google Tag Manager (GTM) para gestión avanzada
+- Google Search Console para SEO
+- Hotjar/Microsoft Clarity para heatmaps
+- Google PageSpeed Insights integration
+
+---
+
+## 🔍 MÉTRICAS DE ÉXITO
+
+### Performance
+- [ ] Lighthouse Score > 90
+- [ ] LCP < 2.5s
+- [ ] FID < 100ms
+- [ ] CLS < 0.1
+
+### Code Quality
+- [ ] 0 TypeScript errors
+- [ ] 0 ESLint warnings
+- [ ] 100% type coverage
+
+### SEO
+- [ ] Sitemap generado automáticamente
+- [ ] Meta tags optimizados
+- [ ] Open Graph completo
+
+### Analytics
+- [ ] 15+ eventos tracked
+- [ ] Conversion funnel configurado
+- [ ] Error tracking activo
+- [ ] Performance monitoring
+
+---
+
+## 📅 CRONOGRAMA ESTIMADO
+- **Tareas 1-4 (Calidad):** 30 minutos
+- **Tareas 5-7 (Arquitectura):** 45 minutos  
+- **Tareas 8-9 (SEO + Analytics):** 60 minutos
+- **Tarea 10 (Performance):** 30 minutos
+- **Total estimado:** 2.5 horas
+
+---
+
+## 🚨 NOTAS IMPORTANTES
+- Backup del código antes de cambios masivos
+- Probar en desarrollo antes de producción
+- Verificar que Google Analytics sigue funcionando
+- Documentar cambios para el equipo
+
+---
+
+*Plan generado automáticamente por Claude Code*
+*Fecha: 2025-06-23*

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import AnalyticsProvider from '@/components/AnalyticsProvider'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -87,6 +88,18 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <head>
+        {/* Preload critical fonts */}
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          as="style"
+        />
+        
+        {/* DNS prefetch for external domains */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//cal.luxia.us" />
+        
         {/* Structured Data */}
         <script
           type="application/ld+json"
@@ -120,9 +133,11 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased no-scrollbar-x`}>
         <AnalyticsProvider>
-          <div className="viewport-safe">
-            {children}
-          </div>
+          <ErrorBoundary>
+            <div className="viewport-safe">
+              {children}
+            </div>
+          </ErrorBoundary>
         </AnalyticsProvider>
       </body>
     </html>

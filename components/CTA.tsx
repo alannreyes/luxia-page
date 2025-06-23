@@ -4,31 +4,9 @@ import { motion } from 'framer-motion'
 import { CheckCircle, Clock, Users, Zap } from 'lucide-react'
 import AppointmentModal from './AppointmentModal'
 import { siteConfig } from '@/lib/config'
+import type { BaseComponentProps } from '@/types'
 
-const benefits = [
-  {
-    icon: Clock,
-    title: 'Consulta de 30 minutos',
-    description: 'Tiempo suficiente para entender tu negocio'
-  },
-  {
-    icon: CheckCircle,
-    title: 'Sin compromisos',
-    description: 'Solo ideas y recomendaciones honestas'
-  },
-  {
-    icon: Users,
-    title: 'Expertos en IA',
-    description: 'Habla directamente con nuestro equipo técnico'
-  },
-  {
-    icon: Zap,
-    title: 'Resultados inmediatos',
-    description: 'Plan de acción personalizado al final de la llamada'
-  }
-]
-
-export default function CTA() {
+export default function CTA({ locale, dictionary }: BaseComponentProps) {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
 
   const handleAppointmentClick = () => {
@@ -61,18 +39,18 @@ export default function CTA() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
-              Comienza tu transformación
+              {dictionary.cta.title}
             </h2>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Agenda una consulta gratuita y descubre cómo la IA puede revolucionar 
-              tus procesos, reducir costos y acelerar tu crecimiento.
+              {dictionary.cta.subtitle}
             </p>
           </motion.div>
 
           {/* Benefits grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon
+            {dictionary.cta.benefits.map((benefit, index) => {
+              const icons = [Clock, CheckCircle, Users, Zap]
+              const Icon = icons[index]
               return (
                 <motion.div
                   key={index}
@@ -107,21 +85,25 @@ export default function CTA() {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              Agendar Consulta Gratuita →
+              {dictionary.cta.primary} →
             </motion.button>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-gray-400">
               <span className="flex items-center">
                 <div className="w-2 h-2 bg-green-400 rounded-full mr-2" />
-                Respuesta en 24 horas
+                {locale === 'es' ? 'Respuesta en 24 horas' : '24-hour response'}
               </span>
               <span className="flex items-center">
                 <div className="w-2 h-2 bg-blue-400 rounded-full mr-2" />
-                Consulta 100% gratuita
+                {locale === 'es' ? 'Consulta 100% gratuita' : '100% free consultation'}
               </span>
               <span className="flex items-center">
                 <div className="w-2 h-2 bg-purple-400 rounded-full mr-2" />
-                También disponible en <span className="underline ml-1">English</span>
+                {locale === 'es' ? (
+                  <>También disponible en <span className="underline ml-1">English</span></>
+                ) : (
+                  <>También disponible en <span className="underline ml-1">Español</span></>
+                )}
               </span>
             </div>
           </motion.div>
@@ -135,7 +117,7 @@ export default function CTA() {
             transition={{ delay: 0.6 }}
           >
             <p className="text-gray-400 text-sm mb-2">
-              ¿Prefieres escribirnos directamente?
+              {locale === 'es' ? '¿Prefieres escribirnos directamente?' : 'Prefer to contact us directly?'}
             </p>
             <a 
               href={`mailto:${siteConfig.contact.email}`}

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { siteConfig } from '@/lib/config'
 import AppointmentModal from './AppointmentModal'
 import { Info } from 'lucide-react'
+import type { Metric, MetricCardProps, MetricInfoModalProps, BaseComponentProps } from '@/types'
 
 // Hook para animar números
 function useCountUp(end: number, duration: number = 2000) {
@@ -31,27 +32,46 @@ function useCountUp(end: number, duration: number = 2000) {
   return count
 }
 
-export default function Hero() {
+export default function Hero({ locale, dictionary }: BaseComponentProps) {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [currentMetricIndex, setCurrentMetricIndex] = useState(0)
-  const [selectedMetric, setSelectedMetric] = useState<any>(null)
+  const [selectedMetric, setSelectedMetric] = useState<Metric | null>(null)
   const [showMetricModal, setShowMetricModal] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
-  // Rotación automática de métricas cada 5 segundos
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMetricIndex((prev) => (prev + 1) % siteConfig.hero.metrics.length)
-    }, 5000)
+  // Métricas estáticas (evitamos rotación para simplificar por ahora)
+  const metrics: Metric[] = [
+    { 
+      value: "80%", 
+      label: locale === 'es' ? "de organizaciones ya implementaron IA en al menos una función" : "of organizations already implemented AI in at least one function",
+      description: locale === 'es' ? "Estadística relevante para la adopción de IA empresarial." : "Relevant statistic for enterprise AI adoption.",
+      source: locale === 'es' ? "Estudios de mercado de IA empresarial" : "Enterprise AI market studies"
+    },
+    { 
+      value: "2x", 
+      label: locale === 'es' ? "de CEOs están implementando software de IA" : "faster implementation with AI tools",
+      description: locale === 'es' ? "Aceleración en procesos empresariales." : "Acceleration in business processes.",
+      source: locale === 'es' ? "Estudios de mercado de IA empresarial" : "Enterprise AI market studies"
+    },
+    { 
+      value: "40%", 
+      label: locale === 'es' ? "incremento en productividad con herramientas IA" : "productivity increase with AI tools",
+      description: locale === 'es' ? "Mejora medible en eficiencia operacional." : "Measurable improvement in operational efficiency.",
+      source: locale === 'es' ? "Estudios de mercado de IA empresarial" : "Enterprise AI market studies"
+    },
+    { 
+      value: "60%", 
+      label: locale === 'es' ? "reducción en tiempo de programación con IA" : "reduction in programming time with AI",
+      description: locale === 'es' ? "Optimización en desarrollo de software." : "Optimization in software development.",
+      source: locale === 'es' ? "Estudios de mercado de IA empresarial" : "Enterprise AI market studies"
+    }
+  ]
 
-    return () => clearInterval(interval)
-  }, [])
-
-  const handleMetricClick = (metric: any) => {
+  const handleMetricClick = (metric: Metric) => {
     setSelectedMetric(metric)
     setShowMetricModal(true)
   }
@@ -62,7 +82,7 @@ export default function Hero() {
     // En desktop: 4 métricas con rotación en lote
     const metricsToShow = 4
     const startIndex = Math.floor(currentMetricIndex / metricsToShow) * metricsToShow
-    return siteConfig.hero.metrics.slice(startIndex, startIndex + metricsToShow)
+    return metrics.slice(startIndex, startIndex + metricsToShow)
   }
 
   const handleDemoClick = () => {
@@ -76,9 +96,9 @@ export default function Hero() {
     }
     
     // Tracking
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', siteConfig.tracking.events.heroCtaClick, {
-        button_text: siteConfig.hero.primaryCTA
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'hero_cta_click', {
+        button_text: dictionary.hero.primaryCTA
       })
     }
   }
@@ -87,9 +107,9 @@ export default function Hero() {
     setIsAppointmentModalOpen(true)
     
     // Tracking
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', siteConfig.tracking.events.heroCtaClick, {
-        button_text: siteConfig.hero.secondaryCTA
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'hero_cta_click', {
+        button_text: dictionary.hero.secondaryCTA
       })
     }
   }
@@ -115,11 +135,20 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                {siteConfig.hero.mainTitle}
+                {dictionary.hero.mainTitle}
                 <span className="block text-3xl md:text-4xl text-gray-600 mt-4">
-                  {siteConfig.hero.subtitle}
+                  {dictionary.hero.subtitle}
                 </span>
               </motion.h1>
+              
+              <motion.p 
+                className="text-lg text-gray-600 leading-relaxed mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                {dictionary.hero.description}
+              </motion.p>
               
 
               
@@ -135,7 +164,7 @@ export default function Hero() {
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {siteConfig.hero.primaryCTA} →
+                  {dictionary.hero.primaryCTA} →
                 </motion.button>
                 <motion.button 
                   onClick={handleAppointmentClick}
@@ -143,7 +172,7 @@ export default function Hero() {
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {siteConfig.hero.secondaryCTA}
+                  {dictionary.hero.secondaryCTA}
                 </motion.button>
               </motion.div>
 
@@ -154,7 +183,7 @@ export default function Hero() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                {siteConfig.hero.benefits.map((benefit, index) => (
+                {dictionary.hero.benefits.map((benefit, index) => (
                   <span key={index} className="flex items-center">
                     <div className="w-4 h-4 bg-green-500 rounded-full mr-2 flex items-center justify-center">
                       <span className="text-white text-xs font-bold">✓</span>
@@ -176,13 +205,13 @@ export default function Hero() {
               <div className="block md:hidden">
                 <MetricCard 
                   key={currentMetricIndex}
-                  metric={siteConfig.hero.metrics[currentMetricIndex]}
+                  metric={metrics[currentMetricIndex % metrics.length]}
                   delay={0}
                   isVisible={isVisible}
-                  onClick={() => handleMetricClick(siteConfig.hero.metrics[currentMetricIndex])}
+                  onClick={() => handleMetricClick(metrics[currentMetricIndex % metrics.length])}
                   showIndicator={true}
                   currentIndex={currentMetricIndex}
-                  totalMetrics={siteConfig.hero.metrics.length}
+                  totalMetrics={metrics.length}
                 />
               </div>
 
@@ -221,6 +250,7 @@ export default function Hero() {
           metric={selectedMetric}
           isOpen={showMetricModal}
           onClose={() => setShowMetricModal(false)}
+          locale={locale}
         />
       )}
     </>
@@ -228,23 +258,16 @@ export default function Hero() {
 }
 
 // Componente para métricas animadas
-function MetricCard({ 
-  metric, 
-  delay, 
-  isVisible, 
-  onClick,
-  showIndicator = false,
-  currentIndex = 0,
-  totalMetrics = 0
-}: { 
-  metric: typeof siteConfig.hero.metrics[0], 
-  delay: number,
-  isVisible: boolean,
-  onClick?: () => void,
-  showIndicator?: boolean,
-  currentIndex?: number,
-  totalMetrics?: number
-}) {
+function MetricCard(props: MetricCardProps) {
+  const { 
+    metric, 
+    delay, 
+    isVisible, 
+    onClick,
+    showIndicator = false,
+    currentIndex = 0,
+    totalMetrics = 0
+  } = props
   // Extraer número para animación
   const numericValue = parseInt(metric.value.replace(/[^\d]/g, '')) || 0
   const animatedValue = useCountUp(numericValue, 2000)
@@ -302,11 +325,7 @@ function MetricCard({
 }
 
 // Modal para mostrar información detallada de métricas
-function MetricInfoModal({ metric, isOpen, onClose }: {
-  metric: typeof siteConfig.hero.metrics[0],
-  isOpen: boolean,
-  onClose: () => void
-}) {
+function MetricInfoModal({ metric, isOpen, onClose, locale }: MetricInfoModalProps & { locale: string }) {
   if (!isOpen) return null
 
   return (
@@ -319,7 +338,7 @@ function MetricInfoModal({ metric, isOpen, onClose }: {
       >
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-lg font-semibold text-gray-900">
-            Estadística de IA Empresarial
+            {locale === 'es' ? 'Estadística de IA Empresarial' : 'Enterprise AI Statistic'}
           </h3>
           <button
             onClick={onClose}
@@ -340,16 +359,20 @@ function MetricInfoModal({ metric, isOpen, onClose }: {
           </div>
 
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Descripción</h4>
+            <h4 className="font-medium text-gray-900 mb-2">
+              {locale === 'es' ? 'Descripción' : 'Description'}
+            </h4>
             <p className="text-sm text-gray-600 leading-relaxed">
-              {metric.description}
+              {metric.description || (locale === 'es' ? 'Estadística relevante para la adopción de IA empresarial.' : 'Relevant statistic for enterprise AI adoption.')}
             </p>
           </div>
 
           <div>
-            <h4 className="font-medium text-gray-900 mb-1">Fuente</h4>
+            <h4 className="font-medium text-gray-900 mb-1">
+              {locale === 'es' ? 'Fuente' : 'Source'}
+            </h4>
             <p className="text-sm text-blue-600 font-medium">
-              {metric.source}
+              {metric.source || (locale === 'es' ? 'Estudios de mercado de IA empresarial' : 'Enterprise AI market studies')}
             </p>
           </div>
 
@@ -358,7 +381,7 @@ function MetricInfoModal({ metric, isOpen, onClose }: {
               onClick={onClose}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Cerrar
+              {locale === 'es' ? 'Cerrar' : 'Close'}
             </button>
           </div>
         </div>

@@ -1,23 +1,8 @@
-import Navigation from '@/components/Navigation'
-import Hero from '@/components/Hero'
-import Services from '@/components/Services'
-import Proof from '@/components/Proof'
-import Insights from '@/components/Insights'
-import CTA from '@/components/CTA'
-import Footer from '@/components/Footer'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
-  return (
-    <>
-      <Navigation />
-      <main>
-        <Hero />
-        <Services />
-        <Proof />
-        <Insights />
-        <CTA />
-      </main>
-      <Footer />
-    </>
-  )
+// Esta página nunca debería verse porque el middleware redirecciona
+// Pero la incluimos como fallback
+export default function RootPage() {
+  // Redirigir a español por defecto
+  redirect('/es')
 }

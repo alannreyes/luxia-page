@@ -2,12 +2,12 @@
 const nextConfig = {
   output: 'standalone',
   eslint: {
-    // Deshabilitar ESLint durante el build de producción
-    ignoreDuringBuilds: true,
+    // Habilitar ESLint durante el build para detectar errores
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    // Deshabilitar type checking durante el build de producción
-    ignoreBuildErrors: true,
+    // Habilitar type checking durante el build para mayor seguridad
+    ignoreBuildErrors: false,
   },
 }
 
