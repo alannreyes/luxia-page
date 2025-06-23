@@ -176,7 +176,7 @@ export const siteConfig = {
 
   // Configuración de tracking (opcional pero recomendado para MVP)
   tracking: {
-    googleAnalytics: '', // Añadir tu ID de GA4 aquí
+    googleAnalytics: process.env.NEXT_PUBLIC_GA_ID || 'G-ZJ96G3V5QH', // Google Analytics ID
     hotjar: '', // Añadir tu ID de Hotjar aquí
     events: {
       heroCtaClick: 'hero_cta_click',
