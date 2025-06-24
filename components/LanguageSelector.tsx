@@ -35,13 +35,29 @@ export default function LanguageSelector({ currentLocale, className = '' }: Lang
 
     // Construir nueva URL
     const currentPathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '') || '/'
-    const newPath = `/${newLocale}${currentPathWithoutLocale}`
+    const newPath = `/${newLocale}${currentPathWithoutLocale === '/' ? '' : currentPathWithoutLocale}`
+
+    // Debug log
+    console.log('🌐 Language change:', {
+      current: currentLocale,
+      new: newLocale,
+      pathname,
+      currentPathWithoutLocale,
+      newPath
+    })
 
     // Track cambio de idioma
     trackLanguageEvent(newLocale, 'manual')
 
-    // Navegar a nueva URL
+    // Navegar con router primero, luego recarga si es necesario
     router.push(newPath)
+    
+    // Forzar recarga después de un pequeño delay para asegurar el cambio
+    setTimeout(() => {
+      if (window.location.pathname !== newPath) {
+        window.location.href = newPath
+      }
+    }, 100)
     setIsOpen(false)
   }
 
