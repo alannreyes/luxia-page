@@ -1,9 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Locale } from '@/middleware'
-import { getDictionary } from './dictionaries'
-
-// Tipo dinámico para diccionarios
-type Dictionary = ReturnType<typeof getDictionary>
+import { getDictionary, type Dictionary } from './dictionaries'
 
 // Cache para diccionarios (performance)
 const dictionaryCache = new Map<Locale, Dictionary>()

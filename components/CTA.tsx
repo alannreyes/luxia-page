@@ -48,7 +48,7 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
 
           {/* Benefits grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {dictionary.cta.benefits.map((benefit, index) => {
+            {dictionary.cta.benefits.map((benefit: { title: string; description: string }, index: number) => {
               const icons = [Clock, CheckCircle, Users, Zap]
               const Icon = icons[index]
               return (

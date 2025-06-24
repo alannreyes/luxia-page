@@ -154,7 +154,7 @@ const es = {
     description: 'Soluciones de IA personalizadas que funcionan desde el primer día. Optimiza procesos, reduce costos y acelera decisiones. Consulta gratuita de 30 min.',
     keywords: 'IA empresarial, RAG, n8n, automatización, ERP, chatbot, transformación digital, demos IA, consulta gratuita, fintech IA, análisis documentos, superpoder IA'
   }
-} as const
+}
 
 // Diccionario en inglés
 const en = {
@@ -320,17 +320,7 @@ export const getDictionary = (locale: Locale) => {
   return dictionaries[locale] || dictionaries.es
 }
 
-// Tipo para las claves de traducción (autocompletado inteligente)
-export type DictionaryKeys = typeof es
-export type TranslationKey = keyof typeof es
-
-// Helper para obtener traducción anidada con type safety
-export type NestedKeyOf<ObjectType extends object> = {
-  [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
-    ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
-    : `${Key}`
-}[keyof ObjectType & (string | number)]
-
-export type DictionaryPath = NestedKeyOf<DictionaryKeys>
+// Tipo dinámico para diccionarios
+export type Dictionary = typeof dictionaries.es
 
 export default dictionaries

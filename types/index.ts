@@ -1,6 +1,6 @@
 // Tipos para la aplicación Luxia Web
 import type { Locale } from '@/middleware'
-import type { DictionaryKeys } from '@/lib/i18n/dictionaries'
+import type { Dictionary } from '@/lib/i18n/dictionaries'
 
 // Google Analytics
 declare global {
@@ -77,7 +77,7 @@ export interface TrackingEvent {
 // Props de componentes con i18n
 export interface BaseComponentProps {
   locale: Locale;
-  dictionary: DictionaryKeys;
+  dictionary: Dictionary;
 }
 
 export interface MetricCardProps {

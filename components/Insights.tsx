@@ -21,7 +21,7 @@ export default function Insights({ dictionary }: BaseComponentProps) {
         </motion.div>
         
         <div className="grid md:grid-cols-3 gap-8">
-          {dictionary.insights.articles.map((article, index) => {
+          {dictionary.insights.articles.map((article: { category: string; title: string; excerpt: string; readTime: string }, index: number) => {
             const gradients = [
               'from-blue-600 to-blue-800',
               'from-purple-600 to-purple-800',

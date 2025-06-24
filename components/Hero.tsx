@@ -182,7 +182,7 @@ export default function Hero({ locale, dictionary }: BaseComponentProps) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                {dictionary.hero.benefits.map((benefit, index) => (
+                {dictionary.hero.benefits.map((benefit: string, index: number) => (
                   <span key={index} className="flex items-center">
                     <div className="w-4 h-4 bg-green-500 rounded-full mr-2 flex items-center justify-center">
                       <span className="text-white text-xs font-bold">✓</span>
