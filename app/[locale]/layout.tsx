@@ -79,50 +79,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   const dictionary = await getServerDictionary(resolvedParams.locale)
 
   return (
-    <html lang={resolvedParams.locale} className="scroll-smooth">
-      <head>
-        
-        
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "luxIA",
-              "url": `https://luxia.us/${resolvedParams.locale}`,
-              "logo": "https://luxiabrands.com/logo.png",
-              "description": dictionary.meta.description,
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+51 993131883",
-                "contactType": "customer service",
-                "email": "alann@luxiabrands.com"
-              },
-              "sameAs": [
-                "https://www.linkedin.com/company/luxiabrands/"
-              ],
-              "offers": {
-                "@type": "Offer",
-                "name": resolvedParams.locale === 'es' ? 'Consulta Gratuita de IA' : 'Free AI Consultation',
-                "description": dictionary.hero.description,
-                "price": "0",
-                "priceCurrency": "USD"
-              }
-            })
-          }}
-        />
-      </head>
-      <body className={`${inter.className} antialiased no-scrollbar-x`}>
-        <AnalyticsProvider locale={resolvedParams.locale}>
-          <ErrorBoundary>
-            <div className="viewport-safe">
-              {children}
-            </div>
-          </ErrorBoundary>
-        </AnalyticsProvider>
-      </body>
-    </html>
+    <>
+      {/* Solo devolvemos el contenido, sin html/body */}
+      <AnalyticsProvider locale={resolvedParams.locale}>
+        <ErrorBoundary>
+          <div className="viewport-safe">
+            {children}
+          </div>
+        </ErrorBoundary>
+      </AnalyticsProvider>
+    </>
   )
 }
