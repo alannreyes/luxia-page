@@ -15,7 +15,7 @@ export interface Message {
   text: string
   sender: 'user' | 'ai'
   timestamp: Date
-  chartData?: any
+  chartData?: any[]
   metrics?: any[]
   showChart?: boolean
   chartType?: 'bar' | 'line' | 'pie'
@@ -63,76 +63,50 @@ export default function ChatInterface({ locale, dictionary }: ChatInterfaceProps
     setInputValue('')
     setIsTyping(true)
 
-    // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    try {
+      // Call real AI API
+      const response = await fetch('/api/chat/fintech', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: text,
+          locale: locale
+        })
+      })
 
-    // Generate AI response based on the question
-    let aiResponse: Message = {
-      id: (Date.now() + 1).toString(),
-      text: 'Déjame analizar esa información para ti...',
-      sender: 'ai',
-      timestamp: new Date()
+      const data = await response.json()
+
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: data.response || 'Lo siento, no pude procesar tu pregunta.',
+        sender: 'ai',
+        timestamp: new Date(),
+        metrics: data.metrics || [],
+        chartData: data.chartData,
+        showChart: data.showChart || false,
+        chartType: data.chartType || 'bar'
+      }
+
+      setIsTyping(false)
+      setMessages(prev => [...prev, aiResponse])
+
+    } catch (error) {
+      console.error('Error calling AI API:', error)
+      
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: locale === 'es' 
+          ? 'Lo siento, experimenté un error técnico. Por favor intenta de nuevo.' 
+          : 'Sorry, I experienced a technical error. Please try again.',
+        sender: 'ai',
+        timestamp: new Date()
+      }
+
+      setIsTyping(false)
+      setMessages(prev => [...prev, errorResponse])
     }
-
-    // Check for specific questions and provide appropriate responses
-    const lowerText = text.toLowerCase()
-    const isSpanish = locale === 'es'
-    
-    // Keywords that work in both languages
-    const salesKeywords = isSpanish ? ['ventas', 'octubre'] : ['sales', 'october']
-    const sellerKeywords = isSpanish ? ['mejor', 'vendedor'] : ['best', 'seller']
-    const paymentsKeywords = isSpanish ? ['pagos', 'pendientes'] : ['payments', 'overdue']
-    const projectionKeywords = isSpanish ? ['proyección', 'q1 2025'] : ['projection', 'q1 2025']
-    
-    if (salesKeywords.every(keyword => lowerText.includes(keyword))) {
-      aiResponse = {
-        ...aiResponse,
-        text: dictionary.demos.fintech.responses.sales,
-        showChart: true,
-        chartType: 'bar',
-        metrics: [
-          { label: 'Total Octubre', value: '$47.2M', change: '+2.8%' },
-          { label: 'vs Año Anterior', value: '+10.3%', positive: true },
-          { label: 'Transacciones', value: '125.4K', change: '+5.2%' }
-        ]
-      }
-    } else if (sellerKeywords.every(keyword => lowerText.includes(keyword))) {
-      aiResponse = {
-        ...aiResponse,
-        text: dictionary.demos.fintech.responses.bestSeller,
-        metrics: [
-          { label: 'Ventas Q4', value: '$4.25M' },
-          { label: 'Deals Cerrados', value: '23' },
-          { label: 'Conversión', value: '68%' }
-        ]
-      }
-    } else if (paymentsKeywords.some(keyword => lowerText.includes(keyword))) {
-      aiResponse = {
-        ...aiResponse,
-        text: dictionary.demos.fintech.responses.payments,
-        metrics: [
-          { label: 'Total Pendiente', value: '$67,000' },
-          { label: 'Clientes', value: '2' }
-        ]
-      }
-    } else if (projectionKeywords.some(keyword => lowerText.includes(keyword))) {
-      aiResponse = {
-        ...aiResponse,
-        text: dictionary.demos.fintech.responses.projection,
-        showChart: true,
-        chartType: 'line',
-        metrics: [
-          { label: 'Proyección Q1', value: '$142.5M' },
-          { label: 'Confianza', value: '85%' }
-        ]
-      }
-    } else {
-      // Default response for unrecognized questions
-      aiResponse.text = dictionary.demos.fintech.responses.default
-    }
-
-    setIsTyping(false)
-    setMessages(prev => [...prev, aiResponse])
   }
 
   const handleSubmit = (e: React.FormEvent) => {

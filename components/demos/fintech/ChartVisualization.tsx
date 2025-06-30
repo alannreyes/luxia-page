@@ -5,7 +5,7 @@ import { salesData } from '@/lib/mockData/techflowData'
 
 interface ChartVisualizationProps {
   type: 'bar' | 'line' | 'area'
-  data?: any
+  data?: any[]
   locale?: string
 }
 
@@ -43,11 +43,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 export default function ChartVisualization({ type, data, locale = 'es' }: ChartVisualizationProps) {
+  // Use provided data or fallback to mock data
+  const chartData = data && data.length > 0 ? data : monthlySalesData
+  
   const renderChart = () => {
     switch (type) {
       case 'bar':
         return (
-          <BarChart data={monthlySalesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis 
               dataKey="month" 
@@ -76,7 +79,7 @@ export default function ChartVisualization({ type, data, locale = 'es' }: ChartV
       
       case 'line':
         return (
-          <LineChart data={projectionData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis 
               dataKey="quarter" 
@@ -111,7 +114,7 @@ export default function ChartVisualization({ type, data, locale = 'es' }: ChartV
       
       case 'area':
         return (
-          <AreaChart data={monthlySalesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis 
               dataKey="month" 
