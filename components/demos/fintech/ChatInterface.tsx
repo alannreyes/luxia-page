@@ -76,11 +76,17 @@ export default function ChatInterface({ locale, dictionary }: ChatInterfaceProps
         })
       })
 
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
       const data = await response.json()
+      
+      console.log('API Response:', data) // Debug log
 
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response || 'Lo siento, no pude procesar tu pregunta.',
+        text: data.response || data.error || 'Lo siento, no pude procesar tu pregunta.',
         sender: 'ai',
         timestamp: new Date(),
         metrics: data.metrics || [],

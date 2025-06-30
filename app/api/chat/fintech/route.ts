@@ -21,10 +21,20 @@ export async function POST(request: NextRequest) {
       forceReseed()
     }
 
-    // Ensure database is seeded
+    // Ensure database is seeded with simple data
     try {
-      seedDatabase()
-      debugDatabase() // Debug what's in the DB
+      const { simpleSeed } = await import('@/lib/database/simple-seed')
+      
+      // Check if we have data
+      const db = getDatabase()
+      const empCount = db.prepare('SELECT COUNT(*) as count FROM employees').get() as { count: number }
+      
+      if (empCount.count === 0) {
+        console.log('🔄 Database empty, seeding with simple data...')
+        simpleSeed()
+      } else {
+        console.log(`✅ Database has ${empCount.count} employees`)
+      }
     } catch (error) {
       console.log('Database seeding error:', error)
     }
@@ -50,12 +60,22 @@ export async function POST(request: NextRequest) {
     // Execute the SQL query
     let queryResults: any[] = []
     try {
-      queryResults = executeQuery(sqlResponse.sql) as any[]
+      if (sqlResponse.sql.trim()) {
+        queryResults = executeQuery(sqlResponse.sql) as any[]
+      } else {
+        // No SQL to execute (probably an access denied case)
+        return NextResponse.json({
+          response: sqlResponse.explanation,
+          error: sqlResponse.error
+        })
+      }
     } catch (dbError) {
       console.error('Database query error:', dbError)
+      console.error('Failed SQL:', sqlResponse.sql)
       return NextResponse.json({
-        response: "Sorry, I encountered an error executing the database query. Please try rephrasing your question.",
-        error: "Database execution error"
+        response: "Sorry, I encountered an error executing the database query. The database might need to be initialized. Please try a simpler question.",
+        error: "Database execution error",
+        sql: sqlResponse.sql // Include for debugging
       })
     }
 
