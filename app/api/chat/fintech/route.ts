@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { generateSQL, generateInsight, validateSQL } from '@/lib/ai/sql-generator'
 import { executeQuery } from '@/lib/database/connection'
 import { seedDatabase } from '@/lib/database/seed-data'
+import { debugDatabase } from '@/lib/database/debug'
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,6 +18,7 @@ export async function POST(request: NextRequest) {
     // Ensure database is seeded
     try {
       seedDatabase()
+      debugDatabase() // Debug what's in the DB
     } catch (error) {
       console.log('Database seeding skipped (already exists)')
     }

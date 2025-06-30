@@ -36,10 +36,14 @@ CHART TYPE GUIDELINES:
 - table: detailed lists, multiple columns
 
 RESPONSE FORMAT:
-Return a JSON object with:
-- sql: the SQLite query
-- explanation: brief explanation of results
-- chartType: suggested visualization type
+You MUST respond with ONLY a JSON object in this exact format:
+{
+  "sql": "SELECT query here",
+  "explanation": "Brief business explanation here", 
+  "chartType": "bar"
+}
+
+Do not include any other text, markdown, or formatting. Just the JSON object.
 
 Remember: This is a factoring business - we buy invoices from clients at a discount and collect from their customers.`
 
@@ -58,6 +62,8 @@ Remember: This is a factoring business - we buy invoices from clients at a disco
       throw new Error('No response from OpenAI')
     }
 
+    console.log('OpenAI Raw Response:', response) // Debug log
+
     // Try to parse JSON response
     try {
       const parsed = JSON.parse(response)
@@ -67,6 +73,8 @@ Remember: This is a factoring business - we buy invoices from clients at a disco
         chartType: parsed.chartType || 'table'
       }
     } catch (parseError) {
+      console.log('JSON Parse Error:', parseError) // Debug log
+      
       // If JSON parsing fails, try to extract SQL from response
       const sqlMatch = response.match(/```sql\n(.*?)\n```/s)
       if (sqlMatch) {
@@ -77,7 +85,22 @@ Remember: This is a factoring business - we buy invoices from clients at a disco
         }
       }
       
-      throw new Error('Could not parse AI response')
+      // If no SQL found, try to extract any code block
+      const codeMatch = response.match(/```(.*?)\n(.*?)\n```/s)
+      if (codeMatch) {
+        return {
+          sql: codeMatch[2],
+          explanation: response.replace(/```.*?```/s, '').trim(),
+          chartType: 'table'
+        }
+      }
+      
+      // Last resort: return the raw response as explanation
+      return {
+        sql: '',
+        explanation: response,
+        error: 'Could not extract SQL from response'
+      }
     }
   } catch (error) {
     console.error('SQL generation error:', error)

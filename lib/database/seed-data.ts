@@ -9,9 +9,11 @@ export function seedDatabase() {
   // Check if data already exists
   const existingEmployees = db.prepare('SELECT COUNT(*) as count FROM employees').get() as { count: number }
   if (existingEmployees.count > 0) {
-    console.log('Database already seeded')
+    console.log('Database already seeded with', existingEmployees.count, 'employees')
     return
   }
+  
+  console.log('Starting fresh seed...')
   
   // Start transaction
   const transaction = db.transaction(() => {
@@ -119,11 +121,103 @@ export function seedDatabase() {
     for (const metric of monthlyMetrics) {
       insertMetrics.run(...metric)
     }
+
+    // 4. Add some key client customers (who owe money on invoices)
+    const clientCustomers = [
+      ['CUST001', 'CL001', 'RetailCorp Miami', 'John Smith', 'john@retailcorp.com', 'A', 'Retail', 30],
+      ['CUST002', 'CL001', 'TechStartup Inc', 'Sarah Lee', 'sarah@techstartup.com', 'AA', 'Technology', 30],
+      ['CUST003', 'CL002', 'Miami Restaurants Group', 'Carlos Ruiz', 'carlos@miamirest.com', 'BBB', 'Food Service', 45],
+      ['CUST004', 'CL003', 'Supermarket Chain FL', 'Maria Garcia', 'maria@superfl.com', 'A', 'Retail', 30],
+      ['CUST005', 'CL004', 'Downtown Office Complex', 'Robert Wilson', 'robert@downtown.com', 'AA', 'Real Estate', 30]
+    ]
+
+    const insertCustomer = db.prepare(`
+      INSERT INTO client_customers (customer_id, client_id, company_name, contact_person, email, credit_rating, industry, payment_terms)
+      VALUES (?, (SELECT id FROM clients WHERE client_id = ?), ?, ?, ?, ?, ?, ?)
+    `)
+
+    for (const customer of clientCustomers) {
+      insertCustomer.run(...customer)
+    }
+
+    // 5. Add realistic factoring transactions (showing business growth)
+    const transactions = [
+      // November 2023 (early transactions)
+      ['TXN001', 'CL001', 'CUST001', 25000, 875, 0.035, 24125, '2023-11-25', '2023-12-25', '2023-12-20', 'collected', 'EMP003'],
+      ['TXN002', 'CL002', 'CUST003', 18000, 756, 0.042, 17244, '2023-11-28', '2023-12-28', '2023-12-22', 'collected', 'EMP003'],
+      
+      // December 2023
+      ['TXN003', 'CL001', 'CUST002', 32000, 1120, 0.035, 30880, '2023-12-05', '2024-01-05', '2024-01-02', 'collected', 'EMP003'],
+      ['TXN004', 'CL003', 'CUST004', 45000, 1710, 0.038, 43290, '2023-12-15', '2024-01-15', '2024-01-12', 'collected', 'EMP003'],
+      ['TXN005', 'CL002', 'CUST003', 22000, 924, 0.042, 21076, '2023-12-20', '2024-01-20', null, 'active', 'EMP003'],
+      
+      // January 2024
+      ['TXN006', 'CL004', 'CUST005', 55000, 2475, 0.045, 52525, '2024-01-10', '2024-02-10', '2024-02-08', 'collected', 'EMP005'],
+      ['TXN007', 'CL001', 'CUST001', 28000, 980, 0.035, 27020, '2024-01-15', '2024-02-15', '2024-02-12', 'collected', 'EMP005'],
+      ['TXN008', 'CL005', 'CUST005', 38000, 1216, 0.032, 36784, '2024-01-25', '2024-02-25', '2024-02-20', 'collected', 'EMP003'],
+      
+      // Continue with more recent transactions...
+      // May 2025 (most recent)
+      ['TXN080', 'CL015', 'CUST001', 75000, 3000, 0.040, 72000, '2025-05-05', '2025-06-05', null, 'active', 'EMP007'],
+      ['TXN081', 'CL012', 'CUST004', 65000, 2860, 0.044, 62140, '2025-05-10', '2025-06-10', '2025-06-08', 'collected', 'EMP010'],
+      ['TXN082', 'CL018', 'CUST002', 85000, 2550, 0.030, 82450, '2025-05-15', '2025-06-15', null, 'active', 'EMP007'],
+      ['TXN083', 'CL020', 'CUST005', 55000, 2035, 0.037, 52965, '2025-05-20', '2025-06-20', null, 'active', 'EMP010'],
+      ['TXN084', 'CL013', 'CUST002', 42000, 1302, 0.031, 40698, '2025-05-25', '2025-06-25', null, 'active', 'EMP005']
+    ]
+
+    const insertTransaction = db.prepare(`
+      INSERT INTO factoring_transactions (
+        transaction_id, client_id, customer_id, advance_amount, factoring_fee, 
+        factoring_rate, net_amount, transaction_date, expected_payment_date, 
+        actual_payment_date, status, processed_by
+      ) VALUES (
+        ?, (SELECT id FROM clients WHERE client_id = ?), 
+        (SELECT id FROM client_customers WHERE customer_id = ?),
+        ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id FROM employees WHERE employee_id = ?)
+      )
+    `)
+
+    for (const txn of transactions) {
+      insertTransaction.run(...txn)
+    }
+
+    // 6. Add sales performance data for key reps
+    const salesPerformance = [
+      // David Johnson (Head of Sales) - EMP003
+      ['EMP003', 11, 2023, 150000, 125000, 4, 3, 2500],
+      ['EMP003', 12, 2023, 200000, 240000, 6, 6, 4800],
+      ['EMP003', 1, 2024, 250000, 285000, 8, 8, 5700],
+      ['EMP003', 5, 2025, 300000, 285000, 10, 9, 5700],
+      
+      // Carlos Martinez - EMP005
+      ['EMP005', 1, 2024, 180000, 155000, 5, 4, 3100],
+      ['EMP005', 5, 2025, 250000, 242000, 8, 7, 4840],
+      
+      // Robert Williams - EMP007
+      ['EMP007', 3, 2024, 200000, 0, 6, 0, 0], // Just started
+      ['EMP007', 5, 2025, 280000, 320000, 9, 10, 6400],
+      
+      // Maria Garcia - EMP010
+      ['EMP010', 1, 2025, 150000, 0, 4, 0, 0], // Just started
+      ['EMP010', 5, 2025, 200000, 168000, 6, 5, 3360]
+    ]
+
+    const insertSalesPerformance = db.prepare(`
+      INSERT INTO sales_performance (employee_id, month, year, target_volume, actual_volume, target_clients, actual_clients, commission_earned)
+      VALUES ((SELECT id FROM employees WHERE employee_id = ?), ?, ?, ?, ?, ?, ?, ?)
+    `)
+
+    for (const performance of salesPerformance) {
+      insertSalesPerformance.run(...performance)
+    }
     
     console.log('Database seeded successfully!')
     console.log(`- ${employees.length} employees`)
     console.log(`- ${clients.length} clients`)
+    console.log(`- ${clientCustomers.length} client customers`)
+    console.log(`- ${transactions.length} factoring transactions`)
     console.log(`- ${monthlyMetrics.length} months of metrics`)
+    console.log(`- ${salesPerformance.length} sales performance records`)
   })
   
   transaction()
