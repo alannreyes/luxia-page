@@ -3,6 +3,7 @@ import { generateSQL, generateInsight, validateSQL } from '@/lib/ai/sql-generato
 import { executeQuery } from '@/lib/database/connection'
 import { seedDatabase } from '@/lib/database/seed-data'
 import { debugDatabase } from '@/lib/database/debug'
+import { forceReseed } from '@/lib/database/force-reseed'
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,12 +16,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Force reseed if message contains "reset" (for testing)
+    if (message.toLowerCase().includes('reset database')) {
+      forceReseed()
+    }
+
     // Ensure database is seeded
     try {
       seedDatabase()
       debugDatabase() // Debug what's in the DB
     } catch (error) {
-      console.log('Database seeding skipped (already exists)')
+      console.log('Database seeding error:', error)
     }
 
     // Generate SQL using AI

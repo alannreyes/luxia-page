@@ -8,8 +8,13 @@ export function seedDatabase() {
   
   // Check if data already exists
   const existingEmployees = db.prepare('SELECT COUNT(*) as count FROM employees').get() as { count: number }
+  console.log('Existing employees:', existingEmployees.count)
+  
   if (existingEmployees.count > 0) {
     console.log('Database already seeded with', existingEmployees.count, 'employees')
+    // Also check clients
+    const existingClients = db.prepare('SELECT COUNT(*) as count FROM clients').get() as { count: number }
+    console.log('Existing clients:', existingClients.count)
     return
   }
   
