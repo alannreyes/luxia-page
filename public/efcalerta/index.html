@@ -1382,84 +1382,163 @@
 </div>
 
 <!-- SLIDE 15: Live Demo -->
-<div class="slide" style="justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden;">
+<div class="slide" style="justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; background: #000 !important;">
     <span class="section-number">15</span>
+
+    <!-- Audio element for SISMATE alarm -->
+    <audio id="alarmSound" loop>
+        <source src="alarm_sismate.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Initial state: Button -->
     <div id="demoInitial">
-        <h1>Live Demo</h1>
-        <p class="subtitle">See it in action</p>
+        <h1 style="color: #fff;">Live Demo</h1>
+        <p class="subtitle" style="color: #888;">Experience a real alert</p>
 
-        <div style="margin-top: 40px;">
-            <p style="color: #888; margin-bottom: 40px; font-size: 18px;">
-                Press the button to trigger a test alert on all devices.
+        <div style="margin-top: 60px;">
+            <p style="color: #666; margin-bottom: 50px; font-size: 18px;">
+                Press to trigger alerts on all connected devices
             </p>
 
             <button id="triggerAlertBtn" onclick="triggerDemoAlert()" style="
                 background: linear-gradient(135deg, #FF4B4B, #CC0000);
                 border: none;
-                border-radius: 20px;
-                padding: 30px 60px;
-                font-size: 24px;
+                border-radius: 30px;
+                padding: 35px 80px;
+                font-size: 28px;
                 font-weight: 700;
                 color: white;
                 cursor: pointer;
-                box-shadow: 0 10px 40px rgba(255, 75, 75, 0.4);
+                box-shadow: 0 0 60px rgba(255, 75, 75, 0.5), 0 0 120px rgba(255, 75, 75, 0.3);
                 transition: all 0.3s ease;
-            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            " onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 0 80px rgba(255, 75, 75, 0.7), 0 0 150px rgba(255, 75, 75, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 60px rgba(255, 75, 75, 0.5), 0 0 120px rgba(255, 75, 75, 0.3)';">
                 ⚡ TRIGGER ALERT
             </button>
         </div>
     </div>
 
-    <!-- Alert state: Full screen mockup -->
-    <div id="demoAlert" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, #CC0000, #8B0000); z-index: 100;">
+    <!-- Alert state: Black background with phone mockup -->
+    <div id="demoAlert" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 100;">
 
-        <!-- Alert content - centered -->
-        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center;">
+        <!-- Phone mockup container -->
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
 
-            <!-- Pulsing icon -->
-            <div id="alertIcon" style="font-size: 120px; margin-bottom: 20px;">⚡</div>
+            <!-- Phone frame with vibration animation -->
+            <div id="phoneContainer" style="position: relative;">
+                <!-- Phone outer frame -->
+                <div style="
+                    width: 320px;
+                    height: 650px;
+                    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+                    border-radius: 45px;
+                    padding: 12px;
+                    box-shadow:
+                        0 0 0 3px #333,
+                        0 50px 100px rgba(255, 50, 50, 0.3),
+                        0 0 200px rgba(255, 50, 50, 0.2),
+                        inset 0 0 20px rgba(0,0,0,0.5);
+                ">
+                    <!-- Phone screen -->
+                    <div style="
+                        width: 100%;
+                        height: 100%;
+                        background: linear-gradient(180deg, #CC0000, #8B0000);
+                        border-radius: 35px;
+                        overflow: hidden;
+                        position: relative;
+                    ">
+                        <!-- Status bar -->
+                        <div style="
+                            height: 35px;
+                            background: rgba(0,0,0,0.3);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 0 20px;
+                        ">
+                            <div style="width: 80px; height: 25px; background: #000; border-radius: 15px;"></div>
+                        </div>
 
-            <!-- Severity badge -->
-            <div style="background: rgba(0,0,0,0.3); padding: 10px 30px; border-radius: 30px; margin-bottom: 25px;">
-                <span id="alertBadge" style="font-size: 18px; font-weight: 700; letter-spacing: 3px;">ALARM</span>
+                        <!-- Alert content inside phone -->
+                        <div style="padding: 25px 20px; text-align: center; height: calc(100% - 35px); display: flex; flex-direction: column; justify-content: center;">
+
+                            <!-- Pulsing lightning icon -->
+                            <div id="alertIcon" style="font-size: 70px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));">⚡</div>
+
+                            <!-- Severity badge -->
+                            <div style="background: rgba(0,0,0,0.4); padding: 8px 25px; border-radius: 25px; margin: 0 auto 15px; display: inline-block;">
+                                <span id="alertBadge" style="font-size: 13px; font-weight: 700; letter-spacing: 3px; color: #fff;">ALARM</span>
+                            </div>
+
+                            <!-- Title -->
+                            <h2 id="alertTitle" style="font-size: 22px; font-weight: 700; margin-bottom: 12px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">LIGHTNING ALERT</h2>
+
+                            <!-- Message -->
+                            <p id="alertMessage" style="font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 8px;">
+                                Lightning detected within <strong>8 km</strong>
+                            </p>
+                            <p style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 20px;">Demo - Presentation Room</p>
+
+                            <!-- Instruction -->
+                            <div style="padding: 12px 20px; background: rgba(0,0,0,0.25); border-radius: 12px; margin-bottom: 20px;">
+                                <p id="alertInstruction" style="font-size: 13px; color: #fff; margin: 0;">🏃 Seek shelter immediately</p>
+                            </div>
+
+                            <!-- Vibrating indicator -->
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px;">
+                                <span style="font-size: 20px;" id="vibrateIcon">📳</span>
+                                <span id="alertVibrate" style="font-size: 12px; color: rgba(255,255,255,0.6);">Vibrating...</span>
+                            </div>
+
+                            <!-- Button inside phone -->
+                            <button style="
+                                padding: 14px 40px;
+                                border-radius: 25px;
+                                border: none;
+                                background: #fff;
+                                color: #CC0000;
+                                font-weight: 700;
+                                font-size: 15px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                            " id="alertButton">
+                                Understood
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sound waves emanating from phone -->
+                <div id="soundWaves" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;">
+                    <div class="sound-wave" style="position: absolute; width: 400px; height: 400px; border: 2px solid rgba(255,50,50,0.3); border-radius: 50%; left: -200px; top: -200px;"></div>
+                    <div class="sound-wave" style="position: absolute; width: 500px; height: 500px; border: 2px solid rgba(255,50,50,0.2); border-radius: 50%; left: -250px; top: -250px; animation-delay: 0.5s;"></div>
+                    <div class="sound-wave" style="position: absolute; width: 600px; height: 600px; border: 2px solid rgba(255,50,50,0.1); border-radius: 50%; left: -300px; top: -300px; animation-delay: 1s;"></div>
+                </div>
             </div>
 
-            <!-- Title - alternates languages -->
-            <h1 id="alertTitle" style="font-size: 48px; font-weight: 700; margin-bottom: 20px; color: #fff;">LIGHTNING ALERT</h1>
-
-            <!-- Message -->
-            <p id="alertMessage" style="font-size: 24px; color: rgba(255,255,255,0.9); line-height: 1.5; margin-bottom: 10px;">
-                Lightning activity detected within <strong>8 km</strong>
-            </p>
-            <p style="font-size: 28px; font-weight: 600; color: #fff; margin-bottom: 30px;">Demo - Presentation Room</p>
-
-            <!-- Instruction box -->
-            <div style="padding: 20px 40px; background: rgba(0,0,0,0.2); border-radius: 16px; margin-bottom: 30px;">
-                <p id="alertInstruction" style="font-size: 22px; color: #fff;">🏃 Seek shelter immediately</p>
-            </div>
-
-            <!-- Vibrating indicator -->
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 40px;">
-                <span style="font-size: 28px;" id="vibrateIcon">📳</span>
-                <span id="alertVibrate" style="font-size: 16px; color: rgba(255,255,255,0.7);">Devices vibrating...</span>
-            </div>
-
-            <!-- Dismiss button -->
+            <!-- Stop button below phone -->
             <button onclick="dismissDemoAlert()" style="
-                padding: 20px 60px;
-                border-radius: 16px;
-                border: none;
-                background: #fff;
-                color: #CC0000;
-                font-weight: 700;
-                font-size: 22px;
+                margin-top: 50px;
+                padding: 18px 50px;
+                border-radius: 30px;
+                border: 2px solid rgba(255,255,255,0.3);
+                background: transparent;
+                color: #fff;
+                font-weight: 600;
+                font-size: 16px;
                 cursor: pointer;
-                box-shadow: 0 5px 30px rgba(0,0,0,0.3);
-            " id="alertButton">
-                Understood
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.5)';" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(255,255,255,0.3)';">
+                ✕ STOP DEMO
             </button>
+
+            <!-- Language indicator -->
+            <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px;">
+                <span id="langEN" class="lang-indicator" style="padding: 5px 15px; border-radius: 15px; font-size: 12px; color: #fff; background: rgba(255,255,255,0.2);">EN</span>
+                <span id="langPT" class="lang-indicator" style="padding: 5px 15px; border-radius: 15px; font-size: 12px; color: #888;">PT</span>
+                <span id="langES" class="lang-indicator" style="padding: 5px 15px; border-radius: 15px; font-size: 12px; color: #888;">ES</span>
+            </div>
         </div>
     </div>
 </div>
@@ -1467,49 +1546,74 @@
 <style>
     @keyframes pulse-icon {
         0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.15); opacity: 0.8; }
+        50% { transform: scale(1.2); opacity: 0.8; }
     }
-    @keyframes vibrate {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-3px); }
-        75% { transform: translateX(3px); }
+    @keyframes vibrate-phone {
+        0%, 100% { transform: translateX(0) rotate(0deg); }
+        10% { transform: translateX(-3px) rotate(-0.5deg); }
+        20% { transform: translateX(3px) rotate(0.5deg); }
+        30% { transform: translateX(-3px) rotate(-0.5deg); }
+        40% { transform: translateX(3px) rotate(0.5deg); }
+        50% { transform: translateX(-2px) rotate(-0.3deg); }
+        60% { transform: translateX(2px) rotate(0.3deg); }
+        70% { transform: translateX(-2px) rotate(-0.3deg); }
+        80% { transform: translateX(2px) rotate(0.3deg); }
+        90% { transform: translateX(-1px) rotate(0deg); }
+    }
+    @keyframes sound-pulse {
+        0% { transform: scale(0.8); opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes glow-pulse {
+        0%, 100% { box-shadow: 0 0 0 3px #333, 0 50px 100px rgba(255, 50, 50, 0.3), 0 0 200px rgba(255, 50, 50, 0.2); }
+        50% { box-shadow: 0 0 0 3px #333, 0 50px 100px rgba(255, 50, 50, 0.5), 0 0 300px rgba(255, 50, 50, 0.4); }
     }
     #alertIcon.active {
-        animation: pulse-icon 0.8s ease-in-out infinite;
+        animation: pulse-icon 0.6s ease-in-out infinite;
     }
-    #vibrateIcon.active {
-        animation: vibrate 0.15s linear infinite;
+    #phoneContainer.active {
+        animation: vibrate-phone 0.5s linear infinite;
+    }
+    #phoneContainer.active > div:first-child {
+        animation: glow-pulse 1s ease-in-out infinite;
+    }
+    .sound-wave {
+        animation: sound-pulse 2s ease-out infinite;
+    }
+    .lang-indicator.active {
+        background: rgba(255,255,255,0.3) !important;
+        color: #fff !important;
     }
 </style>
 
 <script>
-    const API_URL = 'https://efcalerta-api.luxia.pe'; // Cambiar por URL real
+    const API_URL = 'https://efcalerta-api.luxia.pe';
     let languageInterval = null;
-    let isEnglish = true;
+    let alarmAudio = null;
 
     const translations = {
         en: {
             badge: 'ALARM',
             title: 'LIGHTNING ALERT',
-            message: 'Lightning activity detected within <strong>8 km</strong>',
+            message: 'Lightning detected within <strong>8 km</strong>',
             instruction: '🏃 Seek shelter immediately',
-            vibrate: 'Devices vibrating...',
+            vibrate: 'Vibrating...',
             button: 'Understood'
         },
         pt: {
             badge: 'ALARME',
             title: 'ALERTA DE RAIOS',
-            message: 'Atividade de raios detectada a <strong>8 km</strong>',
+            message: 'Raios detectados a <strong>8 km</strong>',
             instruction: '🏃 Procure abrigo imediatamente',
-            vibrate: 'Dispositivos vibrando...',
+            vibrate: 'Vibrando...',
             button: 'Entendido'
         },
         es: {
             badge: 'ALARMA',
             title: 'ALERTA DE RAYOS',
-            message: 'Actividad eléctrica detectada a <strong>8 km</strong>',
+            message: 'Rayos detectados a <strong>8 km</strong>',
             instruction: '🏃 Busque refugio inmediatamente',
-            vibrate: 'Dispositivos vibrando...',
+            vibrate: 'Vibrando...',
             button: 'Entendido'
         }
     };
@@ -1528,6 +1632,10 @@
         document.getElementById('alertVibrate').textContent = t.vibrate;
         document.getElementById('alertButton').textContent = t.button;
 
+        // Update language indicators
+        document.querySelectorAll('.lang-indicator').forEach(el => el.classList.remove('active'));
+        document.getElementById('lang' + lang.toUpperCase()).classList.add('active');
+
         currentLangIndex = (currentLangIndex + 1) % langOrder.length;
     }
 
@@ -1535,7 +1643,14 @@
         document.getElementById('demoInitial').style.display = 'none';
         document.getElementById('demoAlert').style.display = 'block';
         document.getElementById('alertIcon').classList.add('active');
-        document.getElementById('vibrateIcon').classList.add('active');
+        document.getElementById('phoneContainer').classList.add('active');
+
+        // Play alarm sound
+        alarmAudio = document.getElementById('alarmSound');
+        if (alarmAudio) {
+            alarmAudio.currentTime = 0;
+            alarmAudio.play().catch(e => console.log('Audio autoplay blocked:', e));
+        }
 
         // Start language rotation every 3 seconds
         currentLangIndex = 0;
@@ -1547,7 +1662,13 @@
         document.getElementById('demoAlert').style.display = 'none';
         document.getElementById('demoInitial').style.display = 'block';
         document.getElementById('alertIcon').classList.remove('active');
-        document.getElementById('vibrateIcon').classList.remove('active');
+        document.getElementById('phoneContainer').classList.remove('active');
+
+        // Stop alarm sound
+        if (alarmAudio) {
+            alarmAudio.pause();
+            alarmAudio.currentTime = 0;
+        }
 
         if (languageInterval) {
             clearInterval(languageInterval);
@@ -1568,10 +1689,10 @@
         btn.innerHTML = '⏳ SENDING...';
         btn.style.background = '#666';
 
-        // Show the full-screen alert mockup immediately
+        // Show the mockup immediately
         showDemoAlert();
 
-        // Also try to send to real devices (optional - won't fail if server unavailable)
+        // Also try to send to real devices
         try {
             await fetch(`${API_URL}/api/v1/webhooks/test/antamina`, {
                 method: 'POST',
@@ -1587,7 +1708,7 @@
             });
             console.log('Alert sent to real devices');
         } catch (error) {
-            console.log('Could not reach server (demo still works on screen):', error);
+            console.log('Demo mode (server unavailable):', error);
         }
     }
 </script>
