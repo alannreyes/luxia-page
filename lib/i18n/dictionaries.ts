@@ -4,212 +4,167 @@ import type { Locale } from '@/middleware'
 const es = {
   // Navegación
   nav: {
-    services: 'Servicios',
-    cases: 'Casos',
-    insights: 'Insights',
+    services: 'Soluciones',
+    about: 'Fundador',
+    cases: 'Industrias',
     contact: 'Contacto',
     schedule: 'Agendar Consulta'
   },
-  
+
   // Hero Section
   hero: {
-    mainTitle: 'Tu empresa es única.',
-    subtitle: 'Tu IA también.',
-    description: 'Soluciones de IA personalizadas que funcionan desde el primer día. No más demos genéricos, no más promesas vacías.',
-    primaryCTA: 'Ver Demos Reales',
-    secondaryCTA: 'Reserva 30 minutos',
-    benefits: [
-      'Sin compromiso',
-      'Demo personalizado',
-      'Resultados en 30 días'
+    badge: 'Boutique de IA para industrias reguladas',
+    mainTitle: 'IA que entiende',
+    mainTitleHighlight: 'tu industria',
+    subtitle: 'Soluciones de Inteligencia Artificial para Fintech, Insurtech y operaciones industriales. 30 años de experiencia en banca y tecnología.',
+    primaryCTA: 'Ver Soluciones',
+    secondaryCTA: 'Agendar Consulta',
+    stats: [
+      { value: '30+', label: 'Años de experiencia' },
+      { value: 'IBM', label: 'BankBoston, Citibank, BCI' },
+      { value: 'ISO 27001', label: 'Lead Auditor' },
+      { value: 'Google Cloud', label: 'Gen AI Leader' }
     ]
   },
 
-  // Servicios
+  // Soluciones/Servicios
   services: {
-    title: 'Potencia tu empresa con IA a medida',
-    subtitle: 'Integración directa con tus sistemas actuales. Sin disrupciones, sin migraciones complejas.',
-    erp: {
-      title: 'ERP con superpoderes',
-      description: 'Tu ERP actual + IA que entiende tu negocio. Automatización inteligente que se adapta a tus procesos únicos.'
-    },
-    search: {
-      title: 'Encuentra cualquier archivo al instante',
-      description: 'IA que busca en todos tus documentos, correos y sistemas. Como tener un asistente que conoce cada archivo de tu empresa.'
-    },
-    assistant: {
-      title: 'Asistente multicanal inteligente',
-      description: 'Un solo asistente para web, WhatsApp, email y teléfono. Capacitado específicamente en tu empresa y productos.'
-    },
-    cta: 'Reserva 30 minutos'
-  },
-
-  // Casos reales
-  cases: {
-    title: 'Lo que antes era imposible,',
-    subtitle: 'ahora en producción',
-    fintech: {
-      industry: 'Fintech Internacional',
-      challenge: 'Análisis de riesgo crediticio en tiempo real',
-      solution: 'Sistema de IA que evalúa 50+ variables en microsegundos',
-      badge: 'Imposible sin IA'
-    },
-    healthcare: {
-      industry: 'Healthtech',
-      challenge: 'Diagnóstico asistido por IA para radiología',
-      solution: 'Detección de anomalías con precisión superior al 95%',
-      badge: 'Imposible sin IA'
-    },
-    ecommerce: {
-      industry: 'E-commerce',
-      challenge: 'Personalización en tiempo real de 10M+ productos',
-      solution: 'Motor de recomendaciones que aumentó ventas 340%',
-      badge: 'Imposible sin IA'
-    }
-  },
-
-  // Insights
-  insights: {
-    title: 'Insights de IA empresarial',
-    subtitle: 'Conocimiento práctico para líderes que buscan implementar IA de manera efectiva.',
-    readMore: 'Leer más',
-    minutes: 'min de lectura',
-    articles: [
+    title: 'Soluciones de IA',
+    subtitle: 'Tecnología probada en producción, diseñada para industrias reguladas',
+    items: [
       {
-        category: 'Guía Técnica',
-        title: 'Implementando RAG en Producción: Mejores Prácticas',
-        excerpt: 'Cómo escalar sistemas RAG empresariales manteniendo precisión y velocidad...',
-        readTime: '8 min de lectura'
+        id: 'uwia',
+        icon: 'FileSearch',
+        title: 'UWIA',
+        tagline: 'Underwriting Intelligence Automation',
+        description: 'Análisis automatizado de documentos de seguros. Extracción inteligente de datos, evaluación de riesgos y generación de reportes para profesionales legales y de claims.',
+        features: ['Análisis de pólizas', 'Extracción de entidades', 'Evaluación de cobertura', 'Reportes automáticos'],
+        badge: 'Insurtech'
       },
       {
-        category: 'Caso de Uso',
-        title: 'n8n + LLMs: Automatización Inteligente para Fintech',
-        excerpt: 'Workflow completo para detección de fraude y análisis predictivo...',
-        readTime: '12 min de lectura'
+        id: 'semantic',
+        icon: 'Search',
+        title: 'Búsqueda Semántica',
+        tagline: 'Bases de datos vectoriales + RAG',
+        description: 'Motores de búsqueda que entienden el contexto, no solo palabras clave. Ideal para catálogos industriales, documentación técnica y knowledge bases empresariales.',
+        features: ['Embeddings personalizados', 'RAG empresarial', 'Integración con ERPs', 'Búsqueda multimodal'],
+        badge: 'Enterprise'
       },
       {
-        category: 'Tendencias 2025',
-        title: 'El Futuro de los Agentes de IA en Empresas',
-        excerpt: 'Por qué 2025 será el año de la adopción masiva de agentes autónomos...',
-        readTime: '6 min de lectura'
+        id: 'alerta',
+        icon: 'CloudLightning',
+        title: 'EFC Alerta',
+        tagline: 'Sistema de alertas meteorológicas',
+        description: 'Alertas en tiempo real powered by Vaisala Xweather. Protege operaciones mineras, petroleras y de gas con notificaciones push instantáneas de tormentas eléctricas.',
+        features: ['Alertas push nativas', 'Integración Xweather', 'Multi-zona', 'Privacidad total'],
+        badge: 'Industrial'
+      },
+      {
+        id: 'consulting',
+        icon: 'Brain',
+        title: 'Consultoría IA',
+        tagline: 'Estrategia e implementación',
+        description: 'Evaluación, diseño e implementación de soluciones de IA Generativa para industrias reguladas. Desde POCs de 4 semanas hasta despliegues enterprise.',
+        features: ['Assessment IA', 'POCs rápidos', 'Arquitectura cloud', 'Compliance regulatorio'],
+        badge: 'Strategy'
+      }
+    ],
+    cta: 'Explorar solución'
+  },
+
+  // Credenciales del Fundador
+  founder: {
+    title: 'Respaldado por experiencia real',
+    subtitle: 'No solo teoría. Décadas construyendo y liderando tecnología en las instituciones más exigentes.',
+    name: 'Alann Reyes',
+    role: 'Fundador & CEO',
+    bio: 'Technology Innovation Manager en EFC. Ex-Head of IT en Banco BCI donde lideré el lanzamiento del primer banco 100% cloud de Perú. 17 años en IBM sirviendo a los principales bancos y operaciones mineras del país.',
+    credentials: [
+      { icon: 'Award', title: 'Google Cloud', subtitle: 'Generative AI Leader' },
+      { icon: 'Shield', title: 'ISO 27001', subtitle: 'Lead Auditor' },
+      { icon: 'Building', title: 'IBM', subtitle: '17 años' },
+      { icon: 'Landmark', title: 'Banco BCI', subtitle: 'Head of IT' }
+    ],
+    experience: [
+      { company: 'EFC', role: 'Technology Innovation Manager', years: '19 años' },
+      { company: 'Banco BCI', role: 'Head of IT', years: 'Primer banco cloud de Perú' },
+      { company: 'IBM', role: 'Business Continuity Leader', years: '17 años' },
+      { company: 'BankBoston', role: 'IT Supervisor', years: '7 años' },
+      { company: 'Citibank', role: 'Server Administration', years: '2 años' }
+    ],
+    cta: 'Ver LinkedIn'
+  },
+
+  // Industrias
+  industries: {
+    title: 'Industrias que servimos',
+    subtitle: 'Experiencia comprobada en los sectores más regulados y exigentes',
+    items: [
+      {
+        icon: 'Banknote',
+        title: 'Fintech',
+        description: 'Automatización de análisis crediticio, detección de fraude, y workflows de compliance.',
+        clients: 'Bancos, fintechs, microfinancieras'
+      },
+      {
+        icon: 'Shield',
+        title: 'Insurtech',
+        description: 'UWIA para underwriting automatizado, análisis de claims, y extracción de datos de pólizas.',
+        clients: 'Aseguradoras, brokers, ajustadores'
+      },
+      {
+        icon: 'HardHat',
+        title: 'Minería',
+        description: 'Sistemas de alerta temprana, IoT industrial, y búsqueda semántica de catálogos técnicos.',
+        clients: 'Mineras, operaciones de gas y petróleo'
+      },
+      {
+        icon: 'Factory',
+        title: 'Industrial',
+        description: 'Distribución just-in-time, búsqueda de +200K SKUs, integración con ERPs legacy.',
+        clients: 'Distribuidores, manufactura, logística'
       }
     ]
   },
 
   // CTA Final
   cta: {
-    title: '¿Listo para ver la IA en acción?',
-    subtitle: 'Agenda una demo personalizada y descubre cómo la IA puede transformar tu empresa.',
-    primary: 'Agendar Demo',
-    secondary: 'Más información',
-    benefits: [
-      {
-        title: 'Consulta de 30 minutos',
-        description: 'Tiempo suficiente para entender tu negocio'
-      },
-      {
-        title: 'Sin compromisos',
-        description: 'Solo ideas y recomendaciones honestas'
-      },
-      {
-        title: 'Expertos en IA',
-        description: 'Habla directamente con nuestro equipo técnico'
-      },
-      {
-        title: 'Resultados inmediatos',
-        description: 'Plan de acción personalizado al final de la llamada'
-      }
-    ]
+    title: '¿Listo para implementar IA en tu organización?',
+    subtitle: 'Agenda una consulta gratuita de 30 minutos. Sin compromisos, solo ideas concretas.',
+    primary: 'Agendar Consulta',
+    secondary: 'Enviar mensaje',
+    form: {
+      name: 'Nombre',
+      email: 'Email corporativo',
+      company: 'Empresa',
+      message: 'Cuéntanos tu desafío',
+      submit: 'Enviar',
+      sending: 'Enviando...',
+      success: 'Mensaje enviado. Te contactaré pronto.',
+      error: 'Error al enviar. Intenta de nuevo.'
+    }
   },
 
   // Footer
   footer: {
-    tagline: 'Transformación digital inteligente',
-    description: 'luxIA es tu partner estratégico en inteligencia artificial. Desarrollamos soluciones de IA a medida que funcionan desde el primer día.',
-    quickLinks: 'Enlaces rápidos',
-    services: 'Servicios',
+    tagline: 'IA para industrias reguladas',
+    description: 'LuxIA es una boutique de inteligencia artificial fundada por Alann Reyes. Soluciones enterprise con el cuidado de un artesano.',
+    location: 'Florida, USA | Lima, Perú',
+    quickLinks: 'Enlaces',
     contact: 'Contacto',
     legal: 'Legal',
-    privacy: 'Política de Privacidad',
-    terms: 'Términos de Servicio',
-    rights: 'Todos los derechos reservados'
-  },
-
-  // Formularios
-  forms: {
-    name: 'Nombre completo',
-    email: 'Email corporativo',
-    company: 'Empresa',
-    companySize: 'Tamaño de empresa',
-    message: 'Cuéntanos sobre tu proyecto',
-    submit: 'Enviar',
-    sending: 'Enviando...',
-    success: '¡Mensaje enviado! Te contactaremos pronto.',
-    error: 'Error al enviar. Inténtalo de nuevo.'
-  },
-
-  // Demos Interactivas
-  demos: {
-    title: 'Experimenta el Poder de la IA',
-    subtitle: 'Demos interactivas que muestran cómo la IA puede transformar tu negocio',
-    available: 'Demos disponibles próximamente',
-    cta: {
-      title: '¿Quieres ser el primero en probar nuestras demos?',
-      subtitle: 'Agenda una consulta personalizada y te mostraremos estas demos en acción, adaptadas a las necesidades específicas de tu empresa.',
-      schedule: 'Agendar Demo Personalizada',
-      info: 'Más Información'
-    },
-    fintech: {
-      title: 'Chat Fintech + ERP',
-      description: 'Consulta ventas, métricas y análisis de precios con gráficos en tiempo real',
-      features: ['Consultas en lenguaje natural', 'Gráficos interactivos', 'Análisis predictivo'],
-      placeholder: 'Escribe tu pregunta aquí...',
-      initialMessage: '¡Hola! Soy tu asistente de IA para TechFlow Solutions. Puedo ayudarte con análisis de ventas, métricas de rendimiento, proyecciones y más. ¿En qué puedo ayudarte hoy?',
-      poweredBy: 'Powered by:',
-      latency: 'Latencia: <2s',
-      vsManual: 'vs SQL manual: 3-5 min',
-      howItWorks: '¿Cómo funciona la magia? 🪄',
-      howItWorksSteps: {
-        question: {
-          title: 'Tu Pregunta',
-          description: '"¿Cuáles fueron las ventas de octubre?"'
-        },
-        processing: {
-          title: 'Procesamiento IA',
-          description: 'GPT-4o entiende tu intención'
-        },
-        query: {
-          title: 'Query Optimizado',
-          description: 'Consulta PostgreSQL automática'
-        },
-        visualization: {
-          title: 'Visualización',
-          description: 'Gráficos interactivos instantáneos'
-        }
-      },
-      howItWorksResult: 'Tu equipo obtiene insights empresariales complejos sin necesidad de conocimientos técnicos.',
-      suggestions: {
-        title: 'Preguntas sugeridas:',
-        sales: '¿Cuáles fueron las ventas de octubre?',
-        bestSeller: '¿Quién es el mejor vendedor del trimestre?',
-        projection: '¿Cuál es la proyección para Q1 2025?',
-        payments: 'Muéstrame clientes con pagos pendientes'
-      },
-      responses: {
-        sales: 'Las ventas de octubre fueron de $47.2M, representando un incremento del 2.8% respecto a septiembre y un crecimiento YoY del 10.3% comparado con octubre 2023.',
-        bestSeller: 'María Rodriguez lidera el trimestre con $4.25M en ventas, 23 deals cerrados y una tasa de conversión del 68%. Ha mostrado un crecimiento del 15% vs Q3.',
-        projection: 'Basado en las tendencias actuales y factores estacionales, proyectamos $142.5M para Q1 2025, un crecimiento del 8.5% YoY. Factores clave: expansión en Brasil (+15%) y nuevos productos SaaS.',
-        payments: 'Hay 2 clientes con pagos pendientes por un total de $67,000. FastCommerce Ltd tiene 15 días de retraso ($45K) y Digital Store Corp 8 días ($22K).',
-        default: 'Puedo ayudarte con análisis de ventas, información sobre vendedores, pagos pendientes y proyecciones. ¿Podrías ser más específico con tu pregunta?'
-      }
-    }
+    privacy: 'Privacidad',
+    terms: 'Términos',
+    rights: 'Todos los derechos reservados',
+    linkedin: 'LinkedIn',
+    email: 'alann@luxia.us'
   },
 
   // Meta
   meta: {
-    title: 'luxIA - La IA a tu medida',
-    description: 'Soluciones de IA personalizadas que funcionan desde el primer día. Optimiza procesos, reduce costos y acelera decisiones. Consulta gratuita de 30 min.',
-    keywords: 'IA empresarial, RAG, n8n, automatización, ERP, chatbot, transformación digital, demos IA, consulta gratuita, fintech IA, análisis documentos, superpoder IA'
+    title: 'LuxIA - IA para Fintech, Insurtech e Industria',
+    description: 'Boutique de Inteligencia Artificial para industrias reguladas. UWIA para seguros, búsqueda semántica, alertas industriales. 30 años de experiencia en banca y tecnología.',
+    keywords: 'IA empresarial, fintech, insurtech, underwriting automation, UWIA, búsqueda semántica, RAG, bases de datos vectoriales, EFC Alerta, Vaisala, IBM, consultoría IA, Alann Reyes'
   }
 }
 
@@ -217,212 +172,167 @@ const es = {
 const en = {
   // Navigation
   nav: {
-    services: 'Services',
-    cases: 'Cases',
-    insights: 'Insights',
+    services: 'Solutions',
+    about: 'Founder',
+    cases: 'Industries',
     contact: 'Contact',
-    schedule: 'Schedule Consultation'
+    schedule: 'Schedule Call'
   },
-  
+
   // Hero Section
   hero: {
-    mainTitle: 'Your business is unique.',
-    subtitle: 'Your AI should be too.',
-    description: 'Custom AI solutions that work from day one. No more generic demos, no more empty promises.',
-    primaryCTA: 'See Real Demos',
-    secondaryCTA: 'Book 30 minutes',
-    benefits: [
-      'No commitment',
-      'Custom demo',
-      'Results in 30 days'
+    badge: 'AI boutique for regulated industries',
+    mainTitle: 'AI that understands',
+    mainTitleHighlight: 'your industry',
+    subtitle: 'Artificial Intelligence solutions for Fintech, Insurtech and industrial operations. 30 years of experience in banking and technology.',
+    primaryCTA: 'See Solutions',
+    secondaryCTA: 'Schedule Call',
+    stats: [
+      { value: '30+', label: 'Years of experience' },
+      { value: 'IBM', label: 'BankBoston, Citibank, BCI' },
+      { value: 'ISO 27001', label: 'Lead Auditor' },
+      { value: 'Google Cloud', label: 'Gen AI Leader' }
     ]
   },
 
-  // Services
+  // Solutions/Services
   services: {
-    title: 'Supercharge your business with custom AI',
-    subtitle: 'Direct integration with your current systems. No disruptions, no complex migrations.',
-    erp: {
-      title: 'ERP with superpowers',
-      description: 'Your current ERP + AI that understands your business. Intelligent automation that adapts to your unique processes.'
-    },
-    search: {
-      title: 'Find any file instantly',
-      description: 'AI that searches all your documents, emails, and systems. Like having an assistant who knows every file in your company.'
-    },
-    assistant: {
-      title: 'Intelligent multichannel assistant',
-      description: 'One assistant for web, WhatsApp, email, and phone. Specifically trained on your company and products.'
-    },
-    cta: 'Book 30 minutes'
-  },
-
-  // Real cases
-  cases: {
-    title: 'What was once impossible,',
-    subtitle: 'now in production',
-    fintech: {
-      industry: 'International Fintech',
-      challenge: 'Real-time credit risk analysis',
-      solution: 'AI system that evaluates 50+ variables in microseconds',
-      badge: 'Impossible without AI'
-    },
-    healthcare: {
-      industry: 'Healthtech',
-      challenge: 'AI-assisted radiology diagnosis',
-      solution: 'Anomaly detection with 95%+ accuracy',
-      badge: 'Impossible without AI'
-    },
-    ecommerce: {
-      industry: 'E-commerce',
-      challenge: 'Real-time personalization of 10M+ products',
-      solution: 'Recommendation engine that increased sales 340%',
-      badge: 'Impossible without AI'
-    }
-  },
-
-  // Insights
-  insights: {
-    title: 'Enterprise AI insights',
-    subtitle: 'Practical knowledge for leaders looking to implement AI effectively.',
-    readMore: 'Read more',
-    minutes: 'min read',
-    articles: [
+    title: 'AI Solutions',
+    subtitle: 'Battle-tested technology, designed for regulated industries',
+    items: [
       {
-        category: 'Technical Guide',
-        title: 'Implementing RAG in Production: Best Practices',
-        excerpt: 'How to scale enterprise RAG systems while maintaining accuracy and speed...',
-        readTime: '8 min read'
+        id: 'uwia',
+        icon: 'FileSearch',
+        title: 'UWIA',
+        tagline: 'Underwriting Intelligence Automation',
+        description: 'Automated insurance document analysis. Intelligent data extraction, risk assessment and report generation for legal and claims professionals.',
+        features: ['Policy analysis', 'Entity extraction', 'Coverage evaluation', 'Auto-generated reports'],
+        badge: 'Insurtech'
       },
       {
-        category: 'Use Case',
-        title: 'n8n + LLMs: Intelligent Automation for Fintech',
-        excerpt: 'Complete workflow for fraud detection and predictive analysis...',
-        readTime: '12 min read'
+        id: 'semantic',
+        icon: 'Search',
+        title: 'Semantic Search',
+        tagline: 'Vector databases + RAG',
+        description: 'Search engines that understand context, not just keywords. Ideal for industrial catalogs, technical documentation and enterprise knowledge bases.',
+        features: ['Custom embeddings', 'Enterprise RAG', 'ERP integration', 'Multimodal search'],
+        badge: 'Enterprise'
       },
       {
-        category: '2025 Trends',
-        title: 'The Future of AI Agents in Enterprise',
-        excerpt: 'Why 2025 will be the year of massive autonomous agent adoption...',
-        readTime: '6 min read'
+        id: 'alerta',
+        icon: 'CloudLightning',
+        title: 'EFC Alerta',
+        tagline: 'Weather alert system',
+        description: 'Real-time alerts powered by Vaisala Xweather. Protect mining, oil and gas operations with instant push notifications for lightning storms.',
+        features: ['Native push alerts', 'Xweather integration', 'Multi-zone', 'Total privacy'],
+        badge: 'Industrial'
+      },
+      {
+        id: 'consulting',
+        icon: 'Brain',
+        title: 'AI Consulting',
+        tagline: 'Strategy & implementation',
+        description: 'Assessment, design and implementation of Generative AI solutions for regulated industries. From 4-week POCs to enterprise deployments.',
+        features: ['AI assessment', 'Rapid POCs', 'Cloud architecture', 'Regulatory compliance'],
+        badge: 'Strategy'
+      }
+    ],
+    cta: 'Explore solution'
+  },
+
+  // Founder Credentials
+  founder: {
+    title: 'Backed by real experience',
+    subtitle: 'Not just theory. Decades building and leading technology at the most demanding institutions.',
+    name: 'Alann Reyes',
+    role: 'Founder & CEO',
+    bio: 'Technology Innovation Manager at EFC. Former Head of IT at Banco BCI where I led the launch of Peru\'s first 100% cloud-native bank. 17 years at IBM serving the country\'s top banks and mining operations.',
+    credentials: [
+      { icon: 'Award', title: 'Google Cloud', subtitle: 'Generative AI Leader' },
+      { icon: 'Shield', title: 'ISO 27001', subtitle: 'Lead Auditor' },
+      { icon: 'Building', title: 'IBM', subtitle: '17 years' },
+      { icon: 'Landmark', title: 'Banco BCI', subtitle: 'Head of IT' }
+    ],
+    experience: [
+      { company: 'EFC', role: 'Technology Innovation Manager', years: '19 years' },
+      { company: 'Banco BCI', role: 'Head of IT', years: 'Peru\'s first cloud bank' },
+      { company: 'IBM', role: 'Business Continuity Leader', years: '17 years' },
+      { company: 'BankBoston', role: 'IT Supervisor', years: '7 years' },
+      { company: 'Citibank', role: 'Server Administration', years: '2 years' }
+    ],
+    cta: 'View LinkedIn'
+  },
+
+  // Industries
+  industries: {
+    title: 'Industries we serve',
+    subtitle: 'Proven experience in the most regulated and demanding sectors',
+    items: [
+      {
+        icon: 'Banknote',
+        title: 'Fintech',
+        description: 'Credit analysis automation, fraud detection, and compliance workflows.',
+        clients: 'Banks, fintechs, microfinance'
+      },
+      {
+        icon: 'Shield',
+        title: 'Insurtech',
+        description: 'UWIA for automated underwriting, claims analysis, and policy data extraction.',
+        clients: 'Insurers, brokers, adjusters'
+      },
+      {
+        icon: 'HardHat',
+        title: 'Mining',
+        description: 'Early warning systems, industrial IoT, and semantic search for technical catalogs.',
+        clients: 'Mining companies, oil & gas operations'
+      },
+      {
+        icon: 'Factory',
+        title: 'Industrial',
+        description: 'Just-in-time distribution, 200K+ SKU search, legacy ERP integration.',
+        clients: 'Distributors, manufacturing, logistics'
       }
     ]
   },
 
   // Final CTA
   cta: {
-    title: 'Ready to see AI in action?',
-    subtitle: 'Schedule a personalized demo and discover how AI can transform your business.',
-    primary: 'Schedule Demo',
-    secondary: 'More information',
-    benefits: [
-      {
-        title: '30-minute consultation',
-        description: 'Enough time to understand your business'
-      },
-      {
-        title: 'No commitments',
-        description: 'Just honest ideas and recommendations'
-      },
-      {
-        title: 'AI experts',
-        description: 'Speak directly with our technical team'
-      },
-      {
-        title: 'Immediate results',
-        description: 'Personalized action plan at the end of the call'
-      }
-    ]
+    title: 'Ready to implement AI in your organization?',
+    subtitle: 'Schedule a free 30-minute consultation. No commitments, just concrete ideas.',
+    primary: 'Schedule Call',
+    secondary: 'Send message',
+    form: {
+      name: 'Name',
+      email: 'Corporate email',
+      company: 'Company',
+      message: 'Tell us your challenge',
+      submit: 'Send',
+      sending: 'Sending...',
+      success: 'Message sent. I\'ll contact you soon.',
+      error: 'Error sending. Please try again.'
+    }
   },
 
   // Footer
   footer: {
-    tagline: 'Intelligent digital transformation',
-    description: 'luxIA is your strategic partner in artificial intelligence. We develop custom AI solutions that work from day one.',
-    quickLinks: 'Quick links',
-    services: 'Services',
+    tagline: 'AI for regulated industries',
+    description: 'LuxIA is an artificial intelligence boutique founded by Alann Reyes. Enterprise solutions with artisan care.',
+    location: 'Florida, USA | Lima, Peru',
+    quickLinks: 'Links',
     contact: 'Contact',
     legal: 'Legal',
-    privacy: 'Privacy Policy',
-    terms: 'Terms of Service',
-    rights: 'All rights reserved'
-  },
-
-  // Forms
-  forms: {
-    name: 'Full name',
-    email: 'Corporate email',
-    company: 'Company',
-    companySize: 'Company size',
-    message: 'Tell us about your project',
-    submit: 'Submit',
-    sending: 'Sending...',
-    success: 'Message sent! We\'ll contact you soon.',
-    error: 'Error sending. Please try again.'
-  },
-
-  // Interactive Demos
-  demos: {
-    title: 'Experience the Power of AI',
-    subtitle: 'Interactive demos that show how AI can transform your business',
-    available: 'Demos available soon',
-    cta: {
-      title: 'Want to be the first to try our demos?',
-      subtitle: 'Schedule a personalized consultation and we\'ll show you these demos in action, tailored to your company\'s specific needs.',
-      schedule: 'Schedule Personalized Demo',
-      info: 'More Information'
-    },
-    fintech: {
-      title: 'Fintech + ERP Chat',
-      description: 'Query sales, metrics and price analysis with real-time charts',
-      features: ['Natural language queries', 'Interactive charts', 'Predictive analysis'],
-      placeholder: 'Type your question here...',
-      initialMessage: 'Hi! I\'m your AI assistant for TechFlow Solutions. I can help you with sales analysis, performance metrics, projections and more. How can I help you today?',
-      poweredBy: 'Powered by:',
-      latency: 'Latency: <2s',
-      vsManual: 'vs manual SQL: 3-5 min',
-      howItWorks: 'How does the magic work? 🪄',
-      howItWorksSteps: {
-        question: {
-          title: 'Your Question',
-          description: '"What were October\'s sales?"'
-        },
-        processing: {
-          title: 'AI Processing',
-          description: 'GPT-4o understands your intent'
-        },
-        query: {
-          title: 'Optimized Query',
-          description: 'Automatic PostgreSQL query'
-        },
-        visualization: {
-          title: 'Visualization',
-          description: 'Instant interactive charts'
-        }
-      },
-      howItWorksResult: 'Your team gets complex business insights without needing technical knowledge.',
-      suggestions: {
-        title: 'Suggested questions:',
-        sales: 'What were October\'s sales?',
-        bestSeller: 'Who is the best seller this quarter?',
-        projection: 'What\'s the projection for Q1 2025?',
-        payments: 'Show me clients with overdue payments'
-      },
-      responses: {
-        sales: 'October sales were $47.2M, representing a 2.8% increase from September and 10.3% YoY growth compared to October 2023.',
-        bestSeller: 'Maria Rodriguez leads the quarter with $4.25M in sales, 23 closed deals and a 68% conversion rate. She has shown 15% growth vs Q3.',
-        projection: 'Based on current trends and seasonal factors, we project $142.5M for Q1 2025, an 8.5% YoY growth. Key factors: Brazil expansion (+15%) and new SaaS products.',
-        payments: 'There are 2 clients with overdue payments totaling $67,000. FastCommerce Ltd is 15 days overdue ($45K) and Digital Store Corp 8 days ($22K).',
-        default: 'I can help you with sales analysis, seller information, overdue payments and projections. Could you be more specific with your question?'
-      }
-    }
+    privacy: 'Privacy',
+    terms: 'Terms',
+    rights: 'All rights reserved',
+    linkedin: 'LinkedIn',
+    email: 'alann@luxia.us'
   },
 
   // Meta
   meta: {
-    title: 'luxIA - AI Tailored to You',
-    description: 'Custom AI solutions that work from day one. Optimize processes, reduce costs, and accelerate decisions. Free 30-min consultation.',
-    keywords: 'enterprise AI, RAG, n8n, automation, ERP, chatbot, digital transformation, AI demos, free consultation, fintech AI, document analysis, AI superpowers'
+    title: 'LuxIA - AI for Fintech, Insurtech & Industry',
+    description: 'Artificial Intelligence boutique for regulated industries. UWIA for insurance, semantic search, industrial alerts. 30 years of banking and technology experience.',
+    keywords: 'enterprise AI, fintech, insurtech, underwriting automation, UWIA, semantic search, RAG, vector databases, EFC Alerta, Vaisala, IBM, AI consulting, Alann Reyes'
   }
 }
 

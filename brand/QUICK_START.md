@@ -4,9 +4,9 @@
 
 ### **Para Uso Digital** 💻
 ```
-brand/logos/svg/luxia-logo-horizontal.svg    # Logo principal web
-brand/logos/svg/luxia-icon-only.svg          # Icono para favicons
-brand/colors/color-palette.css               # Colores CSS
+public/luxia-star.svg                        # Logo principal - estrella elaborada
+public/favicon.svg                           # Favicon actualizado
+public/logo.png                              # Logo en PNG para usos generales
 ```
 
 ### **Para Firma de Correo** 📧
@@ -41,7 +41,7 @@ brand/templates/business-cards/business-card-modern.html
 <!-- En signature-modern.html, cambia: -->
 [TU NOMBRE] → Juan Pérez
 [TU CARGO] → Consultor en IA
-[TU-EMAIL] → juan@luxiabrands.com
+[TU-EMAIL] → info@luxia.us
 [TU-TELEFONO] → +34 600 123 456
 ```
 

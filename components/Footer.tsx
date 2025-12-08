@@ -1,40 +1,92 @@
 import { siteConfig } from '@/lib/config'
 import Logo from './Logo'
-import { Linkedin } from 'lucide-react'
+import { Linkedin, Mail, MapPin } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
 export default function Footer({ dictionary }: BaseComponentProps) {
   return (
-    <footer className="bg-gray-900 text-white py-12 px-6">
+    <footer className="bg-slate-900 text-white pt-16 pb-8 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <Logo variant="white" />
-          
-          <nav className="flex space-x-6">
-            <a href="#servicios" className="text-gray-300 hover:text-white transition-colors">
-              {dictionary.footer.services}
-            </a>
-            <a href="#casos-reales" className="text-gray-300 hover:text-white transition-colors">
-              {dictionary.nav.cases}
-            </a>
-            <a href="#insights" className="text-gray-300 hover:text-white transition-colors">
-              {dictionary.nav.insights}
-            </a>
-            <a href="#contacto" className="text-gray-300 hover:text-white transition-colors">
-              {dictionary.footer.contact}
-            </a>
-          </nav>
+        {/* Main Footer Content */}
+        <div className="grid md:grid-cols-4 gap-12 mb-12">
+          {/* Brand Column */}
+          <div className="md:col-span-2">
+            <Logo variant="white" />
+            <p className="text-gray-400 mt-4 max-w-md leading-relaxed">
+              {dictionary.footer.description}
+            </p>
+            <div className="flex items-center mt-4 text-gray-400">
+              <MapPin className="w-4 h-4 mr-2" />
+              <span className="text-sm">{dictionary.footer.location}</span>
+            </div>
+          </div>
 
-          <div className="flex space-x-4">
-            <a href={siteConfig.contact.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-gray-400 hover:text-white transition-colors">
-              <Linkedin size={24} />
-            </a>
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">{dictionary.footer.quickLinks}</h4>
+            <nav className="space-y-3">
+              <a href="#servicios" className="block text-gray-400 hover:text-white transition-colors text-sm">
+                {dictionary.nav.services}
+              </a>
+              <a href="#fundador" className="block text-gray-400 hover:text-white transition-colors text-sm">
+                {dictionary.nav.about}
+              </a>
+              <a href="#industrias" className="block text-gray-400 hover:text-white transition-colors text-sm">
+                {dictionary.nav.cases}
+              </a>
+              <a href="#contacto" className="block text-gray-400 hover:text-white transition-colors text-sm">
+                {dictionary.footer.contact}
+              </a>
+            </nav>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">{dictionary.footer.contact}</h4>
+            <div className="space-y-3">
+              <a
+                href={`mailto:${dictionary.footer.email}`}
+                className="flex items-center text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                {dictionary.footer.email}
+              </a>
+              <a
+                href={siteConfig.contact.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                <Linkedin className="w-4 h-4 mr-2" />
+                {dictionary.footer.linkedin}
+              </a>
+            </div>
           </div>
         </div>
-        
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>© {new Date().getFullYear()} luxIA. {dictionary.footer.tagline}.</p>
-          <p className="mt-2">{siteConfig.contact.phone}</p>
+
+        {/* Divider */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            {/* Copyright */}
+            <p className="text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} LuxIA. {dictionary.footer.rights}.
+            </p>
+
+            {/* Legal Links */}
+            <div className="flex space-x-6 text-sm">
+              <span className="text-gray-500 hover:text-gray-300 transition-colors cursor-pointer">
+                {dictionary.footer.privacy}
+              </span>
+              <span className="text-gray-500 hover:text-gray-300 transition-colors cursor-pointer">
+                {dictionary.footer.terms}
+              </span>
+            </div>
+
+            {/* Tagline */}
+            <p className="text-sm text-gray-500">
+              {dictionary.footer.tagline}
+            </p>
+          </div>
         </div>
       </div>
     </footer>

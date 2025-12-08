@@ -15,25 +15,28 @@
 ## 🎨 **Elementos Visuales**
 
 ### **Logo Principal**
-- **Icono**: Sparkles (⭐) - Representa la magia de la IA
+- **Icono**: Estrella de 8 puntas elaborada - Representa la excelencia y precisión en IA
 - **Tipografía**: Sans-serif moderna, peso bold
 - **Composición**: Icono + texto "luxIA"
+- **Colores**: Gris slate profesional con centro claro para contraste
 
 ### **Paleta de Colores**
 
 #### **Colores Primarios**
-- **Azul Principal**: `#3b82f6` (RGB: 59, 130, 246)
-- **Azul Oscuro**: `#1d4ed8` (RGB: 29, 78, 216)
-- **Blanco**: `#ffffff` (RGB: 255, 255, 255)
+- **Gris Oscuro Principal**: `#1e293b` (RGB: 30, 41, 59) - Color principal de la nueva estrella
+- **Gris Medio**: `#475569` (RGB: 71, 85, 105) - Color secundario de la estrella 
+- **Gris Claro**: `#64748b` (RGB: 100, 116, 139) - Color de acento
+- **Blanco**: `#f8fafc` (RGB: 248, 250, 252) - Centro de la estrella y fondos claros
 
 #### **Colores Secundarios**
-- **Gris Oscuro**: `#1f2937` (RGB: 31, 41, 55)
-- **Gris Medio**: `#6b7280` (RGB: 107, 114, 128)
-- **Gris Claro**: `#f9fafb` (RGB: 249, 250, 251)
+- **Gris Profundo**: `#334155` (RGB: 51, 65, 85) - Para hover y estados activos
+- **Gris Suave**: `#e2e8f0` (RGB: 226, 232, 240) - Fondos sutiles
+- **Gris Muy Claro**: `#f1f5f9` (RGB: 241, 245, 249) - Fondos de sección
 
 #### **Gradientes**
-- **Principal**: Linear `#3b82f6` → `#1d4ed8` (135°)
-- **Suave**: Linear `#f9fafb` → `#e5e7eb` (180°)
+- **Principal**: Linear `#1e293b` → `#475569` (135°) - Gradiente de la nueva identidad
+- **Suave**: Linear `#f8fafc` → `#e2e8f0` (180°) - Para fondos delicados
+- **Hover**: Linear `#334155` → `#1e293b` (135°) - Para efectos de interacción
 
 ### **Tipografía**
 - **Principal**: Inter (Google Fonts)

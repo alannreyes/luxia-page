@@ -1,5 +1,5 @@
-import { Sparkles } from 'lucide-react'
 import { siteConfig } from '@/lib/config'
+import Image from 'next/image'
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -9,23 +9,23 @@ interface LogoProps {
 }
 
 const sizeClasses = {
-  sm: 'text-lg',
-  md: 'text-2xl', 
-  lg: 'text-3xl',
-  xl: 'text-4xl'
+  sm: 'text-xl',
+  md: 'text-3xl',
+  lg: 'text-4xl',
+  xl: 'text-5xl'
 }
 
 const iconSizes = {
-  sm: 'w-4 h-4',
-  md: 'w-6 h-6',
-  lg: 'w-8 h-8', 
-  xl: 'w-10 h-10'
+  sm: { width: 48, height: 48 },     // Duplicado: de 24 a 48
+  md: { width: 64, height: 64 },     // Duplicado: de 32 a 64
+  lg: { width: 96, height: 96 },     // Duplicado: de 48 a 96
+  xl: { width: 128, height: 128 }    // Duplicado: de 64 a 128
 }
 
 const variantClasses = {
-  default: 'gradient-text',
-  white: 'text-white',
-  dark: 'text-gray-900'
+  default: 'text-slate-900 font-black',
+  white: 'text-white font-black',
+  dark: 'text-luxia-primary font-black'
 }
 
 export default function Logo({ 
@@ -35,11 +35,18 @@ export default function Logo({
   variant = 'default'
 }: LogoProps) {
   return (
-    <div className={`flex items-center space-x-2 ${className}`}>
+    <div className={`flex items-center space-x-3 ${className}`}>
       {showIcon && (
-        <Sparkles className={`${iconSizes[size]} ${variant === 'default' ? 'text-blue-600' : variant === 'white' ? 'text-white' : 'text-gray-900'}`} />
+        <Image
+          src="/logo.png"
+          alt="Luxia Logo"
+          width={iconSizes[size].width}
+          height={iconSizes[size].height}
+          className="object-contain"
+          priority
+        />
       )}
-      <div className={`${sizeClasses[size]} font-bold ${variantClasses[variant]}`}>
+      <div className={`${sizeClasses[size]} ${variantClasses[variant]} tracking-tight`}>
         {siteConfig.navigation.logo}
       </div>
     </div>
@@ -53,6 +60,13 @@ export const LogoText = ({ size = 'md', className = '', variant = 'default' }: O
   </div>
 )
 
-export const LogoIcon = ({ size = 'md', className = '', variant = 'default' }: Omit<LogoProps, 'showIcon'>) => (
-  <Sparkles className={`${iconSizes[size]} ${variant === 'default' ? 'text-blue-600' : variant === 'white' ? 'text-white' : 'text-gray-900'} ${className}`} />
+export const LogoIcon = ({ size = 'md', className = '' }: Omit<LogoProps, 'showIcon' | 'variant'>) => (
+  <Image
+    src="/logo.png"
+    alt="Luxia Logo"
+    width={iconSizes[size].width}
+    height={iconSizes[size].height}
+    className={`object-contain ${className}`}
+    priority
+  />
 ) 

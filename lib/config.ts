@@ -2,10 +2,10 @@
 export const siteConfig = {
   // Información de contacto y redes sociales
   contact: {
-    email: 'alann@luxiabrands.com',
+    email: 'info@luxia.us',
     phone: '+51 993131883', // Tu número de teléfono
     calcomUrl: 'https://cal.luxia.us/alann/30min', // URL de Cal.com validada
-    linkedinUrl: 'https://www.linkedin.com/company/luxiabrands/',
+    linkedinUrl: 'https://www.linkedin.com/company/luxia/',
   },
 
   // Configuración del Hero

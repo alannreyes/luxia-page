@@ -7,17 +7,17 @@ import Hero from '@/components/Hero'
 const Services = dynamic(() => import('@/components/Services'), {
   loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
 })
-const Proof = dynamic(() => import('@/components/Proof'), {
+const Founder = dynamic(() => import('@/components/Founder'), {
   loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
 })
-const Insights = dynamic(() => import('@/components/Insights'), {
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+const Industries = dynamic(() => import('@/components/Industries'), {
+  loading: () => <div className="h-96 bg-slate-900 animate-pulse" />
 })
 const CTA = dynamic(() => import('@/components/CTA'), {
-  loading: () => <div className="h-48 bg-gray-50 animate-pulse" />
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
 })
 const Footer = dynamic(() => import('@/components/Footer'), {
-  loading: () => <div className="h-64 bg-gray-900 animate-pulse" />
+  loading: () => <div className="h-64 bg-slate-900 animate-pulse" />
 })
 
 interface HomeProps {
@@ -38,11 +38,11 @@ export default async function Home({ params }: HomeProps) {
         <section id="servicios">
           <Services locale={resolvedParams.locale} dictionary={dictionary} />
         </section>
-        <section id="casos-reales">
-          <Proof locale={resolvedParams.locale} dictionary={dictionary} />
+        <section id="fundador">
+          <Founder locale={resolvedParams.locale} dictionary={dictionary} />
         </section>
-        <section id="insights">
-          <Insights locale={resolvedParams.locale} dictionary={dictionary} />
+        <section id="industrias">
+          <Industries locale={resolvedParams.locale} dictionary={dictionary} />
         </section>
         <section id="contacto">
           <CTA locale={resolvedParams.locale} dictionary={dictionary} />

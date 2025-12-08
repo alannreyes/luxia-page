@@ -36,10 +36,25 @@
   }
   
   .gradient-text {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+  
+  /* Gradiente profesional para la nueva identidad */
+  .gradient-luxia {
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+  }
+  
+  /* Gradiente suave para fondos */
+  .gradient-luxia-soft {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+  
+  /* Gradiente para elementos hover */
+  .gradient-luxia-hover {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
   }
   
   .hover-lift {
