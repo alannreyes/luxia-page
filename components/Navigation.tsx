@@ -41,13 +41,13 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
   return (
     <>
       <nav className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled
+        isScrolled || isOpen
           ? 'bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm'
           : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <Logo variant={isScrolled ? 'default' : 'white'} />
+            <Logo variant={isScrolled || isOpen ? 'default' : 'white'} />
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
@@ -80,7 +80,7 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
             {/* Mobile Menu Button */}
             <button
               className={`md:hidden p-2 rounded-lg transition-colors ${
-                isScrolled ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'text-white hover:bg-white/10'
+                isScrolled || isOpen ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'text-white hover:bg-white/10'
               }`}
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Menu"
@@ -91,16 +91,12 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
 
           {/* Mobile Menu */}
           {isOpen && (
-            <div className={`md:hidden mt-4 pb-4 space-y-4 border-t pt-4 ${
-              isScrolled ? 'border-gray-100' : 'border-white/20'
-            }`}>
+            <div className="md:hidden mt-4 pb-4 space-y-4 border-t border-gray-200 pt-4">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`block font-medium transition-colors ${
-                    isScrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white/80 hover:text-white'
-                  }`}
+                  className="block font-medium text-gray-700 hover:text-blue-600 transition-colors py-2"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
@@ -111,7 +107,7 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
               </div>
               <button
                 onClick={handleAppointmentClick}
-                className="w-full bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-all font-medium"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-md"
               >
                 {dictionary.nav.schedule}
               </button>
