@@ -79,12 +79,13 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
 
             {/* Mobile Menu Button */}
             <button
-              className={`md:hidden transition-colors ${
-                isScrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white'
+              className={`md:hidden p-2 rounded-lg transition-colors ${
+                isScrolled ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'text-white hover:bg-white/10'
               }`}
               onClick={() => setIsOpen(!isOpen)}
+              aria-label="Menu"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
 
