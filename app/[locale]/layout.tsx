@@ -16,13 +16,14 @@ export const viewport = {
 }
 
 // Generar metadata dinámica según idioma
-export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const resolvedParams = await params
-  const dictionary = await getServerDictionary(resolvedParams.locale)
+  const locale = resolvedParams.locale as 'es' | 'en'
+  const dictionary = await getServerDictionary(locale)
   
   return {
     metadataBase: new URL('https://luxia.us'),
-    ...generateLocalizedMetadata(dictionary, resolvedParams.locale),
+    ...generateLocalizedMetadata(dictionary, locale),
     authors: [{ name: 'luxIA', url: 'https://luxiabrands.com' }],
     creator: 'luxIA',
     publisher: 'luxIA',
@@ -65,23 +66,24 @@ export async function generateStaticParams() {
 
 interface LayoutProps {
   children: React.ReactNode
-  params: Promise<PageParams>
+  params: Promise<{ locale: string }>
 }
 
 export default async function LocaleLayout({ children, params }: LayoutProps) {
   const resolvedParams = await params
-  
+  const locale = resolvedParams.locale as 'es' | 'en'
+
   // Verificar que el locale sea válido
-  if (!locales.includes(resolvedParams.locale)) {
+  if (!locales.includes(locale)) {
     notFound()
   }
 
-  const dictionary = await getServerDictionary(resolvedParams.locale)
+  const dictionary = await getServerDictionary(locale)
 
   return (
     <>
       {/* Solo devolvemos el contenido, sin html/body */}
-      <AnalyticsProvider locale={resolvedParams.locale}>
+      <AnalyticsProvider locale={locale}>
         <ErrorBoundary>
           <div className="viewport-safe">
             {children}
