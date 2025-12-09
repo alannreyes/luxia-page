@@ -1395,7 +1395,15 @@
         <h1 style="color: #fff;">Live Demo</h1>
         <p class="subtitle" style="color: #888;">Experience a real alert</p>
 
-        <div style="margin-top: 60px;">
+        <div style="margin-top: 60px; display: flex; align-items: center; justify-content: center; gap: 80px;">
+            <!-- QR Code -->
+            <div style="text-align: center;">
+                <img src="qr-apk.png" alt="Download APK" style="width: 150px; height: 150px; border-radius: 10px; background: white; padding: 10px;">
+                <p style="color: #666; font-size: 14px; margin-top: 10px;">Scan to install app</p>
+            </div>
+
+            <!-- Button section -->
+            <div style="text-align: center;">
             <p style="color: #666; margin-bottom: 50px; font-size: 18px;">
                 Press to trigger alerts on all connected devices
             </p>
@@ -1416,6 +1424,7 @@
             " onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 0 80px rgba(255, 75, 75, 0.7), 0 0 150px rgba(255, 75, 75, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 60px rgba(255, 75, 75, 0.5), 0 0 120px rgba(255, 75, 75, 0.3)';">
                 ⚡ TRIGGER ALERT
             </button>
+            </div>
         </div>
     </div>
 
