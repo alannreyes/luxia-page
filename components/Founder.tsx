@@ -1,6 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { Award, Shield, Building, Landmark, Linkedin, ExternalLink } from 'lucide-react'
+import Image from 'next/image'
 import { siteConfig } from '@/lib/config'
 import type { BaseComponentProps } from '@/types'
 
@@ -59,9 +60,16 @@ export default function Founder({ dictionary }: BaseComponentProps) {
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl" />
 
               <div className="relative z-10">
-                {/* Avatar placeholder */}
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
-                  <span className="text-4xl font-bold text-white">AR</span>
+                {/* Profile photo */}
+                <div className="w-24 h-24 rounded-2xl overflow-hidden mb-6 shadow-lg shadow-blue-500/30 ring-2 ring-white/20">
+                  <Image
+                    src="/alann-profile.jpg"
+                    alt="Alann Reyes"
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
                 </div>
 
                 <h3 className="text-3xl font-bold mb-2">{dictionary.founder.name}</h3>
