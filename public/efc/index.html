@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EFC Alerta - Xweather Value-Add Solution</title>
+    <title>EFC Alerta Temprana - Xweather Value-Add Solution</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -486,6 +486,174 @@
                 min-height: 100vh;
             }
         }
+
+        /* Responsive design for mobile devices */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+                min-height: auto;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+
+            h3 {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+
+            p, li {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card h4 {
+                font-size: 18px;
+            }
+
+            .card p {
+                font-size: 14px;
+            }
+
+            .quote {
+                font-size: 18px;
+                padding-left: 20px;
+            }
+
+            .quote-author {
+                font-size: 14px;
+            }
+
+            .section-number {
+                font-size: 60px;
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .logo-container {
+                position: static;
+                justify-content: center;
+                margin-bottom: 30px;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .flow-box {
+                min-width: 100%;
+                padding: 16px 20px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            .phone-mockup {
+                width: 200px;
+                height: 400px;
+                border-radius: 30px;
+            }
+
+            .phone-screen {
+                border-radius: 22px;
+            }
+
+            .icon-large {
+                font-size: 36px;
+            }
+
+            .cta-box {
+                padding: 30px 20px;
+            }
+
+            .stat-number {
+                font-size: 48px;
+            }
+        }
+
+        /* Medium screens */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .slide {
+                padding: 40px 40px;
+            }
+
+            h1 {
+                font-size: 44px;
+            }
+
+            h2 {
+                font-size: 34px;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Larger fonts for better readability on desktop */
+        @media (min-width: 1025px) {
+            h1 {
+                font-size: 64px;
+            }
+
+            h2 {
+                font-size: 48px;
+            }
+
+            h3 {
+                font-size: 32px;
+            }
+
+            p, li {
+                font-size: 22px;
+            }
+
+            .card h4 {
+                font-size: 24px;
+            }
+
+            .card p {
+                font-size: 18px;
+            }
+
+            .quote {
+                font-size: 32px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -497,10 +665,10 @@
         <span class="logo">+</span>
         <span class="logo vaisala">VAISALA XWEATHER</span>
     </div>
-    <h1>EFC Alerta</h1>
-    <p class="subtitle">Mobile Alert Distribution Platform for Xweather Protect</p>
+    <h1>EFC Alerta Temprana</h1>
+    <p class="subtitle">Sistema de Alerta Temprana Móvil</p>
     <p style="margin-top: 60px; color: #666;">
-        <span class="highlight">Electro Ferro Centro S.A.C.</span> | Peru
+        <span class="highlight">EFC</span> | Peru
     </p>
 </div>
 
@@ -516,39 +684,29 @@
         <div class="quote-author">— José Barriga, Supervisor at Antamina Mining</div>
     </div>
 
-    <div class="grid-3" style="margin-top: 40px;">
-        <div class="card">
-            <div class="icon-large">📧</div>
-            <h4>Email Delays</h4>
-            <p>Emails arrive late or get lost in inbox clutter. Not suitable for time-critical safety alerts.</p>
-        </div>
-        <div class="card">
-            <div class="icon-large">💸</div>
-            <h4>SMS Costs</h4>
-            <p>Per-message costs make it expensive to scale to thousands of workers. $50-250 per alert for 2,500 users.</p>
-        </div>
+    <div class="grid-2" style="margin-top: 40px;">
         <div class="card">
             <div class="icon-large">📍</div>
             <h4>No Geofencing</h4>
             <p>All users receive all alerts, regardless of their actual location. Alert fatigue is real.</p>
         </div>
-    </div>
-
-    <div class="grid-3" style="margin-top: 20px;">
         <div class="card">
             <div class="icon-large">🔋</div>
             <h4>GPS Battery Drain</h4>
             <p>Traditional tracking apps constantly poll GPS location, draining phone batteries in hours. Workers disable them.</p>
         </div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 20px;">
         <div class="card">
             <div class="icon-large">🚨</div>
             <h4>Sirens Go Unnoticed</h4>
             <p>Strobe lights and sirens can be missed: workers in vehicles, wearing hearing protection, or in noisy areas.</p>
         </div>
         <div class="card">
-            <div class="icon-large">🚗</div>
-            <h4>Vehicle Coverage Gap</h4>
-            <p>A vehicle with 5 workers may have only 1 radio. If the driver doesn't hear it, everyone is at risk.</p>
+            <div class="icon-large">🔒</div>
+            <h4>Privacy Concerns</h4>
+            <p>Workers don't want their location tracked 24/7. Concerns about personal safety, privacy, and knowing their movements creates resistance to adoption.</p>
         </div>
     </div>
 </div>
@@ -556,7 +714,7 @@
 <!-- SLIDE 3: The Solution -->
 <div class="slide">
     <span class="section-number">02</span>
-    <h2>Introducing <span class="highlight">EFC Alerta</span></h2>
+    <h2>Introducing <span class="highlight">EFC Alerta Temprana</span></h2>
     <p class="subtitle">Push-based alert distribution with on-device geofencing</p>
 
     <div class="grid-2">
@@ -568,7 +726,6 @@
                 <li><strong>On-Device Geofencing</strong> — Ray casting algorithm runs locally on the phone</li>
                 <li><strong>Low Signal Resilient</strong> — Reiterative broadcast catches late-connecting devices</li>
                 <li><strong>Multi-Language Support</strong> — 10 languages including Spanish, English, and Quechua</li>
-                <li><strong>ACK Tracking</strong> — Know who received and acknowledged each alert</li>
             </ul>
         </div>
         <div style="display: flex; justify-content: center;">
@@ -654,83 +811,9 @@
     </div>
 </div>
 
-<!-- SLIDE 3.5: Propagation Effect -->
+<!-- SLIDE 3: Architecture -->
 <div class="slide">
     <span class="section-number">03</span>
-    <h2>The Propagation Effect</h2>
-    <p class="subtitle">One phone can save an entire crew</p>
-
-    <div class="grid-2">
-        <div>
-            <h3>The Vehicle Scenario</h3>
-            <div class="card highlight-card">
-                <p style="font-size: 18px; line-height: 1.8;">
-                    Imagine a pickup truck with <strong>5 workers</strong> heading to a remote area of the mine.
-                </p>
-                <ul style="margin-top: 20px;">
-                    <li>The radio is on, but there's music playing</li>
-                    <li>Workers are talking, engine is loud</li>
-                    <li>Strobe lights? They're inside, windows up</li>
-                    <li>Driver focused on the road ahead</li>
-                </ul>
-                <p style="margin-top: 20px; font-size: 18px;">
-                    Then suddenly: <strong style="color: #FF4B4B;">📳 BUZZ!</strong>
-                </p>
-                <p style="margin-top: 10px; font-size: 16px; color: #888;">
-                    One worker's phone vibrates in their pocket. They pull it out. They see the alert. They tell the driver.
-                </p>
-                <p style="margin-top: 20px; font-size: 22px; color: #00C7B7; font-weight: 600;">
-                    Everyone is warned. Everyone is safe.
-                </p>
-            </div>
-        </div>
-        <div>
-            <h3>Why This Matters</h3>
-
-            <div class="card" style="margin-bottom: 20px;">
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div style="font-size: 48px;">📱</div>
-                    <div>
-                        <h4 style="margin-bottom: 8px;">Always With You</h4>
-                        <p>Workers may forget radios, ignore sirens, but their phone is always in their pocket.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" style="margin-bottom: 20px;">
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div style="font-size: 48px;">📳</div>
-                    <div>
-                        <h4 style="margin-bottom: 8px;">Physical Vibration</h4>
-                        <p>You can ignore a sound. You can't ignore something vibrating against your body.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" style="margin-bottom: 20px;">
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div style="font-size: 48px;">👥</div>
-                    <div>
-                        <h4 style="margin-bottom: 8px;">Social Propagation</h4>
-                        <p>One person with the app can warn everyone around them. The alert spreads naturally.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card highlight-card">
-                <div style="text-align: center;">
-                    <div style="font-size: 36px; font-weight: 700; color: #00A3E0;">5 workers</div>
-                    <div style="font-size: 16px; color: #888; margin: 10px 0;">protected by</div>
-                    <div style="font-size: 36px; font-weight: 700; color: #00C7B7;">1 phone</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 4: Architecture -->
-<div class="slide">
-    <span class="section-number">04</span>
     <h2>System Architecture</h2>
     <p class="subtitle">Seamless integration with Xweather Protect via Webhooks</p>
 
@@ -751,8 +834,8 @@
         </div>
         <span class="flow-arrow">→</span>
         <div class="flow-box">
-            <h5>Firebase FCM</h5>
-            <span>Push Service</span>
+            <h5>Push Service</h5>
+            <span>Firebase FCM</span>
         </div>
         <span class="flow-arrow">→</span>
         <div class="flow-box secondary">
@@ -761,89 +844,40 @@
         </div>
     </div>
 
-    <div class="grid-2" style="margin-top: 40px;">
+    <div class="grid-3" style="margin-top: 40px;">
         <div class="card">
-            <h3>EFC Bridge (Backend)</h3>
+            <h3>Admin Console</h3>
             <ul>
-                <li>Receives Xweather webhooks with HMAC validation</li>
-                <li>Multi-tenant architecture (one instance, multiple clients)</li>
-                <li>Broadcasts alerts with polygon geometries</li>
-                <li>Reiterative broadcast during alert duration</li>
-                <li>Collects anonymous ACK metrics</li>
+                <li>Manage tenants and clients</li>
+                <li>Configure alert zones (AOIs)</li>
+                <li>System monitoring and logs</li>
+                <li>User management</li>
+            </ul>
+        </div>
+        <div class="card highlight-card">
+            <h3>Client Dashboard</h3>
+            <ul>
+                <li>Real-time alert visualization</li>
+                <li>ACK metrics by zone</li>
+                <li>Historical alert reports</li>
+                <li>Custom zone configuration</li>
             </ul>
         </div>
         <div class="card">
-            <h3>EFC Alerta (Mobile)</h3>
+            <h3>Mobile App</h3>
             <ul>
-                <li>Android native (iOS coming soon)</li>
-                <li>Background service for always-on alerts</li>
-                <li>Local point-in-polygon calculation</li>
-                <li>Smart deduplication (alerts once per event)</li>
+                <li>Android native (iOS coming)</li>
+                <li>Background alert service</li>
+                <li>Local geofencing calculation</li>
+                <li>Multi-language support</li>
             </ul>
         </div>
     </div>
 </div>
 
-<!-- SLIDE 5: Privacy First -->
+<!-- SLIDE 4: ACK System -->
 <div class="slide">
-    <span class="section-number">05</span>
-    <h2>Privacy-First Design</h2>
-    <p class="subtitle">Location data never leaves the device</p>
-
-    <div class="grid-2">
-        <div>
-            <h3>Traditional Approach</h3>
-            <div class="card" style="border-color: #FF4B4B;">
-                <p><span class="cross">✗</span> Server tracks all user locations 24/7</p>
-                <p><span class="cross">✗</span> Location history stored in database</p>
-                <p><span class="cross">✗</span> Privacy concerns for workers</p>
-                <p><span class="cross">✗</span> GDPR/data protection complications</p>
-                <p><span class="cross">✗</span> Bandwidth costs for location updates</p>
-            </div>
-        </div>
-        <div>
-            <h3>EFC Alerta Approach</h3>
-            <div class="card highlight-card">
-                <p><span class="check">✓</span> Alert polygons sent to device</p>
-                <p><span class="check">✓</span> Point-in-polygon computed locally</p>
-                <p><span class="check">✓</span> Only ACK status sent back (no GPS)</p>
-                <p><span class="check">✓</span> Workers maintain privacy</p>
-                <p><span class="check">✓</span> Minimal bandwidth usage</p>
-            </div>
-
-            <div class="card" style="margin-top: 20px; border-color: #00C7B7;">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="font-size: 36px;">🔋</div>
-                    <div>
-                        <h4 style="color: #00C7B7; margin-bottom: 6px;">Zero Battery Drain</h4>
-                        <p style="font-size: 14px;">GPS is only activated <strong>when an alert arrives</strong>, for a single location check. No background polling. Workers never disable the app because it doesn't drain their battery.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="flow-diagram" style="margin-top: 60px;">
-        <div class="flow-box primary">
-            <h5>Server sends</h5>
-            <span>Alert + Polygon coordinates</span>
-        </div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-box secondary">
-            <h5>Device computes</h5>
-            <span>Am I inside polygon?</span>
-        </div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-box">
-            <h5>Device sends back</h5>
-            <span>ACK status only (no location)</span>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 6: ACK System -->
-<div class="slide">
-    <span class="section-number">06</span>
+    <span class="section-number">04</span>
     <h2>Alert Acknowledgment System</h2>
     <p class="subtitle">Complete visibility into alert reception and response</p>
 
@@ -892,9 +926,9 @@
     </div>
 </div>
 
-<!-- SLIDE 7: Comparison -->
+<!-- SLIDE 5: Comparison -->
 <div class="slide">
-    <span class="section-number">07</span>
+    <span class="section-number">05</span>
     <h2>Comparison: Notification Methods</h2>
     <p class="subtitle">Why push notifications are the optimal choice</p>
 
@@ -906,7 +940,7 @@
                     <th>Email</th>
                     <th>SMS</th>
                     <th>Sirens/Strobe</th>
-                    <th>EFC Alerta</th>
+                    <th>EFC Alerta Temprana</th>
                 </tr>
             </thead>
             <tbody>
@@ -971,419 +1005,47 @@
     </div>
 </div>
 
-<!-- SLIDE 8: Use Case - Antamina -->
+<!-- SLIDE 6: Summary -->
 <div class="slide">
-    <span class="section-number">08</span>
-    <h2>Case Study: Antamina</h2>
-    <p class="subtitle">Real requirements from Peru's largest copper-zinc mine</p>
-
-    <div class="grid-2">
-        <div>
-            <h3>Current Situation</h3>
-            <div class="card">
-                <ul>
-                    <li>3 Areas of Interest (AOIs), expanding to 6</li>
-                    <li>Alert radii: 4/8/12 km and 8/16/32 km</li>
-                    <li>~2,500 workers need to receive alerts</li>
-                    <li>Mix of employees and contractors</li>
-                    <li>Requested SISMATE-like functionality</li>
-                </ul>
-            </div>
-
-            <h3 style="margin-top: 30px;">Their Ask</h3>
-            <div class="card highlight-card">
-                <p>"Alerts should only reach devices that are <strong>physically inside</strong> the mine site, similar to how SISMATE works with cell broadcast."</p>
-            </div>
-        </div>
-        <div>
-            <h3>EFC Alerta Solution</h3>
-            <div class="card">
-                <h4>Phase 1: Android Deployment</h4>
-                <ul>
-                    <li>Install EFC Alerta on worker devices</li>
-                    <li>IT deploys via MDM (managed devices)</li>
-                    <li>Workers download from Play Store (BYOD)</li>
-                </ul>
-
-                <h4 style="margin-top: 24px;">Phase 2: Expanded Coverage</h4>
-                <ul>
-                    <li>iOS app for supervisors/management</li>
-                    <li>Desktop alerts via PWA (control rooms)</li>
-                    <li>Integration with fleet management</li>
-                </ul>
-
-                <h4 style="margin-top: 24px;">Phase 3: Analytics</h4>
-                <ul>
-                    <li>ACK rate dashboards</li>
-                    <li>Response time metrics</li>
-                    <li>Coverage heat maps</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 9: EFC Insights -->
-<div class="slide">
-    <span class="section-number">09</span>
-    <h2>EFC Insights: Analytics for Sales</h2>
-    <p class="subtitle">Anonymous metrics that help identify expansion opportunities</p>
-
-    <div class="grid-2">
-        <div>
-            <h3>Coverage Heat Maps</h3>
-            <div class="card">
-                <p>Anonymous 1km² cell-based metrics showing:</p>
-                <ul>
-                    <li><span style="color: #666;">●</span> Gray: No user activity</li>
-                    <li><span style="color: #F4D03F;">●</span> Yellow: Low activity (1-10 NOT_SHOWN)</li>
-                    <li><span style="color: #E67E22;">●</span> Orange: Medium (10-50 NOT_SHOWN)</li>
-                    <li><span style="color: #E74C3C;">●</span> Red: High demand (50+ NOT_SHOWN)</li>
-                </ul>
-                <p style="margin-top: 16px; font-size: 14px; color: #888;">
-                    Red zones = workers present but no coverage<br>
-                    = Opportunity to sell new protected assets
-                </p>
-            </div>
-        </div>
-        <div>
-            <h3>Business Intelligence</h3>
-            <div class="card">
-                <h4>For Vaisala Sales Team</h4>
-                <ul>
-                    <li>Identify uncovered areas with worker activity</li>
-                    <li>Quantify demand for new protected assets</li>
-                    <li>Data-driven upsell conversations</li>
-                </ul>
-
-                <h4 style="margin-top: 24px;">For Mining Clients</h4>
-                <ul>
-                    <li>Prove ROI with engagement metrics</li>
-                    <li>Justify safety investment to board</li>
-                    <li>Compliance documentation for audits</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="cta-box" style="margin-top: 40px; background: linear-gradient(135deg, #1a1a2e, #16213e);">
-        <h3 style="color: #fff;">Win-Win for Everyone</h3>
-        <p style="color: #ccc;">EFC gets recurring revenue. Vaisala gets more protected assets sold. Clients get better safety coverage.</p>
-    </div>
-</div>
-
-<!-- SLIDE 10: Business Model -->
-<div class="slide">
-    <span class="section-number">10</span>
-    <h2>Proposed Business Model</h2>
-    <p class="subtitle">EFC Alerta as a value-add for Xweather Protect sales</p>
-
-    <div class="grid-3">
-        <div class="pricing-card">
-            <h4>Xweather Protect</h4>
-            <div class="price">$XX,XXX</div>
-            <div class="period">per year</div>
-            <div style="margin-top: 24px; text-align: left;">
-                <p><span class="check">✓</span> Lightning detection</p>
-                <p><span class="check">✓</span> Protected assets</p>
-                <p><span class="check">✓</span> Email/SMS alerts</p>
-                <p><span class="check">✓</span> Xweather Insight dashboard</p>
-            </div>
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #333;">
-                <span class="badge badge-blue">VAISALA</span>
-            </div>
-        </div>
-
-        <div class="pricing-card featured">
-            <div style="background: #00A3E0; color: #000; padding: 8px; border-radius: 8px; margin: -40px -40px 20px; font-weight: 600; font-size: 14px;">RECOMMENDED BUNDLE</div>
-            <h4>Protect + EFC Alerta</h4>
-            <div class="price">$XX,XXX</div>
-            <div class="period">per year</div>
-            <div style="margin-top: 24px; text-align: left;">
-                <p><span class="check">✓</span> Everything in Protect</p>
-                <p><span class="check">✓</span> Mobile push alerts</p>
-                <p><span class="check">✓</span> Privacy-first geofencing</p>
-                <p><span class="check">✓</span> ACK tracking & analytics</p>
-                <p><span class="check">✓</span> Unlimited users</p>
-            </div>
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #333;">
-                <span class="badge badge-blue">VAISALA</span>
-                <span class="badge badge-green">+ EFC</span>
-            </div>
-        </div>
-
-        <div class="pricing-card">
-            <h4>EFC Alerta Add-on</h4>
-            <div class="price">$X,XXX</div>
-            <div class="period">per year</div>
-            <div style="margin-top: 24px; text-align: left;">
-                <p><span class="check">✓</span> For existing Protect customers</p>
-                <p><span class="check">✓</span> Mobile push alerts</p>
-                <p><span class="check">✓</span> Privacy-first geofencing</p>
-                <p><span class="check">✓</span> Local language support</p>
-            </div>
-            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #333;">
-                <span class="badge badge-green">EFC</span>
-            </div>
-        </div>
-    </div>
-
-    <p style="text-align: center; margin-top: 40px; color: #888;">
-        EFC Alerta increases the value proposition of Xweather Protect,<br>
-        making it easier to close deals and justify premium pricing.
-    </p>
-</div>
-
-<!-- SLIDE 11: Commission Tier Discussion -->
-<div class="slide">
-    <span class="section-number">11</span>
-    <h2>Partnership Tier Discussion</h2>
-    <p class="subtitle">Moving from Sales-Only to Sales + Support</p>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Tier</th>
-                    <th>Activities</th>
-                    <th>Commission Range</th>
-                    <th>EFC Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Sales Only</strong></td>
-                    <td>Lead generation, proposal support</td>
-                    <td>10-25%</td>
-                    <td><span class="badge badge-blue">CURRENT (20%)</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Sales + Renewal</strong></td>
-                    <td>+ Customer success, renewal management</td>
-                    <td>25-35%</td>
-                    <td><span class="badge badge-orange">TARGET</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Sales + Renewal + Support</strong></td>
-                    <td>+ Technical support, local implementation</td>
-                    <td>35-50%</td>
-                    <td><span class="badge badge-green">GOAL WITH EFC ALERTA</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="grid-2" style="margin-top: 40px;">
-        <div class="card">
-            <h3>What EFC Brings to the Table</h3>
-            <ul>
-                <li>Local presence in Peru's mining sector</li>
-                <li>Spanish/Quechua language support</li>
-                <li>EFC Alerta mobile platform (proprietary)</li>
-                <li>Technical implementation capability</li>
-                <li>Ongoing customer success management</li>
-            </ul>
-        </div>
-        <div class="card highlight-card">
-            <h3>The Ask</h3>
-            <ul>
-                <li>Recognition of EFC Alerta as official add-on</li>
-                <li>Upgrade to Sales + Support tier</li>
-                <li>Potential exclusivity for Peru mining sector</li>
-                <li>Joint marketing for mining vertical</li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 12: Roadmap -->
-<div class="slide">
-    <span class="section-number">12</span>
-    <h2>Development Roadmap</h2>
-    <p class="subtitle">Phased rollout with Antamina as pilot customer</p>
-
-    <div class="timeline">
-        <div class="timeline-item">
-            <div class="timeline-marker">1</div>
-            <div class="timeline-content">
-                <h4>Phase 1: Android MVP</h4>
-                <p style="color: #00C7B7;">Status: Functional prototype ready</p>
-                <ul>
-                    <li>Core push notification functionality</li>
-                    <li>On-device geofencing with ray casting</li>
-                    <li>ACK system (CONFIRMED, TIMEOUT, NOT_SHOWN)</li>
-                    <li>Multi-language support (10 languages)</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="timeline-item">
-            <div class="timeline-marker">2</div>
-            <div class="timeline-content">
-                <h4>Phase 2: Antamina Pilot</h4>
-                <p style="color: #888;">Status: Pending agreement</p>
-                <ul>
-                    <li>Deploy to 100-500 test users</li>
-                    <li>Integration with Antamina's 6 AOIs</li>
-                    <li>Gather feedback and iterate</li>
-                    <li>Measure ACK rates and response times</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="timeline-item">
-            <div class="timeline-marker">3</div>
-            <div class="timeline-content">
-                <h4>Phase 3: Full Rollout</h4>
-                <p style="color: #888;">Status: Planned</p>
-                <ul>
-                    <li>Scale to 2,500+ users</li>
-                    <li>iOS app development</li>
-                    <li>EFC Admin dashboard for tenant management</li>
-                    <li>EFC Insights for Vaisala sales team</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="timeline-item">
-            <div class="timeline-marker">4</div>
-            <div class="timeline-content">
-                <h4>Phase 4: Expansion</h4>
-                <p style="color: #888;">Status: Future</p>
-                <ul>
-                    <li>Other mining clients (Cerro Verde, Las Bambas, etc.)</li>
-                    <li>Desktop/PWA for control rooms</li>
-                    <li>Fleet management integrations</li>
-                    <li>Wearable device support (Tektelic)</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 13: Technical Readiness -->
-<div class="slide">
-    <span class="section-number">13</span>
-    <h2>Technical Readiness</h2>
-    <p class="subtitle">Built to integrate seamlessly with Xweather infrastructure</p>
-
-    <div class="grid-2">
-        <div>
-            <h3>Webhook Integration</h3>
-            <div class="card">
-                <pre style="background: #0d0d0d; padding: 20px; border-radius: 8px; font-size: 13px; overflow-x: auto; color: #ccc;">
-<span style="color: #888;">// EFC Bridge webhook handler</span>
-<span style="color: #00A3E0;">POST</span> /api/webhook/xweather
-
-<span style="color: #888;">Headers:</span>
-  X-Vaisala-Signature-V1: <span style="color: #00C7B7;">{hmac_sha256}</span>
-  X-Vaisala-Timestamp: <span style="color: #00C7B7;">{epoch_ms}</span>
-
-<span style="color: #888;">Body:</span>
-{
-  "type": "alert.lightning",
-  "data": {
-    "severity": "ALARM",
-    "assetName": "Tajo Norte",
-    "currentState": "ACTIVE"
-  }
-}
-                </pre>
-            </div>
-        </div>
-        <div>
-            <h3>Technology Stack</h3>
-            <div class="card">
-                <table style="width: 100%;">
-                    <tr>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;"><strong>Backend</strong></td>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;">NestJS + PostgreSQL + Prisma</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;"><strong>Mobile</strong></td>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;">React Native (Android first)</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;"><strong>Push Service</strong></td>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;">Firebase Cloud Messaging</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;"><strong>Dashboard</strong></td>
-                        <td style="padding: 12px 0; border-bottom: 1px solid #333;">React + TypeScript</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px 0;"><strong>Hosting</strong></td>
-                        <td style="padding: 12px 0;">Cloud-ready (AWS/GCP/Azure)</td>
-                    </tr>
-                </table>
-            </div>
-
-            <h3 style="margin-top: 24px;">Security</h3>
-            <div class="card">
-                <ul>
-                    <li>HMAC signature validation on all webhooks</li>
-                    <li>HTTPS only, TLS 1.3</li>
-                    <li>Per-tenant webhook secrets</li>
-                    <li>No PII stored (privacy-first design)</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 14: Summary -->
-<div class="slide">
-    <span class="section-number">14</span>
-    <h2>Summary: Why EFC Alerta?</h2>
+    <span class="section-number">06</span>
+    <h2>Summary: Why EFC Alerta Temprana?</h2>
     <p class="subtitle">The value proposition for all stakeholders</p>
 
-    <div class="grid-3">
+    <div class="grid-2">
         <div class="card">
             <div class="icon-large">🏭</div>
             <h4>For Mining Clients</h4>
             <ul>
-                <li>Instant alerts to all workers</li>
+                <li>Instant alerts to all workers, contractors and visitors</li>
                 <li>Privacy-respecting geofencing</li>
                 <li>Zero per-message costs</li>
                 <li>Works with app closed</li>
-                <li>Local language support</li>
+                <li>Main languages supported (including ex-pats)</li>
             </ul>
         </div>
 
         <div class="card highlight-card">
             <div class="icon-large">⚡</div>
-            <h4>For Vaisala</h4>
+            <h4>For Vaisala Sales Team</h4>
             <ul>
                 <li>Stronger value proposition</li>
                 <li>Easier to close mining deals</li>
                 <li>Local implementation partner</li>
                 <li>Data to identify upsell opportunities</li>
-                <li>Reduced support burden</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="icon-large">🤝</div>
-            <h4>For EFC</h4>
-            <ul>
-                <li>Recurring SaaS revenue</li>
-                <li>Differentiation from competitors</li>
-                <li>Deeper client relationships</li>
-                <li>Path to higher commission tier</li>
-                <li>Scalable across LATAM</li>
+                <li>Scalable across LATAM and Worldwide</li>
             </ul>
         </div>
     </div>
 
     <div class="cta-box">
         <h3>Ready for Pilot</h3>
-        <p>EFC Alerta prototype is functional. Antamina is interested.<br>Let's discuss how to formalize this partnership.</p>
+        <p>EFC Alerta Temprana prototype is functional.<br>An innovative proposal we present for your consideration — let's explore together the best path to market with proper authorizations.</p>
     </div>
 </div>
 
-<!-- SLIDE 15: Live Demo -->
+<!-- SLIDE 7: Live Demo -->
 <div class="slide" style="justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; background: #000 !important;">
-    <span class="section-number">15</span>
+    <span class="section-number">07</span>
 
     <!-- Audio element for SISMATE alarm -->
     <audio id="alarmSound" loop>
@@ -1395,35 +1057,68 @@
         <h1 style="color: #fff;">Live Demo</h1>
         <p class="subtitle" style="color: #888;">Experience a real alert</p>
 
-        <div style="margin-top: 60px; display: flex; align-items: center; justify-content: center; gap: 80px;">
-            <!-- QR Code -->
-            <div style="text-align: center;">
-                <img src="qr-apk.png" alt="Download APK" style="width: 150px; height: 150px; border-radius: 10px; background: white; padding: 10px;">
-                <p style="color: #666; font-size: 14px; margin-top: 10px;">Scan to install app</p>
-            </div>
-
-            <!-- Button section -->
-            <div style="text-align: center;">
-            <p style="color: #666; margin-bottom: 50px; font-size: 18px;">
-                Press to trigger alerts on all connected devices
+        <div style="margin-top: 40px;">
+            <p style="color: #666; margin-bottom: 40px; font-size: 18px;">
+                Select alert severity to trigger on all connected devices
             </p>
 
-            <button id="triggerAlertBtn" onclick="triggerDemoAlert()" style="
-                background: linear-gradient(135deg, #FF4B4B, #CC0000);
-                border: none;
-                border-radius: 30px;
-                padding: 35px 80px;
-                font-size: 28px;
-                font-weight: 700;
-                color: white;
-                cursor: pointer;
-                box-shadow: 0 0 60px rgba(255, 75, 75, 0.5), 0 0 120px rgba(255, 75, 75, 0.3);
-                transition: all 0.3s ease;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-            " onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 0 80px rgba(255, 75, 75, 0.7), 0 0 150px rgba(255, 75, 75, 0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 60px rgba(255, 75, 75, 0.5), 0 0 120px rgba(255, 75, 75, 0.3)';">
-                ⚡ TRIGGER ALERT
-            </button>
+            <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+                <!-- ALARM Button (Red) -->
+                <button id="triggerAlarmBtn" onclick="triggerDemoAlert('ALARM')" style="
+                    background: linear-gradient(135deg, #FF4B4B, #B71C1C);
+                    border: none;
+                    border-radius: 20px;
+                    padding: 25px 40px;
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: white;
+                    cursor: pointer;
+                    box-shadow: 0 0 40px rgba(183, 28, 28, 0.5);
+                    transition: all 0.3s ease;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    min-width: 200px;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 60px rgba(183, 28, 28, 0.7)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 40px rgba(183, 28, 28, 0.5)';">
+                    ⚡ ALARM<br><span style="font-size: 12px; font-weight: 400;">Lightning Alert</span>
+                </button>
+
+                <!-- WARNING Button (Orange) -->
+                <button id="triggerWarningBtn" onclick="triggerDemoAlert('WARNING')" style="
+                    background: linear-gradient(135deg, #FF9800, #E65100);
+                    border: none;
+                    border-radius: 20px;
+                    padding: 25px 40px;
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: white;
+                    cursor: pointer;
+                    box-shadow: 0 0 40px rgba(230, 81, 0, 0.5);
+                    transition: all 0.3s ease;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    min-width: 200px;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 60px rgba(230, 81, 0, 0.7)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 40px rgba(230, 81, 0, 0.5)';">
+                    ⚠️ WARNING<br><span style="font-size: 12px; font-weight: 400;">Thunderstorm</span>
+                </button>
+
+                <!-- INFO Button (Blue) -->
+                <button id="triggerInfoBtn" onclick="triggerDemoAlert('INFO')" style="
+                    background: linear-gradient(135deg, #2196F3, #1565C0);
+                    border: none;
+                    border-radius: 20px;
+                    padding: 25px 40px;
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: white;
+                    cursor: pointer;
+                    box-shadow: 0 0 40px rgba(21, 101, 192, 0.5);
+                    transition: all 0.3s ease;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    min-width: 200px;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 60px rgba(21, 101, 192, 0.7)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 40px rgba(21, 101, 192, 0.5)';">
+                    ℹ️ INFO<br><span style="font-size: 12px; font-weight: 400;">Weather Update</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1437,7 +1132,7 @@
             <!-- Phone frame with vibration animation -->
             <div id="phoneContainer" style="position: relative;">
                 <!-- Phone outer frame -->
-                <div style="
+                <div id="phoneFrame" style="
                     width: 320px;
                     height: 650px;
                     background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
@@ -1450,7 +1145,7 @@
                         inset 0 0 20px rgba(0,0,0,0.5);
                 ">
                     <!-- Phone screen -->
-                    <div style="
+                    <div id="phoneScreen" style="
                         width: 100%;
                         height: 100%;
                         background: linear-gradient(180deg, #CC0000, #8B0000);
@@ -1470,49 +1165,35 @@
                             <div style="width: 80px; height: 25px; background: #000; border-radius: 15px;"></div>
                         </div>
 
-                        <!-- Alert content inside phone -->
-                        <div style="padding: 25px 20px; text-align: center; height: calc(100% - 35px); display: flex; flex-direction: column; justify-content: center;">
+                        <!-- Alert content inside phone - matches AlertActivity.kt layout -->
+                        <div style="padding: 25px 20px; text-align: center; height: calc(100% - 35px); display: flex; flex-direction: column; justify-content: center; align-items: center;">
 
-                            <!-- Pulsing lightning icon -->
-                            <div id="alertIcon" style="font-size: 70px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));">⚡</div>
+                            <!-- Pulsing icon -->
+                            <div id="alertIcon" style="font-size: 72px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));">⚡</div>
 
-                            <!-- Severity badge -->
-                            <div style="background: rgba(0,0,0,0.4); padding: 8px 25px; border-radius: 25px; margin: 0 auto 15px; display: inline-block;">
-                                <span id="alertBadge" style="font-size: 13px; font-weight: 700; letter-spacing: 3px; color: #fff;">ALARM</span>
-                            </div>
+                            <!-- Title (translated) -->
+                            <h2 id="alertTitle" style="font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">ALERTA DE RAYOS</h2>
 
-                            <!-- Title -->
-                            <h2 id="alertTitle" style="font-size: 22px; font-weight: 700; margin-bottom: 12px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">LIGHTNING ALERT</h2>
-
-                            <!-- Message -->
-                            <p id="alertMessage" style="font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 8px;">
-                                Lightning detected within <strong>8 km</strong>
+                            <!-- Message / Severity instruction (translated) -->
+                            <p id="alertMessage" style="font-size: 18px; color: #FFECB3; line-height: 1.4; margin-bottom: 20px; font-weight: 500;">
+                                BUSQUE REFUGIO AHORA!
                             </p>
-                            <p style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 20px;">Demo - Presentation Room</p>
 
-                            <!-- Instruction -->
-                            <div style="padding: 12px 20px; background: rgba(0,0,0,0.25); border-radius: 12px; margin-bottom: 20px;">
-                                <p id="alertInstruction" style="font-size: 13px; color: #fff; margin: 0;">🏃 Seek shelter immediately</p>
-                            </div>
-
-                            <!-- Vibrating indicator -->
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px;">
-                                <span style="font-size: 20px;" id="vibrateIcon">📳</span>
-                                <span id="alertVibrate" style="font-size: 12px; color: rgba(255,255,255,0.6);">Vibrating...</span>
-                            </div>
+                            <!-- Zone name (translated label) -->
+                            <p id="alertZone" style="font-size: 16px; color: rgba(255,255,255,0.9); margin-bottom: 40px;">Zona: Demo - Presentation Room</p>
 
                             <!-- Button inside phone -->
-                            <button style="
-                                padding: 14px 40px;
-                                border-radius: 25px;
+                            <button id="alertButton" style="
+                                padding: 16px 50px;
+                                border-radius: 8px;
                                 border: none;
                                 background: #fff;
                                 color: #CC0000;
                                 font-weight: 700;
-                                font-size: 15px;
+                                font-size: 18px;
                                 box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-                            " id="alertButton">
-                                Understood
+                            ">
+                                ENTENDIDO
                             </button>
                         </div>
                     </div>
@@ -1520,9 +1201,9 @@
 
                 <!-- Sound waves emanating from phone -->
                 <div id="soundWaves" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;">
-                    <div class="sound-wave" style="position: absolute; width: 400px; height: 400px; border: 2px solid rgba(255,50,50,0.3); border-radius: 50%; left: -200px; top: -200px;"></div>
-                    <div class="sound-wave" style="position: absolute; width: 500px; height: 500px; border: 2px solid rgba(255,50,50,0.2); border-radius: 50%; left: -250px; top: -250px; animation-delay: 0.5s;"></div>
-                    <div class="sound-wave" style="position: absolute; width: 600px; height: 600px; border: 2px solid rgba(255,50,50,0.1); border-radius: 50%; left: -300px; top: -300px; animation-delay: 1s;"></div>
+                    <div id="soundWave1" class="sound-wave" style="position: absolute; width: 400px; height: 400px; border: 2px solid rgba(255,50,50,0.3); border-radius: 50%; left: -200px; top: -200px;"></div>
+                    <div id="soundWave2" class="sound-wave" style="position: absolute; width: 500px; height: 500px; border: 2px solid rgba(255,50,50,0.2); border-radius: 50%; left: -250px; top: -250px; animation-delay: 0.5s;"></div>
+                    <div id="soundWave3" class="sound-wave" style="position: absolute; width: 600px; height: 600px; border: 2px solid rgba(255,50,50,0.1); border-radius: 50%; left: -300px; top: -300px; animation-delay: 1s;"></div>
                 </div>
             </div>
 
@@ -1600,30 +1281,67 @@
     let languageInterval = null;
     let alarmAudio = null;
 
+    // Translations that match the mobile app AlertActivity.kt
     const translations = {
-        en: {
-            badge: 'ALARM',
-            title: 'LIGHTNING ALERT',
-            message: 'Lightning detected within <strong>8 km</strong>',
-            instruction: '🏃 Seek shelter immediately',
-            vibrate: 'Vibrating...',
-            button: 'Understood'
+        ALARM: {
+            en: {
+                title: 'LIGHTNING ALERT',
+                message: 'SEEK SHELTER NOW!',
+                zone: 'Zone',
+                button: 'UNDERSTOOD'
+            },
+            pt: {
+                title: 'ALERTA DE RAIOS',
+                message: 'PROCURE ABRIGO AGORA!',
+                zone: 'Zona',
+                button: 'ENTENDIDO'
+            },
+            es: {
+                title: 'ALERTA DE RAYOS',
+                message: 'BUSQUE REFUGIO AHORA!',
+                zone: 'Zona',
+                button: 'ENTENDIDO'
+            }
         },
-        pt: {
-            badge: 'ALARME',
-            title: 'ALERTA DE RAIOS',
-            message: 'Raios detectados a <strong>8 km</strong>',
-            instruction: '🏃 Procure abrigo imediatamente',
-            vibrate: 'Vibrando...',
-            button: 'Entendido'
+        WARNING: {
+            en: {
+                title: 'STORM ALERT',
+                message: 'Prepare to seek shelter',
+                zone: 'Zone',
+                button: 'UNDERSTOOD'
+            },
+            pt: {
+                title: 'ALERTA DE TEMPESTADE',
+                message: 'Prepare-se para procurar abrigo',
+                zone: 'Zona',
+                button: 'ENTENDIDO'
+            },
+            es: {
+                title: 'ADVERTENCIA METEOROLOGICA',
+                message: 'Preparese para buscar refugio',
+                zone: 'Zona',
+                button: 'ENTENDIDO'
+            }
         },
-        es: {
-            badge: 'ALARMA',
-            title: 'ALERTA DE RAYOS',
-            message: 'Rayos detectados a <strong>8 km</strong>',
-            instruction: '🏃 Busque refugio inmediatamente',
-            vibrate: 'Vibrando...',
-            button: 'Entendido'
+        INFO: {
+            en: {
+                title: 'WEATHER ALERT',
+                message: 'Stay informed',
+                zone: 'Zone',
+                button: 'UNDERSTOOD'
+            },
+            pt: {
+                title: 'ALERTA METEOROLOGICO',
+                message: 'Mantenha-se informado',
+                zone: 'Zona',
+                button: 'ENTENDIDO'
+            },
+            es: {
+                title: 'INFORMACION METEOROLOGICA',
+                message: 'Mantengase informado',
+                zone: 'Zona',
+                button: 'ENTENDIDO'
+            }
         }
     };
 
@@ -1632,13 +1350,11 @@
 
     function updateAlertLanguage() {
         const lang = langOrder[currentLangIndex];
-        const t = translations[lang];
+        const t = translations[currentSeverity][lang];
 
-        document.getElementById('alertBadge').textContent = t.badge;
         document.getElementById('alertTitle').textContent = t.title;
-        document.getElementById('alertMessage').innerHTML = t.message;
-        document.getElementById('alertInstruction').innerHTML = t.instruction;
-        document.getElementById('alertVibrate').textContent = t.vibrate;
+        document.getElementById('alertMessage').textContent = t.message;
+        document.getElementById('alertZone').textContent = t.zone + ': Demo - Presentation Room';
         document.getElementById('alertButton').textContent = t.button;
 
         // Update language indicators
@@ -1648,11 +1364,52 @@
         currentLangIndex = (currentLangIndex + 1) % langOrder.length;
     }
 
-    function showDemoAlert() {
+    // Severity color configurations
+    const severityColors = {
+        ALARM: {
+            gradient: 'linear-gradient(180deg, #CC0000, #8B0000)',
+            glow: 'rgba(255, 50, 50',
+            buttonColor: '#CC0000',
+            icon: '⚡',
+            badge: 'ALARM'
+        },
+        WARNING: {
+            gradient: 'linear-gradient(180deg, #E65100, #BF360C)',
+            glow: 'rgba(230, 81, 0',
+            buttonColor: '#E65100',
+            icon: '⚠️',
+            badge: 'WARNING'
+        },
+        INFO: {
+            gradient: 'linear-gradient(180deg, #1565C0, #0D47A1)',
+            glow: 'rgba(21, 101, 192',
+            buttonColor: '#1565C0',
+            icon: 'ℹ️',
+            badge: 'INFO'
+        }
+    };
+
+    let currentSeverity = 'ALARM';
+
+    function showDemoAlert(severity = 'ALARM') {
+        currentSeverity = severity;
+        const colors = severityColors[severity] || severityColors.ALARM;
+
         document.getElementById('demoInitial').style.display = 'none';
         document.getElementById('demoAlert').style.display = 'block';
         document.getElementById('alertIcon').classList.add('active');
         document.getElementById('phoneContainer').classList.add('active');
+
+        // Apply severity colors
+        document.getElementById('phoneScreen').style.background = colors.gradient;
+        document.getElementById('phoneFrame').style.boxShadow = `0 0 0 3px #333, 0 50px 100px ${colors.glow}, 0.3), 0 0 200px ${colors.glow}, 0.2), inset 0 0 20px rgba(0,0,0,0.5)`;
+        document.getElementById('alertButton').style.color = colors.buttonColor;
+        document.getElementById('alertIcon').textContent = colors.icon;
+
+        // Update sound waves color
+        document.getElementById('soundWave1').style.borderColor = `${colors.glow}, 0.3)`;
+        document.getElementById('soundWave2').style.borderColor = `${colors.glow}, 0.2)`;
+        document.getElementById('soundWave3').style.borderColor = `${colors.glow}, 0.1)`;
 
         // Play alarm sound
         alarmAudio = document.getElementById('alarmSound');
@@ -1691,56 +1448,52 @@
         btn.style.background = 'linear-gradient(135deg, #FF4B4B, #CC0000)';
     }
 
-    async function triggerDemoAlert() {
-        const btn = document.getElementById('triggerAlertBtn');
+    async function triggerDemoAlert(severity = 'ALARM') {
+        // Show the mockup immediately with the correct severity color
+        showDemoAlert(severity);
 
-        btn.disabled = true;
-        btn.innerHTML = '⏳ SENDING...';
-        btn.style.background = '#666';
-
-        // Show the mockup immediately
-        showDemoAlert();
-
-        // Also try to send to real devices
+        // Send alert to all subscribed devices via topic
         try {
-            await fetch(`${API_URL}/api/v1/webhooks/test/efc`, {
+            const response = await fetch(`${API_URL}/api/v1/devices/test-alert`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    type: 'alert.lightning',
-                    data: {
-                        assetName: 'Demo - Presentation Room',
-                        currentState: 'ACTIVE',
-                        severity: 'ALARM'
-                    }
+                    country: 'pe',
+                    severity: severity
                 })
             });
-            console.log('Alert sent to real devices');
+            const result = await response.json();
+            console.log('Alert sent to devices:', result);
         } catch (error) {
             console.log('Demo mode (server unavailable):', error);
         }
     }
 </script>
 
-<!-- SLIDE 16: Contact -->
+<!-- SLIDE 8: Contact -->
 <div class="slide" style="justify-content: center; align-items: center; text-align: center;">
     <h1>Thank You</h1>
     <p class="subtitle">Let's build the future of safety alerts together</p>
 
-    <div style="margin-top: 60px;">
-        <h3 style="color: #fff; margin-bottom: 30px;">Contact</h3>
-        <p style="font-size: 24px; margin-bottom: 10px;"><strong>Alann Reyes</strong></p>
-        <p style="color: #888;">Gerente de Innovación Tecnológica</p>
-        <p style="color: #888;">Electro Ferro Centro S.A.C.</p>
-        <p style="margin-top: 20px;">
-            <span class="highlight">areyesj@efc.com.pe</span>
-        </p>
-    </div>
-
-    <div class="logo-container" style="position: static; margin-top: 80px; justify-content: center;">
-        <span class="logo efc" style="font-size: 24px;">EFC</span>
-        <span class="logo" style="font-size: 24px;">×</span>
-        <span class="logo vaisala" style="font-size: 24px;">VAISALA XWEATHER</span>
+    <div style="margin-top: 60px; display: flex; gap: 80px; justify-content: center; flex-wrap: wrap;">
+        <!-- Contact 1: Alann -->
+        <div>
+            <p style="font-size: 24px; margin-bottom: 10px;"><strong>Alann Reyes</strong></p>
+            <p style="color: #888;">Gerente de Innovación Tecnológica</p>
+            <p style="color: #888;">EFC</p>
+            <p style="margin-top: 20px;">
+                <span class="highlight">areyesj@efc.com.pe</span>
+            </p>
+        </div>
+        <!-- Contact 2: Erickson -->
+        <div>
+            <p style="font-size: 24px; margin-bottom: 10px;"><strong>Erickson Huapaya</strong></p>
+            <p style="color: #888;">Gerente de Desarrollo de Negocios</p>
+            <p style="color: #888;">EFC</p>
+            <p style="margin-top: 20px;">
+                <span class="highlight">ehuapaya@efc.com.pe</span>
+            </p>
+        </div>
     </div>
 </div>
 
