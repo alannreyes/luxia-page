@@ -672,7 +672,7 @@
     </p>
 </div>
 
-<!-- SLIDE 2: The Problem -->
+<!-- SLIDE 2: The Challenge -->
 <div class="slide">
     <span class="section-number">01</span>
     <h2>The Challenge</h2>
@@ -684,30 +684,46 @@
         <div class="quote-author">— José Barriga, Supervisor at Antamina Mining</div>
     </div>
 
-    <div class="grid-2" style="margin-top: 40px;">
+    <div class="grid-3" style="margin-top: 40px;">
         <div class="card">
-            <div class="icon-large">📍</div>
-            <h4>No Geofencing</h4>
-            <p>All users receive all alerts, regardless of their actual location. Alert fatigue is real.</p>
+            <div class="icon-large">📡</div>
+            <h4>Simultaneous Broadcast</h4>
+            <p>Alert reaches all devices at the exact same moment, creating unmistakable collective awareness.</p>
         </div>
         <div class="card">
-            <div class="icon-large">🔋</div>
-            <h4>GPS Battery Drain</h4>
-            <p>Traditional tracking apps constantly poll GPS location, draining phone batteries in hours. Workers disable them.</p>
+            <div class="icon-large">📍</div>
+            <h4>Geofenced Delivery</h4>
+            <p>Only users physically inside the defined area receive the alert — no one outside.</p>
+        </div>
+        <div class="card">
+            <div class="icon-large">🔊</div>
+            <h4>Loud Recognizable Sound</h4>
+            <p>Distinctive alarm that cuts through noise, impossible to confuse with other notifications.</p>
         </div>
     </div>
 
-    <div class="grid-2" style="margin-top: 20px;">
+    <div class="grid-3" style="margin-top: 20px;">
         <div class="card">
-            <div class="icon-large">🚨</div>
-            <h4>Sirens Go Unnoticed</h4>
-            <p>Strobe lights and sirens can be missed: workers in vehicles, wearing hearing protection, or in noisy areas.</p>
+            <div class="icon-large">📱</div>
+            <h4>Full-Screen Takeover</h4>
+            <p>Alert dominates the screen until acknowledged — cannot be accidentally dismissed.</p>
         </div>
         <div class="card">
             <div class="icon-large">🔒</div>
-            <h4>Privacy Concerns</h4>
-            <p>Workers don't want their location tracked 24/7. Concerns about personal safety, privacy, and knowing their movements creates resistance to adoption.</p>
+            <h4>Total Privacy</h4>
+            <p>No location tracking, no movement history — workers' privacy must be fully respected.</p>
         </div>
+        <div class="card">
+            <div class="icon-large">💤</div>
+            <h4>Works When Closed</h4>
+            <p>Functions even with app closed and phone locked — true emergency-grade reliability.</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #FF4B4B20, #FF4B4B10); border-left: 4px solid #FF4B4B; border-radius: 8px;">
+        <p style="color: #FF6B6B; font-size: 18px; margin: 0;">
+            <strong>⚠️ SISMATE is regulated by Peruvian law for government use only — it is not available for private companies.</strong>
+        </p>
     </div>
 </div>
 
@@ -715,99 +731,60 @@
 <div class="slide">
     <span class="section-number">02</span>
     <h2>Introducing <span class="highlight">EFC Alerta Temprana</span></h2>
-    <p class="subtitle">Push-based alert distribution with on-device geofencing</p>
+    <p class="subtitle">Meeting the challenge — and going beyond</p>
 
     <div class="grid-2">
+        <!-- Left Column: The Solution -->
         <div>
-            <ul>
-                <li><strong>Native Push Notifications</strong> — Works even when app is closed or phone is locked</li>
-                <li><strong>Zero Battery Drain</strong> — No GPS polling; location checked only when alert arrives</li>
-                <li><strong>Privacy-First Design</strong> — GPS location never leaves the device</li>
-                <li><strong>On-Device Geofencing</strong> — Ray casting algorithm runs locally on the phone</li>
-                <li><strong>Low Signal Resilient</strong> — Reiterative broadcast catches late-connecting devices</li>
-                <li><strong>Multi-Language Support</strong> — 10 languages including Spanish, English, and Quechua</li>
-            </ul>
-        </div>
-        <div style="display: flex; justify-content: center;">
-            <div class="phone-mockup">
-                <div class="phone-notch"></div>
-                <div class="phone-screen" style="background: linear-gradient(180deg, #CC0000, #990000); padding: 0; display: flex; flex-direction: column; position: relative; overflow: hidden;">
-
-                    <!-- ENGLISH VERSION -->
-                    <div class="lang-en" style="display: flex; flex-direction: column; height: 100%;">
-                        <!-- Status bar -->
-                        <div style="padding: 45px 15px 10px; display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 11px; color: rgba(255,255,255,0.8);">12:45</span>
-                            <span style="font-size: 10px; color: rgba(255,255,255,0.8);">📶 🔋</span>
-                        </div>
-
-                        <!-- Alert content -->
-                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center;">
-                            <div style="font-size: 56px; margin-bottom: 10px; animation: pulse 1s infinite;">⚡</div>
-                            <div style="background: rgba(0,0,0,0.3); padding: 5px 14px; border-radius: 20px; margin-bottom: 12px;">
-                                <span style="font-size: 11px; font-weight: 700; letter-spacing: 2px;">ALARM</span>
-                            </div>
-                            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #fff;">LIGHTNING ALERT</h3>
-                            <p style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 6px;">
-                                Lightning detected<br>within <strong>8 km</strong> of
-                            </p>
-                            <p style="font-size: 15px; font-weight: 600; color: #fff;">Tajo Norte</p>
-                            <div style="margin-top: 15px; padding: 10px 16px; background: rgba(0,0,0,0.2); border-radius: 10px;">
-                                <p style="font-size: 12px; color: #fff;">🏃 Seek shelter immediately</p>
-                            </div>
-                            <div style="margin-top: 12px; display: flex; align-items: center; gap: 5px;">
-                                <span style="font-size: 14px;">📳</span>
-                                <span style="font-size: 10px; color: rgba(255,255,255,0.7);">Phone vibrating</span>
-                            </div>
-                        </div>
-
-                        <!-- Button -->
-                        <div style="padding: 12px 18px 22px;">
-                            <button style="width: 100%; padding: 14px; border-radius: 12px; border: none; background: #fff; color: #CC0000; font-weight: 700; font-size: 15px;">
-                                Understood
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- PORTUGUESE VERSION -->
-                    <div class="lang-pt" style="display: flex; flex-direction: column; height: 100%; background: linear-gradient(180deg, #CC0000, #990000);">
-                        <!-- Status bar -->
-                        <div style="padding: 45px 15px 10px; display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 11px; color: rgba(255,255,255,0.8);">12:45</span>
-                            <span style="font-size: 10px; color: rgba(255,255,255,0.8);">📶 🔋</span>
-                        </div>
-
-                        <!-- Alert content -->
-                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center;">
-                            <div style="font-size: 56px; margin-bottom: 10px; animation: pulse 1s infinite;">⚡</div>
-                            <div style="background: rgba(0,0,0,0.3); padding: 5px 14px; border-radius: 20px; margin-bottom: 12px;">
-                                <span style="font-size: 11px; font-weight: 700; letter-spacing: 2px;">ALARME</span>
-                            </div>
-                            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #fff;">ALERTA DE RAIOS</h3>
-                            <p style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 6px;">
-                                Raios detectados<br>a <strong>8 km</strong> de
-                            </p>
-                            <p style="font-size: 15px; font-weight: 600; color: #fff;">Tajo Norte</p>
-                            <div style="margin-top: 15px; padding: 10px 16px; background: rgba(0,0,0,0.2); border-radius: 10px;">
-                                <p style="font-size: 12px; color: #fff;">🏃 Procure abrigo imediatamente</p>
-                            </div>
-                            <div style="margin-top: 12px; display: flex; align-items: center; gap: 5px;">
-                                <span style="font-size: 14px;">📳</span>
-                                <span style="font-size: 10px; color: rgba(255,255,255,0.7);">Telefone vibrando</span>
-                            </div>
-                        </div>
-
-                        <!-- Button -->
-                        <div style="padding: 12px 18px 22px;">
-                            <button style="width: 100%; padding: 14px; border-radius: 12px; border: none; background: #fff; color: #CC0000; font-weight: 700; font-size: 15px;">
-                                Entendido
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
+            <h3 style="color: #00C7B7; margin-bottom: 20px;">✓ The Solution</h3>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="color: #00C7B7;">✅</span> <strong>Simultaneous Broadcast</strong> — Push notification reaches all devices within seconds via Firebase Cloud Messaging</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="color: #00C7B7;">✅</span> <strong>On-Device Geofencing</strong> — Location checked locally; alert only triggers if user is inside the polygon</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="color: #00C7B7;">✅</span> <strong>SISMATE-Style Alarm</strong> — Loud, distinctive sound that commands attention</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="color: #00C7B7;">✅</span> <strong>Full-Screen Alert</strong> — Takes over the screen until user acknowledges</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="color: #00C7B7;">✅</span> <strong>Privacy by Design</strong> — GPS coordinates never leave the device</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="color: #00C7B7;">✅</span> <strong>Works Always</strong> — Background service ensures alerts even with app closed and phone locked</p>
             </div>
         </div>
+
+        <!-- Right Column: Beyond SISMATE -->
+        <div>
+            <h3 style="color: #00A3E0; margin-bottom: 20px;">🚀 Beyond SISMATE</h3>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="font-size: 18px;">🌍</span> <strong>Multi-Language Support</strong> — 10 languages including Spanish, English, Portuguese, Quechua</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="font-size: 18px;">🔗</span> <strong>API & Webhook Integration</strong> — Connects with Xweather, SCADA, ERP, or any alert source</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="font-size: 18px;">📊</span> <strong>ACK Tracking</strong> — Know how many received and acknowledged (without knowing WHO or WHERE)</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="font-size: 18px;">🏢</span> <strong>Multi-Tenant Ready</strong> — One platform serves multiple clients with their own zones</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="font-size: 18px;">📱</span> <strong>No Carrier Dependency</strong> — Works independently, no telecom operator cooperation needed</p>
+            </div>
+            <div class="card" style="margin-bottom: 12px; padding: 16px;">
+                <p style="margin: 0;"><span style="font-size: 18px;">🚀</span> <strong>Rapid Deployment</strong> — Install app and go, no government authorization required</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #00A3E020, #00C7B710); border-left: 4px solid #00C7B7; border-radius: 8px; text-align: center;">
+        <p style="color: #00C7B7; font-size: 20px; margin: 0;">
+            <strong>All SISMATE capabilities — now available for private companies, with features SISMATE doesn't offer</strong>
+        </p>
     </div>
 </div>
 
