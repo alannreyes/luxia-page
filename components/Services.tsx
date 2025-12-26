@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import AppointmentModal from './AppointmentModal'
-import { FileSearch, Search, CloudLightning, Brain, ArrowRight } from 'lucide-react'
+import { FileSearch, Search, CloudLightning, Brain, Ruler, ArrowRight } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
 // Mapeo de nombres de iconos a componentes
@@ -10,7 +10,8 @@ const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = 
   FileSearch,
   Search,
   CloudLightning,
-  Brain
+  Brain,
+  Ruler
 }
 
 interface ServiceItem {
@@ -43,7 +44,8 @@ export default function Services({ dictionary }: BaseComponentProps) {
     Insurtech: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
     Enterprise: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
     Industrial: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    Strategy: 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+    Strategy: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+    Logistics: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
   }
 
   return (

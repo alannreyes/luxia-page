@@ -53,10 +53,10 @@ const es = {
       {
         id: 'alerta',
         icon: 'CloudLightning',
-        title: 'EFC Alerta',
-        tagline: 'Sistema de alertas meteorológicas',
-        description: 'Alertas en tiempo real powered by Vaisala Xweather. Protege operaciones mineras, petroleras y de gas con notificaciones push instantáneas de tormentas eléctricas.',
-        features: ['Alertas push nativas', 'Integración Xweather', 'Multi-zona', 'Privacidad total'],
+        title: 'Alerta Temprana Móvil',
+        tagline: 'Alertas que salvan vidas',
+        description: 'Sistema de alertas push que funciona con el celular bloqueado y la app cerrada. Privacidad total: la ubicación nunca sale del dispositivo. Ideal para proteger personal en operaciones mineras, petroleras y de gas.',
+        features: ['Funciona con app cerrada', 'Celular bloqueado', 'Privacidad total', 'Multi-idioma'],
         badge: 'Industrial'
       },
       {
@@ -67,6 +67,15 @@ const es = {
         description: 'Evaluación, diseño e implementación de soluciones de IA Generativa para industrias reguladas. Desde POCs de 4 semanas hasta despliegues enterprise.',
         features: ['Assessment IA', 'POCs rápidos', 'Arquitectura cloud', 'Compliance regulatorio'],
         badge: 'Strategy'
+      },
+      {
+        id: 'wincha',
+        icon: 'Ruler',
+        title: 'Wincha',
+        tagline: 'Mide con tu celular. Sin hardware costoso.',
+        description: 'Dimensionador logístico con IA para Android. Captura dimensiones y peso de paquetes usando la cámara + inteligencia artificial. Ideal para logística, almacenes, courier y e-commerce.',
+        features: ['Dimensiones con IA', 'Peso por voz', 'Balanza Bluetooth', 'Integración ERP'],
+        badge: 'Logistics'
       }
     ],
     cta: 'Explorar solución'
@@ -164,7 +173,7 @@ const es = {
   meta: {
     title: 'LuxIA - IA para Fintech, Insurtech e Industria',
     description: 'Boutique de Inteligencia Artificial para industrias reguladas. UWIA para seguros, búsqueda semántica, alertas industriales. 30 años de experiencia en banca y tecnología.',
-    keywords: 'IA empresarial, fintech, insurtech, underwriting automation, UWIA, búsqueda semántica, RAG, bases de datos vectoriales, EFC Alerta, Vaisala, IBM, consultoría IA, Alann Reyes'
+    keywords: 'IA empresarial, fintech, insurtech, underwriting automation, UWIA, búsqueda semántica, RAG, bases de datos vectoriales, EFC Alerta, alertas meteorológicas, Wincha, dimensionador logístico, IBM, consultoría IA, Alann Reyes'
   }
 }
 
@@ -221,10 +230,10 @@ const en = {
       {
         id: 'alerta',
         icon: 'CloudLightning',
-        title: 'EFC Alerta',
-        tagline: 'Weather alert system',
-        description: 'Real-time alerts powered by Vaisala Xweather. Protect mining, oil and gas operations with instant push notifications for lightning storms.',
-        features: ['Native push alerts', 'Xweather integration', 'Multi-zone', 'Total privacy'],
+        title: 'Mobile Early Warning',
+        tagline: 'Alerts that save lives',
+        description: 'Push alert system that works with phone locked and app closed. Total privacy: location never leaves the device. Ideal for protecting personnel in mining, oil and gas operations.',
+        features: ['Works with app closed', 'Phone locked', 'Total privacy', 'Multi-language'],
         badge: 'Industrial'
       },
       {
@@ -235,6 +244,15 @@ const en = {
         description: 'Assessment, design and implementation of Generative AI solutions for regulated industries. From 4-week POCs to enterprise deployments.',
         features: ['AI assessment', 'Rapid POCs', 'Cloud architecture', 'Regulatory compliance'],
         badge: 'Strategy'
+      },
+      {
+        id: 'wincha',
+        icon: 'Ruler',
+        title: 'Wincha',
+        tagline: 'Measure with your phone. No costly hardware.',
+        description: 'AI-powered logistics dimensioner for Android. Capture package dimensions and weight using camera + artificial intelligence. Ideal for logistics, warehouses, courier and e-commerce.',
+        features: ['AI dimensions', 'Voice weight', 'Bluetooth scale', 'ERP integration'],
+        badge: 'Logistics'
       }
     ],
     cta: 'Explore solution'
@@ -332,7 +350,7 @@ const en = {
   meta: {
     title: 'LuxIA - AI for Fintech, Insurtech & Industry',
     description: 'Artificial Intelligence boutique for regulated industries. UWIA for insurance, semantic search, industrial alerts. 30 years of banking and technology experience.',
-    keywords: 'enterprise AI, fintech, insurtech, underwriting automation, UWIA, semantic search, RAG, vector databases, EFC Alerta, Vaisala, IBM, AI consulting, Alann Reyes'
+    keywords: 'enterprise AI, fintech, insurtech, underwriting automation, UWIA, semantic search, RAG, vector databases, EFC Alerta, weather alerts, Wincha, logistics dimensioner, IBM, AI consulting, Alann Reyes'
   }
 }
 
