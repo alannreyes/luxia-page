@@ -38,6 +38,11 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
     { href: '#contacto', label: dictionary.nav.contact }
   ]
 
+  const eduLinks = [
+    { href: `/${locale}/learning`, label: dictionary.nav.learning, icon: '📖' },
+    { href: `/${locale}/cooking`, label: dictionary.nav.cooking, icon: '👨‍🍳' }
+  ]
+
   return (
     <>
       <nav className={`fixed w-full z-50 transition-all duration-300 ${
@@ -64,6 +69,23 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
                   {link.label}
                 </a>
               ))}
+              {/* Learning & Cooking Links */}
+              <div className="flex items-center gap-2 border-l border-gray-300/30 pl-4">
+                {eduLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center gap-1 px-2 py-1 rounded-lg font-medium transition-colors ${
+                      isScrolled
+                        ? 'text-slate-600 hover:text-blue-600 hover:bg-blue-50'
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{link.icon}</span>
+                    <span className="text-sm">{link.label}</span>
+                  </a>
+                ))}
+              </div>
               <LanguageSelector currentLocale={locale} />
               <button
                 onClick={handleAppointmentClick}
@@ -102,6 +124,20 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
                   {link.label}
                 </a>
               ))}
+              {/* Learning & Cooking Links Mobile */}
+              <div className="flex gap-2 pt-2 border-t border-gray-100">
+                {eduLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-700 transition-colors font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span>{link.icon}</span>
+                    <span>{link.label}</span>
+                  </a>
+                ))}
+              </div>
               <div className="pt-2">
                 <LanguageSelector currentLocale={locale} />
               </div>

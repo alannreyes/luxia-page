@@ -8,6 +8,8 @@ const es = {
     about: 'Fundador',
     cases: 'Industrias',
     contact: 'Contacto',
+    learning: 'Learning',
+    cooking: 'Cooking',
     schedule: 'Agendar Consulta'
   },
 
@@ -185,6 +187,8 @@ const en = {
     about: 'Founder',
     cases: 'Industries',
     contact: 'Contact',
+    learning: 'Learning',
+    cooking: 'Cooking',
     schedule: 'Schedule Call'
   },
 
