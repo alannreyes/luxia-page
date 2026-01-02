@@ -10,7 +10,36 @@ export type Locale = (typeof locales)[number]
 export function middleware(request: NextRequest) {
   // Verificar si hay un idioma en la URL
   const { pathname } = request.nextUrl
-  
+
+  // LEARNING routes
+  if (pathname === '/aprendiendo' || pathname.startsWith('/aprendiendo/')) {
+    const newPath = pathname.replace('/aprendiendo', '/es/learning')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
+  if (pathname === '/learning' || pathname.startsWith('/learning/')) {
+    const newPath = pathname.replace('/learning', '/en/learning')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
+  // Legacy redirects
+  if (pathname === '/aprende' || pathname.startsWith('/aprende/')) {
+    const newPath = pathname.replace('/aprende', '/es/learning')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
+  if (pathname === '/learn' || pathname.startsWith('/learn/')) {
+    const newPath = pathname.replace('/learn', '/en/learning')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
+
+  // COOKING routes
+  if (pathname === '/cocinando' || pathname.startsWith('/cocinando/')) {
+    const newPath = pathname.replace('/cocinando', '/es/cooking')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
+  if (pathname === '/cooking' || pathname.startsWith('/cooking/')) {
+    const newPath = pathname.replace('/cooking', '/en/cooking')
+    return NextResponse.redirect(new URL(newPath, request.url))
+  }
+
   // Verificar si la ruta ya tiene un idioma
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`

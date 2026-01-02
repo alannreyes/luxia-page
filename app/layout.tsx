@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import AnalyticsProvider from '@/components/AnalyticsProvider'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import Providers from '@/components/Providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -114,13 +115,15 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased no-scrollbar-x`}>
-        <AnalyticsProvider>
-          <ErrorBoundary>
-            <div className="viewport-safe">
-              {children}
-            </div>
-          </ErrorBoundary>
-        </AnalyticsProvider>
+        <Providers>
+          <AnalyticsProvider>
+            <ErrorBoundary>
+              <div className="viewport-safe">
+                {children}
+              </div>
+            </ErrorBoundary>
+          </AnalyticsProvider>
+        </Providers>
       </body>
     </html>
   )
