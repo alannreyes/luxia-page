@@ -1,11 +1,14 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
-// 52 platillos organizados por nivel
+// 55+ platillos organizados por nivel
+// Prioridad: APIs cloud (Gemini, Claude, OpenAI) primero, modelos locales al final
 const dishes = [
-  // APRENDIZ (Primeros pasos - 12 platillos)
-  { slug: 'chatbot-local', titleEs: 'Chatbot Local con Ollama', titleEn: 'Local Chatbot with Ollama', level: 'aprendiz', icon: '🤖', descEs: 'Tu primer chatbot corriendo en tu máquina', descEn: 'Your first chatbot running locally' },
-  { slug: 'chatbot-api', titleEs: 'Chatbot con Claude API', titleEn: 'Chatbot with Claude API', level: 'aprendiz', icon: '💬', descEs: 'Conecta con la API de Anthropic', descEn: 'Connect with Anthropic API' },
+  // APRENDIZ: Empezar con IA en la nube (gratis/fácil)
+  { slug: 'chatbot-gemini', titleEs: 'Chatbot con Gemini API', titleEn: 'Chatbot with Gemini API', level: 'aprendiz', icon: '✨', descEs: '¡Gratis! Tu primer chat con IA en 5 minutos', descEn: 'Free! Your first AI chat in 5 minutes' },
+  { slug: 'chatbot-claude', titleEs: 'Chatbot con Claude API', titleEn: 'Chatbot with Claude API', level: 'aprendiz', icon: '🟠', descEs: 'El modelo más inteligente de Anthropic', descEn: 'Anthropic\'s smartest model' },
+  { slug: 'chatbot-openai', titleEs: 'Chatbot con OpenAI API', titleEn: 'Chatbot with OpenAI API', level: 'aprendiz', icon: '🟢', descEs: 'GPT-4 desde tu terminal', descEn: 'GPT-4 from your terminal' },
+  { slug: 'claude-code-intro', titleEs: 'Introducción a Claude Code', titleEn: 'Introduction to Claude Code', level: 'aprendiz', icon: '⌨️', descEs: 'Programa con IA en tu terminal', descEn: 'Code with AI in your terminal' },
   { slug: 'hello-terminal', titleEs: 'Hola Mundo en Terminal', titleEn: 'Hello World in Terminal', level: 'aprendiz', icon: '🖥️', descEs: 'Primeros comandos y scripts', descEn: 'First commands and scripts' },
   { slug: 'first-repo', titleEs: 'Mi Primer Repositorio', titleEn: 'My First Repository', level: 'aprendiz', icon: '📚', descEs: 'Crea y sube tu primer repo a GitHub', descEn: 'Create and push your first repo' },
   { slug: 'dotfiles', titleEs: 'Mi Configuración Dotfiles', titleEn: 'My Dotfiles Setup', level: 'aprendiz', icon: '⚙️', descEs: 'Configura tu ambiente de desarrollo', descEn: 'Configure your dev environment' },
@@ -16,8 +19,10 @@ const dishes = [
   { slug: 'json-api-fetch', titleEs: 'Consumir una API JSON', titleEn: 'Consume a JSON API', level: 'aprendiz', icon: '🔗', descEs: 'Fetch de datos de una API pública', descEn: 'Fetch data from a public API' },
   { slug: 'markdown-notes', titleEs: 'Sistema de Notas Markdown', titleEn: 'Markdown Notes System', level: 'aprendiz', icon: '📝', descEs: 'Organiza tus notas en markdown', descEn: 'Organize your markdown notes' },
   { slug: 'git-collaboration', titleEs: 'Colaborar con Git', titleEn: 'Collaborate with Git', level: 'aprendiz', icon: '🤝', descEs: 'Pull requests y code review', descEn: 'Pull requests and code review' },
+  { slug: 'chatbot-local', titleEs: 'Chatbot Local con Ollama', titleEn: 'Local Chatbot with Ollama', level: 'aprendiz', icon: '🏠', descEs: 'IA 100% privada en tu máquina', descEn: '100% private AI on your machine' },
 
-  // COCINERO (Web Básico - 14 platillos)
+  // COCINERO: Web apps y chat con UI
+  { slug: 'chat-web-ui', titleEs: 'Chat IA con Interfaz Web', titleEn: 'AI Chat with Web UI', level: 'cocinero', icon: '💬', descEs: 'De terminal a interfaz web bonita', descEn: 'From terminal to beautiful web interface' },
   { slug: 'react-todo', titleEs: 'Todo App con React', titleEn: 'Todo App with React', level: 'cocinero', icon: '✅', descEs: 'Tu primera app con React', descEn: 'Your first React app' },
   { slug: 'api-rest-basic', titleEs: 'API REST con Express', titleEn: 'REST API with Express', level: 'cocinero', icon: '🔌', descEs: 'Backend básico con Node.js', descEn: 'Basic backend with Node.js' },
   { slug: 'python-cli', titleEs: 'CLI Tool con Python', titleEn: 'CLI Tool with Python', level: 'cocinero', icon: '🐍', descEs: 'Herramienta de línea de comandos', descEn: 'Command line tool' },
@@ -33,7 +38,8 @@ const dishes = [
   { slug: 'api-fastapi', titleEs: 'API con FastAPI', titleEn: 'API with FastAPI', level: 'cocinero', icon: '⚡', descEs: 'API moderna con Python', descEn: 'Modern API with Python' },
   { slug: 'scraper-basic', titleEs: 'Web Scraper Básico', titleEn: 'Basic Web Scraper', level: 'cocinero', icon: '🕷️', descEs: 'Extrae datos de sitios web', descEn: 'Extract data from websites' },
 
-  // CHEF (Fullstack - 16 platillos)
+  // CHEF: Fullstack y chat público con auth
+  { slug: 'public-ai-chat', titleEs: 'Chat IA Público con Auth', titleEn: 'Public AI Chat with Auth', level: 'chef', icon: '🌐', descEs: 'HTTPS + Firebase Auth + Memoria', descEn: 'HTTPS + Firebase Auth + Memory' },
   { slug: 'nextjs-blog', titleEs: 'Blog con Next.js + MDX', titleEn: 'Blog with Next.js + MDX', level: 'chef', icon: '▲', descEs: 'Blog fullstack con SSR', descEn: 'Fullstack blog with SSR' },
   { slug: 'auth-firebase', titleEs: 'Auth con Firebase Google', titleEn: 'Auth with Firebase Google', level: 'chef', icon: '🔐', descEs: 'Login social completo', descEn: 'Complete social login' },
   { slug: 'crud-postgres', titleEs: 'CRUD con PostgreSQL', titleEn: 'CRUD with PostgreSQL', level: 'chef', icon: '🐘', descEs: 'Operaciones de base de datos', descEn: 'Database operations' },
