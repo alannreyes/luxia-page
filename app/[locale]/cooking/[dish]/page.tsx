@@ -3889,6 +3889,716 @@ You've finished the Apprentice level. Now you have the basics for:
 → [Chat with Web UI](/en/cooking/chat-web-ui) — Start Cook level
     `,
   },
+  'react-todo': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Terminal básica', 'Node.js instalado'],
+    prerequisitesEn: ['Basic terminal', 'Node.js installed'],
+    contentEs: `
+## Tu primera app React
+
+Una Todo App es el "Hola Mundo" de las aplicaciones web. Simple pero completa.
+
+---
+
+## Lo que construirás
+
+- Agregar tareas
+- Marcar como completadas
+- Eliminar tareas
+- Filtrar (todas/activas/completadas)
+
+---
+
+## Paso 1: Pídele a una IA el proyecto completo
+
+\`\`\`
+Necesito una Todo App con React que:
+- Use Vite como bundler
+- Tenga TypeScript
+- Use Tailwind CSS para estilos
+- Guarde las tareas en localStorage
+- Tenga filtros (todas/activas/completadas)
+
+Dame los comandos para crear el proyecto y el código de cada archivo.
+\`\`\`
+
+---
+
+## Paso 2: Sigue las instrucciones
+
+La IA te dará algo como:
+
+\`\`\`bash
+npm create vite@latest todo-app -- --template react-ts
+cd todo-app
+npm install
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+\`\`\`
+
+Luego te dará el código para:
+- \`src/App.tsx\` - Componente principal
+- \`src/components/TodoItem.tsx\` - Cada tarea
+- \`tailwind.config.js\` - Configuración
+
+---
+
+## Paso 3: Ejecuta
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+Abre [http://localhost:5173](http://localhost:5173)
+
+---
+
+## Conceptos clave de React
+
+| Concepto | Qué es |
+|----------|--------|
+| \`useState\` | Estado local del componente |
+| \`props\` | Datos que pasan de padre a hijo |
+| \`map()\` | Renderizar listas |
+| \`key\` | Identificador único para listas |
+
+---
+
+## Ejemplo de código
+
+\`\`\`tsx
+const [todos, setTodos] = useState<Todo[]>([])
+
+const addTodo = (text: string) => {
+  setTodos([...todos, { id: Date.now(), text, completed: false }])
+}
+
+const toggleTodo = (id: number) => {
+  setTodos(todos.map(todo =>
+    todo.id === id ? { ...todo, completed: !todo.completed } : todo
+  ))
+}
+\`\`\`
+
+---
+
+## Si algo falló
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`Module not found\` | Falta dependencia | \`npm install\` |
+| Tailwind no funciona | Config incorrecta | Verifica \`tailwind.config.js\` |
+| No guarda en localStorage | Key incorrecta | Verifica \`localStorage.setItem\` |
+
+---
+
+## Próximo paso
+
+→ [API REST con Express](/es/cooking/api-rest-basic) — Tu primer backend
+    `,
+    contentEn: `
+## Your first React app
+
+A Todo App is the "Hello World" of web applications. Simple but complete.
+
+---
+
+## What you'll build
+
+- Add tasks
+- Mark as completed
+- Delete tasks
+- Filter (all/active/completed)
+
+---
+
+## Step 1: Ask an AI for the complete project
+
+\`\`\`
+I need a Todo App with React that:
+- Uses Vite as bundler
+- Has TypeScript
+- Uses Tailwind CSS for styles
+- Saves tasks in localStorage
+- Has filters (all/active/completed)
+
+Give me the commands to create the project and the code for each file.
+\`\`\`
+
+---
+
+## Step 2: Follow the instructions
+
+The AI will give you something like:
+
+\`\`\`bash
+npm create vite@latest todo-app -- --template react-ts
+cd todo-app
+npm install
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+\`\`\`
+
+Then it will give you code for:
+- \`src/App.tsx\` - Main component
+- \`src/components/TodoItem.tsx\` - Each task
+- \`tailwind.config.js\` - Configuration
+
+---
+
+## Step 3: Run it
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+Open [http://localhost:5173](http://localhost:5173)
+
+---
+
+## Key React concepts
+
+| Concept | What it is |
+|---------|------------|
+| \`useState\` | Local component state |
+| \`props\` | Data passed from parent to child |
+| \`map()\` | Render lists |
+| \`key\` | Unique identifier for lists |
+
+---
+
+## Code example
+
+\`\`\`tsx
+const [todos, setTodos] = useState<Todo[]>([])
+
+const addTodo = (text: string) => {
+  setTodos([...todos, { id: Date.now(), text, completed: false }])
+}
+
+const toggleTodo = (id: number) => {
+  setTodos(todos.map(todo =>
+    todo.id === id ? { ...todo, completed: !todo.completed } : todo
+  ))
+}
+\`\`\`
+
+---
+
+## If something failed
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`Module not found\` | Missing dependency | \`npm install\` |
+| Tailwind not working | Wrong config | Check \`tailwind.config.js\` |
+| Not saving to localStorage | Wrong key | Check \`localStorage.setItem\` |
+
+---
+
+## Next step
+
+→ [REST API with Express](/en/cooking/api-rest-basic) — Your first backend
+    `,
+  },
+  'api-rest-basic': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Node.js instalado', 'JSON API Fetch completado'],
+    prerequisitesEn: ['Node.js installed', 'JSON API Fetch completed'],
+    contentEs: `
+## Tu primer backend
+
+Una API REST es un servidor que responde a peticiones HTTP. Tu frontend habla con ella.
+
+---
+
+## Lo que construirás
+
+Un servidor con:
+- GET /todos - Lista todas las tareas
+- POST /todos - Crea una tarea
+- PUT /todos/:id - Actualiza una tarea
+- DELETE /todos/:id - Elimina una tarea
+
+---
+
+## Paso 1: Pídele a una IA el código
+
+\`\`\`
+Necesito una API REST con Express y Node.js que:
+- Tenga endpoints CRUD para tareas (todos)
+- Use JSON para requests y responses
+- Guarde en memoria (array)
+- Tenga CORS habilitado
+- Puerto 3001
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Paso 2: Crea el proyecto
+
+\`\`\`bash
+mkdir todo-api
+cd todo-api
+npm init -y
+npm install express cors
+\`\`\`
+
+Pega el código que te dio la IA en \`server.js\`
+
+---
+
+## Paso 3: Ejecuta
+
+\`\`\`bash
+node server.js
+\`\`\`
+
+---
+
+## Paso 4: Prueba con curl
+
+\`\`\`bash
+# Listar todos
+curl http://localhost:3001/todos
+
+# Crear uno
+curl -X POST http://localhost:3001/todos \\
+  -H "Content-Type: application/json" \\
+  -d '{"text": "Mi primera tarea"}'
+
+# Actualizar
+curl -X PUT http://localhost:3001/todos/1 \\
+  -H "Content-Type: application/json" \\
+  -d '{"completed": true}'
+
+# Eliminar
+curl -X DELETE http://localhost:3001/todos/1
+\`\`\`
+
+---
+
+## Código típico
+
+\`\`\`javascript
+const express = require('express')
+const cors = require('cors')
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+
+let todos = []
+let nextId = 1
+
+app.get('/todos', (req, res) => {
+  res.json(todos)
+})
+
+app.post('/todos', (req, res) => {
+  const todo = { id: nextId++, ...req.body, completed: false }
+  todos.push(todo)
+  res.status(201).json(todo)
+})
+
+app.listen(3001, () => console.log('API en puerto 3001'))
+\`\`\`
+
+---
+
+## Métodos HTTP
+
+| Método | Uso |
+|--------|-----|
+| GET | Leer datos |
+| POST | Crear nuevo |
+| PUT | Actualizar existente |
+| DELETE | Eliminar |
+
+---
+
+## Si algo falló
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`EADDRINUSE\` | Puerto ocupado | Cambia el puerto |
+| \`Cannot find module\` | Falta dependencia | \`npm install\` |
+| CORS error | CORS no habilitado | Agrega \`app.use(cors())\` |
+
+---
+
+## Próximo paso
+
+→ [CLI Tool con Python](/es/cooking/python-cli) — Automatiza con Python
+    `,
+    contentEn: `
+## Your first backend
+
+A REST API is a server that responds to HTTP requests. Your frontend talks to it.
+
+---
+
+## What you'll build
+
+A server with:
+- GET /todos - List all tasks
+- POST /todos - Create a task
+- PUT /todos/:id - Update a task
+- DELETE /todos/:id - Delete a task
+
+---
+
+## Step 1: Ask an AI for the code
+
+\`\`\`
+I need a REST API with Express and Node.js that:
+- Has CRUD endpoints for tasks (todos)
+- Uses JSON for requests and responses
+- Saves in memory (array)
+- Has CORS enabled
+- Port 3001
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Step 2: Create the project
+
+\`\`\`bash
+mkdir todo-api
+cd todo-api
+npm init -y
+npm install express cors
+\`\`\`
+
+Paste the code the AI gave you in \`server.js\`
+
+---
+
+## Step 3: Run it
+
+\`\`\`bash
+node server.js
+\`\`\`
+
+---
+
+## Step 4: Test with curl
+
+\`\`\`bash
+# List all
+curl http://localhost:3001/todos
+
+# Create one
+curl -X POST http://localhost:3001/todos \\
+  -H "Content-Type: application/json" \\
+  -d '{"text": "My first task"}'
+
+# Update
+curl -X PUT http://localhost:3001/todos/1 \\
+  -H "Content-Type: application/json" \\
+  -d '{"completed": true}'
+
+# Delete
+curl -X DELETE http://localhost:3001/todos/1
+\`\`\`
+
+---
+
+## Typical code
+
+\`\`\`javascript
+const express = require('express')
+const cors = require('cors')
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+
+let todos = []
+let nextId = 1
+
+app.get('/todos', (req, res) => {
+  res.json(todos)
+})
+
+app.post('/todos', (req, res) => {
+  const todo = { id: nextId++, ...req.body, completed: false }
+  todos.push(todo)
+  res.status(201).json(todo)
+})
+
+app.listen(3001, () => console.log('API on port 3001'))
+\`\`\`
+
+---
+
+## HTTP Methods
+
+| Method | Usage |
+|--------|-------|
+| GET | Read data |
+| POST | Create new |
+| PUT | Update existing |
+| DELETE | Delete |
+
+---
+
+## If something failed
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`EADDRINUSE\` | Port in use | Change the port |
+| \`Cannot find module\` | Missing dependency | \`npm install\` |
+| CORS error | CORS not enabled | Add \`app.use(cors())\` |
+
+---
+
+## Next step
+
+→ [CLI Tool with Python](/en/cooking/python-cli) — Automate with Python
+    `,
+  },
+  'python-cli': {
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['Terminal básica'],
+    prerequisitesEn: ['Basic terminal'],
+    contentEs: `
+## Automatiza con Python
+
+Python es excelente para crear herramientas de línea de comandos. Rápido de escribir, fácil de leer.
+
+---
+
+## Paso 1: Verifica Python
+
+\`\`\`bash
+python3 --version
+# o
+python --version
+\`\`\`
+
+Si no lo tienes:
+- macOS: \`brew install python\`
+- Windows: [python.org](https://python.org)
+
+---
+
+## Paso 2: Pídele a una IA un CLI
+
+\`\`\`
+Necesito un CLI en Python que:
+- Use argparse para los comandos
+- Tenga comandos: add, list, done, delete
+- Guarde tareas en un archivo JSON
+- Muestre colores en la salida
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Ejemplo de CLI básico
+
+\`\`\`python
+#!/usr/bin/env python3
+import argparse
+import json
+from pathlib import Path
+
+TASKS_FILE = Path.home() / ".tasks.json"
+
+def load_tasks():
+    if TASKS_FILE.exists():
+        return json.loads(TASKS_FILE.read_text())
+    return []
+
+def save_tasks(tasks):
+    TASKS_FILE.write_text(json.dumps(tasks, indent=2))
+
+def add_task(text):
+    tasks = load_tasks()
+    tasks.append({"text": text, "done": False})
+    save_tasks(tasks)
+    print(f"✓ Tarea agregada: {text}")
+
+def list_tasks():
+    tasks = load_tasks()
+    for i, task in enumerate(tasks, 1):
+        status = "✓" if task["done"] else "○"
+        print(f"{i}. [{status}] {task['text']}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Gestor de tareas")
+    parser.add_argument("command", choices=["add", "list"])
+    parser.add_argument("text", nargs="?")
+
+    args = parser.parse_args()
+
+    if args.command == "add":
+        add_task(args.text)
+    elif args.command == "list":
+        list_tasks()
+\`\`\`
+
+---
+
+## Paso 3: Hazlo ejecutable
+
+\`\`\`bash
+chmod +x tasks.py
+./tasks.py add "Comprar leche"
+./tasks.py list
+\`\`\`
+
+---
+
+## Librerías útiles
+
+| Librería | Para qué |
+|----------|----------|
+| \`argparse\` | Parsear argumentos (incluido) |
+| \`click\` | CLI más elegante |
+| \`rich\` | Colores y tablas bonitas |
+| \`requests\` | Hacer HTTP requests |
+
+---
+
+## Si algo falló
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`python: command not found\` | No instalado | Instala Python |
+| \`ModuleNotFoundError\` | Falta librería | \`pip install librería\` |
+| \`Permission denied\` | No ejecutable | \`chmod +x script.py\` |
+
+---
+
+## Próximo paso
+
+→ [Landing Page Responsive](/es/cooking/landing-page) — Diseño web moderno
+    `,
+    contentEn: `
+## Automate with Python
+
+Python is excellent for creating command-line tools. Quick to write, easy to read.
+
+---
+
+## Step 1: Verify Python
+
+\`\`\`bash
+python3 --version
+# or
+python --version
+\`\`\`
+
+If you don't have it:
+- macOS: \`brew install python\`
+- Windows: [python.org](https://python.org)
+
+---
+
+## Step 2: Ask an AI for a CLI
+
+\`\`\`
+I need a CLI in Python that:
+- Uses argparse for commands
+- Has commands: add, list, done, delete
+- Saves tasks in a JSON file
+- Shows colors in output
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Basic CLI example
+
+\`\`\`python
+#!/usr/bin/env python3
+import argparse
+import json
+from pathlib import Path
+
+TASKS_FILE = Path.home() / ".tasks.json"
+
+def load_tasks():
+    if TASKS_FILE.exists():
+        return json.loads(TASKS_FILE.read_text())
+    return []
+
+def save_tasks(tasks):
+    TASKS_FILE.write_text(json.dumps(tasks, indent=2))
+
+def add_task(text):
+    tasks = load_tasks()
+    tasks.append({"text": text, "done": False})
+    save_tasks(tasks)
+    print(f"✓ Task added: {text}")
+
+def list_tasks():
+    tasks = load_tasks()
+    for i, task in enumerate(tasks, 1):
+        status = "✓" if task["done"] else "○"
+        print(f"{i}. [{status}] {task['text']}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Task manager")
+    parser.add_argument("command", choices=["add", "list"])
+    parser.add_argument("text", nargs="?")
+
+    args = parser.parse_args()
+
+    if args.command == "add":
+        add_task(args.text)
+    elif args.command == "list":
+        list_tasks()
+\`\`\`
+
+---
+
+## Step 3: Make it executable
+
+\`\`\`bash
+chmod +x tasks.py
+./tasks.py add "Buy milk"
+./tasks.py list
+\`\`\`
+
+---
+
+## Useful libraries
+
+| Library | What for |
+|---------|----------|
+| \`argparse\` | Parse arguments (included) |
+| \`click\` | More elegant CLI |
+| \`rich\` | Nice colors and tables |
+| \`requests\` | Make HTTP requests |
+
+---
+
+## If something failed
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`python: command not found\` | Not installed | Install Python |
+| \`ModuleNotFoundError\` | Missing library | \`pip install library\` |
+| \`Permission denied\` | Not executable | \`chmod +x script.py\` |
+
+---
+
+## Next step
+
+→ [Responsive Landing Page](/en/cooking/landing-page) — Modern web design
+    `,
+  },
 }
 
 const dishOrder = dishes.map(d => d.slug)
