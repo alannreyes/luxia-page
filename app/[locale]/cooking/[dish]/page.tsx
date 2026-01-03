@@ -170,11 +170,18 @@ Gemini: ¡Hola! ¿En qué puedo ayudarte?
 
 ## Si algo falló
 
-| Error | Solución |
-|-------|----------|
-| \`API key not valid\` | Verifica que copiaste bien la key |
-| \`Cannot find module\` | Ejecuta \`npm install @google/genai\` |
-| \`node: command not found\` | Necesitas instalar Node.js: [nodejs.org](https://nodejs.org) |
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`API key not valid\` | Key mal copiada o expirada | Verifica en [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| \`Cannot find module\` | Falta la dependencia | Ejecuta \`npm install @google/genai\` |
+| \`node: command not found\` | Node.js no instalado | Instala desde [nodejs.org](https://nodejs.org) |
+| \`npm: command not found\` | npm no está en PATH | Reinstala Node.js o reinicia la terminal |
+| \`GEMINI_API_KEY\` undefined | Variable no configurada | Ejecuta el export en la **misma** terminal |
+| \`SyntaxError\` | Código mal copiado | Copia todo el código de nuevo, sin cortar |
+| \`429 Too Many Requests\` | Límite de API alcanzado | Espera 1 minuto o usa otro proyecto |
+| Gemini da código en Python | No especificaste Node.js | Pide de nuevo: "en Node.js, no Python" |
+
+> 💡 **Tip importante**: Si cerraste la terminal, debes ejecutar el \`export\` de nuevo. La variable solo existe en esa sesión.
 
 ---
 
@@ -297,11 +304,18 @@ Gemini: Hi! How can I help you?
 
 ## If something failed
 
-| Error | Solution |
-|-------|----------|
-| \`API key not valid\` | Verify you copied the key correctly |
-| \`Cannot find module\` | Run \`npm install @google/genai\` |
-| \`node: command not found\` | You need to install Node.js: [nodejs.org](https://nodejs.org) |
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`API key not valid\` | Key copied wrong or expired | Check at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| \`Cannot find module\` | Missing dependency | Run \`npm install @google/genai\` |
+| \`node: command not found\` | Node.js not installed | Install from [nodejs.org](https://nodejs.org) |
+| \`npm: command not found\` | npm not in PATH | Reinstall Node.js or restart terminal |
+| \`GEMINI_API_KEY\` undefined | Variable not set | Run export in the **same** terminal |
+| \`SyntaxError\` | Code copied incorrectly | Copy all the code again, don't cut |
+| \`429 Too Many Requests\` | API limit reached | Wait 1 minute or use another project |
+| Gemini gives Python code | Didn't specify Node.js | Ask again: "in Node.js, not Python" |
+
+> 💡 **Important tip**: If you closed the terminal, you need to run the \`export\` again. The variable only exists in that session.
 
 ---
 
@@ -343,229 +357,211 @@ If you're interested in learning what an API is, what an LLM is, or how this wor
     `,
   },
   'chatbot-claude': {
-    timeEs: '30 minutos',
-    timeEn: '30 minutes',
-    prerequisitesEs: ['Node.js instalado', 'Cuenta en Anthropic'],
-    prerequisitesEn: ['Node.js installed', 'Anthropic account'],
+    timeEs: '15 minutos',
+    timeEn: '15 minutes',
+    prerequisitesEs: ['Chatbot con Gemini completado', 'Tarjeta de crédito (para API)'],
+    prerequisitesEn: ['Chatbot with Gemini completed', 'Credit card (for API)'],
     contentEs: `
-## El plato final
+## Mismo proceso, diferente IA
 
-Un chatbot que usa Claude API, el modelo más avanzado de Anthropic, desde tu terminal.
+Ya sabes cómo funciona: le pides a una IA que escriba el código.
 
----
+Esta vez usaremos la API de Claude, de Anthropic.
 
-## Ingredientes
-
-- Node.js 22+
-- API Key de Anthropic (console.anthropic.com)
-- Editor de código
+> ⚠️ **Nota**: Claude API requiere agregar una tarjeta de crédito. Hay $5 USD de crédito gratis para empezar.
 
 ---
 
-## Paso 1: Crear proyecto
+## Paso 1: Obtén tu API Key de Anthropic
 
-\`\`\`bash
-mkdir mi-chatbot && cd mi-chatbot
-npm init -y
-npm install @anthropic-ai/sdk readline
+1. Ve a [console.anthropic.com](https://console.anthropic.com)
+2. Crea una cuenta o inicia sesión
+3. Ve a **API Keys** → **Create Key**
+4. Copia la key
+
+---
+
+## Paso 2: Pídele a una IA que escriba el código
+
+Abre [Google AI Studio](https://aistudio.google.com), ChatGPT, o cualquier chat de IA.
+
+Copia y pega este prompt:
+
+\`\`\`
+Necesito un chatbot simple en Node.js que:
+- Use la API de Claude (Anthropic)
+- Funcione en la terminal
+- Mantenga el historial de la conversación
+- La API key la leo de la variable de entorno ANTHROPIC_API_KEY
+
+Dame el código completo y los comandos para instalarlo.
+\`\`\`
+
+**La IA escribirá todo el código por ti.**
+
+---
+
+## Paso 3: Configura la key en tu sistema
+
+| Sistema | Comando |
+|---------|---------|
+| **macOS/Linux** | \`export ANTHROPIC_API_KEY="tu-key-aqui"\` |
+| **Windows PowerShell** | \`$env:ANTHROPIC_API_KEY="tu-key-aqui"\` |
+
+---
+
+## Paso 4: Sigue las instrucciones
+
+La IA te dio:
+1. Comandos para crear el proyecto
+2. Código para el archivo
+3. El comando para ejecutarlo
+
+**Sigue sus instrucciones paso a paso.**
+
+---
+
+## ¿Funcionó?
+
+\`\`\`
+Tú: Hola Claude
+Claude: ¡Hola! ¿En qué puedo ayudarte hoy?
 \`\`\`
 
 ---
 
-## Paso 2: Configurar API Key
+## Si algo falló
 
-\`\`\`bash
-# Agregar a tu ~/.zprofile o ~/.bashrc
-export ANTHROPIC_API_KEY="tu-api-key-aqui"
-source ~/.zprofile
-\`\`\`
-
----
-
-## Paso 3: Crear el chatbot
-
-Crea \`chatbot.js\`:
-
-\`\`\`javascript
-import Anthropic from '@anthropic-ai/sdk';
-import * as readline from 'readline';
-
-const client = new Anthropic();
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-const messages = [];
-
-async function chat(userMessage) {
-  messages.push({ role: 'user', content: userMessage });
-
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    messages: messages
-  });
-
-  const assistantMessage = response.content[0].text;
-  messages.push({ role: 'assistant', content: assistantMessage });
-
-  return assistantMessage;
-}
-
-console.log('🤖 Chatbot con Claude API');
-console.log('Escribe tu mensaje (o "salir" para terminar)\\n');
-
-function prompt() {
-  rl.question('Tú: ', async (input) => {
-    if (input.toLowerCase() === 'salir') {
-      console.log('👋 ¡Hasta luego!');
-      rl.close();
-      return;
-    }
-
-    const response = await chat(input);
-    console.log(\`\\nClaude: \${response}\\n\`);
-    prompt();
-  });
-}
-
-prompt();
-\`\`\`
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`authentication_error\` | API key inválida | Verifica en [console.anthropic.com](https://console.anthropic.com) |
+| \`insufficient_quota\` | Sin créditos | Agrega método de pago en la consola |
+| \`Cannot find module\` | Falta SDK | Ejecuta \`npm install @anthropic-ai/sdk\` |
+| \`rate_limit_error\` | Muchas peticiones | Espera unos segundos |
 
 ---
 
-## Paso 4: Ejecutar
+## ¿Qué aprendiste?
 
-\`\`\`bash
-node chatbot.js
-\`\`\`
+El proceso es **idéntico** al de Gemini:
+1. Pides código a una IA
+2. Configuras la API key
+3. Ejecutas
 
----
-
-## Verificación final
-
-- [ ] API Key configurada
-- [ ] Proyecto creado
-- [ ] Chatbot respondiendo
-- [ ] Conversación con contexto
+La única diferencia es la API que usas. El flujo de trabajo es el mismo.
 
 ---
 
-## Próximos pasos
+## Próximo paso
 
-→ [RAG con Documentos](/es/cooking/rag-documents) - Chatea con tus propios archivos
+→ [Chatbot con OpenAI](/es/cooking/chatbot-openai) — Completa el trío
+
+---
+
+## ¿Quieres entender más?
+
+→ [¿Qué es un LLM?](/es/learning/llms-intro)
     `,
     contentEn: `
-## The final dish
+## Same process, different AI
 
-A chatbot that uses Claude API, Anthropic's most advanced model, from your terminal.
+You already know how it works: you ask an AI to write the code.
 
----
+This time we'll use Claude's API, from Anthropic.
 
-## Ingredients
-
-- Node.js 22+
-- Anthropic API Key (console.anthropic.com)
-- Code editor
+> ⚠️ **Note**: Claude API requires adding a credit card. There's $5 USD free credit to start.
 
 ---
 
-## Step 1: Create project
+## Step 1: Get your Anthropic API Key
 
-\`\`\`bash
-mkdir my-chatbot && cd my-chatbot
-npm init -y
-npm install @anthropic-ai/sdk readline
+1. Go to [console.anthropic.com](https://console.anthropic.com)
+2. Create an account or sign in
+3. Go to **API Keys** → **Create Key**
+4. Copy the key
+
+---
+
+## Step 2: Ask an AI to write the code
+
+Open [Google AI Studio](https://aistudio.google.com), ChatGPT, or any AI chat.
+
+Copy and paste this prompt:
+
+\`\`\`
+I need a simple Node.js chatbot that:
+- Uses the Claude API (Anthropic)
+- Works in the terminal
+- Maintains conversation history
+- Reads the API key from the ANTHROPIC_API_KEY environment variable
+
+Give me the complete code and installation commands.
+\`\`\`
+
+**The AI will write all the code for you.**
+
+---
+
+## Step 3: Configure the key in your system
+
+| System | Command |
+|--------|---------|
+| **macOS/Linux** | \`export ANTHROPIC_API_KEY="your-key-here"\` |
+| **Windows PowerShell** | \`$env:ANTHROPIC_API_KEY="your-key-here"\` |
+
+---
+
+## Step 4: Follow the instructions
+
+The AI gave you:
+1. Commands to create the project
+2. Code for the file
+3. The command to run it
+
+**Follow its instructions step by step.**
+
+---
+
+## Did it work?
+
+\`\`\`
+You: Hello Claude
+Claude: Hello! How can I help you today?
 \`\`\`
 
 ---
 
-## Step 2: Configure API Key
+## If something failed
 
-\`\`\`bash
-# Add to your ~/.zprofile or ~/.bashrc
-export ANTHROPIC_API_KEY="your-api-key-here"
-source ~/.zprofile
-\`\`\`
-
----
-
-## Step 3: Create the chatbot
-
-Create \`chatbot.js\`:
-
-\`\`\`javascript
-import Anthropic from '@anthropic-ai/sdk';
-import * as readline from 'readline';
-
-const client = new Anthropic();
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-const messages = [];
-
-async function chat(userMessage) {
-  messages.push({ role: 'user', content: userMessage });
-
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    messages: messages
-  });
-
-  const assistantMessage = response.content[0].text;
-  messages.push({ role: 'assistant', content: assistantMessage });
-
-  return assistantMessage;
-}
-
-console.log('🤖 Chatbot with Claude API');
-console.log('Type your message (or "exit" to quit)\\n');
-
-function prompt() {
-  rl.question('You: ', async (input) => {
-    if (input.toLowerCase() === 'exit') {
-      console.log('👋 Goodbye!');
-      rl.close();
-      return;
-    }
-
-    const response = await chat(input);
-    console.log(\`\\nClaude: \${response}\\n\`);
-    prompt();
-  });
-}
-
-prompt();
-\`\`\`
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`authentication_error\` | Invalid API key | Check at [console.anthropic.com](https://console.anthropic.com) |
+| \`insufficient_quota\` | No credits | Add payment method in console |
+| \`Cannot find module\` | Missing SDK | Run \`npm install @anthropic-ai/sdk\` |
+| \`rate_limit_error\` | Too many requests | Wait a few seconds |
 
 ---
 
-## Step 4: Run
+## What did you learn?
 
-\`\`\`bash
-node chatbot.js
-\`\`\`
+The process is **identical** to Gemini:
+1. You ask an AI for code
+2. You configure the API key
+3. You run it
 
----
-
-## Final verification
-
-- [ ] API Key configured
-- [ ] Project created
-- [ ] Chatbot responding
-- [ ] Conversation with context
+The only difference is the API you use. The workflow is the same.
 
 ---
 
-## Next steps
+## Next step
 
-→ [RAG with Documents](/en/cooking/rag-documents) - Chat with your own files
+→ [Chatbot with OpenAI](/en/cooking/chatbot-openai) — Complete the trio
+
+---
+
+## Want to understand more?
+
+→ [What is an LLM?](/en/learning/llms-intro)
     `,
   },
   'chatbot-local': {

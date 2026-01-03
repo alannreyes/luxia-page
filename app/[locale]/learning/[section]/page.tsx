@@ -406,9 +406,35 @@ gh pr create --fill
 
 **LLM** = Large Language Model (Modelo de Lenguaje Grande)
 
-Es un programa entrenado con millones de textos que puede entender y generar lenguaje humano.
+Es un programa entrenado con millones de textos que puede entender y generar lenguaje humano. Incluyendo código.
 
-> **Analogía**: Un LLM es como un asistente que ha leído todo internet y puede responder preguntas basándose en ese conocimiento.
+> **Lo importante**: Un LLM puede escribir código por ti. Solo tienes que pedírselo bien.
+
+---
+
+## El concepto "Prompt-First"
+
+En lugar de memorizar sintaxis y copiar código de Stack Overflow, puedes:
+
+1. **Describir** lo que quieres en lenguaje natural
+2. **Pedir** que el LLM escriba el código
+3. **Ejecutar** el código que te dio
+4. **Iterar** si algo no funciona
+
+Esto funciona con cualquier LLM: Gemini, ChatGPT, Claude, etc.
+
+---
+
+## ¿Dónde puedo usar un LLM?
+
+| Opción | Acceso | Costo | Ideal para |
+|--------|--------|-------|------------|
+| [Google AI Studio](https://aistudio.google.com) | Cuenta Google | Gratis | Empezar rápido |
+| [ChatGPT](https://chat.openai.com) | Cuenta OpenAI | Gratis/Pago | Uso general |
+| [Claude.ai](https://claude.ai) | Cuenta Anthropic | Gratis/Pago | Código y razonamiento |
+| [Ollama](https://ollama.ai) | Tu computadora | Gratis | Privacidad total |
+
+> 💡 **Recomendación**: Empieza con Google AI Studio. Es gratis, no pide tarjeta, y ya tienes cuenta.
 
 ---
 
@@ -416,66 +442,50 @@ Es un programa entrenado con millones de textos que puede entender y generar len
 
 | Modelo | Empresa | Fortaleza |
 |--------|---------|-----------|
-| **Claude** | Anthropic | Razonamiento, código, seguro |
+| **Gemini** | Google | Gratis, multimodal, API fácil |
+| **Claude** | Anthropic | Excelente para código, razonamiento |
 | **GPT-4** | OpenAI | Versátil, amplio conocimiento |
-| **Gemini** | Google | Multimodal, integración Google |
-| **Llama** | Meta | Open source, local |
+| **Llama** | Meta | Open source, corre local |
 
 ---
 
-## Tu primer chatbot local
+## ¿Qué es una API Key?
 
-Con Ollama puedes correr modelos en tu computadora:
+Cuando usas un LLM desde tu código (no desde el chat web), necesitas una **API Key**.
 
-\`\`\`bash
-# Instalar Ollama
-brew install ollama
+Es como una contraseña que identifica quién está usando el servicio.
 
-# Descargar un modelo
-ollama pull llama3.2
+| Servicio | Dónde obtenerla |
+|----------|-----------------|
+| Gemini | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| Claude | [console.anthropic.com](https://console.anthropic.com) |
+| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
 
-# Chatear
-ollama run llama3.2
-\`\`\`
-
-> 💡 **Tip**: Modelos pequeños como \`llama3.2:3b\` corren en laptops normales.
-
----
-
-## APIs de LLMs
-
-\`\`\`typescript
-// Ejemplo con Anthropic SDK
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic()
-
-const response = await client.messages.create({
-  model: 'claude-sonnet-4-20250514',
-  max_tokens: 1024,
-  messages: [
-    { role: 'user', content: 'Hola Claude!' }
-  ]
-})
-\`\`\`
+> ⚠️ **Nunca compartas tu API Key** ni la subas a GitHub.
 
 ---
 
 ## Conceptos clave
 
-| Concepto | Qué es |
-|----------|--------|
-| **Prompt** | La instrucción que le das al modelo |
-| **Token** | Unidad de texto (~4 caracteres) |
-| **Context Window** | Memoria del modelo (cuánto puede "recordar") |
-| **Temperature** | Creatividad (0=determinista, 1=creativo) |
+| Concepto | Qué es | Ejemplo |
+|----------|--------|---------|
+| **Prompt** | Lo que le pides al modelo | "Escribe un chatbot en Node.js" |
+| **Response** | Lo que el modelo responde | El código + explicación |
+| **Token** | Unidad de texto (~4 caracteres) | "Hola" = 1 token |
+| **Context** | Lo que el modelo "recuerda" | Conversación anterior |
+
+---
+
+## Practica
+
+→ [Chatbot con Gemini](/es/cooking/chatbot-gemini) — Tu primer proyecto con IA
 
 ---
 
 ## Enlaces útiles
 
+- 📖 [Google AI Studio](https://aistudio.google.com)
 - 📖 [Anthropic API Docs](https://docs.anthropic.com/)
-- 📖 [Ollama](https://ollama.ai/)
 - 🎓 [Prompt Engineering Guide](https://www.promptingguide.ai/)
     `,
     contentEn: `
@@ -483,9 +493,35 @@ const response = await client.messages.create({
 
 **LLM** = Large Language Model
 
-It's a program trained on millions of texts that can understand and generate human language.
+It's a program trained on millions of texts that can understand and generate human language. Including code.
 
-> **Analogy**: An LLM is like an assistant that has read the entire internet and can answer questions based on that knowledge.
+> **The key insight**: An LLM can write code for you. You just have to ask properly.
+
+---
+
+## The "Prompt-First" concept
+
+Instead of memorizing syntax and copying code from Stack Overflow, you can:
+
+1. **Describe** what you want in natural language
+2. **Ask** the LLM to write the code
+3. **Run** the code it gives you
+4. **Iterate** if something doesn't work
+
+This works with any LLM: Gemini, ChatGPT, Claude, etc.
+
+---
+
+## Where can I use an LLM?
+
+| Option | Access | Cost | Ideal for |
+|--------|--------|------|-----------|
+| [Google AI Studio](https://aistudio.google.com) | Google account | Free | Getting started |
+| [ChatGPT](https://chat.openai.com) | OpenAI account | Free/Paid | General use |
+| [Claude.ai](https://claude.ai) | Anthropic account | Free/Paid | Code and reasoning |
+| [Ollama](https://ollama.ai) | Your computer | Free | Total privacy |
+
+> 💡 **Recommendation**: Start with Google AI Studio. It's free, no credit card, and you already have an account.
 
 ---
 
@@ -493,66 +529,50 @@ It's a program trained on millions of texts that can understand and generate hum
 
 | Model | Company | Strength |
 |-------|---------|----------|
-| **Claude** | Anthropic | Reasoning, code, safety |
+| **Gemini** | Google | Free, multimodal, easy API |
+| **Claude** | Anthropic | Excellent for code, reasoning |
 | **GPT-4** | OpenAI | Versatile, broad knowledge |
-| **Gemini** | Google | Multimodal, Google integration |
-| **Llama** | Meta | Open source, local |
+| **Llama** | Meta | Open source, runs locally |
 
 ---
 
-## Your first local chatbot
+## What is an API Key?
 
-With Ollama you can run models on your computer:
+When you use an LLM from your code (not from the web chat), you need an **API Key**.
 
-\`\`\`bash
-# Install Ollama
-brew install ollama
+It's like a password that identifies who is using the service.
 
-# Download a model
-ollama pull llama3.2
+| Service | Where to get it |
+|---------|-----------------|
+| Gemini | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| Claude | [console.anthropic.com](https://console.anthropic.com) |
+| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
 
-# Chat
-ollama run llama3.2
-\`\`\`
-
-> 💡 **Tip**: Small models like \`llama3.2:3b\` run on normal laptops.
-
----
-
-## LLM APIs
-
-\`\`\`typescript
-// Example with Anthropic SDK
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic()
-
-const response = await client.messages.create({
-  model: 'claude-sonnet-4-20250514',
-  max_tokens: 1024,
-  messages: [
-    { role: 'user', content: 'Hello Claude!' }
-  ]
-})
-\`\`\`
+> ⚠️ **Never share your API Key** or upload it to GitHub.
 
 ---
 
 ## Key concepts
 
-| Concept | What it is |
-|---------|------------|
-| **Prompt** | The instruction you give the model |
-| **Token** | Unit of text (~4 characters) |
-| **Context Window** | Model's memory (how much it can "remember") |
-| **Temperature** | Creativity (0=deterministic, 1=creative) |
+| Concept | What it is | Example |
+|---------|------------|---------|
+| **Prompt** | What you ask the model | "Write a chatbot in Node.js" |
+| **Response** | What the model answers | The code + explanation |
+| **Token** | Unit of text (~4 characters) | "Hello" = 1 token |
+| **Context** | What the model "remembers" | Previous conversation |
+
+---
+
+## Practice
+
+→ [Chatbot with Gemini](/en/cooking/chatbot-gemini) — Your first AI project
 
 ---
 
 ## Useful links
 
+- 📖 [Google AI Studio](https://aistudio.google.com)
 - 📖 [Anthropic API Docs](https://docs.anthropic.com/)
-- 📖 [Ollama](https://ollama.ai/)
 - 🎓 [Prompt Engineering Guide](https://www.promptingguide.ai/)
     `,
   },
