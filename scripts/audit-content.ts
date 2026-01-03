@@ -54,11 +54,32 @@ function extractContentKeys(content: string): Set<string> {
   return keys
 }
 
-// Simple approach: look for 'slug': { ... contentEs:
+// Alias mapping for slug variations
+const slugAliases: Record<string, string> = {
+  'llms-intro': 'llms_intro',
+}
+
+// Check if slug has content - handles both quoted and unquoted keys
 function hasContent(content: string, slug: string): boolean {
-  // Check if slug appears followed by contentEs
-  const pattern = new RegExp(`['"]${slug}['"]\\s*:\\s*\\{[^}]*contentEs:`, 's')
-  return pattern.test(content)
+  const checkSlug = slugAliases[slug] || slug
+
+  // Pattern 1: quoted key like 'slug': { ... contentEs:
+  const quotedPattern = new RegExp(`['"]${checkSlug}['"]\\s*:\\s*\\{`, 's')
+  // Pattern 2: unquoted key like slug: { ... contentEs:
+  const unquotedPattern = new RegExp(`^\\s+${checkSlug}:\\s*\\{`, 'm')
+
+  // Check if key exists and has contentEs
+  if (quotedPattern.test(content) || unquotedPattern.test(content)) {
+    // Find the position and check for contentEs within 500 chars
+    const quotedMatch = content.match(new RegExp(`['"]${checkSlug}['"]\\s*:\\s*\\{`))
+    const unquotedMatch = content.match(new RegExp(`^\\s+${checkSlug}:\\s*\\{`, 'm'))
+    const match = quotedMatch || unquotedMatch
+    if (match && match.index !== undefined) {
+      const slice = content.slice(match.index, match.index + 500)
+      return slice.includes('contentEs:')
+    }
+  }
+  return false
 }
 
 console.log('=' .repeat(60))
