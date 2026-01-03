@@ -143,22 +143,17 @@ Gemini va a escribir todo el código por ti. También te dirá qué comandos eje
 
 ---
 
-## Paso 5: Ejecuta el código
+## Paso 5: Sigue las instrucciones de Gemini
 
-Sigue las instrucciones que Gemini te dio. Típicamente:
+Gemini te dio:
+1. **Comandos** para crear el proyecto (mkdir, npm install, etc.)
+2. **Código** para pegar en un archivo
+3. **El nombre del archivo** (algo como \`chatbot.js\` o \`index.mjs\`)
+4. **El comando para ejecutarlo** (algo como \`node chatbot.js\`)
 
-\`\`\`bash
-mkdir mi-chatbot
-cd mi-chatbot
-npm init -y
-npm install @google/genai
-\`\`\`
+**Sigue sus instrucciones paso a paso.**
 
-Crea el archivo con el código que Gemini generó, y ejecuta:
-
-\`\`\`bash
-node chatbot.mjs
-\`\`\`
+> 💡 **¿Cómo creo un archivo?** Abre tu editor de código (VS Code, Cursor, etc.), crea un nuevo archivo, pega el código, y guárdalo con el nombre que Gemini indicó.
 
 ---
 
@@ -275,22 +270,17 @@ Gemini will write all the code for you. It will also tell you what commands to r
 
 ---
 
-## Step 5: Run the code
+## Step 5: Follow Gemini's instructions
 
-Follow the instructions Gemini gave you. Typically:
+Gemini gave you:
+1. **Commands** to create the project (mkdir, npm install, etc.)
+2. **Code** to paste into a file
+3. **The filename** (something like \`chatbot.js\` or \`index.mjs\`)
+4. **The command to run it** (something like \`node chatbot.js\`)
 
-\`\`\`bash
-mkdir my-chatbot
-cd my-chatbot
-npm init -y
-npm install @google/genai
-\`\`\`
+**Follow its instructions step by step.**
 
-Create the file with the code Gemini generated, and run:
-
-\`\`\`bash
-node chatbot.mjs
-\`\`\`
+> 💡 **How do I create a file?** Open your code editor (VS Code, Cursor, etc.), create a new file, paste the code, and save it with the name Gemini indicated.
 
 ---
 
