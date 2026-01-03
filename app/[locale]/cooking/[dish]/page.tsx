@@ -83,437 +83,273 @@ const dishesContent: Record<string, {
   contentEn: string
 }> = {
   'chatbot-gemini': {
-    timeEs: '15-20 minutos',
-    timeEn: '15-20 minutes',
-    prerequisitesEs: ['Cuenta de Google (Gmail)', 'Node.js 20+ instalado'],
-    prerequisitesEn: ['Google account (Gmail)', 'Node.js 20+ installed'],
+    timeEs: '10 minutos',
+    timeEn: '10 minutes',
+    prerequisitesEs: ['Cuenta de Google (Gmail)'],
+    prerequisitesEn: ['Google account (Gmail)'],
     contentEs: `
-## 🎯 Lo que vas a construir
+## Tu primer chatbot con IA
 
-En 15 minutos tendrás tu propio chatbot con IA corriendo en tu terminal. Podrás hacerle preguntas, mantener conversaciones, y todo **100% gratis**.
+Vas a crear un chatbot que corre en tu computadora.
 
-> **¿Por qué Gemini primero?** Es gratis, no pide tarjeta de crédito, y con tu cuenta de Google ya tienes acceso. Perfecto para tu primera experiencia con IA.
+Lo interesante: **no vas a escribir el código**. Se lo vas a pedir a una IA.
 
 ---
 
-## ✅ Antes de empezar
+## Paso 1: Abre Google AI Studio
 
-Verifica que tienes todo listo:
+Ve a [aistudio.google.com](https://aistudio.google.com) e inicia sesión con tu cuenta de Google.
 
-| Requisito | ¿Cómo verificar? | ¿No lo tienes? |
-|-----------|------------------|----------------|
-| **Cuenta Google** | ¿Puedes entrar a Gmail? | [Crear cuenta](https://accounts.google.com) |
-| **Node.js 20+** | Ejecuta \`node --version\` en terminal | Ver tabla abajo |
+Esto es un chat con Gemini, la IA de Google. Gratis.
 
-### Instalar Node.js (si no lo tienes)
+---
+
+## Paso 2: Pídele que escriba el código
+
+Copia y pega este prompt:
+
+\`\`\`
+Necesito un chatbot simple en Node.js que:
+- Use la API de Gemini
+- Funcione en la terminal
+- Mantenga el historial de la conversación
+- La API key la leo de la variable de entorno GEMINI_API_KEY
+
+Dame el código completo y los comandos para instalarlo.
+\`\`\`
+
+**Dale Enter y espera.**
+
+Gemini va a escribir todo el código por ti. También te dirá qué comandos ejecutar.
+
+---
+
+## Paso 3: Obtén tu API Key
+
+1. Abre [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+2. Click en **"Create API Key"**
+3. Copia la key
+
+---
+
+## Paso 4: Configura la key en tu sistema
 
 | Sistema | Comando |
 |---------|---------|
-| **macOS** | \`brew install node\` |
-| **Linux (Ubuntu/Debian)** | \`curl -fsSL https://deb.nodesource.com/setup_22.x \\| sudo -E bash - && sudo apt-get install -y nodejs\` |
-| **Windows** | Descarga de [nodejs.org](https://nodejs.org) o usa \`winget install OpenJS.NodeJS\` |
+| **macOS/Linux** | \`export GEMINI_API_KEY="tu-key-aqui"\` |
+| **Windows PowerShell** | \`$env:GEMINI_API_KEY="tu-key-aqui"\` |
 
-> 💡 **Verificación**: Ejecuta \`node --version\` — debes ver \`v20.x.x\` o superior.
-
----
-
-## 🔑 Paso 1: Obtener tu API Key (3 min)
-
-1. Abre [Google AI Studio](https://aistudio.google.com/apikey)
-2. Inicia sesión con tu cuenta de Google
-3. Click en **"Create API Key"**
-4. Copia la key (empieza con \`AIza...\`)
-
-> ⚠️ **Importante**: Guarda tu API key en un lugar seguro. No la compartas ni la subas a GitHub.
-
-### ¿Cuánto puedo usar gratis?
-
-| Modelo | Requests/día | Ideal para |
-|--------|--------------|------------|
-| **Gemini 2.5 Flash** | 1,000 | Respuestas rápidas |
-| **Gemini 2.5 Pro** | 50 | Razonamiento complejo |
-
-Más que suficiente para aprender y experimentar.
+> Ejecuta esto en la misma terminal donde vas a correr el chatbot.
 
 ---
 
-## 📁 Paso 2: Crear el proyecto (2 min)
+## Paso 5: Ejecuta el código
 
-Abre tu terminal y ejecuta estos comandos:
+Sigue las instrucciones que Gemini te dio. Típicamente:
 
 \`\`\`bash
-mkdir mi-chatbot-gemini
-cd mi-chatbot-gemini
+mkdir mi-chatbot
+cd mi-chatbot
 npm init -y
 npm install @google/genai
 \`\`\`
 
-> ✓ **Si ves "added X packages"** — vas bien.
-
----
-
-## 🔐 Paso 3: Configurar la API Key (2 min)
-
-Necesitas guardar tu API key como variable de entorno.
-
-| Sistema | Archivo a editar | Comando para agregar |
-|---------|------------------|---------------------|
-| **macOS (zsh)** | \`~/.zshrc\` | \`echo 'export GEMINI_API_KEY="tu-key-aqui"' >> ~/.zshrc && source ~/.zshrc\` |
-| **macOS (bash)** | \`~/.bash_profile\` | \`echo 'export GEMINI_API_KEY="tu-key-aqui"' >> ~/.bash_profile && source ~/.bash_profile\` |
-| **Linux** | \`~/.bashrc\` | \`echo 'export GEMINI_API_KEY="tu-key-aqui"' >> ~/.bashrc && source ~/.bashrc\` |
-| **Windows (PowerShell)** | Variable de sistema | \`[Environment]::SetEnvironmentVariable("GEMINI_API_KEY", "tu-key-aqui", "User")\` |
-
-> 💡 **Verificación**: Ejecuta \`echo $GEMINI_API_KEY\` (macOS/Linux) o \`echo %GEMINI_API_KEY%\` (Windows CMD) — debes ver tu key.
-
----
-
-## 💻 Paso 4: Escribir el chatbot (5 min)
-
-Crea un archivo llamado \`chatbot.mjs\` con este contenido:
-
-\`\`\`javascript
-import { GoogleGenAI } from "@google/genai";
-import * as readline from "readline";
-
-// Conectar con Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
-// Crear interfaz de chat
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-// Historial de conversación
-const historial = [];
-
-console.log("╔════════════════════════════════════════╗");
-console.log("║  ✨ Chatbot con Gemini API             ║");
-console.log("║  Escribe 'salir' para terminar         ║");
-console.log("╚════════════════════════════════════════╝\\n");
-
-async function chat(mensaje) {
-  historial.push({ role: "user", parts: [{ text: mensaje }] });
-
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: historial,
-  });
-
-  const respuesta = response.text;
-  historial.push({ role: "model", parts: [{ text: respuesta }] });
-
-  return respuesta;
-}
-
-function preguntar() {
-  rl.question("Tú: ", async (input) => {
-    if (input.toLowerCase() === "salir") {
-      console.log("\\n👋 ¡Hasta pronto!");
-      rl.close();
-      return;
-    }
-
-    try {
-      const respuesta = await chat(input);
-      console.log(\`\\n🤖 Gemini: \${respuesta}\\n\`);
-    } catch (error) {
-      console.log(\`\\n❌ Error: \${error.message}\\n\`);
-    }
-
-    preguntar();
-  });
-}
-
-preguntar();
-\`\`\`
-
-> 📝 **Nota**: Usamos \`.mjs\` para habilitar ES modules (import/export).
-
----
-
-## 🚀 Paso 5: ¡Ejecutar! (1 min)
+Crea el archivo con el código que Gemini generó, y ejecuta:
 
 \`\`\`bash
 node chatbot.mjs
 \`\`\`
 
-Deberías ver:
+---
+
+## ¿Funcionó?
+
+Si ves algo como esto, lo lograste:
+
 \`\`\`
-╔════════════════════════════════════════╗
-║  ✨ Chatbot con Gemini API             ║
-║  Escribe 'salir' para terminar         ║
-╚════════════════════════════════════════╝
-
-Tú:
+Tú: Hola
+Gemini: ¡Hola! ¿En qué puedo ayudarte?
 \`\`\`
 
-**¡Pruébalo!** Escribe "Hola, ¿cómo estás?" y presiona Enter.
+---
+
+## Si algo falló
+
+| Error | Solución |
+|-------|----------|
+| \`API key not valid\` | Verifica que copiaste bien la key |
+| \`Cannot find module\` | Ejecuta \`npm install @google/genai\` |
+| \`node: command not found\` | Necesitas instalar Node.js: [nodejs.org](https://nodejs.org) |
 
 ---
 
-## 🔧 Solución de problemas
+## ¿Qué acaba de pasar?
 
-| Error | Causa | Solución |
-|-------|-------|----------|
-| \`API key not valid\` | Key incorrecta o no configurada | Verifica que \`echo $GEMINI_API_KEY\` muestre tu key |
-| \`Cannot find module\` | Falta instalar dependencia | Ejecuta \`npm install @google/genai\` |
-| \`ENOTFOUND\` | Sin conexión a internet | Verifica tu conexión |
-| \`429 Too Many Requests\` | Excediste el límite | Espera 1 minuto o usa otro modelo |
+1. Le pediste a una IA que escriba código
+2. La IA lo escribió
+3. Tú lo ejecutaste
+4. Funciona
 
----
-
-## ✅ Lista de verificación final
-
-- [ ] Node.js instalado y funcionando
-- [ ] API key obtenida de Google AI Studio
-- [ ] Variable de entorno configurada
-- [ ] Proyecto creado con npm
-- [ ] Archivo chatbot.mjs creado
-- [ ] **¡Chatbot respondiendo!** 🎉
+Podrías haberle pedido lo mismo a ChatGPT, Claude, o cualquier otro chat de IA. El resultado sería similar.
 
 ---
 
-## 🎓 ¿Qué aprendiste?
+## Experimenta
 
-| Concepto | Qué significa |
-|----------|---------------|
-| **API Key** | Tu "contraseña" para usar el servicio de Google |
-| **Variable de entorno** | Forma segura de guardar secretos |
-| **SDK** | Librería que facilita usar la API |
-| **Historial** | Memoria de la conversación para contexto |
+Vuelve a Google AI Studio y prueba variaciones:
 
----
+- *"...que responda como pirata"*
+- *"...que me ayude a practicar inglés"*
+- *"...que sea un tutor de matemáticas"*
 
-## ⏭️ Próximos pasos
-
-Ahora que tienes tu primer chatbot, puedes:
-
-→ [Chatbot con Claude API](/es/cooking/chatbot-claude) — Compara con el modelo de Anthropic
-→ [Chatbot con OpenAI](/es/cooking/chatbot-openai) — Prueba GPT-4
-→ [Chat con Interfaz Web](/es/cooking/chat-web-ui) — Dale una interfaz bonita
+El código cambia. El proceso es el mismo.
 
 ---
 
-## 📚 Referencias
+## Próximo paso
 
-- [Documentación oficial de Gemini API](https://ai.google.dev/gemini-api/docs)
-- [Google AI Studio](https://aistudio.google.com)
-- [Precios y límites](https://ai.google.dev/gemini-api/docs/pricing)
+→ [Chatbot con Claude](/es/cooking/chatbot-claude) — Mismo proceso, diferente IA
+
+---
+
+## ¿Quieres entender más?
+
+Si te interesa saber qué es una API, qué es un LLM, o cómo funciona esto por dentro:
+
+→ [¿Qué es un LLM?](/es/learning/llms-intro)
+→ [Terminal básico](/es/learning/terminal)
     `,
     contentEn: `
-## 🎯 What you'll build
+## Your first AI chatbot
 
-In 15 minutes you'll have your own AI chatbot running in your terminal. You can ask it questions, have conversations, and it's **100% free**.
+You're going to create a chatbot that runs on your computer.
 
-> **Why Gemini first?** It's free, doesn't require a credit card, and you already have access with your Google account. Perfect for your first AI experience.
+The interesting part: **you won't write the code**. You'll ask an AI to do it.
 
 ---
 
-## ✅ Before you start
+## Step 1: Open Google AI Studio
 
-Verify you have everything ready:
+Go to [aistudio.google.com](https://aistudio.google.com) and sign in with your Google account.
 
-| Requirement | How to verify? | Don't have it? |
-|-------------|----------------|----------------|
-| **Google Account** | Can you log into Gmail? | [Create account](https://accounts.google.com) |
-| **Node.js 20+** | Run \`node --version\` in terminal | See table below |
+This is a chat with Gemini, Google's AI. Free.
 
-### Install Node.js (if you don't have it)
+---
+
+## Step 2: Ask it to write the code
+
+Copy and paste this prompt:
+
+\`\`\`
+I need a simple Node.js chatbot that:
+- Uses the Gemini API
+- Works in the terminal
+- Maintains conversation history
+- Reads the API key from the GEMINI_API_KEY environment variable
+
+Give me the complete code and installation commands.
+\`\`\`
+
+**Press Enter and wait.**
+
+Gemini will write all the code for you. It will also tell you what commands to run.
+
+---
+
+## Step 3: Get your API Key
+
+1. Open [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+2. Click **"Create API Key"**
+3. Copy the key
+
+---
+
+## Step 4: Configure the key in your system
 
 | System | Command |
 |--------|---------|
-| **macOS** | \`brew install node\` |
-| **Linux (Ubuntu/Debian)** | \`curl -fsSL https://deb.nodesource.com/setup_22.x \\| sudo -E bash - && sudo apt-get install -y nodejs\` |
-| **Windows** | Download from [nodejs.org](https://nodejs.org) or use \`winget install OpenJS.NodeJS\` |
+| **macOS/Linux** | \`export GEMINI_API_KEY="your-key-here"\` |
+| **Windows PowerShell** | \`$env:GEMINI_API_KEY="your-key-here"\` |
 
-> 💡 **Verification**: Run \`node --version\` — you should see \`v20.x.x\` or higher.
-
----
-
-## 🔑 Step 1: Get your API Key (3 min)
-
-1. Open [Google AI Studio](https://aistudio.google.com/apikey)
-2. Sign in with your Google account
-3. Click **"Create API Key"**
-4. Copy the key (starts with \`AIza...\`)
-
-> ⚠️ **Important**: Save your API key somewhere safe. Don't share it or upload it to GitHub.
-
-### How much can I use for free?
-
-| Model | Requests/day | Ideal for |
-|-------|--------------|-----------|
-| **Gemini 2.5 Flash** | 1,000 | Fast responses |
-| **Gemini 2.5 Pro** | 50 | Complex reasoning |
-
-More than enough for learning and experimenting.
+> Run this in the same terminal where you'll run the chatbot.
 
 ---
 
-## 📁 Step 2: Create the project (2 min)
+## Step 5: Run the code
 
-Open your terminal and run these commands:
+Follow the instructions Gemini gave you. Typically:
 
 \`\`\`bash
-mkdir my-gemini-chatbot
-cd my-gemini-chatbot
+mkdir my-chatbot
+cd my-chatbot
 npm init -y
 npm install @google/genai
 \`\`\`
 
-> ✓ **If you see "added X packages"** — you're on track.
-
----
-
-## 🔐 Step 3: Configure the API Key (2 min)
-
-You need to save your API key as an environment variable.
-
-| System | File to edit | Command to add |
-|--------|--------------|----------------|
-| **macOS (zsh)** | \`~/.zshrc\` | \`echo 'export GEMINI_API_KEY="your-key-here"' >> ~/.zshrc && source ~/.zshrc\` |
-| **macOS (bash)** | \`~/.bash_profile\` | \`echo 'export GEMINI_API_KEY="your-key-here"' >> ~/.bash_profile && source ~/.bash_profile\` |
-| **Linux** | \`~/.bashrc\` | \`echo 'export GEMINI_API_KEY="your-key-here"' >> ~/.bashrc && source ~/.bashrc\` |
-| **Windows (PowerShell)** | System variable | \`[Environment]::SetEnvironmentVariable("GEMINI_API_KEY", "your-key-here", "User")\` |
-
-> 💡 **Verification**: Run \`echo $GEMINI_API_KEY\` (macOS/Linux) or \`echo %GEMINI_API_KEY%\` (Windows CMD) — you should see your key.
-
----
-
-## 💻 Step 4: Write the chatbot (5 min)
-
-Create a file called \`chatbot.mjs\` with this content:
-
-\`\`\`javascript
-import { GoogleGenAI } from "@google/genai";
-import * as readline from "readline";
-
-// Connect to Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
-// Create chat interface
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-// Conversation history
-const history = [];
-
-console.log("╔════════════════════════════════════════╗");
-console.log("║  ✨ Chatbot with Gemini API            ║");
-console.log("║  Type 'exit' to quit                   ║");
-console.log("╚════════════════════════════════════════╝\\n");
-
-async function chat(message) {
-  history.push({ role: "user", parts: [{ text: message }] });
-
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: history,
-  });
-
-  const reply = response.text;
-  history.push({ role: "model", parts: [{ text: reply }] });
-
-  return reply;
-}
-
-function ask() {
-  rl.question("You: ", async (input) => {
-    if (input.toLowerCase() === "exit") {
-      console.log("\\n👋 Goodbye!");
-      rl.close();
-      return;
-    }
-
-    try {
-      const reply = await chat(input);
-      console.log(\`\\n🤖 Gemini: \${reply}\\n\`);
-    } catch (error) {
-      console.log(\`\\n❌ Error: \${error.message}\\n\`);
-    }
-
-    ask();
-  });
-}
-
-ask();
-\`\`\`
-
-> 📝 **Note**: We use \`.mjs\` to enable ES modules (import/export).
-
----
-
-## 🚀 Step 5: Run it! (1 min)
+Create the file with the code Gemini generated, and run:
 
 \`\`\`bash
 node chatbot.mjs
 \`\`\`
 
-You should see:
+---
+
+## Did it work?
+
+If you see something like this, you made it:
+
 \`\`\`
-╔════════════════════════════════════════╗
-║  ✨ Chatbot with Gemini API            ║
-║  Type 'exit' to quit                   ║
-╚════════════════════════════════════════╝
-
-You:
+You: Hello
+Gemini: Hi! How can I help you?
 \`\`\`
 
-**Try it!** Type "Hello, how are you?" and press Enter.
+---
+
+## If something failed
+
+| Error | Solution |
+|-------|----------|
+| \`API key not valid\` | Verify you copied the key correctly |
+| \`Cannot find module\` | Run \`npm install @google/genai\` |
+| \`node: command not found\` | You need to install Node.js: [nodejs.org](https://nodejs.org) |
 
 ---
 
-## 🔧 Troubleshooting
+## What just happened?
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| \`API key not valid\` | Wrong or missing key | Verify \`echo $GEMINI_API_KEY\` shows your key |
-| \`Cannot find module\` | Missing dependency | Run \`npm install @google/genai\` |
-| \`ENOTFOUND\` | No internet connection | Check your connection |
-| \`429 Too Many Requests\` | Rate limit exceeded | Wait 1 minute or use another model |
+1. You asked an AI to write code
+2. The AI wrote it
+3. You ran it
+4. It works
 
----
-
-## ✅ Final checklist
-
-- [ ] Node.js installed and working
-- [ ] API key obtained from Google AI Studio
-- [ ] Environment variable configured
-- [ ] Project created with npm
-- [ ] chatbot.mjs file created
-- [ ] **Chatbot responding!** 🎉
+You could have asked the same thing to ChatGPT, Claude, or any other AI chat. The result would be similar.
 
 ---
 
-## 🎓 What you learned
+## Experiment
 
-| Concept | What it means |
-|---------|---------------|
-| **API Key** | Your "password" to use Google's service |
-| **Environment variable** | Secure way to store secrets |
-| **SDK** | Library that makes using the API easier |
-| **History** | Conversation memory for context |
+Go back to Google AI Studio and try variations:
 
----
+- *"...that responds like a pirate"*
+- *"...that helps me practice Spanish"*
+- *"...that's a math tutor"*
 
-## ⏭️ Next steps
-
-Now that you have your first chatbot, you can:
-
-→ [Chatbot with Claude API](/en/cooking/chatbot-claude) — Compare with Anthropic's model
-→ [Chatbot with OpenAI](/en/cooking/chatbot-openai) — Try GPT-4
-→ [Chat with Web UI](/en/cooking/chat-web-ui) — Give it a nice interface
+The code changes. The process is the same.
 
 ---
 
-## 📚 References
+## Next step
 
-- [Official Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
-- [Google AI Studio](https://aistudio.google.com)
-- [Pricing and Limits](https://ai.google.dev/gemini-api/docs/pricing)
+→ [Chatbot with Claude](/en/cooking/chatbot-claude) — Same process, different AI
+
+---
+
+## Want to understand more?
+
+If you're interested in learning what an API is, what an LLM is, or how this works under the hood:
+
+→ [What is an LLM?](/en/learning/llms-intro)
+→ [Terminal basics](/en/learning/terminal)
     `,
   },
   'chatbot-claude': {
