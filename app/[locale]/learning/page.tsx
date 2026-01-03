@@ -1,7 +1,140 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
-// 29 temas organizados por nivel (sincronizado con layout.tsx)
+// Cooking Analogy Component
+function CookingAnalogy({ isSpanish }: { isSpanish: boolean }) {
+  return (
+    <div className="mb-12 bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 rounded-2xl p-6 md:p-8">
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">
+        {isSpanish ? '👨‍🍳 Aprendes a cocinar, cocinando' : '👨‍🍳 You learn to cook by cooking'}
+      </h2>
+
+      <p className="text-slate-700 mb-6">
+        {isSpanish
+          ? 'Imagina que quieres ser chef. Antes de crear platos memorables, necesitas conocer tus ingredientes (su calidad, cómo prepararlos), dominar tu cocina (dónde está cada cosa, cómo funciona), y elegir la herramienta correcta (un cuchillo de chef para picar, no una cuchara).'
+          : 'Imagine you want to become a chef. Before creating memorable dishes, you need to know your ingredients (their quality, how to prepare them), master your kitchen (where everything is, how it works), and choose the right tool (a chef\'s knife to chop, not a spoon).'}
+      </p>
+
+      <p className="text-slate-700 mb-6 font-medium">
+        {isSpanish ? 'El desarrollo de software funciona igual.' : 'Software development works the same way.'}
+      </p>
+
+      {/* Kitchen to Code Mapping */}
+      <div className="bg-white/70 rounded-xl p-4 mb-6 font-mono text-sm">
+        <div className="text-slate-500 mb-2">{isSpanish ? 'COCINA → DESARROLLO' : 'KITCHEN → DEVELOPMENT'}</div>
+        <div className="grid gap-2 text-slate-700">
+          <div className="flex items-center gap-3">
+            <span>🏠 {isSpanish ? 'Tu cocina' : 'Your kitchen'}</span>
+            <span className="text-slate-400">→</span>
+            <span>💻 {isSpanish ? 'Tu computadora' : 'Your computer'}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span>🔥 {isSpanish ? 'Estación de trabajo' : 'Workstation'}</span>
+            <span className="text-slate-400">→</span>
+            <span>⬛ {isSpanish ? 'La Terminal' : 'The Terminal'}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span>🥬 {isSpanish ? 'Ingredientes' : 'Ingredients'}</span>
+            <span className="text-slate-400">→</span>
+            <span>📝 {isSpanish ? 'Código, APIs, Datos' : 'Code, APIs, Data'}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span>🔪 {isSpanish ? 'Utensilios' : 'Utensils'}</span>
+            <span className="text-slate-400">→</span>
+            <span>🛠️ Git, Docker, Cursor</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span>📖 {isSpanish ? 'Recetas' : 'Recipes'}</span>
+            <span className="text-slate-400">→</span>
+            <span>📚 {isSpanish ? 'Documentación, Prompts' : 'Documentation, Prompts'}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span>🍽️ {isSpanish ? 'El plato final' : 'The final dish'}</span>
+            <span className="text-slate-400">→</span>
+            <span>🚀 {isSpanish ? 'Tu app en producción' : 'Your app in production'}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Novice vs Chef Table */}
+      <div className="overflow-x-auto mb-6">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-orange-200">
+              <th className="text-left py-2 pr-4"></th>
+              <th className="text-left py-2 px-2">👶 {isSpanish ? 'Novato' : 'Novice'}</th>
+              <th className="text-left py-2 pl-2">👨‍🍳 {isSpanish ? 'Chef' : 'Chef'}</th>
+            </tr>
+          </thead>
+          <tbody className="text-slate-600">
+            <tr className="border-b border-orange-100">
+              <td className="py-2 pr-4 font-medium">{isSpanish ? 'Recetas' : 'Recipes'}</td>
+              <td className="py-2 px-2">{isSpanish ? 'Sigue al pie de la letra' : 'Follows to the letter'}</td>
+              <td className="py-2 pl-2">{isSpanish ? 'Entiende por qué cada paso existe' : 'Understands why each step exists'}</td>
+            </tr>
+            <tr className="border-b border-orange-100">
+              <td className="py-2 pr-4 font-medium">{isSpanish ? 'Problemas' : 'Problems'}</td>
+              <td className="py-2 px-2">{isSpanish ? 'Se frustra cuando algo falla' : 'Gets frustrated when something fails'}</td>
+              <td className="py-2 pl-2">{isSpanish ? 'Improvisa y adapta' : 'Improvises and adapts'}</td>
+            </tr>
+            <tr className="border-b border-orange-100">
+              <td className="py-2 pr-4 font-medium">{isSpanish ? 'Herramientas' : 'Tools'}</td>
+              <td className="py-2 px-2">{isSpanish ? 'Usa lo que encuentra' : 'Uses whatever is available'}</td>
+              <td className="py-2 pl-2">{isSpanish ? 'Sabe exactamente cuál elegir' : 'Knows exactly which to choose'}</td>
+            </tr>
+            <tr>
+              <td className="py-2 pr-4 font-medium">{isSpanish ? 'Resultado' : 'Result'}</td>
+              <td className="py-2 px-2">{isSpanish ? 'A veces sale bien' : 'Sometimes turns out well'}</td>
+              <td className="py-2 pl-2">{isSpanish ? 'Consistentemente excelente' : 'Consistently excellent'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Philosophy */}
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+        <p className="font-semibold text-blue-900 mb-1">💡 {isSpanish ? 'Nuestra filosofía' : 'Our philosophy'}</p>
+        <p className="text-blue-800">
+          {isSpanish
+            ? 'No te enseñaremos a seguir recetas. Te enseñaremos a pensar como chef: entender tu cocina, dominar tus herramientas, y crear platos que ni tú sabías que podías hacer.'
+            : "We won't teach you to follow recipes. We'll teach you to think like a chef: understand your kitchen, master your tools, and create dishes you didn't know you could make."}
+        </p>
+      </div>
+
+      {/* What's coming */}
+      <div className="bg-white/70 rounded-xl p-4 font-mono text-sm">
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <div className="text-slate-500 text-xs mb-1">{isSpanish ? 'PRIMERO' : 'FIRST'}</div>
+            <div className="text-2xl mb-1">🏠</div>
+            <div className="text-slate-700 font-medium">{isSpanish ? 'Preparar tu cocina' : 'Set up your kitchen'}</div>
+            <div className="text-xs text-slate-500">Terminal, Git, Docker, Cursor</div>
+          </div>
+          <div>
+            <div className="text-slate-500 text-xs mb-1">{isSpanish ? 'DESPUÉS' : 'THEN'}</div>
+            <div className="text-2xl mb-1">🍳</div>
+            <div className="text-slate-700 font-medium">{isSpanish ? 'Cocinar tus platos' : 'Cook your dishes'}</div>
+            <div className="text-xs text-slate-500">{isSpanish ? 'Tu Asistente IA funcionando' : 'Your AI Assistant working'}</div>
+          </div>
+          <div>
+            <div className="text-slate-500 text-xs mb-1">{isSpanish ? 'RESULTADO' : 'RESULT'}</div>
+            <div className="text-2xl mb-1">🍽️</div>
+            <div className="text-slate-700 font-medium">{isSpanish ? 'Servir al mundo' : 'Serve the world'}</div>
+            <div className="text-xs text-slate-500">{isSpanish ? 'App en producción' : 'App in production'}</div>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-center text-slate-600 mt-6 font-medium">
+        {isSpanish
+          ? 'En las próximas misiones, tu cocina estará lista. Después, a cocinar. 🔥'
+          : "In the upcoming missions, your kitchen will be ready. Then, let's cook. 🔥"}
+      </p>
+    </div>
+  )
+}
+
+// 30 temas organizados por nivel (sincronizado con layout.tsx)
 const sections = [
   // APRENDIZ (Fundamentos)
   { slug: 'terminal', titleEs: 'Terminal & Shell', titleEn: 'Terminal & Shell', level: 'aprendiz', icon: '🖥️', descEs: 'Tu centro de comando para desarrollo', descEn: 'Your command center for development' },
@@ -22,6 +155,7 @@ const sections = [
   { slug: 'embeddings', titleEs: 'Embeddings', titleEn: 'Embeddings', level: 'cocinero', icon: '🧮', descEs: 'Vectores y similitud semántica', descEn: 'Vectors and semantic similarity' },
 
   // CHEF (Fullstack)
+  { slug: 'git-advanced', titleEs: 'Git Avanzado & Colaboración', titleEn: 'Advanced Git & Collaboration', level: 'chef', icon: '🔀', descEs: 'PRs, merge conflicts, rebases, equipos', descEn: 'PRs, merge conflicts, rebases, teams' },
   { slug: 'nextjs', titleEs: 'Next.js', titleEn: 'Next.js', level: 'chef', icon: '▲', descEs: 'Framework fullstack React', descEn: 'Fullstack React framework' },
   { slug: 'auth', titleEs: 'Autenticación', titleEn: 'Authentication', level: 'chef', icon: '🔐', descEs: 'Firebase, JWT, OAuth', descEn: 'Firebase, JWT, OAuth' },
   { slug: 'webhooks', titleEs: 'Webhooks', titleEn: 'Webhooks', level: 'chef', icon: '🪝', descEs: 'Eventos en tiempo real', descEn: 'Real-time events' },
@@ -80,7 +214,7 @@ export default async function LearningPage({ params }: PageProps) {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Hero */}
-      <div className="mb-12">
+      <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <span className="text-4xl">📖</span>
           <h1 className="text-4xl font-bold text-slate-900">
@@ -95,28 +229,31 @@ export default async function LearningPage({ params }: PageProps) {
         <div className="flex flex-wrap gap-4 text-sm text-slate-500">
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-            {isSpanish ? '29 temas' : '29 topics'}
+            {isSpanish ? '30 temas' : '30 topics'}
           </span>
           <span>•</span>
           <span>{isSpanish ? '4 niveles de dificultad' : '4 difficulty levels'}</span>
           <span>•</span>
           <span className="text-blue-600 font-medium">{isSpanish ? '100% Gratis' : '100% Free'}</span>
         </div>
+      </div>
 
-        {/* Link to Cooking */}
-        <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-xl">
-          <p className="text-sm text-orange-800">
-            <span className="font-semibold">👨‍🍳 {isSpanish ? '¿Prefieres aprender haciendo?' : 'Prefer learning by doing?'}</span>
-            {' '}
-            {isSpanish
-              ? 'Visita Cooking para proyectos prácticos que siempre terminan en algo funcional.'
-              : 'Visit Cooking for hands-on projects that always result in something functional.'}
-            {' '}
-            <Link href={`/${locale}/cooking`} className="font-medium underline hover:no-underline">
-              {isSpanish ? 'Ir a Cooking →' : 'Go to Cooking →'}
-            </Link>
-          </p>
-        </div>
+      {/* Cooking Analogy */}
+      <CookingAnalogy isSpanish={isSpanish} />
+
+      {/* Link to Cooking */}
+      <div className="mb-10 p-4 bg-orange-50 border border-orange-200 rounded-xl">
+        <p className="text-sm text-orange-800">
+          <span className="font-semibold">👨‍🍳 {isSpanish ? '¿Prefieres aprender haciendo?' : 'Prefer learning by doing?'}</span>
+          {' '}
+          {isSpanish
+            ? 'Visita Cooking para proyectos prácticos que siempre terminan en algo funcional.'
+            : 'Visit Cooking for hands-on projects that always result in something functional.'}
+          {' '}
+          <Link href={`/${locale}/cooking`} className="font-medium underline hover:no-underline">
+            {isSpanish ? 'Ir a Cooking →' : 'Go to Cooking →'}
+          </Link>
+        </p>
       </div>
 
       {/* Sections by Level */}

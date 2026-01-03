@@ -19,6 +19,7 @@ const sections = [
   { slug: 'react', titleEs: 'React', titleEn: 'React', level: 'cocinero', icon: '⚛️' },
   { slug: 'apis', titleEs: 'APIs REST', titleEn: 'REST APIs', level: 'cocinero', icon: '🔗' },
   { slug: 'embeddings', titleEs: 'Embeddings', titleEn: 'Embeddings', level: 'cocinero', icon: '🧮' },
+  { slug: 'git-advanced', titleEs: 'Git Avanzado & Colaboración', titleEn: 'Advanced Git & Collaboration', level: 'chef', icon: '🔀' },
   { slug: 'nextjs', titleEs: 'Next.js', titleEn: 'Next.js', level: 'chef', icon: '▲' },
   { slug: 'auth', titleEs: 'Autenticación', titleEn: 'Authentication', level: 'chef', icon: '🔐' },
   { slug: 'webhooks', titleEs: 'Webhooks', titleEn: 'Webhooks', level: 'chef', icon: '🪝' },
@@ -249,11 +250,121 @@ echo $PATH
   },
   git: {
     contentEs: `
-## Control de versiones: El "Ctrl+Z" profesional
+## ¿Por qué desde el primer proyecto?
 
-Imagina escribir un documento de 100 páginas sin poder deshacer cambios. Así era programar antes de Git.
+"Es solo un proyectito pequeño, no necesito Git..."
 
-**Git** es un sistema de control de versiones que guarda el historial de todos los cambios en tu código.
+**Error.** Usa Git desde el día 1, aunque sea un script de 10 líneas. ¿Por qué?
+
+| Lo que piensas | Lo que pasa en realidad |
+|----------------|------------------------|
+| "Es muy simple" | Crece más de lo esperado |
+| "Me acuerdo de todo" | En 2 semanas no recuerdas por qué cambiaste algo |
+| "Tengo backup en Drive" | Drive no te dice qué cambió entre versiones |
+| "Lo configuro después" | "Después" nunca llega, y cuando lo necesitas es tarde |
+
+---
+
+## 🤖 Git te salva de la IA
+
+Esto es **crítico** si usas asistentes de código como Cursor, Claude Code, o Copilot:
+
+| Situación | Sin Git | Con Git |
+|-----------|---------|---------|
+| La IA malinterpretó tu prompt y borró código importante | 😱 Perdido | \`git checkout -- .\` |
+| El agente "mejoró" algo que funcionaba y ahora no compila | 😱 A reescribir | \`git diff\` para ver qué cambió |
+| Pediste un cambio pequeño y modificó 15 archivos | 😱 Caos | \`git stash\` y empiezas de nuevo |
+| Después de 5 prompts, todo está peor que al inicio | 😱 Frustración | \`git reset --hard HEAD~5\` |
+
+> ⚠️ **Realidad**: Los agentes de IA son poderosos pero cometen errores. Un prompt ambiguo puede resultar en cambios destructivos. Git es tu red de seguridad.
+
+**Flujo recomendado con IA:**
+\`\`\`bash
+# ANTES de pedirle algo a la IA
+git add . && git commit -m "Checkpoint antes de cambios con IA"
+
+# Si la IA rompe algo
+git diff                    # Ver qué cambió
+git checkout -- archivo.js  # Revertir un archivo
+git reset --hard HEAD       # Revertir TODO al último commit
+\`\`\`
+
+---
+
+> **Nuestra recomendación**: \`git init\` es el PRIMER comando en cualquier proyecto. Antes de escribir código, antes de instalar dependencias. Primero Git.
+
+---
+
+## Git ≠ GitHub: La diferencia fundamental
+
+Antes de ver comandos, entiende esto:
+
+| | **Git** | **GitHub** |
+|---|---------|------------|
+| **¿Qué es?** | Software en tu computadora | Sitio web / servicio en la nube |
+| **¿Dónde vive?** | Local (tu máquina) | Remoto (internet) |
+| **¿Quién lo creó?** | Linus Torvalds (2005) | Microsoft (comprado en 2018) |
+| **¿Costo?** | Gratis, open source | Gratis + planes de pago |
+| **¿Se necesitan mutuamente?** | Git funciona sin GitHub | GitHub necesita Git |
+
+**Analogía**: Git es tu diario personal donde escribes todos los días. GitHub es la caja de seguridad del banco donde guardas una copia.
+
+---
+
+## ¿Para qué sirven realmente?
+
+### Git (local) te permite:
+
+| Uso | Ejemplo |
+|-----|---------|
+| 📸 **Historial completo** | Ver exactamente qué cambió, cuándo y por qué |
+| ⏪ **Volver en el tiempo** | "Ayer funcionaba, ¿qué rompí hoy?" |
+| 🔀 **Experimentar sin miedo** | Crear branches para probar ideas locas |
+| 🔍 **Encontrar bugs** | "¿En qué commit se introdujo este error?" |
+| 📝 **Documentar decisiones** | Los mensajes de commit son documentación |
+
+### GitHub (remoto) te permite:
+
+| Uso | Ejemplo |
+|-----|---------|
+| ☁️ **Backup en la nube** | Si te roban la laptop, tu código está seguro |
+| 👥 **Colaborar** | Varios devs trabajando en el mismo proyecto |
+| 🔍 **Code review** | Pull Requests para revisar antes de integrar |
+| 🌐 **Portfolio** | Tu perfil muestra tu actividad y proyectos |
+| 🚀 **Deploy automático** | GitHub Actions, Vercel, etc. |
+
+---
+
+## ¿Cuándo necesitas solo Git?
+
+✅ **Solo Git es suficiente cuando:**
+- Trabajas solo en tu máquina
+- El proyecto es personal/experimental
+- No necesitas backup remoto (pero deberías...)
+- Estás aprendiendo
+
+---
+
+## ¿Cuándo necesitas GitHub?
+
+✅ **Agrega GitHub cuando:**
+- Quieres backup (¡siempre recomendado!)
+- Trabajas en equipo
+- El proyecto es open source
+- Quieres mostrar tu trabajo (portfolio)
+- Necesitas CI/CD (tests automáticos, deploy)
+
+---
+
+## Escenario real: Te roban la laptop 💻🔓
+
+| Situación | Sin GitHub | Con GitHub |
+|-----------|------------|------------|
+| **Tu código** | Perdido para siempre | Haces \`git clone\` y sigues |
+| **Historial** | Perdido | Intacto en la nube |
+| **Tiempo perdido** | Semanas/meses de trabajo | 5 minutos en clonar |
+
+**Moraleja**: Git local + GitHub remoto = tranquilidad.
 
 ---
 
@@ -268,9 +379,15 @@ Imagina escribir un documento de 100 páginas sin poder deshacer cambios. Así e
 ## Configuración inicial
 
 \`\`\`bash
+# Identidad (aparece en cada commit)
 git config --global user.name "Tu Nombre"
 git config --global user.email "tu@email.com"
+
+# Branch por defecto
 git config --global init.defaultBranch main
+
+# Editor para mensajes largos
+git config --global core.editor "code --wait"
 \`\`\`
 
 ---
@@ -280,56 +397,415 @@ git config --global init.defaultBranch main
 | Concepto | Qué es | Analogía |
 |----------|--------|----------|
 | **Repository** | Carpeta con historial Git | Álbum de fotos |
-| **Commit** | Foto del estado actual | Foto en el álbum |
-| **Branch** | Línea alternativa de desarrollo | Universo paralelo |
-| **Merge** | Unir dos branches | Fusionar universos |
+| **Commit** | Foto del estado actual | Foto fechada en el álbum |
+| **Branch** | Línea alternativa de desarrollo | Borrador de un capítulo |
+| **Merge** | Unir dos branches | Integrar el borrador al libro |
+| **Remote** | Conexión a GitHub/GitLab | Copia en la nube |
+| **Clone** | Descargar repo remoto | Copiar álbum del banco |
+| **Push** | Subir commits al remoto | Llevar fotos nuevas al banco |
+| **Pull** | Bajar commits del remoto | Traer fotos que otros subieron |
 
 ---
 
-## Flujo básico
+## Flujo de trabajo
+
+### Solo Git (local)
 
 \`\`\`bash
-# 1. Ver estado
+# Crear repositorio
+git init mi-proyecto
+cd mi-proyecto
+
+# Trabajar...
+echo "# Mi Proyecto" > README.md
+
+# Ver qué cambió
 git status
 
-# 2. Agregar cambios
+# Agregar al staging
+git add README.md    # archivo específico
+git add .            # todos los cambios
+
+# Crear commit
+git commit -m "Inicial: agrega README"
+
+# Ver historial
+git log --oneline
+\`\`\`
+
+### Git + GitHub (local + remoto)
+
+\`\`\`bash
+# Conectar con GitHub (una vez)
+git remote add origin https://github.com/tu-usuario/tu-repo.git
+
+# Subir tu código
+git push -u origin main
+
+# Después de cada sesión de trabajo:
 git add .
-
-# 3. Guardar con mensaje
-git commit -m "Agrega nueva funcionalidad"
-
-# 4. Subir a remoto
-git push origin main
+git commit -m "Describe qué hiciste"
+git push
 \`\`\`
 
 ---
 
-## GitHub CLI
+## Branches: Experimentar sin miedo
+
+\`\`\`bash
+# Crear branch para nueva feature
+git checkout -b feature/login
+
+# Trabajar en la feature...
+git add .
+git commit -m "Agrega formulario de login"
+
+# Volver a main
+git checkout main
+
+# Integrar la feature
+git merge feature/login
+
+# Borrar branch (ya no la necesitas)
+git branch -d feature/login
+\`\`\`
+
+---
+
+## GitHub CLI (gh)
 
 \`\`\`bash
 # Instalar
 brew install gh
 
-# Autenticar
+# Autenticar (abre navegador)
 gh auth login
 
-# Crear PR
+# Clonar repo
+gh repo clone usuario/repo
+
+# Crear repo desde carpeta actual
+gh repo create mi-proyecto --public --source=.
+
+# Crear Pull Request
 gh pr create --fill
 \`\`\`
+
+---
+
+## Comandos de emergencia
+
+\`\`\`bash
+# "La cagué, quiero volver al último commit"
+git checkout -- .
+
+# "Quiero ver cómo estaba hace 3 commits"
+git checkout HEAD~3
+
+# "¿Quién escribió esta línea?"
+git blame archivo.js
+
+# "¿En qué commit se rompió?"
+git bisect start
+git bisect bad          # el actual está mal
+git bisect good abc123  # este commit estaba bien
+# Git encuentra el culpable automáticamente
+\`\`\`
+
+---
+
+## Resumen visual
+
+\`\`\`
+    TU COMPUTADORA                          GITHUB (NUBE)
+    ──────────────                          ─────────────
+
+    📁 Working Directory
+         │
+         │ git add
+         ▼
+    📦 Staging Area
+         │
+         │ git commit
+         ▼
+    📚 Local Repository  ──── git push ───▶ ☁️ Remote Repository
+                         ◀── git pull ────
+\`\`\`
+
+---
+
+## 🔐 .gitignore: Tu escudo contra filtraciones
+
+El archivo \`.gitignore\` le dice a Git qué archivos **NUNCA** debe rastrear. Esto es **CRÍTICO** para seguridad.
+
+### ⚠️ Peligro real: La IA y tus secretos
+
+Los asistentes de IA (Cursor, Claude Code, Copilot) pueden accidentalmente:
+
+| Situación peligrosa | Consecuencia |
+|---------------------|--------------|
+| Agregar \`.env\` al commit | Tus API keys quedan públicas |
+| Crear archivo con credenciales hardcodeadas | Cualquiera puede verlas en GitHub |
+| "Mejorar" código moviendo secrets a archivos nuevos | El \`.gitignore\` no los cubre |
+
+> 🚨 **Historia real**: Miles de API keys de AWS se filtran cada día en GitHub. Bots escanean repos públicos buscando credenciales. Tu cuenta puede ser hackeada en minutos.
+
+### Archivo .gitignore esencial
+
+Crea esto en la raíz de CADA proyecto:
+
+\`\`\`bash
+# .gitignore
+
+# Variables de entorno (SECRETS!)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Credenciales
+credentials.json
+*-credentials.json
+*.pem
+*.key
+secrets/
+
+# Dependencias (se reinstalan)
+node_modules/
+venv/
+__pycache__/
+
+# Build (se regenera)
+dist/
+build/
+.next/
+.output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+\`\`\`
+
+### Comandos útiles
+
+\`\`\`bash
+# Ver qué está ignorando Git
+git status --ignored
+
+# Si ya commiteaste un archivo con secretos 😱
+git rm --cached .env
+git commit -m "Remove .env from tracking"
+# IMPORTANTE: El archivo sigue en el historial!
+# Cambia TODAS las credenciales que se filtraron
+
+# Verificar antes de push
+git diff --staged   # Ver qué vas a subir
+\`\`\`
+
+### Regla de oro
+
+> **NUNCA** pongas credenciales directamente en el código. Usa variables de entorno (\`.env\`) y asegúrate de que \`.env\` esté en \`.gitignore\` ANTES del primer commit.
+
+---
+
+## 💼 GitHub como portfolio profesional
+
+Tu perfil de GitHub es más importante de lo que crees:
+
+| Situación | Qué miran |
+|-----------|-----------|
+| **Aplicar a trabajo** | Reclutadores revisan tu GitHub antes de la entrevista |
+| **Freelance** | Clientes quieren ver proyectos reales funcionando |
+| **Licitaciones** | Las empresas evalúan calidad de código y documentación |
+
+### ¿Qué hace un repo "profesional"?
+
+\`\`\`
+mi-proyecto/
+├── README.md          # ⭐ CRÍTICO: Qué hace, cómo instalar, screenshots
+├── LICENSE            # MIT, Apache, etc.
+├── .gitignore         # Limpio, sin node_modules ni .env
+├── docs/              # Arquitectura, decisiones técnicas
+│   └── ARCHITECTURE.md
+├── src/               # Código organizado
+├── tests/             # ⭐ Tests demuestran profesionalismo
+└── .github/
+    └── workflows/     # CI/CD muestra que sabes DevOps
+\`\`\`
+
+### Checklist de repo de portfolio
+
+- [ ] README con descripción clara y screenshots/GIFs
+- [ ] Instrucciones de instalación que FUNCIONAN
+- [ ] Tests (aunque sean básicos)
+- [ ] Código limpio y comentado donde hace falta
+- [ ] Sin secretos ni credenciales (revisa el historial!)
+- [ ] Commits con mensajes descriptivos (no "fix", "update")
+
+> 💡 **Tip**: 3-5 repos públicos bien hechos impresionan más que 50 repos abandonados.
+
+### Tu perfil de GitHub
+
+Crea un repo con tu username (ej: \`alannreyes/alannreyes\`) con un README.md que aparece en tu perfil:
+
+\`\`\`markdown
+# 👋 Hola, soy [Tu Nombre]
+
+🔭 Actualmente trabajando en...
+🌱 Aprendiendo...
+💬 Pregúntame sobre...
+📫 Contáctame: tu@email.com
+\`\`\`
+
+---
+
+## 🍳 Practica: Tu primer repositorio
+
+¿Listo para aplicar todo esto?
+
+→ **[Mi Primer Repositorio](/es/cooking/first-repo)** — Crea y sube tu primer repo a GitHub paso a paso
+
+---
+
+## 📚 Siguiente nivel
+
+→ **[Git Avanzado & Colaboración](/es/learning/git-advanced)** — PRs, merge conflicts, rebases y trabajo en equipo
 
 ---
 
 ## Enlaces útiles
 
 - 📖 [Git - Documentación oficial](https://git-scm.com/doc)
-- 🎓 [Learn Git Branching](https://learngitbranching.js.org/)
+- 🎓 [Learn Git Branching (interactivo)](https://learngitbranching.js.org/)
+- 📘 [GitHub Docs](https://docs.github.com)
+- 📘 [gitignore.io](https://www.toptal.com/developers/gitignore) — Genera .gitignore para tu stack
+- 🎥 [Git en 15 minutos (video)](https://www.youtube.com/watch?v=USjZcfj8yxE)
     `,
     contentEn: `
-## Version control: The professional "Ctrl+Z"
+## Why from your first project?
 
-Imagine writing a 100-page document without being able to undo changes. That's what programming was like before Git.
+"It's just a tiny project, I don't need Git..."
 
-**Git** is a version control system that saves the history of all changes in your code.
+**Wrong.** Use Git from day 1, even for a 10-line script. Why?
+
+| What you think | What actually happens |
+|----------------|----------------------|
+| "It's too simple" | It grows more than expected |
+| "I'll remember everything" | In 2 weeks you won't remember why you changed something |
+| "I have backup on Drive" | Drive doesn't tell you what changed between versions |
+| "I'll set it up later" | "Later" never comes, and when you need it, it's too late |
+
+---
+
+## 🤖 Git saves you from AI
+
+This is **critical** if you use code assistants like Cursor, Claude Code, or Copilot:
+
+| Situation | Without Git | With Git |
+|-----------|-------------|----------|
+| AI misunderstood your prompt and deleted important code | 😱 Lost | \`git checkout -- .\` |
+| The agent "improved" something that worked and now it won't compile | 😱 Rewrite it | \`git diff\` to see what changed |
+| You asked for a small change and it modified 15 files | 😱 Chaos | \`git stash\` and start over |
+| After 5 prompts, everything is worse than before | 😱 Frustration | \`git reset --hard HEAD~5\` |
+
+> ⚠️ **Reality**: AI agents are powerful but make mistakes. An ambiguous prompt can result in destructive changes. Git is your safety net.
+
+**Recommended workflow with AI:**
+\`\`\`bash
+# BEFORE asking the AI for something
+git add . && git commit -m "Checkpoint before AI changes"
+
+# If the AI breaks something
+git diff                    # See what changed
+git checkout -- file.js     # Revert one file
+git reset --hard HEAD       # Revert EVERYTHING to last commit
+\`\`\`
+
+---
+
+> **Our recommendation**: \`git init\` is the FIRST command in any project. Before writing code, before installing dependencies. Git first.
+
+---
+
+## Git ≠ GitHub: The fundamental difference
+
+Before looking at commands, understand this:
+
+| | **Git** | **GitHub** |
+|---|---------|------------|
+| **What is it?** | Software on your computer | Website / cloud service |
+| **Where does it live?** | Local (your machine) | Remote (internet) |
+| **Who created it?** | Linus Torvalds (2005) | Microsoft (acquired 2018) |
+| **Cost?** | Free, open source | Free + paid plans |
+| **Do they need each other?** | Git works without GitHub | GitHub needs Git |
+
+**Analogy**: Git is your personal journal where you write every day. GitHub is the bank's safety deposit box where you keep a copy.
+
+---
+
+## What are they really for?
+
+### Git (local) allows you to:
+
+| Use | Example |
+|-----|---------|
+| 📸 **Complete history** | See exactly what changed, when, and why |
+| ⏪ **Go back in time** | "It worked yesterday, what did I break today?" |
+| 🔀 **Experiment fearlessly** | Create branches to try crazy ideas |
+| 🔍 **Find bugs** | "Which commit introduced this error?" |
+| 📝 **Document decisions** | Commit messages are documentation |
+
+### GitHub (remote) allows you to:
+
+| Use | Example |
+|-----|---------|
+| ☁️ **Cloud backup** | If your laptop gets stolen, your code is safe |
+| 👥 **Collaborate** | Multiple devs working on the same project |
+| 🔍 **Code review** | Pull Requests to review before merging |
+| 🌐 **Portfolio** | Your profile shows your activity and projects |
+| 🚀 **Auto deploy** | GitHub Actions, Vercel, etc. |
+
+---
+
+## When do you only need Git?
+
+✅ **Git alone is enough when:**
+- You work solo on your machine
+- The project is personal/experimental
+- You don't need remote backup (but you should...)
+- You're learning
+
+---
+
+## When do you need GitHub?
+
+✅ **Add GitHub when:**
+- You want backup (always recommended!)
+- You work in a team
+- The project is open source
+- You want to showcase your work (portfolio)
+- You need CI/CD (automated tests, deploy)
+
+---
+
+## Real scenario: Your laptop gets stolen 💻🔓
+
+| Situation | Without GitHub | With GitHub |
+|-----------|----------------|-------------|
+| **Your code** | Lost forever | \`git clone\` and continue |
+| **History** | Lost | Intact in the cloud |
+| **Time lost** | Weeks/months of work | 5 minutes to clone |
+
+**Moral**: Local Git + remote GitHub = peace of mind.
 
 ---
 
@@ -344,9 +820,15 @@ Imagine writing a 100-page document without being able to undo changes. That's w
 ## Initial setup
 
 \`\`\`bash
+# Identity (appears in every commit)
 git config --global user.name "Your Name"
 git config --global user.email "your@email.com"
+
+# Default branch
 git config --global init.defaultBranch main
+
+# Editor for long messages
+git config --global core.editor "code --wait"
 \`\`\`
 
 ---
@@ -356,48 +838,931 @@ git config --global init.defaultBranch main
 | Concept | What it is | Analogy |
 |---------|------------|---------|
 | **Repository** | Folder with Git history | Photo album |
-| **Commit** | Snapshot of current state | Photo in album |
-| **Branch** | Alternative line of development | Parallel universe |
-| **Merge** | Join two branches | Merge universes |
+| **Commit** | Snapshot of current state | Dated photo in album |
+| **Branch** | Alternative development line | Draft of a chapter |
+| **Merge** | Join two branches | Integrate draft into book |
+| **Remote** | Connection to GitHub/GitLab | Cloud copy |
+| **Clone** | Download remote repo | Copy album from bank |
+| **Push** | Upload commits to remote | Take new photos to bank |
+| **Pull** | Download commits from remote | Get photos others uploaded |
 
 ---
 
-## Basic workflow
+## Workflow
+
+### Git only (local)
 
 \`\`\`bash
-# 1. Check status
+# Create repository
+git init my-project
+cd my-project
+
+# Work...
+echo "# My Project" > README.md
+
+# See what changed
 git status
 
-# 2. Add changes
+# Add to staging
+git add README.md    # specific file
+git add .            # all changes
+
+# Create commit
+git commit -m "Initial: add README"
+
+# View history
+git log --oneline
+\`\`\`
+
+### Git + GitHub (local + remote)
+
+\`\`\`bash
+# Connect to GitHub (once)
+git remote add origin https://github.com/your-user/your-repo.git
+
+# Push your code
+git push -u origin main
+
+# After each work session:
 git add .
-
-# 3. Save with message
-git commit -m "Add new feature"
-
-# 4. Push to remote
-git push origin main
+git commit -m "Describe what you did"
+git push
 \`\`\`
 
 ---
 
-## GitHub CLI
+## Branches: Experiment fearlessly
+
+\`\`\`bash
+# Create branch for new feature
+git checkout -b feature/login
+
+# Work on the feature...
+git add .
+git commit -m "Add login form"
+
+# Go back to main
+git checkout main
+
+# Integrate the feature
+git merge feature/login
+
+# Delete branch (no longer needed)
+git branch -d feature/login
+\`\`\`
+
+---
+
+## GitHub CLI (gh)
 
 \`\`\`bash
 # Install
 brew install gh
 
-# Authenticate
+# Authenticate (opens browser)
 gh auth login
 
-# Create PR
+# Clone repo
+gh repo clone user/repo
+
+# Create repo from current folder
+gh repo create my-project --public --source=.
+
+# Create Pull Request
 gh pr create --fill
 \`\`\`
+
+---
+
+## Emergency commands
+
+\`\`\`bash
+# "I messed up, I want to go back to last commit"
+git checkout -- .
+
+# "I want to see how it was 3 commits ago"
+git checkout HEAD~3
+
+# "Who wrote this line?"
+git blame file.js
+
+# "Which commit broke it?"
+git bisect start
+git bisect bad          # current is bad
+git bisect good abc123  # this commit was good
+# Git finds the culprit automatically
+\`\`\`
+
+---
+
+## Visual summary
+
+\`\`\`
+    YOUR COMPUTER                           GITHUB (CLOUD)
+    ─────────────                           ──────────────
+
+    📁 Working Directory
+         │
+         │ git add
+         ▼
+    📦 Staging Area
+         │
+         │ git commit
+         ▼
+    📚 Local Repository  ──── git push ───▶ ☁️ Remote Repository
+                         ◀── git pull ────
+\`\`\`
+
+---
+
+## 🔐 .gitignore: Your shield against leaks
+
+The \`.gitignore\` file tells Git which files to **NEVER** track. This is **CRITICAL** for security.
+
+### ⚠️ Real danger: AI and your secrets
+
+AI assistants (Cursor, Claude Code, Copilot) can accidentally:
+
+| Dangerous situation | Consequence |
+|---------------------|-------------|
+| Add \`.env\` to commit | Your API keys become public |
+| Create file with hardcoded credentials | Anyone can see them on GitHub |
+| "Improve" code by moving secrets to new files | \`.gitignore\` doesn't cover them |
+
+> 🚨 **True story**: Thousands of AWS API keys leak every day on GitHub. Bots scan public repos looking for credentials. Your account can be hacked within minutes.
+
+### Essential .gitignore file
+
+Create this at the root of EVERY project:
+
+\`\`\`bash
+# .gitignore
+
+# Environment variables (SECRETS!)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Credentials
+credentials.json
+*-credentials.json
+*.pem
+*.key
+secrets/
+
+# Dependencies (reinstallable)
+node_modules/
+venv/
+__pycache__/
+
+# Build (regeneratable)
+dist/
+build/
+.next/
+.output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+\`\`\`
+
+### Useful commands
+
+\`\`\`bash
+# See what Git is ignoring
+git status --ignored
+
+# If you already committed a file with secrets 😱
+git rm --cached .env
+git commit -m "Remove .env from tracking"
+# IMPORTANT: The file is still in history!
+# Change ALL credentials that were leaked
+
+# Verify before push
+git diff --staged   # See what you're about to push
+\`\`\`
+
+### Golden rule
+
+> **NEVER** put credentials directly in code. Use environment variables (\`.env\`) and make sure \`.env\` is in \`.gitignore\` BEFORE the first commit.
+
+---
+
+## 💼 GitHub as a professional portfolio
+
+Your GitHub profile is more important than you think:
+
+| Situation | What they look at |
+|-----------|-------------------|
+| **Job applications** | Recruiters check your GitHub before interviews |
+| **Freelancing** | Clients want to see real working projects |
+| **Contract bids** | Companies evaluate code quality and documentation |
+
+### What makes a repo "professional"?
+
+\`\`\`
+my-project/
+├── README.md          # ⭐ CRITICAL: What it does, how to install, screenshots
+├── LICENSE            # MIT, Apache, etc.
+├── .gitignore         # Clean, no node_modules or .env
+├── docs/              # Architecture, technical decisions
+│   └── ARCHITECTURE.md
+├── src/               # Organized code
+├── tests/             # ⭐ Tests demonstrate professionalism
+└── .github/
+    └── workflows/     # CI/CD shows you know DevOps
+\`\`\`
+
+### Portfolio repo checklist
+
+- [ ] README with clear description and screenshots/GIFs
+- [ ] Installation instructions that WORK
+- [ ] Tests (even basic ones)
+- [ ] Clean code with comments where needed
+- [ ] No secrets or credentials (check the history!)
+- [ ] Commits with descriptive messages (not "fix", "update")
+
+> 💡 **Tip**: 3-5 well-made public repos impress more than 50 abandoned ones.
+
+### Your GitHub profile
+
+Create a repo with your username (e.g., \`alannreyes/alannreyes\`) with a README.md that appears on your profile:
+
+\`\`\`markdown
+# 👋 Hi, I'm [Your Name]
+
+🔭 Currently working on...
+🌱 Learning...
+💬 Ask me about...
+📫 Contact me: your@email.com
+\`\`\`
+
+---
+
+## 🍳 Practice: Your first repository
+
+Ready to apply all this?
+
+→ **[My First Repository](/en/cooking/first-repo)** — Create and push your first repo to GitHub step by step
+
+---
+
+## 📚 Next level
+
+→ **[Advanced Git & Collaboration](/en/learning/git-advanced)** — PRs, merge conflicts, rebases and teamwork
 
 ---
 
 ## Useful links
 
 - 📖 [Git - Official documentation](https://git-scm.com/doc)
+- 🎓 [Learn Git Branching (interactive)](https://learngitbranching.js.org/)
+- 📘 [GitHub Docs](https://docs.github.com)
+- 📘 [gitignore.io](https://www.toptal.com/developers/gitignore) — Generate .gitignore for your stack
+- 🎥 [Git in 15 minutes (video)](https://www.youtube.com/watch?v=USjZcfj8yxE)
+    `,
+  },
+  'git-advanced': {
+    contentEs: `
+## Colaboración profesional con Git
+
+Ya sabes usar Git solo. Ahora aprende a trabajar en equipo sin pisarte con otros developers.
+
+---
+
+## 🔀 Pull Requests (PRs)
+
+Un PR es una solicitud para integrar tus cambios a la rama principal. Es el corazón de la colaboración.
+
+### Flujo de trabajo con PRs
+
+\`\`\`bash
+# 1. Crea una rama para tu feature
+git checkout -b feature/nueva-funcionalidad
+
+# 2. Trabaja y haz commits
+git add .
+git commit -m "Agrega formulario de contacto"
+
+# 3. Sube tu rama
+git push -u origin feature/nueva-funcionalidad
+
+# 4. Crea el PR en GitHub
+gh pr create --fill
+# O ve a GitHub y haz clic en "Compare & pull request"
+\`\`\`
+
+### Anatomía de un buen PR
+
+| Elemento | Qué incluir |
+|----------|-------------|
+| **Título** | Descripción clara y concisa |
+| **Descripción** | Qué hace, por qué, cómo probarlo |
+| **Screenshots** | Si hay cambios visuales |
+| **Tests** | Que pasen todos |
+| **Tamaño** | Pequeño (< 400 líneas ideal) |
+
+### Ejemplo de descripción de PR
+
+\`\`\`markdown
+## ¿Qué hace este PR?
+Agrega formulario de contacto con validación.
+
+## ¿Por qué?
+Los usuarios necesitan poder contactarnos (#123)
+
+## ¿Cómo probarlo?
+1. Ir a /contacto
+2. Llenar el formulario
+3. Verificar que llegue el email
+
+## Screenshots
+[imagen del formulario]
+
+## Checklist
+- [x] Tests pasan
+- [x] Sin console.logs
+- [x] Responsive
+\`\`\`
+
+---
+
+## ⚔️ Merge Conflicts
+
+Ocurren cuando dos personas modifican las mismas líneas. No entres en pánico.
+
+### ¿Cómo se ven?
+
+\`\`\`javascript
+<<<<<<< HEAD
+const mensaje = "Versión de main";
+=======
+const mensaje = "Tu versión";
+>>>>>>> feature/mi-rama
+\`\`\`
+
+### Cómo resolverlos
+
+\`\`\`bash
+# 1. Actualiza tu rama con main
+git checkout feature/mi-rama
+git fetch origin
+git merge origin/main
+# Aquí aparecen los conflictos
+
+# 2. Abre los archivos con conflictos
+# VS Code los marca en rojo/verde
+
+# 3. Decide qué código mantener
+# Elimina los marcadores <<<<, ====, >>>>
+
+# 4. Marca como resuelto
+git add archivo-con-conflicto.js
+git commit -m "Resuelve conflictos con main"
+git push
+\`\`\`
+
+### Tips para evitar conflictos
+
+| Práctica | Por qué ayuda |
+|----------|---------------|
+| PRs pequeños | Menos código = menos conflictos |
+| Merge main frecuente | Detectas conflictos temprano |
+| Comunicación | "Voy a modificar X" en el chat |
+| Archivos separados | Cada quien en su zona |
+
+---
+
+## 🔄 Rebase vs Merge
+
+Dos formas de integrar cambios. Ambas válidas, diferentes usos.
+
+### Merge (conserva historial)
+
+\`\`\`bash
+git checkout main
+git merge feature/mi-rama
+\`\`\`
+
+\`\`\`
+      A---B---C feature
+     /         \\
+D---E---F---G---H main (merge commit)
+\`\`\`
+
+### Rebase (historial lineal)
+
+\`\`\`bash
+git checkout feature/mi-rama
+git rebase main
+git checkout main
+git merge feature/mi-rama  # Fast-forward
+\`\`\`
+
+\`\`\`
+D---E---F---G---A'---B'---C' main
+\`\`\`
+
+### ¿Cuándo usar cada uno?
+
+| Situación | Usa |
+|-----------|-----|
+| PR a main | Merge (o Squash) |
+| Actualizar tu rama con main | Rebase |
+| Rama compartida con otros | Merge (nunca rebase) |
+| Historial limpio | Rebase + Squash |
+
+> ⚠️ **Regla de oro**: Nunca hagas rebase de ramas que otros están usando.
+
+---
+
+## 👥 Estrategias de branching
+
+### GitHub Flow (simple, recomendado)
+
+\`\`\`
+main ────●────●────●────●────●────
+          \\      /   \\      /
+           ●────●     ●────●
+          feature    feature
+\`\`\`
+
+- \`main\` siempre deployable
+- Features en ramas cortas
+- PRs para todo
+- Deploy después de merge
+
+### GitFlow (empresas grandes)
+
+\`\`\`
+main     ────────────●────────────●────
+                    /            /
+release  ──────●───●────────●───●────
+              /   /        /   /
+develop ●───●───●───●───●───●───●────
+         \\     /     \\     /
+          ●───●       ●───●
+         feature     feature
+\`\`\`
+
+- Más complejo, más control
+- Ramas: main, develop, feature, release, hotfix
+- Para releases planificados
+
+### Trunk-Based (equipos expertos)
+
+\`\`\`
+main ●───●───●───●───●───●───●───●
+      \\─/     \\─/     \\─/
+      tiny    tiny    tiny
+\`\`\`
+
+- Commits directos a main (o PRs muy pequeños)
+- Feature flags para código incompleto
+- CI/CD robusto obligatorio
+
+---
+
+## 🔍 Code Review
+
+Revisar código de otros es tan importante como escribirlo.
+
+### Como autor del PR
+
+\`\`\`bash
+# Antes de pedir review
+git diff main...HEAD  # Revisa tus cambios
+npm test              # Asegura que pasan tests
+npm run lint          # Sin errores de estilo
+\`\`\`
+
+### Como reviewer
+
+| Busca | Ejemplo |
+|-------|---------|
+| **Bugs** | ¿Maneja errores? ¿Edge cases? |
+| **Seguridad** | ¿Inyección SQL? ¿XSS? ¿Secrets? |
+| **Rendimiento** | ¿N+1 queries? ¿Loops innecesarios? |
+| **Legibilidad** | ¿Se entiende sin explicación? |
+| **Tests** | ¿Cubren los casos importantes? |
+
+### Cómo dar feedback constructivo
+
+\`\`\`markdown
+❌ "Esto está mal"
+✅ "Considera usar Optional Chaining aquí para evitar
+    el error si user es undefined: user?.name"
+
+❌ "No me gusta"
+✅ "Prefiero extraer esta lógica a una función separada
+    para mejorar testabilidad. ¿Qué opinas?"
+\`\`\`
+
+---
+
+## 🏷️ Versionado Semántico
+
+Cómo numerar releases: MAJOR.MINOR.PATCH
+
+| Versión | Cuándo incrementar |
+|---------|-------------------|
+| **MAJOR** (2.0.0) | Cambios que rompen compatibilidad |
+| **MINOR** (1.1.0) | Nueva funcionalidad, compatible |
+| **PATCH** (1.0.1) | Bug fixes |
+
+\`\`\`bash
+# Crear un tag de versión
+git tag -a v1.2.0 -m "Release 1.2.0: Agrega autenticación"
+git push origin v1.2.0
+
+# Ver tags
+git tag -l
+
+# Crear release en GitHub
+gh release create v1.2.0 --notes "Changelog aquí"
+\`\`\`
+
+---
+
+## 🛠️ Comandos avanzados útiles
+
+\`\`\`bash
+# Squash: Unir últimos 3 commits en uno
+git rebase -i HEAD~3
+# Cambia "pick" por "squash" en los commits a unir
+
+# Cherry-pick: Traer un commit específico
+git cherry-pick abc123
+
+# Stash: Guardar cambios temporalmente
+git stash
+git stash pop
+
+# Bisect: Encontrar qué commit introdujo un bug
+git bisect start
+git bisect bad                 # Commit actual tiene bug
+git bisect good v1.0.0         # Esta versión estaba bien
+# Git te va guiando hasta encontrar el culpable
+
+# Reflog: Recuperar commits "perdidos"
+git reflog
+git checkout HEAD@{2}
+
+# Clean: Eliminar archivos no rastreados
+git clean -fd
+\`\`\`
+
+---
+
+## 📋 Checklist de colaboración
+
+- [ ] Rama con nombre descriptivo (\`feature/\`, \`fix/\`, \`hotfix/\`)
+- [ ] Commits atómicos con mensajes claros
+- [ ] PR con descripción completa
+- [ ] Tests pasan en CI
+- [ ] Code review aprobado
+- [ ] Sin conflictos con main
+- [ ] Squash o merge según convención del equipo
+
+---
+
+## 🍳 Practica
+
+→ **[Contribuir a Open Source](/es/cooking/open-source-contrib)** — Tu primer PR a un proyecto real
+
+---
+
+## Enlaces útiles
+
+- 📖 [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
+- 📖 [Conventional Commits](https://www.conventionalcommits.org/)
+- 📖 [Semantic Versioning](https://semver.org/)
+- 🎓 [Learn Git Branching](https://learngitbranching.js.org/)
+    `,
+    contentEn: `
+## Professional collaboration with Git
+
+You know how to use Git alone. Now learn to work in a team without stepping on other developers' toes.
+
+---
+
+## 🔀 Pull Requests (PRs)
+
+A PR is a request to integrate your changes into the main branch. It's the heart of collaboration.
+
+### PR workflow
+
+\`\`\`bash
+# 1. Create a branch for your feature
+git checkout -b feature/new-functionality
+
+# 2. Work and make commits
+git add .
+git commit -m "Add contact form"
+
+# 3. Push your branch
+git push -u origin feature/new-functionality
+
+# 4. Create the PR on GitHub
+gh pr create --fill
+# Or go to GitHub and click "Compare & pull request"
+\`\`\`
+
+### Anatomy of a good PR
+
+| Element | What to include |
+|---------|-----------------|
+| **Title** | Clear and concise description |
+| **Description** | What it does, why, how to test |
+| **Screenshots** | If there are visual changes |
+| **Tests** | All passing |
+| **Size** | Small (< 400 lines ideal) |
+
+### PR description example
+
+\`\`\`markdown
+## What does this PR do?
+Adds contact form with validation.
+
+## Why?
+Users need to be able to contact us (#123)
+
+## How to test?
+1. Go to /contact
+2. Fill out the form
+3. Verify the email arrives
+
+## Screenshots
+[form image]
+
+## Checklist
+- [x] Tests pass
+- [x] No console.logs
+- [x] Responsive
+\`\`\`
+
+---
+
+## ⚔️ Merge Conflicts
+
+They happen when two people modify the same lines. Don't panic.
+
+### What they look like
+
+\`\`\`javascript
+<<<<<<< HEAD
+const message = "Main version";
+=======
+const message = "Your version";
+>>>>>>> feature/my-branch
+\`\`\`
+
+### How to resolve them
+
+\`\`\`bash
+# 1. Update your branch with main
+git checkout feature/my-branch
+git fetch origin
+git merge origin/main
+# Conflicts appear here
+
+# 2. Open files with conflicts
+# VS Code marks them in red/green
+
+# 3. Decide which code to keep
+# Remove the <<<<, ====, >>>> markers
+
+# 4. Mark as resolved
+git add file-with-conflict.js
+git commit -m "Resolve conflicts with main"
+git push
+\`\`\`
+
+### Tips to avoid conflicts
+
+| Practice | Why it helps |
+|----------|--------------|
+| Small PRs | Less code = fewer conflicts |
+| Merge main frequently | Detect conflicts early |
+| Communication | "I'm modifying X" in chat |
+| Separate files | Everyone in their zone |
+
+---
+
+## 🔄 Rebase vs Merge
+
+Two ways to integrate changes. Both valid, different uses.
+
+### Merge (preserves history)
+
+\`\`\`bash
+git checkout main
+git merge feature/my-branch
+\`\`\`
+
+\`\`\`
+      A---B---C feature
+     /         \\
+D---E---F---G---H main (merge commit)
+\`\`\`
+
+### Rebase (linear history)
+
+\`\`\`bash
+git checkout feature/my-branch
+git rebase main
+git checkout main
+git merge feature/my-branch  # Fast-forward
+\`\`\`
+
+\`\`\`
+D---E---F---G---A'---B'---C' main
+\`\`\`
+
+### When to use each?
+
+| Situation | Use |
+|-----------|-----|
+| PR to main | Merge (or Squash) |
+| Update your branch with main | Rebase |
+| Shared branch with others | Merge (never rebase) |
+| Clean history | Rebase + Squash |
+
+> ⚠️ **Golden rule**: Never rebase branches that others are using.
+
+---
+
+## 👥 Branching strategies
+
+### GitHub Flow (simple, recommended)
+
+\`\`\`
+main ────●────●────●────●────●────
+          \\      /   \\      /
+           ●────●     ●────●
+          feature    feature
+\`\`\`
+
+- \`main\` always deployable
+- Features in short-lived branches
+- PRs for everything
+- Deploy after merge
+
+### GitFlow (large enterprises)
+
+\`\`\`
+main     ────────────●────────────●────
+                    /            /
+release  ──────●───●────────●───●────
+              /   /        /   /
+develop ●───●───●───●───●───●───●────
+         \\     /     \\     /
+          ●───●       ●───●
+         feature     feature
+\`\`\`
+
+- More complex, more control
+- Branches: main, develop, feature, release, hotfix
+- For planned releases
+
+### Trunk-Based (expert teams)
+
+\`\`\`
+main ●───●───●───●───●───●───●───●
+      \\─/     \\─/     \\─/
+      tiny    tiny    tiny
+\`\`\`
+
+- Direct commits to main (or very small PRs)
+- Feature flags for incomplete code
+- Robust CI/CD required
+
+---
+
+## 🔍 Code Review
+
+Reviewing others' code is as important as writing it.
+
+### As PR author
+
+\`\`\`bash
+# Before requesting review
+git diff main...HEAD  # Review your changes
+npm test              # Ensure tests pass
+npm run lint          # No style errors
+\`\`\`
+
+### As reviewer
+
+| Look for | Example |
+|----------|---------|
+| **Bugs** | Does it handle errors? Edge cases? |
+| **Security** | SQL injection? XSS? Secrets? |
+| **Performance** | N+1 queries? Unnecessary loops? |
+| **Readability** | Understandable without explanation? |
+| **Tests** | Cover important cases? |
+
+### How to give constructive feedback
+
+\`\`\`markdown
+❌ "This is wrong"
+✅ "Consider using Optional Chaining here to avoid
+    the error if user is undefined: user?.name"
+
+❌ "I don't like it"
+✅ "I'd prefer extracting this logic to a separate function
+    to improve testability. What do you think?"
+\`\`\`
+
+---
+
+## 🏷️ Semantic Versioning
+
+How to number releases: MAJOR.MINOR.PATCH
+
+| Version | When to increment |
+|---------|-------------------|
+| **MAJOR** (2.0.0) | Breaking changes |
+| **MINOR** (1.1.0) | New functionality, compatible |
+| **PATCH** (1.0.1) | Bug fixes |
+
+\`\`\`bash
+# Create a version tag
+git tag -a v1.2.0 -m "Release 1.2.0: Add authentication"
+git push origin v1.2.0
+
+# List tags
+git tag -l
+
+# Create GitHub release
+gh release create v1.2.0 --notes "Changelog here"
+\`\`\`
+
+---
+
+## 🛠️ Useful advanced commands
+
+\`\`\`bash
+# Squash: Combine last 3 commits into one
+git rebase -i HEAD~3
+# Change "pick" to "squash" on commits to combine
+
+# Cherry-pick: Bring a specific commit
+git cherry-pick abc123
+
+# Stash: Save changes temporarily
+git stash
+git stash pop
+
+# Bisect: Find which commit introduced a bug
+git bisect start
+git bisect bad                 # Current commit has bug
+git bisect good v1.0.0         # This version was fine
+# Git guides you until finding the culprit
+
+# Reflog: Recover "lost" commits
+git reflog
+git checkout HEAD@{2}
+
+# Clean: Remove untracked files
+git clean -fd
+\`\`\`
+
+---
+
+## 📋 Collaboration checklist
+
+- [ ] Branch with descriptive name (\`feature/\`, \`fix/\`, \`hotfix/\`)
+- [ ] Atomic commits with clear messages
+- [ ] PR with complete description
+- [ ] Tests pass in CI
+- [ ] Code review approved
+- [ ] No conflicts with main
+- [ ] Squash or merge per team convention
+
+---
+
+## 🍳 Practice
+
+→ **[Contribute to Open Source](/en/cooking/open-source-contrib)** — Your first PR to a real project
+
+---
+
+## Useful links
+
+- 📖 [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
+- 📖 [Conventional Commits](https://www.conventionalcommits.org/)
+- 📖 [Semantic Versioning](https://semver.org/)
 - 🎓 [Learn Git Branching](https://learngitbranching.js.org/)
     `,
   },
@@ -936,7 +2301,7 @@ Legend: ✅✅ Excellent | ✅ Good | ⚠️ Limited | ❌ Not available
 │  ✗ No inline autocomplete                                  │
 │  ✗ Requires API key (pay per use)                          │
 │                                                              │
-│  💰 Cost: ~$0.003 per 1K tokens (~$3/M tokens)              │
+│  💰 Cost: ~$3/M tokens, $20/mes pro, $100/mes max           │
 │  🔗 https://docs.anthropic.com/en/docs/claude-code          │
 └─────────────────────────────────────────────────────────────┘
 
@@ -6345,6 +7710,7 @@ const sectionOrder = sections.map(s => s.slug)
 const sectionDescriptions: Record<string, { es: string; en: string }> = {
   terminal: { es: 'Aprende a usar la terminal y shell para desarrollo. Comandos esenciales, tips y atajos para macOS, Linux y Windows.', en: 'Learn to use the terminal and shell for development. Essential commands, tips and shortcuts for macOS, Linux and Windows.' },
   git: { es: 'Domina Git y GitHub: control de versiones, branches, commits, pull requests y colaboración en equipo.', en: 'Master Git and GitHub: version control, branches, commits, pull requests and team collaboration.' },
+  'git-advanced': { es: 'Git avanzado para equipos: Pull Requests, merge conflicts, rebase, code review, GitFlow y versionado semántico.', en: 'Advanced Git for teams: Pull Requests, merge conflicts, rebase, code review, GitFlow and semantic versioning.' },
   editors: { es: 'Guía completa de editores de código: VS Code, Cursor, Claude Code, Copilot. Comparativa y configuración 2026.', en: 'Complete guide to code editors: VS Code, Cursor, Claude Code, Copilot. Comparison and setup 2026.' },
   homebrew: { es: 'Instala herramientas de desarrollo fácilmente con Homebrew y gestores de paquetes en macOS y Linux.', en: 'Easily install development tools with Homebrew and package managers on macOS and Linux.' },
   'docker-intro': { es: 'Introducción a Docker: contenedores, imágenes y comandos básicos para principiantes.', en: 'Introduction to Docker: containers, images and basic commands for beginners.' },

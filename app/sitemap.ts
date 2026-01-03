@@ -1,10 +1,10 @@
 import { MetadataRoute } from 'next'
 
-// Learning sections (29 temas)
+// Learning sections (30 temas)
 const learningSections = [
   'terminal', 'git', 'editors', 'homebrew', 'docker-intro', 'llms-intro', 'llms-models',
   'javascript', 'nodejs', 'python', 'html-css', 'react', 'apis', 'embeddings',
-  'nextjs', 'auth', 'webhooks', 'nestjs', 'postgresql', 'redis', 'docker-compose', 'cicd', 'mobile', 'iot',
+  'git-advanced', 'nextjs', 'auth', 'webhooks', 'nestjs', 'postgresql', 'redis', 'docker-compose', 'cicd', 'mobile', 'iot',
   'vector-db', 'rag', 'mcp', 'agents', 'vision'
 ]
 

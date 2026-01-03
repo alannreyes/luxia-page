@@ -1912,21 +1912,59 @@ echo "# Mi Proyecto" > README.md
 
 ---
 
-## Paso 4: Tu primer commit
+## Paso 4: Crear .gitignore (¡CRÍTICO!)
+
+> ⚠️ **SIEMPRE** crea \`.gitignore\` ANTES del primer commit
+
+\`\`\`bash
+# Crea el archivo .gitignore
+cat > .gitignore << 'EOF'
+# Secretos - NUNCA subir
+.env
+.env.local
+*.env
+credentials.json
+*.pem
+*.key
+
+# Dependencias
+node_modules/
+venv/
+
+# Build
+dist/
+build/
+
+# Sistema
+.DS_Store
+EOF
+\`\`\`
+
+### ¿Por qué es tan importante?
+
+| Sin .gitignore | Con .gitignore |
+|----------------|----------------|
+| Subes \`.env\` con API keys | Protegido automáticamente |
+| La IA puede commitear secretos | Git los ignora siempre |
+| Tus credenciales en GitHub público | Seguras en tu máquina |
+
+---
+
+## Paso 5: Tu primer commit
 
 \`\`\`bash
 # Añade los archivos al "staging"
 git add .
 
 # Guarda el estado (commit)
-git commit -m "Primer commit"
+git commit -m "Primer commit con .gitignore"
 \`\`\`
 
 ¡Guardaste tu primer estado!
 
 ---
 
-## Paso 5: Crear repositorio en GitHub
+## Paso 6: Crear repositorio en GitHub
 
 1. Ve a [github.com/new](https://github.com/new)
 2. Nombre: \`mi-proyecto\`
@@ -1936,7 +1974,7 @@ git commit -m "Primer commit"
 
 ---
 
-## Paso 6: Conectar y subir
+## Paso 7: Conectar y subir
 
 GitHub te mostrará comandos. Copia y ejecuta:
 
@@ -1991,9 +2029,31 @@ git push
 
 ---
 
+## 🤖 Tip: Checkpoints antes de usar IA
+
+Si usas Cursor, Claude Code u otro asistente de IA:
+
+\`\`\`bash
+# ANTES de pedirle algo a la IA
+git add . && git commit -m "Checkpoint antes de cambios con IA"
+
+# Si la IA rompe algo, vuelves fácil
+git reset --hard HEAD
+\`\`\`
+
+> La IA es poderosa pero a veces malinterpreta. Git es tu red de seguridad.
+
+---
+
 ## Próximo paso
 
 → [Mi Configuración Dotfiles](/es/cooking/dotfiles) — Personaliza tu entorno
+
+---
+
+## 📖 Quiero aprender más
+
+→ [Git & GitHub (Teoría completa)](/es/learning/git) — Conceptos, branches, .gitignore y más
     `,
     contentEn: `
 ## Save your code forever
@@ -2045,21 +2105,59 @@ echo "# My Project" > README.md
 
 ---
 
-## Step 4: Your first commit
+## Step 4: Create .gitignore (CRITICAL!)
+
+> ⚠️ **ALWAYS** create \`.gitignore\` BEFORE the first commit
+
+\`\`\`bash
+# Create the .gitignore file
+cat > .gitignore << 'EOF'
+# Secrets - NEVER upload
+.env
+.env.local
+*.env
+credentials.json
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+venv/
+
+# Build
+dist/
+build/
+
+# System
+.DS_Store
+EOF
+\`\`\`
+
+### Why is it so important?
+
+| Without .gitignore | With .gitignore |
+|--------------------|-----------------|
+| Upload \`.env\` with API keys | Automatically protected |
+| AI can commit secrets | Git always ignores them |
+| Your credentials on public GitHub | Safe on your machine |
+
+---
+
+## Step 5: Your first commit
 
 \`\`\`bash
 # Add files to "staging"
 git add .
 
 # Save the state (commit)
-git commit -m "First commit"
+git commit -m "First commit with .gitignore"
 \`\`\`
 
 You saved your first state!
 
 ---
 
-## Step 5: Create repository on GitHub
+## Step 6: Create repository on GitHub
 
 1. Go to [github.com/new](https://github.com/new)
 2. Name: \`my-project\`
@@ -2069,7 +2167,7 @@ You saved your first state!
 
 ---
 
-## Step 6: Connect and push
+## Step 7: Connect and push
 
 GitHub will show you commands. Copy and run:
 
@@ -2124,9 +2222,31 @@ git push
 
 ---
 
+## 🤖 Tip: Checkpoints before using AI
+
+If you use Cursor, Claude Code or another AI assistant:
+
+\`\`\`bash
+# BEFORE asking the AI for something
+git add . && git commit -m "Checkpoint before AI changes"
+
+# If the AI breaks something, you can easily revert
+git reset --hard HEAD
+\`\`\`
+
+> AI is powerful but sometimes misunderstands. Git is your safety net.
+
+---
+
 ## Next step
 
 → [My Dotfiles Setup](/en/cooking/dotfiles) — Customize your environment
+
+---
+
+## 📖 I want to learn more
+
+→ [Git & GitHub (Full Theory)](/en/learning/git) — Concepts, branches, .gitignore and more
     `,
   },
   'dotfiles': {
