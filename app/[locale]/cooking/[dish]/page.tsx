@@ -3,10 +3,14 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import MarkdownContent from '@/components/MarkdownContent'
 
-// 52 platillos organizados por nivel
+// 52+ platillos organizados por nivel
+// Prioridad: APIs cloud (Gemini, Claude, OpenAI) primero, modelos locales al final
 const dishes = [
-  { slug: 'chatbot-local', titleEs: 'Chatbot Local con Ollama', titleEn: 'Local Chatbot with Ollama', level: 'aprendiz', icon: '🤖' },
-  { slug: 'chatbot-api', titleEs: 'Chatbot con Claude API', titleEn: 'Chatbot with Claude API', level: 'aprendiz', icon: '💬' },
+  // ===== APRENDIZ: Empezar con IA en la nube (gratis/fácil) =====
+  { slug: 'chatbot-gemini', titleEs: 'Chatbot con Gemini API', titleEn: 'Chatbot with Gemini API', level: 'aprendiz', icon: '✨' },
+  { slug: 'chatbot-claude', titleEs: 'Chatbot con Claude API', titleEn: 'Chatbot with Claude API', level: 'aprendiz', icon: '🟠' },
+  { slug: 'chatbot-openai', titleEs: 'Chatbot con OpenAI API', titleEn: 'Chatbot with OpenAI API', level: 'aprendiz', icon: '🟢' },
+  { slug: 'claude-code-intro', titleEs: 'Introducción a Claude Code', titleEn: 'Introduction to Claude Code', level: 'aprendiz', icon: '⌨️' },
   { slug: 'hello-terminal', titleEs: 'Hola Mundo en Terminal', titleEn: 'Hello World in Terminal', level: 'aprendiz', icon: '🖥️' },
   { slug: 'first-repo', titleEs: 'Mi Primer Repositorio', titleEn: 'My First Repository', level: 'aprendiz', icon: '📚' },
   { slug: 'dotfiles', titleEs: 'Mi Configuración Dotfiles', titleEn: 'My Dotfiles Setup', level: 'aprendiz', icon: '⚙️' },
@@ -17,6 +21,7 @@ const dishes = [
   { slug: 'json-api-fetch', titleEs: 'Consumir una API JSON', titleEn: 'Consume a JSON API', level: 'aprendiz', icon: '🔗' },
   { slug: 'markdown-notes', titleEs: 'Sistema de Notas Markdown', titleEn: 'Markdown Notes System', level: 'aprendiz', icon: '📝' },
   { slug: 'git-collaboration', titleEs: 'Colaborar con Git', titleEn: 'Collaborate with Git', level: 'aprendiz', icon: '🤝' },
+  { slug: 'chatbot-local', titleEs: 'Chatbot Local con Ollama', titleEn: 'Local Chatbot with Ollama', level: 'aprendiz', icon: '🏠' },
   { slug: 'react-todo', titleEs: 'Todo App con React', titleEn: 'Todo App with React', level: 'cocinero', icon: '✅' },
   { slug: 'api-rest-basic', titleEs: 'API REST con Express', titleEn: 'REST API with Express', level: 'cocinero', icon: '🔌' },
   { slug: 'python-cli', titleEs: 'CLI Tool con Python', titleEn: 'CLI Tool with Python', level: 'cocinero', icon: '🐍' },
@@ -31,6 +36,8 @@ const dishes = [
   { slug: 'image-gallery', titleEs: 'Galería de Imágenes', titleEn: 'Image Gallery', level: 'cocinero', icon: '🖼️' },
   { slug: 'api-fastapi', titleEs: 'API con FastAPI', titleEn: 'API with FastAPI', level: 'cocinero', icon: '⚡' },
   { slug: 'scraper-basic', titleEs: 'Web Scraper Básico', titleEn: 'Basic Web Scraper', level: 'cocinero', icon: '🕷️' },
+  { slug: 'chat-web-ui', titleEs: 'Chat IA con Interfaz Web', titleEn: 'AI Chat with Web UI', level: 'cocinero', icon: '💬' },
+  { slug: 'public-ai-chat', titleEs: 'Chat IA Público con Auth', titleEn: 'Public AI Chat with Auth', level: 'chef', icon: '🌐' },
   { slug: 'nextjs-blog', titleEs: 'Blog con Next.js + MDX', titleEn: 'Blog with Next.js + MDX', level: 'chef', icon: '▲' },
   { slug: 'auth-firebase', titleEs: 'Auth con Firebase Google', titleEn: 'Auth with Firebase Google', level: 'chef', icon: '🔐' },
   { slug: 'crud-postgres', titleEs: 'CRUD con PostgreSQL', titleEn: 'CRUD with PostgreSQL', level: 'chef', icon: '🐘' },
@@ -75,175 +82,251 @@ const dishesContent: Record<string, {
   contentEs: string
   contentEn: string
 }> = {
-  'chatbot-local': {
-    timeEs: '30 minutos',
-    timeEn: '30 minutes',
-    prerequisitesEs: ['Terminal básico', 'Homebrew instalado'],
-    prerequisitesEn: ['Basic Terminal', 'Homebrew installed'],
+  'chatbot-gemini': {
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['Cuenta de Google', 'Node.js instalado'],
+    prerequisitesEn: ['Google account', 'Node.js installed'],
     contentEs: `
 ## El plato final
 
-Al terminar tendrás un chatbot corriendo en tu computadora, sin conexión a internet, completamente privado.
+Un chatbot usando Gemini API de Google. **100% gratis** para empezar, sin tarjeta de crédito.
+
+---
+
+## Por qué empezar con Gemini
+
+| Ventaja | Detalle |
+|---------|---------|
+| **Gratis** | Tier gratuito generoso (60 queries/minuto) |
+| **Fácil** | Solo necesitas cuenta de Google |
+| **Ecosistema** | Acceso a Maps, Vision, Speech, Translate... |
+| **Rápido** | Gemini Flash es ultra-rápido |
 
 ---
 
 ## Ingredientes
 
-- macOS, Linux o Windows con WSL
-- 8GB de RAM mínimo (16GB recomendado)
-- 5GB de espacio en disco
+- Cuenta de Google
+- Node.js 20+
+- 5 minutos para obtener API key
 
 ---
 
-## Paso 1: Instalar Ollama
+## Paso 1: Obtener API Key
+
+1. Ve a [Google AI Studio](https://aistudio.google.com/apikey)
+2. Click en "Create API Key"
+3. Copia tu key
+
+> No necesitas tarjeta de crédito. El tier gratuito es suficiente para aprender.
+
+---
+
+## Paso 2: Crear proyecto
 
 \`\`\`bash
-# macOS
-brew install ollama
-
-# Linux
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Windows (PowerShell como Admin)
-winget install Ollama.Ollama
+mkdir chatbot-gemini && cd chatbot-gemini
+npm init -y
+npm install @google/generative-ai readline
 \`\`\`
 
 ---
 
-## Paso 2: Descargar un modelo
+## Paso 3: Configurar API Key
 
 \`\`\`bash
-# Modelo pequeño (3B parámetros, ~2GB)
-ollama pull llama3.2
-
-# O modelo más capaz (8B parámetros, ~5GB)
-ollama pull llama3.2:8b
+# Agregar a tu ~/.zprofile o ~/.bashrc
+export GOOGLE_API_KEY="tu-api-key-aqui"
+source ~/.zprofile
 \`\`\`
-
-> 💡 **Tip**: Empieza con el modelo pequeño. Siempre puedes descargar uno más grande después.
 
 ---
 
-## Paso 3: ¡Chatear!
+## Paso 4: Crear el chatbot
 
-\`\`\`bash
-ollama run llama3.2
+Crea \`chatbot.js\`:
+
+\`\`\`javascript
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import * as readline from 'readline';
+
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+const chat = model.startChat();
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+console.log('✨ Chatbot con Gemini API');
+console.log('Escribe tu mensaje (o "salir" para terminar)\\n');
+
+async function prompt() {
+  rl.question('Tú: ', async (input) => {
+    if (input.toLowerCase() === 'salir') {
+      console.log('👋 ¡Hasta luego!');
+      rl.close();
+      return;
+    }
+
+    const result = await chat.sendMessage(input);
+    console.log(\`\\nGemini: \${result.response.text()}\\n\`);
+    prompt();
+  });
+}
+
+prompt();
 \`\`\`
-
-Escribe tu mensaje y presiona Enter. Para salir escribe \`/bye\`.
 
 ---
 
-## Paso 4: Crear un script de acceso rápido
+## Paso 5: Ejecutar
 
 \`\`\`bash
-# Crear alias en tu shell config
-echo 'alias chat="ollama run llama3.2"' >> ~/.zshrc
-source ~/.zshrc
-
-# Ahora solo escribe:
-chat
+node chatbot.js
 \`\`\`
 
 ---
 
 ## Verificación final
 
-- [ ] Ollama instalado (\`ollama --version\`)
-- [ ] Modelo descargado (\`ollama list\`)
-- [ ] Chat funcionando
-- [ ] Alias creado
+- [ ] API Key obtenida de Google AI Studio
+- [ ] Variable de entorno configurada
+- [ ] Chatbot respondiendo
+- [ ] Conversación con contexto funcionando
 
 ---
 
 ## Próximos pasos
 
-→ [Chatbot con Claude API](/es/cooking/chatbot-api) - Conecta con modelos en la nube
+→ [Chatbot con Claude API](/es/cooking/chatbot-claude) - Prueba el modelo de Anthropic
+→ [Chatbot con OpenAI](/es/cooking/chatbot-openai) - Usa GPT-4
     `,
     contentEn: `
 ## The final dish
 
-When finished, you'll have a chatbot running on your computer, without internet connection, completely private.
+A chatbot using Google's Gemini API. **100% free** to start, no credit card required.
+
+---
+
+## Why start with Gemini
+
+| Advantage | Detail |
+|-----------|--------|
+| **Free** | Generous free tier (60 queries/minute) |
+| **Easy** | Just need a Google account |
+| **Ecosystem** | Access to Maps, Vision, Speech, Translate... |
+| **Fast** | Gemini Flash is ultra-fast |
 
 ---
 
 ## Ingredients
 
-- macOS, Linux or Windows with WSL
-- 8GB RAM minimum (16GB recommended)
-- 5GB disk space
+- Google account
+- Node.js 20+
+- 5 minutes to get API key
 
 ---
 
-## Step 1: Install Ollama
+## Step 1: Get API Key
+
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Click "Create API Key"
+3. Copy your key
+
+> No credit card needed. The free tier is enough for learning.
+
+---
+
+## Step 2: Create project
 
 \`\`\`bash
-# macOS
-brew install ollama
-
-# Linux
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Windows (PowerShell as Admin)
-winget install Ollama.Ollama
+mkdir chatbot-gemini && cd chatbot-gemini
+npm init -y
+npm install @google/generative-ai readline
 \`\`\`
 
 ---
 
-## Step 2: Download a model
+## Step 3: Configure API Key
 
 \`\`\`bash
-# Small model (3B parameters, ~2GB)
-ollama pull llama3.2
-
-# Or more capable model (8B parameters, ~5GB)
-ollama pull llama3.2:8b
+# Add to your ~/.zprofile or ~/.bashrc
+export GOOGLE_API_KEY="your-api-key-here"
+source ~/.zprofile
 \`\`\`
-
-> 💡 **Tip**: Start with the small model. You can always download a bigger one later.
 
 ---
 
-## Step 3: Chat!
+## Step 4: Create the chatbot
 
-\`\`\`bash
-ollama run llama3.2
+Create \`chatbot.js\`:
+
+\`\`\`javascript
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import * as readline from 'readline';
+
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+const chat = model.startChat();
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+console.log('✨ Chatbot with Gemini API');
+console.log('Type your message (or "exit" to quit)\\n');
+
+async function prompt() {
+  rl.question('You: ', async (input) => {
+    if (input.toLowerCase() === 'exit') {
+      console.log('👋 Goodbye!');
+      rl.close();
+      return;
+    }
+
+    const result = await chat.sendMessage(input);
+    console.log(\`\\nGemini: \${result.response.text()}\\n\`);
+    prompt();
+  });
+}
+
+prompt();
 \`\`\`
-
-Type your message and press Enter. To exit type \`/bye\`.
 
 ---
 
-## Step 4: Create a quick access script
+## Step 5: Run
 
 \`\`\`bash
-# Create alias in your shell config
-echo 'alias chat="ollama run llama3.2"' >> ~/.zshrc
-source ~/.zshrc
-
-# Now just type:
-chat
+node chatbot.js
 \`\`\`
 
 ---
 
 ## Final verification
 
-- [ ] Ollama installed (\`ollama --version\`)
-- [ ] Model downloaded (\`ollama list\`)
-- [ ] Chat working
-- [ ] Alias created
+- [ ] API Key obtained from Google AI Studio
+- [ ] Environment variable configured
+- [ ] Chatbot responding
+- [ ] Conversation with context working
 
 ---
 
 ## Next steps
 
-→ [Chatbot with Claude API](/en/cooking/chatbot-api) - Connect with cloud models
+→ [Chatbot with Claude API](/en/cooking/chatbot-claude) - Try Anthropic's model
+→ [Chatbot with OpenAI](/en/cooking/chatbot-openai) - Use GPT-4
     `,
   },
-  'chatbot-api': {
-    timeEs: '45 minutos',
-    timeEn: '45 minutes',
+  'chatbot-claude': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
     prerequisitesEs: ['Node.js instalado', 'Cuenta en Anthropic'],
     prerequisitesEn: ['Node.js installed', 'Anthropic account'],
     contentEs: `
@@ -465,6 +548,156 @@ node chatbot.js
 ## Next steps
 
 → [RAG with Documents](/en/cooking/rag-documents) - Chat with your own files
+    `,
+  },
+  'chatbot-local': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Terminal básico', '8GB RAM mínimo'],
+    prerequisitesEn: ['Basic Terminal', '8GB RAM minimum'],
+    contentEs: `
+## El plato final
+
+Un chatbot corriendo 100% en tu computadora, sin internet, completamente privado. Ideal para datos sensibles.
+
+---
+
+## Por qué un modelo local
+
+| Ventaja | Detalle |
+|---------|---------|
+| **Privacidad total** | Tus datos nunca salen de tu máquina |
+| **Sin costos** | Gratis después de descargarlo |
+| **Offline** | Funciona sin internet |
+| **Aprendizaje** | Entiende cómo funcionan los LLMs |
+
+---
+
+## Ingredientes
+
+- macOS, Linux o Windows con WSL
+- 8GB de RAM mínimo (16GB recomendado)
+- 5GB de espacio en disco
+
+---
+
+## Paso 1: Instalar Ollama
+
+| Sistema | Comando |
+|---------|---------|
+| **macOS** | \`brew install ollama\` |
+| **Linux** | \`curl -fsSL https://ollama.ai/install.sh \\| sh\` |
+| **Windows** | \`winget install Ollama.Ollama\` |
+
+---
+
+## Paso 2: Descargar un modelo
+
+\`\`\`bash
+# Modelo pequeño (3B parámetros, ~2GB)
+ollama pull llama3.2
+
+# O modelo más capaz (8B parámetros, ~5GB)
+ollama pull llama3.2:8b
+\`\`\`
+
+> 💡 **Tip**: Empieza con el modelo pequeño. Siempre puedes descargar uno más grande después.
+
+---
+
+## Paso 3: ¡Chatear!
+
+\`\`\`bash
+ollama run llama3.2
+\`\`\`
+
+Escribe tu mensaje y presiona Enter. Para salir escribe \`/bye\`.
+
+---
+
+## Verificación final
+
+- [ ] Ollama instalado (\`ollama --version\`)
+- [ ] Modelo descargado (\`ollama list\`)
+- [ ] Chat funcionando
+
+---
+
+## Próximos pasos
+
+→ [RAG con Documentos](/es/cooking/rag-documents) - Agrega tus propios archivos al contexto
+    `,
+    contentEn: `
+## The final dish
+
+A chatbot running 100% on your computer, without internet, completely private. Ideal for sensitive data.
+
+---
+
+## Why a local model
+
+| Advantage | Detail |
+|-----------|--------|
+| **Total privacy** | Your data never leaves your machine |
+| **No costs** | Free after downloading |
+| **Offline** | Works without internet |
+| **Learning** | Understand how LLMs work |
+
+---
+
+## Ingredients
+
+- macOS, Linux or Windows with WSL
+- 8GB RAM minimum (16GB recommended)
+- 5GB disk space
+
+---
+
+## Step 1: Install Ollama
+
+| System | Command |
+|--------|---------|
+| **macOS** | \`brew install ollama\` |
+| **Linux** | \`curl -fsSL https://ollama.ai/install.sh \\| sh\` |
+| **Windows** | \`winget install Ollama.Ollama\` |
+
+---
+
+## Step 2: Download a model
+
+\`\`\`bash
+# Small model (3B parameters, ~2GB)
+ollama pull llama3.2
+
+# Or more capable model (8B parameters, ~5GB)
+ollama pull llama3.2:8b
+\`\`\`
+
+> 💡 **Tip**: Start with the small model. You can always download a bigger one later.
+
+---
+
+## Step 3: Chat!
+
+\`\`\`bash
+ollama run llama3.2
+\`\`\`
+
+Type your message and press Enter. To exit type \`/bye\`.
+
+---
+
+## Final verification
+
+- [ ] Ollama installed (\`ollama --version\`)
+- [ ] Model downloaded (\`ollama list\`)
+- [ ] Chat working
+
+---
+
+## Next steps
+
+→ [RAG with Documents](/en/cooking/rag-documents) - Add your own files to the context
     `,
   },
 }
