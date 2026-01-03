@@ -1014,6 +1014,366 @@ The code is almost the same. Only the endpoint changes.
 → [Chat with Web UI](/en/cooking/chat-web-ui) — Give your chatbot a nice face
     `,
   },
+  'chat-web-ui': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Al menos un chatbot de terminal completado', 'Node.js instalado'],
+    prerequisitesEn: ['At least one terminal chatbot completed', 'Node.js installed'],
+    contentEs: `
+## De la terminal al navegador
+
+Ya tienes un chatbot que funciona en terminal. Ahora le darás una interfaz web bonita.
+
+**El enfoque**: Le pedirás a una IA que genere una app React/Next.js completa.
+
+---
+
+## ¿Por qué una interfaz web?
+
+| Terminal | Web UI |
+|----------|--------|
+| Solo tú puedes usarlo | Cualquiera con el link |
+| Texto plano | Diseño bonito, markdown |
+| Una conversación | Múltiples chats |
+| Copiar/pegar difícil | Click para copiar |
+
+---
+
+## Paso 1: Elige tu API
+
+Usa la misma API de tu chatbot anterior:
+
+| API | Variable de entorno |
+|-----|---------------------|
+| Gemini | \`GEMINI_API_KEY\` |
+| Claude | \`ANTHROPIC_API_KEY\` |
+| OpenAI | \`OPENAI_API_KEY\` |
+| Ollama | (ninguna, corre local) |
+
+---
+
+## Paso 2: Pídele a una IA que genere la app
+
+Abre [Google AI Studio](https://aistudio.google.com), ChatGPT, o Claude.
+
+Copia y pega este prompt (cambia la API según tu elección):
+
+\`\`\`
+Necesito una aplicación de chat con IA usando Next.js y React que:
+
+- Use la API de Gemini (variable GEMINI_API_KEY)
+- Tenga una interfaz moderna con Tailwind CSS
+- Muestre el historial de mensajes en burbujas
+- Tenga un input fijo en la parte inferior
+- Muestre un indicador de "escribiendo..." mientras espera
+- Renderice markdown en las respuestas
+- Sea responsive (funcione en móvil)
+
+Dame:
+1. Los comandos para crear el proyecto
+2. El código de cada archivo
+3. Cómo ejecutarlo
+\`\`\`
+
+> 💡 **Tip**: Si prefieres otra API, cambia "Gemini" por "Claude", "OpenAI", u "Ollama".
+
+---
+
+## Paso 3: Sigue las instrucciones
+
+La IA te dará algo como:
+
+\`\`\`bash
+npx create-next-app@latest my-chat --typescript --tailwind
+cd my-chat
+npm install @google/generative-ai react-markdown
+\`\`\`
+
+Luego te dará el código para varios archivos. Créalos en tu editor.
+
+---
+
+## Paso 4: Configura tu API key
+
+\`\`\`bash
+# macOS/Linux
+export GEMINI_API_KEY="tu-key-aqui"
+
+# Windows PowerShell
+$env:GEMINI_API_KEY="tu-key-aqui"
+\`\`\`
+
+---
+
+## Paso 5: Ejecuta la app
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+Abre [http://localhost:3000](http://localhost:3000)
+
+---
+
+## ¿Funcionó?
+
+Deberías ver algo así:
+
+- Input para escribir mensajes
+- Burbujas de chat (tú vs IA)
+- Respuestas con formato markdown
+
+---
+
+## Si algo falló
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`Module not found\` | Falta dependencia | Ejecuta \`npm install\` de nuevo |
+| \`API key not valid\` | Key mal configurada | Verifica el export en la misma terminal |
+| Pantalla en blanco | Error de React | Revisa la consola del navegador (F12) |
+| \`CORS error\` | Llamada desde frontend | La API debe estar en una ruta API de Next.js |
+| No renderiza markdown | Falta react-markdown | \`npm install react-markdown\` |
+| Styles no funcionan | Tailwind mal configurado | Verifica \`tailwind.config.js\` |
+
+---
+
+## Mejoras opcionales
+
+Vuelve a pedirle a la IA:
+
+- *"Agrega un botón para copiar las respuestas"*
+- *"Agrega modo oscuro"*
+- *"Guarda el historial en localStorage"*
+- *"Agrega un selector de modelo"*
+
+Cada mejora es un prompt nuevo. La IA actualiza el código.
+
+---
+
+## Arquitectura básica
+
+\`\`\`
+my-chat/
+├── app/
+│   ├── page.tsx        # UI del chat
+│   └── api/
+│       └── chat/
+│           └── route.ts # Endpoint que habla con la IA
+├── components/
+│   └── ChatMessage.tsx  # Componente de burbuja
+└── package.json
+\`\`\`
+
+> 💡 **Importante**: Las llamadas a la API deben hacerse desde el servidor (route.ts), no desde el cliente. Así proteges tu API key.
+
+---
+
+## ¿Qué aprendiste?
+
+| Antes (Terminal) | Ahora (Web) |
+|------------------|-------------|
+| \`readline\` de Node | Componentes React |
+| \`console.log\` | Renderizado de UI |
+| Proceso local | Servidor web |
+
+El flujo sigue siendo:
+1. Usuario escribe
+2. App envía a la API
+3. API responde
+4. App muestra la respuesta
+
+---
+
+## Próximo paso
+
+→ [Chat IA Público con Auth](/es/cooking/public-ai-chat) — Ponlo en internet con login
+
+---
+
+## ¿Quieres entender más?
+
+→ [¿Qué es un LLM?](/es/learning/llms-intro)
+→ [Terminal básico](/es/learning/terminal)
+    `,
+    contentEn: `
+## From terminal to browser
+
+You already have a chatbot that works in terminal. Now you'll give it a nice web interface.
+
+**The approach**: You'll ask an AI to generate a complete React/Next.js app.
+
+---
+
+## Why a web interface?
+
+| Terminal | Web UI |
+|----------|--------|
+| Only you can use it | Anyone with the link |
+| Plain text | Nice design, markdown |
+| One conversation | Multiple chats |
+| Copy/paste is hard | Click to copy |
+
+---
+
+## Step 1: Choose your API
+
+Use the same API from your previous chatbot:
+
+| API | Environment variable |
+|-----|---------------------|
+| Gemini | \`GEMINI_API_KEY\` |
+| Claude | \`ANTHROPIC_API_KEY\` |
+| OpenAI | \`OPENAI_API_KEY\` |
+| Ollama | (none, runs local) |
+
+---
+
+## Step 2: Ask an AI to generate the app
+
+Open [Google AI Studio](https://aistudio.google.com), ChatGPT, or Claude.
+
+Copy and paste this prompt (change the API to your choice):
+
+\`\`\`
+I need an AI chat application using Next.js and React that:
+
+- Uses the Gemini API (GEMINI_API_KEY variable)
+- Has a modern interface with Tailwind CSS
+- Shows message history in bubbles
+- Has a fixed input at the bottom
+- Shows a "typing..." indicator while waiting
+- Renders markdown in responses
+- Is responsive (works on mobile)
+
+Give me:
+1. Commands to create the project
+2. Code for each file
+3. How to run it
+\`\`\`
+
+> 💡 **Tip**: If you prefer another API, change "Gemini" to "Claude", "OpenAI", or "Ollama".
+
+---
+
+## Step 3: Follow the instructions
+
+The AI will give you something like:
+
+\`\`\`bash
+npx create-next-app@latest my-chat --typescript --tailwind
+cd my-chat
+npm install @google/generative-ai react-markdown
+\`\`\`
+
+Then it will give you code for several files. Create them in your editor.
+
+---
+
+## Step 4: Configure your API key
+
+\`\`\`bash
+# macOS/Linux
+export GEMINI_API_KEY="your-key-here"
+
+# Windows PowerShell
+$env:GEMINI_API_KEY="your-key-here"
+\`\`\`
+
+---
+
+## Step 5: Run the app
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+Open [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Did it work?
+
+You should see something like:
+
+- Input to write messages
+- Chat bubbles (you vs AI)
+- Responses with markdown formatting
+
+---
+
+## If something failed
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`Module not found\` | Missing dependency | Run \`npm install\` again |
+| \`API key not valid\` | Key misconfigured | Check the export in same terminal |
+| Blank screen | React error | Check browser console (F12) |
+| \`CORS error\` | Calling from frontend | API must be in a Next.js API route |
+| Markdown not rendering | Missing react-markdown | \`npm install react-markdown\` |
+| Styles not working | Tailwind misconfigured | Check \`tailwind.config.js\` |
+
+---
+
+## Optional improvements
+
+Ask the AI again:
+
+- *"Add a button to copy responses"*
+- *"Add dark mode"*
+- *"Save history to localStorage"*
+- *"Add a model selector"*
+
+Each improvement is a new prompt. The AI updates the code.
+
+---
+
+## Basic architecture
+
+\`\`\`
+my-chat/
+├── app/
+│   ├── page.tsx        # Chat UI
+│   └── api/
+│       └── chat/
+│           └── route.ts # Endpoint that talks to the AI
+├── components/
+│   └── ChatMessage.tsx  # Bubble component
+└── package.json
+\`\`\`
+
+> 💡 **Important**: API calls should be made from the server (route.ts), not from the client. This protects your API key.
+
+---
+
+## What did you learn?
+
+| Before (Terminal) | Now (Web) |
+|-------------------|-----------|
+| Node's \`readline\` | React components |
+| \`console.log\` | UI rendering |
+| Local process | Web server |
+
+The flow is still:
+1. User types
+2. App sends to API
+3. API responds
+4. App shows response
+
+---
+
+## Next step
+
+→ [Public AI Chat with Auth](/en/cooking/public-ai-chat) — Put it on the internet with login
+
+---
+
+## Want to understand more?
+
+→ [What is an LLM?](/en/learning/llms-intro)
+→ [Terminal basics](/en/learning/terminal)
+    `,
+  },
 }
 
 const dishOrder = dishes.map(d => d.slug)
