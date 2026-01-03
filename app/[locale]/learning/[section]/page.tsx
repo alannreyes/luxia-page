@@ -4308,6 +4308,1071 @@ void loop() {
 → [Arduino + MQTT](/en/cooking/arduino-sensor)
     `,
   },
+
+  // =============================================
+  // MASTER CHEF - Temas IA Avanzada
+  // =============================================
+
+  'vector-db': {
+    contentEs: `
+## ¿Qué son las bases de datos vectoriales?
+
+Almacenan **embeddings** (vectores numéricos) para búsqueda por similitud semántica.
+
+---
+
+## El problema tradicional
+
+\`\`\`
+SQL: WHERE title LIKE '%gato%'
+→ Solo encuentra "gato", no "felino" ni "mascota"
+
+Vector: embedding("gato")
+→ Encuentra conceptos SIMILARES semánticamente
+\`\`\`
+
+---
+
+## ¿Cómo funcionan?
+
+| Paso | Proceso |
+|------|---------|
+| 1. **Embed** | Texto → Vector [0.1, 0.3, ...] |
+| 2. **Store** | Guardar vector en DB |
+| 3. **Query** | Buscar vectores similares |
+| 4. **Return** | Resultados por coseno/distancia |
+
+---
+
+## Bases de datos populares
+
+| DB | Tipo | Ideal para |
+|----|------|------------|
+| **Pinecone** | Cloud | Producción fácil |
+| **Weaviate** | Self-host | Control total |
+| **ChromaDB** | Local | Desarrollo |
+| **pgvector** | PostgreSQL | Si ya usas Postgres |
+| **Qdrant** | Self-host | Alto rendimiento |
+
+---
+
+## Ejemplo con ChromaDB
+
+\`\`\`python
+import chromadb
+
+# Crear cliente
+client = chromadb.Client()
+collection = client.create_collection("docs")
+
+# Agregar documentos (auto-embedding)
+collection.add(
+    documents=["El gato duerme", "El perro corre"],
+    ids=["doc1", "doc2"]
+)
+
+# Buscar similares
+results = collection.query(
+    query_texts=["mascota descansando"],
+    n_results=1
+)
+# → Encuentra "El gato duerme"
+\`\`\`
+
+---
+
+## Índices vectoriales
+
+| Algoritmo | Velocidad | Precisión |
+|-----------|-----------|-----------|
+| **Flat** | Lento | 100% |
+| **IVF** | Medio | ~95% |
+| **HNSW** | Rápido | ~95% |
+
+---
+
+## Practica
+
+→ [Búsqueda Vectorial](/es/cooking/vector-search)
+    `,
+    contentEn: `
+## What are vector databases?
+
+They store **embeddings** (numeric vectors) for semantic similarity search.
+
+---
+
+## The traditional problem
+
+\`\`\`
+SQL: WHERE title LIKE '%cat%'
+→ Only finds "cat", not "feline" or "pet"
+
+Vector: embedding("cat")
+→ Finds semantically SIMILAR concepts
+\`\`\`
+
+---
+
+## How they work
+
+| Step | Process |
+|------|---------|
+| 1. **Embed** | Text → Vector [0.1, 0.3, ...] |
+| 2. **Store** | Save vector in DB |
+| 3. **Query** | Search similar vectors |
+| 4. **Return** | Results by cosine/distance |
+
+---
+
+## Popular databases
+
+| DB | Type | Ideal for |
+|----|------|-----------|
+| **Pinecone** | Cloud | Easy production |
+| **Weaviate** | Self-host | Full control |
+| **ChromaDB** | Local | Development |
+| **pgvector** | PostgreSQL | If using Postgres |
+| **Qdrant** | Self-host | High performance |
+
+---
+
+## ChromaDB example
+
+\`\`\`python
+import chromadb
+
+# Create client
+client = chromadb.Client()
+collection = client.create_collection("docs")
+
+# Add documents (auto-embedding)
+collection.add(
+    documents=["The cat sleeps", "The dog runs"],
+    ids=["doc1", "doc2"]
+)
+
+# Search similar
+results = collection.query(
+    query_texts=["pet resting"],
+    n_results=1
+)
+# → Finds "The cat sleeps"
+\`\`\`
+
+---
+
+## Vector indexes
+
+| Algorithm | Speed | Precision |
+|-----------|-------|-----------|
+| **Flat** | Slow | 100% |
+| **IVF** | Medium | ~95% |
+| **HNSW** | Fast | ~95% |
+
+---
+
+## Practice
+
+→ [Vector Search](/en/cooking/vector-search)
+    `,
+  },
+
+  'rag': {
+    contentEs: `
+## Retrieval Augmented Generation
+
+RAG = **Buscar info relevante** + **Darla al LLM** = Respuestas precisas con fuentes
+
+---
+
+## ¿Por qué RAG?
+
+| Sin RAG | Con RAG |
+|---------|---------|
+| LLM solo sabe lo que aprendió | LLM accede a TUS documentos |
+| Puede inventar ("alucinar") | Cita fuentes reales |
+| Conocimiento estático | Info siempre actualizada |
+
+---
+
+## Arquitectura RAG
+
+\`\`\`
+                 ┌─────────────────┐
+                 │   Tu pregunta   │
+                 └────────┬────────┘
+                          ↓
+┌─────────────────────────────────────────────┐
+│              1. RETRIEVAL                    │
+│  Query → Vector DB → Top K documentos        │
+└────────┬────────────────────────────────────┘
+         ↓
+┌─────────────────────────────────────────────┐
+│              2. AUGMENTATION                 │
+│  Prompt + Contexto de documentos             │
+└────────┬────────────────────────────────────┘
+         ↓
+┌─────────────────────────────────────────────┐
+│              3. GENERATION                   │
+│  LLM genera respuesta con contexto           │
+└─────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Flujo de indexación
+
+\`\`\`python
+# 1. Cargar documentos
+docs = load_pdfs("./docs/")
+
+# 2. Chunking (dividir en partes)
+chunks = split_text(docs, chunk_size=500)
+
+# 3. Embeddings
+embeddings = model.embed(chunks)
+
+# 4. Guardar en vector DB
+vector_db.add(embeddings, chunks)
+\`\`\`
+
+---
+
+## Chunking strategies
+
+| Estrategia | Cuando usar |
+|------------|-------------|
+| **Fixed size** | Documentos simples |
+| **Sentence** | Texto natural |
+| **Semantic** | Alta precisión |
+| **Recursive** | Documentos largos |
+
+---
+
+## Prompt template RAG
+
+\`\`\`
+Responde usando SOLO la información del contexto.
+Si no está en el contexto, di "No tengo esa información".
+
+CONTEXTO:
+{chunks_relevantes}
+
+PREGUNTA: {user_question}
+\`\`\`
+
+---
+
+## Métricas de calidad
+
+| Métrica | Qué mide |
+|---------|----------|
+| **Relevance** | ¿Chunks correctos? |
+| **Faithfulness** | ¿Respuesta basada en contexto? |
+| **Answer quality** | ¿Respuesta útil? |
+
+---
+
+## Practica
+
+→ [RAG con Documentos PDF](/es/cooking/rag-documents)
+    `,
+    contentEn: `
+## Retrieval Augmented Generation
+
+RAG = **Search relevant info** + **Give it to LLM** = Precise answers with sources
+
+---
+
+## Why RAG?
+
+| Without RAG | With RAG |
+|-------------|----------|
+| LLM only knows what it learned | LLM accesses YOUR documents |
+| May invent ("hallucinate") | Cites real sources |
+| Static knowledge | Always updated info |
+
+---
+
+## RAG Architecture
+
+\`\`\`
+                 ┌─────────────────┐
+                 │   Your question │
+                 └────────┬────────┘
+                          ↓
+┌─────────────────────────────────────────────┐
+│              1. RETRIEVAL                    │
+│  Query → Vector DB → Top K documents         │
+└────────┬────────────────────────────────────┘
+         ↓
+┌─────────────────────────────────────────────┐
+│              2. AUGMENTATION                 │
+│  Prompt + Document context                   │
+└────────┬────────────────────────────────────┘
+         ↓
+┌─────────────────────────────────────────────┐
+│              3. GENERATION                   │
+│  LLM generates response with context         │
+└─────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Indexing flow
+
+\`\`\`python
+# 1. Load documents
+docs = load_pdfs("./docs/")
+
+# 2. Chunking (split into parts)
+chunks = split_text(docs, chunk_size=500)
+
+# 3. Embeddings
+embeddings = model.embed(chunks)
+
+# 4. Save to vector DB
+vector_db.add(embeddings, chunks)
+\`\`\`
+
+---
+
+## Chunking strategies
+
+| Strategy | When to use |
+|----------|-------------|
+| **Fixed size** | Simple documents |
+| **Sentence** | Natural text |
+| **Semantic** | High precision |
+| **Recursive** | Long documents |
+
+---
+
+## RAG prompt template
+
+\`\`\`
+Answer using ONLY information from the context.
+If not in context, say "I don't have that information".
+
+CONTEXT:
+{relevant_chunks}
+
+QUESTION: {user_question}
+\`\`\`
+
+---
+
+## Quality metrics
+
+| Metric | What it measures |
+|--------|------------------|
+| **Relevance** | Correct chunks? |
+| **Faithfulness** | Response based on context? |
+| **Answer quality** | Useful response? |
+
+---
+
+## Practice
+
+→ [RAG with PDF Documents](/en/cooking/rag-documents)
+    `,
+  },
+
+  'mcp': {
+    contentEs: `
+## Model Context Protocol
+
+MCP = Protocolo estándar para conectar LLMs con **herramientas y datos externos**.
+
+---
+
+## ¿Por qué MCP?
+
+| Sin MCP | Con MCP |
+|---------|---------|
+| Cada app su integración | Protocolo unificado |
+| APIs custom por modelo | Funciona con cualquier LLM |
+| Difícil mantener | Servidores reutilizables |
+
+---
+
+## Arquitectura MCP
+
+\`\`\`
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│   Cliente    │ ←→  │  Servidor    │ ←→  │   Recurso    │
+│  (Claude)    │     │    MCP       │     │  (DB, API)   │
+└──────────────┘     └──────────────┘     └──────────────┘
+                           ↑
+                     stdio / SSE
+\`\`\`
+
+---
+
+## Conceptos clave
+
+| Concepto | Descripción |
+|----------|-------------|
+| **Tools** | Funciones que el LLM puede llamar |
+| **Resources** | Datos que el LLM puede leer |
+| **Prompts** | Templates predefinidos |
+| **Sampling** | LLM genera contenido |
+
+---
+
+## Servidor MCP básico
+
+\`\`\`typescript
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+const server = new Server({
+  name: "mi-servidor",
+  version: "1.0.0"
+});
+
+// Definir herramienta
+server.setRequestHandler("tools/list", async () => ({
+  tools: [{
+    name: "saludar",
+    description: "Saluda a una persona",
+    inputSchema: {
+      type: "object",
+      properties: {
+        nombre: { type: "string" }
+      }
+    }
+  }]
+}));
+
+// Implementar herramienta
+server.setRequestHandler("tools/call", async (request) => {
+  if (request.params.name === "saludar") {
+    return { content: [{ type: "text", text: \`¡Hola \${request.params.arguments.nombre}!\` }] };
+  }
+});
+
+// Iniciar
+const transport = new StdioServerTransport();
+await server.connect(transport);
+\`\`\`
+
+---
+
+## Configurar en Claude Desktop
+
+\`\`\`json
+{
+  "mcpServers": {
+    "mi-servidor": {
+      "command": "node",
+      "args": ["./build/index.js"]
+    }
+  }
+}
+\`\`\`
+
+---
+
+## Servidores MCP populares
+
+| Servidor | Función |
+|----------|---------|
+| **filesystem** | Leer/escribir archivos |
+| **github** | Repos, PRs, issues |
+| **postgres** | Consultas SQL |
+| **brave-search** | Búsqueda web |
+
+---
+
+## Practica
+
+→ [Servidor MCP Custom](/es/cooking/mcp-server)
+    `,
+    contentEn: `
+## Model Context Protocol
+
+MCP = Standard protocol to connect LLMs with **external tools and data**.
+
+---
+
+## Why MCP?
+
+| Without MCP | With MCP |
+|-------------|----------|
+| Each app its own integration | Unified protocol |
+| Custom APIs per model | Works with any LLM |
+| Hard to maintain | Reusable servers |
+
+---
+
+## MCP Architecture
+
+\`\`\`
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│    Client    │ ←→  │    MCP       │ ←→  │   Resource   │
+│   (Claude)   │     │   Server     │     │  (DB, API)   │
+└──────────────┘     └──────────────┘     └──────────────┘
+                           ↑
+                     stdio / SSE
+\`\`\`
+
+---
+
+## Key concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Tools** | Functions the LLM can call |
+| **Resources** | Data the LLM can read |
+| **Prompts** | Predefined templates |
+| **Sampling** | LLM generates content |
+
+---
+
+## Basic MCP server
+
+\`\`\`typescript
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+const server = new Server({
+  name: "my-server",
+  version: "1.0.0"
+});
+
+// Define tool
+server.setRequestHandler("tools/list", async () => ({
+  tools: [{
+    name: "greet",
+    description: "Greet a person",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string" }
+      }
+    }
+  }]
+}));
+
+// Implement tool
+server.setRequestHandler("tools/call", async (request) => {
+  if (request.params.name === "greet") {
+    return { content: [{ type: "text", text: \`Hello \${request.params.arguments.name}!\` }] };
+  }
+});
+
+// Start
+const transport = new StdioServerTransport();
+await server.connect(transport);
+\`\`\`
+
+---
+
+## Configure in Claude Desktop
+
+\`\`\`json
+{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["./build/index.js"]
+    }
+  }
+}
+\`\`\`
+
+---
+
+## Popular MCP servers
+
+| Server | Function |
+|--------|----------|
+| **filesystem** | Read/write files |
+| **github** | Repos, PRs, issues |
+| **postgres** | SQL queries |
+| **brave-search** | Web search |
+
+---
+
+## Practice
+
+→ [Custom MCP Server](/en/cooking/mcp-server)
+    `,
+  },
+
+  'agents': {
+    contentEs: `
+## Agentes IA Autónomos
+
+Un agente = LLM + **herramientas** + **bucle de razonamiento** para completar tareas complejas.
+
+---
+
+## Agente vs Chatbot
+
+| Chatbot | Agente |
+|---------|--------|
+| Una respuesta | Múltiples pasos |
+| Sin herramientas | Usa herramientas |
+| Reactivo | Proactivo |
+| Tú controlas | Él decide |
+
+---
+
+## Arquitectura de un agente
+
+\`\`\`
+              ┌─────────────────────────────────┐
+              │           AGENTE                │
+              │  ┌─────────────────────────┐    │
+              │  │      Razonamiento       │    │
+  Tarea  ───→ │  │  (ReAct, CoT, ToT)      │ ───→ Resultado
+              │  └───────────┬─────────────┘    │
+              │              ↓                  │
+              │  ┌─────────────────────────┐    │
+              │  │     Herramientas        │    │
+              │  │  [Web] [Code] [Files]   │    │
+              │  └─────────────────────────┘    │
+              └─────────────────────────────────┘
+\`\`\`
+
+---
+
+## Patrón ReAct
+
+\`\`\`
+Thought: Necesito buscar el clima de Madrid
+Action: search_weather("Madrid")
+Observation: 22°C, soleado
+Thought: Ya tengo la info
+Action: respond("El clima en Madrid es 22°C...")
+\`\`\`
+
+---
+
+## Herramientas comunes
+
+| Herramienta | Uso |
+|-------------|-----|
+| **web_search** | Buscar información |
+| **read_file** | Leer documentos |
+| **write_file** | Crear archivos |
+| **run_code** | Ejecutar Python |
+| **ask_user** | Pedir clarificación |
+
+---
+
+## Agente básico con OpenAI
+
+\`\`\`python
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "search",
+            "description": "Search the web",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"}
+                }
+            }
+        }
+    }
+]
+
+# Loop del agente
+while True:
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages,
+        tools=tools
+    )
+
+    if response.choices[0].finish_reason == "tool_calls":
+        # Ejecutar herramienta
+        tool_call = response.choices[0].message.tool_calls[0]
+        result = execute_tool(tool_call)
+        messages.append({"role": "tool", "content": result})
+    else:
+        # Respuesta final
+        break
+\`\`\`
+
+---
+
+## Frameworks de agentes
+
+| Framework | Enfoque |
+|-----------|---------|
+| **LangChain** | Chains y agents |
+| **LangGraph** | Grafos de estado |
+| **CrewAI** | Multi-agente |
+| **AutoGen** | Conversación |
+| **Claude Code** | Coding agent |
+
+---
+
+## Practica
+
+→ [Agente IA Autónomo](/es/cooking/ai-agent)
+    `,
+    contentEn: `
+## Autonomous AI Agents
+
+An agent = LLM + **tools** + **reasoning loop** to complete complex tasks.
+
+---
+
+## Agent vs Chatbot
+
+| Chatbot | Agent |
+|---------|-------|
+| One response | Multiple steps |
+| No tools | Uses tools |
+| Reactive | Proactive |
+| You control | It decides |
+
+---
+
+## Agent architecture
+
+\`\`\`
+              ┌─────────────────────────────────┐
+              │            AGENT                │
+              │  ┌─────────────────────────┐    │
+              │  │       Reasoning         │    │
+   Task  ───→ │  │  (ReAct, CoT, ToT)      │ ───→ Result
+              │  └───────────┬─────────────┘    │
+              │              ↓                  │
+              │  ┌─────────────────────────┐    │
+              │  │        Tools            │    │
+              │  │  [Web] [Code] [Files]   │    │
+              │  └─────────────────────────┘    │
+              └─────────────────────────────────┘
+\`\`\`
+
+---
+
+## ReAct pattern
+
+\`\`\`
+Thought: I need to search Madrid's weather
+Action: search_weather("Madrid")
+Observation: 22°C, sunny
+Thought: I have the info now
+Action: respond("The weather in Madrid is 22°C...")
+\`\`\`
+
+---
+
+## Common tools
+
+| Tool | Use |
+|------|-----|
+| **web_search** | Search information |
+| **read_file** | Read documents |
+| **write_file** | Create files |
+| **run_code** | Execute Python |
+| **ask_user** | Request clarification |
+
+---
+
+## Basic agent with OpenAI
+
+\`\`\`python
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "search",
+            "description": "Search the web",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"}
+                }
+            }
+        }
+    }
+]
+
+# Agent loop
+while True:
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages,
+        tools=tools
+    )
+
+    if response.choices[0].finish_reason == "tool_calls":
+        # Execute tool
+        tool_call = response.choices[0].message.tool_calls[0]
+        result = execute_tool(tool_call)
+        messages.append({"role": "tool", "content": result})
+    else:
+        # Final response
+        break
+\`\`\`
+
+---
+
+## Agent frameworks
+
+| Framework | Focus |
+|-----------|-------|
+| **LangChain** | Chains and agents |
+| **LangGraph** | State graphs |
+| **CrewAI** | Multi-agent |
+| **AutoGen** | Conversation |
+| **Claude Code** | Coding agent |
+
+---
+
+## Practice
+
+→ [Autonomous AI Agent](/en/cooking/ai-agent)
+    `,
+  },
+
+  'vision': {
+    contentEs: `
+## Vision & Multimodal AI
+
+Los modelos multimodales procesan **múltiples tipos de entrada**: texto, imágenes, audio, video.
+
+---
+
+## Capacidades de visión
+
+| Tarea | Descripción |
+|-------|-------------|
+| **OCR** | Extraer texto de imágenes |
+| **Descripción** | Describir contenido visual |
+| **Análisis** | Identificar objetos/personas |
+| **Comparación** | Comparar imágenes |
+| **Diagramas** | Entender gráficos/charts |
+
+---
+
+## Modelos multimodales
+
+| Modelo | Proveedor | Entrada |
+|--------|-----------|---------|
+| **GPT-4V** | OpenAI | Texto + Imagen |
+| **Claude 3** | Anthropic | Texto + Imagen |
+| **Gemini Pro** | Google | Texto + Imagen + Audio |
+| **LLaVA** | Open Source | Texto + Imagen |
+
+---
+
+## Enviar imagen a Claude
+
+\`\`\`typescript
+const response = await anthropic.messages.create({
+  model: "claude-sonnet-4-20250514",
+  max_tokens: 1024,
+  messages: [{
+    role: "user",
+    content: [
+      {
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: "image/jpeg",
+          data: base64Image
+        }
+      },
+      {
+        type: "text",
+        text: "¿Qué hay en esta imagen?"
+      }
+    ]
+  }]
+});
+\`\`\`
+
+---
+
+## Enviar imagen a OpenAI
+
+\`\`\`python
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "¿Qué hay en esta imagen?"},
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_image}"
+                }
+            }
+        ]
+    }]
+)
+\`\`\`
+
+---
+
+## Casos de uso reales
+
+| Aplicación | Ejemplo |
+|------------|---------|
+| **Accesibilidad** | Describir imágenes para ciegos |
+| **Documentos** | Extraer datos de facturas |
+| **Retail** | Analizar productos en fotos |
+| **Salud** | Análisis preliminar de rayos X |
+| **Seguridad** | Detección de contenido |
+
+---
+
+## Modelos de clasificación de imágenes
+
+Para tareas específicas, usa modelos especializados:
+
+\`\`\`python
+from transformers import pipeline
+
+# Clasificación
+classifier = pipeline("image-classification")
+result = classifier("cat.jpg")
+# → [{"label": "cat", "score": 0.99}]
+
+# Detección de objetos
+detector = pipeline("object-detection")
+objects = detector("street.jpg")
+# → [{"label": "car", "box": {...}}]
+\`\`\`
+
+---
+
+## Practica
+
+→ [Clasificador de Imágenes](/es/cooking/image-classifier)
+→ [App Multimodal](/es/cooking/multimodal-app)
+    `,
+    contentEn: `
+## Vision & Multimodal AI
+
+Multimodal models process **multiple input types**: text, images, audio, video.
+
+---
+
+## Vision capabilities
+
+| Task | Description |
+|------|-------------|
+| **OCR** | Extract text from images |
+| **Description** | Describe visual content |
+| **Analysis** | Identify objects/people |
+| **Comparison** | Compare images |
+| **Diagrams** | Understand charts/graphs |
+
+---
+
+## Multimodal models
+
+| Model | Provider | Input |
+|-------|----------|-------|
+| **GPT-4V** | OpenAI | Text + Image |
+| **Claude 3** | Anthropic | Text + Image |
+| **Gemini Pro** | Google | Text + Image + Audio |
+| **LLaVA** | Open Source | Text + Image |
+
+---
+
+## Send image to Claude
+
+\`\`\`typescript
+const response = await anthropic.messages.create({
+  model: "claude-sonnet-4-20250514",
+  max_tokens: 1024,
+  messages: [{
+    role: "user",
+    content: [
+      {
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: "image/jpeg",
+          data: base64Image
+        }
+      },
+      {
+        type: "text",
+        text: "What's in this image?"
+      }
+    ]
+  }]
+});
+\`\`\`
+
+---
+
+## Send image to OpenAI
+
+\`\`\`python
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What's in this image?"},
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_image}"
+                }
+            }
+        ]
+    }]
+)
+\`\`\`
+
+---
+
+## Real use cases
+
+| Application | Example |
+|-------------|---------|
+| **Accessibility** | Describe images for blind users |
+| **Documents** | Extract data from invoices |
+| **Retail** | Analyze products in photos |
+| **Health** | Preliminary X-ray analysis |
+| **Security** | Content detection |
+
+---
+
+## Image classification models
+
+For specific tasks, use specialized models:
+
+\`\`\`python
+from transformers import pipeline
+
+# Classification
+classifier = pipeline("image-classification")
+result = classifier("cat.jpg")
+# → [{"label": "cat", "score": 0.99}]
+
+# Object detection
+detector = pipeline("object-detection")
+objects = detector("street.jpg")
+# → [{"label": "car", "box": {...}}]
+\`\`\`
+
+---
+
+## Practice
+
+→ [Image Classifier](/en/cooking/image-classifier)
+→ [Multimodal App](/en/cooking/multimodal-app)
+    `,
+  },
 }
 
 // Mapear slugs alternativos

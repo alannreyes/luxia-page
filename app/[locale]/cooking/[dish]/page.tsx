@@ -8994,6 +8994,2458 @@ function Chart() {
 → [RAG with PDF Documents](/en/cooking/rag-documents) — Master Level
     `,
   },
+
+  // =============================================
+  // MASTER CHEF - IA Avanzada (10 platillos)
+  // =============================================
+
+  'rag-documents': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Python', 'API de LLM (Gemini)'],
+    prerequisitesEn: ['Python', 'LLM API (Gemini)'],
+    contentEs: `
+## RAG con Documentos PDF
+
+Crea un sistema que responda preguntas sobre TUS documentos PDF.
+
+---
+
+## El prompt para empezar
+
+> Crea un sistema RAG en Python que:
+> 1. Cargue PDFs de una carpeta
+> 2. Los divida en chunks de 500 caracteres
+> 3. Cree embeddings con Gemini
+> 4. Guarde en ChromaDB
+> 5. Permita hacer preguntas y obtenga contexto relevante
+> 6. Use Gemini para responder basándose en el contexto
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+from PyPDF2 import PdfReader
+import chromadb
+from chromadb.utils import embedding_functions
+import google.generativeai as genai
+import os
+
+# Configurar
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# ChromaDB con embeddings de Gemini
+client = chromadb.Client()
+gemini_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+    api_key=os.environ["GEMINI_API_KEY"]
+)
+collection = client.create_collection("docs", embedding_function=gemini_ef)
+
+def load_pdfs(folder: str) -> list[str]:
+    """Cargar todos los PDFs de una carpeta"""
+    chunks = []
+    for file in os.listdir(folder):
+        if file.endswith(".pdf"):
+            reader = PdfReader(os.path.join(folder, file))
+            text = "".join(page.extract_text() for page in reader.pages)
+            # Dividir en chunks
+            for i in range(0, len(text), 500):
+                chunks.append(text[i:i+500])
+    return chunks
+
+def index_documents(folder: str):
+    """Indexar documentos en ChromaDB"""
+    chunks = load_pdfs(folder)
+    collection.add(
+        documents=chunks,
+        ids=[f"chunk_{i}" for i in range(len(chunks))]
+    )
+    print(f"Indexados {len(chunks)} chunks")
+
+def ask(question: str) -> str:
+    """Preguntar al RAG"""
+    # Buscar contexto relevante
+    results = collection.query(
+        query_texts=[question],
+        n_results=3
+    )
+    context = "\\n---\\n".join(results["documents"][0])
+
+    # Generar respuesta con contexto
+    prompt = f"""Responde usando SOLO la información del contexto.
+Si no está en el contexto, di "No tengo esa información".
+
+CONTEXTO:
+{context}
+
+PREGUNTA: {question}"""
+
+    response = model.generate_content(prompt)
+    return response.text
+
+# Uso
+index_documents("./mis_documentos")
+respuesta = ask("¿Cuál es el proceso de onboarding?")
+print(respuesta)
+\`\`\`
+
+---
+
+## Instalación
+
+\`\`\`bash
+pip install PyPDF2 chromadb google-generativeai
+\`\`\`
+
+---
+
+## Mejoras sugeridas
+
+| Mejora | Descripción |
+|--------|-------------|
+| **Chunks semánticos** | Dividir por párrafos |
+| **Metadata** | Guardar nombre de archivo |
+| **Reranking** | Reordenar resultados |
+| **Streaming** | Respuesta en tiempo real |
+
+---
+
+## Siguiente nivel
+
+→ [Búsqueda Vectorial](/es/cooking/vector-search)
+    `,
+    contentEn: `
+## RAG with PDF Documents
+
+Create a system that answers questions about YOUR PDF documents.
+
+---
+
+## The prompt to start
+
+> Create a RAG system in Python that:
+> 1. Loads PDFs from a folder
+> 2. Splits them into 500-character chunks
+> 3. Creates embeddings with Gemini
+> 4. Stores in ChromaDB
+> 5. Allows asking questions and gets relevant context
+> 6. Uses Gemini to answer based on context
+
+---
+
+## What the AI will create
+
+\`\`\`python
+from PyPDF2 import PdfReader
+import chromadb
+from chromadb.utils import embedding_functions
+import google.generativeai as genai
+import os
+
+# Configure
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# ChromaDB with Gemini embeddings
+client = chromadb.Client()
+gemini_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+    api_key=os.environ["GEMINI_API_KEY"]
+)
+collection = client.create_collection("docs", embedding_function=gemini_ef)
+
+def load_pdfs(folder: str) -> list[str]:
+    """Load all PDFs from a folder"""
+    chunks = []
+    for file in os.listdir(folder):
+        if file.endswith(".pdf"):
+            reader = PdfReader(os.path.join(folder, file))
+            text = "".join(page.extract_text() for page in reader.pages)
+            # Split into chunks
+            for i in range(0, len(text), 500):
+                chunks.append(text[i:i+500])
+    return chunks
+
+def index_documents(folder: str):
+    """Index documents in ChromaDB"""
+    chunks = load_pdfs(folder)
+    collection.add(
+        documents=chunks,
+        ids=[f"chunk_{i}" for i in range(len(chunks))]
+    )
+    print(f"Indexed {len(chunks)} chunks")
+
+def ask(question: str) -> str:
+    """Ask the RAG"""
+    # Search relevant context
+    results = collection.query(
+        query_texts=[question],
+        n_results=3
+    )
+    context = "\\n---\\n".join(results["documents"][0])
+
+    # Generate response with context
+    prompt = f"""Answer using ONLY information from the context.
+If not in context, say "I don't have that information".
+
+CONTEXT:
+{context}
+
+QUESTION: {question}"""
+
+    response = model.generate_content(prompt)
+    return response.text
+
+# Usage
+index_documents("./my_documents")
+answer = ask("What is the onboarding process?")
+print(answer)
+\`\`\`
+
+---
+
+## Installation
+
+\`\`\`bash
+pip install PyPDF2 chromadb google-generativeai
+\`\`\`
+
+---
+
+## Suggested improvements
+
+| Improvement | Description |
+|-------------|-------------|
+| **Semantic chunks** | Split by paragraphs |
+| **Metadata** | Store filename |
+| **Reranking** | Reorder results |
+| **Streaming** | Real-time response |
+
+---
+
+## Next level
+
+→ [Vector Search](/en/cooking/vector-search)
+    `,
+  },
+
+  'vector-search': {
+    timeEs: '40 minutos',
+    timeEn: '40 minutes',
+    prerequisitesEs: ['Python básico', 'ChromaDB'],
+    prerequisitesEn: ['Basic Python', 'ChromaDB'],
+    contentEs: `
+## Búsqueda Vectorial
+
+Implementa búsqueda semántica que entiende el SIGNIFICADO, no solo palabras clave.
+
+---
+
+## El prompt para empezar
+
+> Crea un sistema de búsqueda vectorial en Python con:
+> 1. ChromaDB como base de datos vectorial
+> 2. Embeddings de Gemini (gratis)
+> 3. Función para agregar documentos
+> 4. Función para buscar similares
+> 5. Mostrar score de similitud
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+import chromadb
+from chromadb.utils import embedding_functions
+import os
+
+# Configurar embeddings con Gemini
+gemini_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+    api_key=os.environ["GEMINI_API_KEY"],
+    model_name="models/embedding-001"
+)
+
+# Crear cliente y colección
+client = chromadb.PersistentClient(path="./vector_db")
+collection = client.get_or_create_collection(
+    name="documentos",
+    embedding_function=gemini_ef,
+    metadata={"hnsw:space": "cosine"}
+)
+
+def add_documents(docs: list[dict]):
+    """Agregar documentos con metadata"""
+    collection.add(
+        documents=[d["text"] for d in docs],
+        metadatas=[{"source": d.get("source", "unknown")} for d in docs],
+        ids=[f"doc_{i}" for i in range(len(docs))]
+    )
+
+def search(query: str, n_results: int = 5):
+    """Buscar documentos similares"""
+    results = collection.query(
+        query_texts=[query],
+        n_results=n_results,
+        include=["documents", "distances", "metadatas"]
+    )
+
+    for i, (doc, dist, meta) in enumerate(zip(
+        results["documents"][0],
+        results["distances"][0],
+        results["metadatas"][0]
+    )):
+        similarity = 1 - dist  # Convertir distancia a similitud
+        print(f"{i+1}. [{similarity:.2%}] {doc[:100]}...")
+        print(f"   Fuente: {meta['source']}")
+
+# Ejemplo
+docs = [
+    {"text": "El gato duerme en el sofá", "source": "mascotas.txt"},
+    {"text": "Python es un lenguaje de programación", "source": "tech.txt"},
+    {"text": "Mi perro corre en el parque", "source": "mascotas.txt"},
+    {"text": "JavaScript se usa para web", "source": "tech.txt"},
+]
+
+add_documents(docs)
+search("animal doméstico descansando")
+# → Encuentra "El gato duerme en el sofá" con alta similitud
+\`\`\`
+
+---
+
+## Comparación SQL vs Vectorial
+
+| SQL tradicional | Búsqueda vectorial |
+|-----------------|-------------------|
+| \`LIKE '%gato%'\` | Busca "gato" literal |
+| Solo coincidencias exactas | Entiende sinónimos |
+| No entiende contexto | "mascota" → "gato", "perro" |
+
+---
+
+## Siguiente nivel
+
+→ [Servidor MCP Custom](/es/cooking/mcp-server)
+    `,
+    contentEn: `
+## Vector Search
+
+Implement semantic search that understands MEANING, not just keywords.
+
+---
+
+## The prompt to start
+
+> Create a vector search system in Python with:
+> 1. ChromaDB as vector database
+> 2. Gemini embeddings (free)
+> 3. Function to add documents
+> 4. Function to search similar
+> 5. Show similarity score
+
+---
+
+## What the AI will create
+
+\`\`\`python
+import chromadb
+from chromadb.utils import embedding_functions
+import os
+
+# Configure embeddings with Gemini
+gemini_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+    api_key=os.environ["GEMINI_API_KEY"],
+    model_name="models/embedding-001"
+)
+
+# Create client and collection
+client = chromadb.PersistentClient(path="./vector_db")
+collection = client.get_or_create_collection(
+    name="documents",
+    embedding_function=gemini_ef,
+    metadata={"hnsw:space": "cosine"}
+)
+
+def add_documents(docs: list[dict]):
+    """Add documents with metadata"""
+    collection.add(
+        documents=[d["text"] for d in docs],
+        metadatas=[{"source": d.get("source", "unknown")} for d in docs],
+        ids=[f"doc_{i}" for i in range(len(docs))]
+    )
+
+def search(query: str, n_results: int = 5):
+    """Search similar documents"""
+    results = collection.query(
+        query_texts=[query],
+        n_results=n_results,
+        include=["documents", "distances", "metadatas"]
+    )
+
+    for i, (doc, dist, meta) in enumerate(zip(
+        results["documents"][0],
+        results["distances"][0],
+        results["metadatas"][0]
+    )):
+        similarity = 1 - dist  # Convert distance to similarity
+        print(f"{i+1}. [{similarity:.2%}] {doc[:100]}...")
+        print(f"   Source: {meta['source']}")
+
+# Example
+docs = [
+    {"text": "The cat sleeps on the sofa", "source": "pets.txt"},
+    {"text": "Python is a programming language", "source": "tech.txt"},
+    {"text": "My dog runs in the park", "source": "pets.txt"},
+    {"text": "JavaScript is used for web", "source": "tech.txt"},
+]
+
+add_documents(docs)
+search("domestic animal resting")
+# → Finds "The cat sleeps on the sofa" with high similarity
+\`\`\`
+
+---
+
+## SQL vs Vector comparison
+
+| Traditional SQL | Vector search |
+|-----------------|---------------|
+| \`LIKE '%cat%'\` | Searches literal "cat" |
+| Only exact matches | Understands synonyms |
+| No context | "pet" → "cat", "dog" |
+
+---
+
+## Next level
+
+→ [Custom MCP Server](/en/cooking/mcp-server)
+    `,
+  },
+
+  'mcp-server': {
+    timeEs: '50 minutos',
+    timeEn: '50 minutes',
+    prerequisitesEs: ['TypeScript', 'Node.js'],
+    prerequisitesEn: ['TypeScript', 'Node.js'],
+    contentEs: `
+## Servidor MCP Custom
+
+Crea tu propio servidor MCP para darle herramientas a Claude.
+
+---
+
+## El prompt para empezar
+
+> Crea un servidor MCP en TypeScript que:
+> 1. Tenga una herramienta "clima" que reciba ciudad
+> 2. Tenga una herramienta "notas" para guardar/leer notas
+> 3. Use el SDK oficial de MCP
+> 4. Funcione con Claude Desktop
+
+---
+
+## Lo que la IA creará
+
+\`\`\`typescript
+// src/index.ts
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  ListToolsRequestSchema,
+  CallToolRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+
+const server = new Server(
+  { name: "mi-servidor-mcp", version: "1.0.0" },
+  { capabilities: { tools: {} } }
+);
+
+// Base de datos simple para notas
+const notas: Record<string, string> = {};
+
+// Definir herramientas disponibles
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    {
+      name: "clima",
+      description: "Obtiene el clima de una ciudad",
+      inputSchema: {
+        type: "object",
+        properties: {
+          ciudad: { type: "string", description: "Nombre de la ciudad" }
+        },
+        required: ["ciudad"]
+      }
+    },
+    {
+      name: "guardar_nota",
+      description: "Guarda una nota",
+      inputSchema: {
+        type: "object",
+        properties: {
+          titulo: { type: "string" },
+          contenido: { type: "string" }
+        },
+        required: ["titulo", "contenido"]
+      }
+    },
+    {
+      name: "leer_notas",
+      description: "Lee todas las notas guardadas",
+      inputSchema: { type: "object", properties: {} }
+    }
+  ]
+}));
+
+// Implementar herramientas
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  const { name, arguments: args } = request.params;
+
+  switch (name) {
+    case "clima": {
+      // Simular API de clima
+      const ciudad = args?.ciudad as string;
+      const temp = Math.floor(Math.random() * 30) + 5;
+      return {
+        content: [{
+          type: "text",
+          text: \`El clima en \${ciudad}: \${temp}°C, parcialmente nublado\`
+        }]
+      };
+    }
+
+    case "guardar_nota": {
+      const { titulo, contenido } = args as { titulo: string; contenido: string };
+      notas[titulo] = contenido;
+      return {
+        content: [{ type: "text", text: \`Nota "\${titulo}" guardada\` }]
+      };
+    }
+
+    case "leer_notas": {
+      const lista = Object.entries(notas)
+        .map(([t, c]) => \`- \${t}: \${c}\`)
+        .join("\\n");
+      return {
+        content: [{ type: "text", text: lista || "No hay notas" }]
+      };
+    }
+
+    default:
+      throw new Error(\`Herramienta desconocida: \${name}\`);
+  }
+});
+
+// Iniciar servidor
+const transport = new StdioServerTransport();
+server.connect(transport);
+console.error("Servidor MCP iniciado");
+\`\`\`
+
+---
+
+## Configurar Claude Desktop
+
+\`\`\`json
+{
+  "mcpServers": {
+    "mi-servidor": {
+      "command": "node",
+      "args": ["/ruta/a/dist/index.js"]
+    }
+  }
+}
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [Agente IA Autónomo](/es/cooking/ai-agent)
+    `,
+    contentEn: `
+## Custom MCP Server
+
+Create your own MCP server to give tools to Claude.
+
+---
+
+## The prompt to start
+
+> Create an MCP server in TypeScript that:
+> 1. Has a "weather" tool that receives city
+> 2. Has a "notes" tool to save/read notes
+> 3. Uses the official MCP SDK
+> 4. Works with Claude Desktop
+
+---
+
+## What the AI will create
+
+\`\`\`typescript
+// src/index.ts
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  ListToolsRequestSchema,
+  CallToolRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+
+const server = new Server(
+  { name: "my-mcp-server", version: "1.0.0" },
+  { capabilities: { tools: {} } }
+);
+
+// Simple database for notes
+const notes: Record<string, string> = {};
+
+// Define available tools
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    {
+      name: "weather",
+      description: "Gets the weather for a city",
+      inputSchema: {
+        type: "object",
+        properties: {
+          city: { type: "string", description: "City name" }
+        },
+        required: ["city"]
+      }
+    },
+    {
+      name: "save_note",
+      description: "Saves a note",
+      inputSchema: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          content: { type: "string" }
+        },
+        required: ["title", "content"]
+      }
+    },
+    {
+      name: "read_notes",
+      description: "Reads all saved notes",
+      inputSchema: { type: "object", properties: {} }
+    }
+  ]
+}));
+
+// Implement tools
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  const { name, arguments: args } = request.params;
+
+  switch (name) {
+    case "weather": {
+      // Simulate weather API
+      const city = args?.city as string;
+      const temp = Math.floor(Math.random() * 30) + 5;
+      return {
+        content: [{
+          type: "text",
+          text: \`Weather in \${city}: \${temp}°C, partly cloudy\`
+        }]
+      };
+    }
+
+    case "save_note": {
+      const { title, content } = args as { title: string; content: string };
+      notes[title] = content;
+      return {
+        content: [{ type: "text", text: \`Note "\${title}" saved\` }]
+      };
+    }
+
+    case "read_notes": {
+      const list = Object.entries(notes)
+        .map(([t, c]) => \`- \${t}: \${c}\`)
+        .join("\\n");
+      return {
+        content: [{ type: "text", text: list || "No notes" }]
+      };
+    }
+
+    default:
+      throw new Error(\`Unknown tool: \${name}\`);
+  }
+});
+
+// Start server
+const transport = new StdioServerTransport();
+server.connect(transport);
+console.error("MCP server started");
+\`\`\`
+
+---
+
+## Configure Claude Desktop
+
+\`\`\`json
+{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["/path/to/dist/index.js"]
+    }
+  }
+}
+\`\`\`
+
+---
+
+## Next level
+
+→ [Autonomous AI Agent](/en/cooking/ai-agent)
+    `,
+  },
+
+  'ai-agent': {
+    timeEs: '60 minutos',
+    timeEn: '60 minutes',
+    prerequisitesEs: ['Python', 'API de LLM (Gemini)'],
+    prerequisitesEn: ['Python', 'LLM API (Gemini)'],
+    contentEs: `
+## Agente IA Autónomo
+
+Crea un agente que razona, usa herramientas y completa tareas por sí mismo.
+
+---
+
+## El prompt para empezar
+
+> Crea un agente IA en Python con:
+> 1. Patrón ReAct (Reasoning + Acting)
+> 2. Herramientas: búsqueda web, calculadora, leer archivos
+> 3. Loop que ejecute hasta completar la tarea
+> 4. Usa Gemini como LLM
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+import google.generativeai as genai
+import os
+import json
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Definir herramientas
+def search_web(query: str) -> str:
+    """Simula búsqueda web"""
+    return f"Resultados para '{query}': Info relevante encontrada..."
+
+def calculate(expression: str) -> str:
+    """Evalúa expresiones matemáticas"""
+    try:
+        return str(eval(expression))
+    except:
+        return "Error en cálculo"
+
+def read_file(path: str) -> str:
+    """Lee contenido de archivo"""
+    try:
+        with open(path) as f:
+            return f.read()[:1000]
+    except:
+        return f"No se pudo leer {path}"
+
+TOOLS = {
+    "search_web": search_web,
+    "calculate": calculate,
+    "read_file": read_file,
+}
+
+SYSTEM_PROMPT = """Eres un agente que resuelve tareas paso a paso.
+
+Para cada paso, responde en formato JSON:
+{
+  "thought": "Tu razonamiento",
+  "action": "nombre_herramienta",
+  "action_input": "parámetro"
+}
+
+O si terminaste:
+{
+  "thought": "Razonamiento final",
+  "final_answer": "Tu respuesta"
+}
+
+Herramientas disponibles:
+- search_web(query): Busca en internet
+- calculate(expression): Calcula expresiones
+- read_file(path): Lee archivos
+"""
+
+def run_agent(task: str, max_steps: int = 10):
+    """Ejecutar agente hasta completar tarea"""
+    messages = [
+        {"role": "user", "parts": [SYSTEM_PROMPT + f"\\n\\nTarea: {task}"]}
+    ]
+
+    for step in range(max_steps):
+        response = model.generate_content(messages)
+        text = response.text
+
+        # Parsear respuesta JSON
+        try:
+            data = json.loads(text.strip().strip("\`\`\`json").strip("\`\`\`"))
+        except:
+            print(f"Error parseando: {text}")
+            continue
+
+        print(f"\\n--- Paso {step + 1} ---")
+        print(f"Pensamiento: {data.get('thought')}")
+
+        # ¿Terminó?
+        if "final_answer" in data:
+            print(f"\\n✅ Respuesta: {data['final_answer']}")
+            return data["final_answer"]
+
+        # Ejecutar herramienta
+        action = data.get("action")
+        action_input = data.get("action_input")
+
+        if action in TOOLS:
+            result = TOOLS[action](action_input)
+            print(f"Acción: {action}({action_input})")
+            print(f"Resultado: {result}")
+
+            messages.append({"role": "model", "parts": [text]})
+            messages.append({"role": "user", "parts": [f"Observación: {result}"]})
+
+    return "Máximo de pasos alcanzado"
+
+# Uso
+run_agent("¿Cuál es el resultado de 45 * 23 + 100?")
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [Clasificador de Imágenes](/es/cooking/image-classifier)
+    `,
+    contentEn: `
+## Autonomous AI Agent
+
+Create an agent that reasons, uses tools, and completes tasks by itself.
+
+---
+
+## The prompt to start
+
+> Create an AI agent in Python with:
+> 1. ReAct pattern (Reasoning + Acting)
+> 2. Tools: web search, calculator, read files
+> 3. Loop that executes until task completion
+> 4. Uses Gemini as LLM
+
+---
+
+## What the AI will create
+
+\`\`\`python
+import google.generativeai as genai
+import os
+import json
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Define tools
+def search_web(query: str) -> str:
+    """Simulates web search"""
+    return f"Results for '{query}': Relevant info found..."
+
+def calculate(expression: str) -> str:
+    """Evaluates math expressions"""
+    try:
+        return str(eval(expression))
+    except:
+        return "Calculation error"
+
+def read_file(path: str) -> str:
+    """Reads file content"""
+    try:
+        with open(path) as f:
+            return f.read()[:1000]
+    except:
+        return f"Could not read {path}"
+
+TOOLS = {
+    "search_web": search_web,
+    "calculate": calculate,
+    "read_file": read_file,
+}
+
+SYSTEM_PROMPT = """You are an agent that solves tasks step by step.
+
+For each step, respond in JSON format:
+{
+  "thought": "Your reasoning",
+  "action": "tool_name",
+  "action_input": "parameter"
+}
+
+Or if finished:
+{
+  "thought": "Final reasoning",
+  "final_answer": "Your answer"
+}
+
+Available tools:
+- search_web(query): Search the internet
+- calculate(expression): Calculate expressions
+- read_file(path): Read files
+"""
+
+def run_agent(task: str, max_steps: int = 10):
+    """Run agent until task completion"""
+    messages = [
+        {"role": "user", "parts": [SYSTEM_PROMPT + f"\\n\\nTask: {task}"]}
+    ]
+
+    for step in range(max_steps):
+        response = model.generate_content(messages)
+        text = response.text
+
+        # Parse JSON response
+        try:
+            data = json.loads(text.strip().strip("\`\`\`json").strip("\`\`\`"))
+        except:
+            print(f"Error parsing: {text}")
+            continue
+
+        print(f"\\n--- Step {step + 1} ---")
+        print(f"Thought: {data.get('thought')}")
+
+        # Finished?
+        if "final_answer" in data:
+            print(f"\\n✅ Answer: {data['final_answer']}")
+            return data["final_answer"]
+
+        # Execute tool
+        action = data.get("action")
+        action_input = data.get("action_input")
+
+        if action in TOOLS:
+            result = TOOLS[action](action_input)
+            print(f"Action: {action}({action_input})")
+            print(f"Result: {result}")
+
+            messages.append({"role": "model", "parts": [text]})
+            messages.append({"role": "user", "parts": [f"Observation: {result}"]})
+
+    return "Max steps reached"
+
+# Usage
+run_agent("What is the result of 45 * 23 + 100?")
+\`\`\`
+
+---
+
+## Next level
+
+→ [Image Classifier](/en/cooking/image-classifier)
+    `,
+  },
+
+  'image-classifier': {
+    timeEs: '35 minutos',
+    timeEn: '35 minutes',
+    prerequisitesEs: ['Python', 'API multimodal (Gemini Vision)'],
+    prerequisitesEn: ['Python', 'Multimodal API (Gemini Vision)'],
+    contentEs: `
+## Clasificador de Imágenes
+
+Clasifica imágenes usando modelos multimodales de IA.
+
+---
+
+## El prompt para empezar
+
+> Crea un clasificador de imágenes en Python que:
+> 1. Reciba una imagen (path o URL)
+> 2. Use Gemini Vision para analizarla
+> 3. Devuelva: categoría, confianza, descripción
+> 4. Soporte categorías personalizadas
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+import google.generativeai as genai
+from PIL import Image
+import requests
+from io import BytesIO
+import os
+import json
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+def load_image(source: str) -> Image.Image:
+    """Cargar imagen desde path o URL"""
+    if source.startswith("http"):
+        response = requests.get(source)
+        return Image.open(BytesIO(response.content))
+    return Image.open(source)
+
+def classify(
+    image_source: str,
+    categories: list[str] = None
+) -> dict:
+    """Clasificar imagen"""
+    image = load_image(image_source)
+
+    if categories:
+        cat_list = ", ".join(categories)
+        prompt = f"""Analiza esta imagen y clasifícala en UNA de estas categorías: {cat_list}
+
+Responde en JSON:
+{{
+  "category": "categoría elegida",
+  "confidence": 0.0 a 1.0,
+  "description": "descripción breve",
+  "objects": ["objetos detectados"]
+}}"""
+    else:
+        prompt = """Analiza esta imagen.
+
+Responde en JSON:
+{
+  "category": "categoría general",
+  "confidence": 0.0 a 1.0,
+  "description": "descripción breve",
+  "objects": ["objetos detectados"]
+}"""
+
+    response = model.generate_content([prompt, image])
+    text = response.text.strip().strip("\`\`\`json").strip("\`\`\`")
+    return json.loads(text)
+
+# Ejemplos de uso
+result = classify("gato.jpg")
+print(f"Categoría: {result['category']}")
+print(f"Confianza: {result['confidence']:.0%}")
+print(f"Descripción: {result['description']}")
+
+# Con categorías personalizadas
+result = classify(
+    "foto.jpg",
+    categories=["comida", "paisaje", "persona", "animal", "objeto"]
+)
+\`\`\`
+
+---
+
+## Variante: Clasificación batch
+
+\`\`\`python
+def classify_batch(images: list[str], categories: list[str]) -> list[dict]:
+    """Clasificar múltiples imágenes"""
+    results = []
+    for img in images:
+        try:
+            result = classify(img, categories)
+            result["source"] = img
+            results.append(result)
+        except Exception as e:
+            results.append({"source": img, "error": str(e)})
+    return results
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [Asistente de Voz](/es/cooking/voice-assistant)
+    `,
+    contentEn: `
+## Image Classifier
+
+Classify images using multimodal AI models.
+
+---
+
+## The prompt to start
+
+> Create an image classifier in Python that:
+> 1. Receives an image (path or URL)
+> 2. Uses Gemini Vision to analyze it
+> 3. Returns: category, confidence, description
+> 4. Supports custom categories
+
+---
+
+## What the AI will create
+
+\`\`\`python
+import google.generativeai as genai
+from PIL import Image
+import requests
+from io import BytesIO
+import os
+import json
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+def load_image(source: str) -> Image.Image:
+    """Load image from path or URL"""
+    if source.startswith("http"):
+        response = requests.get(source)
+        return Image.open(BytesIO(response.content))
+    return Image.open(source)
+
+def classify(
+    image_source: str,
+    categories: list[str] = None
+) -> dict:
+    """Classify image"""
+    image = load_image(image_source)
+
+    if categories:
+        cat_list = ", ".join(categories)
+        prompt = f"""Analyze this image and classify it in ONE of these categories: {cat_list}
+
+Respond in JSON:
+{{
+  "category": "chosen category",
+  "confidence": 0.0 to 1.0,
+  "description": "brief description",
+  "objects": ["detected objects"]
+}}"""
+    else:
+        prompt = """Analyze this image.
+
+Respond in JSON:
+{
+  "category": "general category",
+  "confidence": 0.0 to 1.0,
+  "description": "brief description",
+  "objects": ["detected objects"]
+}"""
+
+    response = model.generate_content([prompt, image])
+    text = response.text.strip().strip("\`\`\`json").strip("\`\`\`")
+    return json.loads(text)
+
+# Usage examples
+result = classify("cat.jpg")
+print(f"Category: {result['category']}")
+print(f"Confidence: {result['confidence']:.0%}")
+print(f"Description: {result['description']}")
+
+# With custom categories
+result = classify(
+    "photo.jpg",
+    categories=["food", "landscape", "person", "animal", "object"]
+)
+\`\`\`
+
+---
+
+## Variant: Batch classification
+
+\`\`\`python
+def classify_batch(images: list[str], categories: list[str]) -> list[dict]:
+    """Classify multiple images"""
+    results = []
+    for img in images:
+        try:
+            result = classify(img, categories)
+            result["source"] = img
+            results.append(result)
+        except Exception as e:
+            results.append({"source": img, "error": str(e)})
+    return results
+\`\`\`
+
+---
+
+## Next level
+
+→ [Voice Assistant](/en/cooking/voice-assistant)
+    `,
+  },
+
+  'voice-assistant': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Python', 'Micrófono'],
+    prerequisitesEn: ['Python', 'Microphone'],
+    contentEs: `
+## Asistente de Voz
+
+Crea un asistente que escucha, entiende y responde con voz.
+
+---
+
+## El prompt para empezar
+
+> Crea un asistente de voz en Python que:
+> 1. Escuche del micrófono con speech_recognition
+> 2. Convierta voz a texto
+> 3. Envíe a Gemini para procesar
+> 4. Convierta respuesta a voz con gTTS
+> 5. Loop continuo de escucha
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+import speech_recognition as sr
+from gtts import gTTS
+import google.generativeai as genai
+import os
+import tempfile
+from playsound import playsound
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Inicializar reconocedor
+recognizer = sr.Recognizer()
+mic = sr.Microphone()
+
+def listen() -> str:
+    """Escuchar del micrófono"""
+    with mic as source:
+        print("🎤 Escuchando...")
+        recognizer.adjust_for_ambient_noise(source, duration=0.5)
+        audio = recognizer.listen(source, timeout=5)
+
+    try:
+        text = recognizer.recognize_google(audio, language="es-ES")
+        print(f"Escuché: {text}")
+        return text
+    except sr.UnknownValueError:
+        return ""
+    except sr.RequestError as e:
+        print(f"Error: {e}")
+        return ""
+
+def think(text: str) -> str:
+    """Procesar con Gemini"""
+    response = model.generate_content(
+        f"Eres un asistente amigable. Responde brevemente: {text}"
+    )
+    return response.text
+
+def speak(text: str):
+    """Convertir texto a voz"""
+    tts = gTTS(text=text, lang="es")
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as f:
+        tts.save(f.name)
+        playsound(f.name)
+        os.unlink(f.name)
+
+def run_assistant():
+    """Loop principal del asistente"""
+    print("🤖 Asistente iniciado. Di 'salir' para terminar.")
+
+    while True:
+        text = listen()
+
+        if not text:
+            continue
+
+        if "salir" in text.lower():
+            speak("¡Hasta luego!")
+            break
+
+        response = think(text)
+        print(f"🤖: {response}")
+        speak(response)
+
+# Ejecutar
+run_assistant()
+\`\`\`
+
+---
+
+## Instalación
+
+\`\`\`bash
+pip install SpeechRecognition gTTS playsound pyaudio google-generativeai
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [App Multimodal](/es/cooking/multimodal-app)
+    `,
+    contentEn: `
+## Voice Assistant
+
+Create an assistant that listens, understands, and responds with voice.
+
+---
+
+## The prompt to start
+
+> Create a voice assistant in Python that:
+> 1. Listens from microphone with speech_recognition
+> 2. Converts voice to text
+> 3. Sends to Gemini for processing
+> 4. Converts response to speech with gTTS
+> 5. Continuous listening loop
+
+---
+
+## What the AI will create
+
+\`\`\`python
+import speech_recognition as sr
+from gtts import gTTS
+import google.generativeai as genai
+import os
+import tempfile
+from playsound import playsound
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Initialize recognizer
+recognizer = sr.Recognizer()
+mic = sr.Microphone()
+
+def listen() -> str:
+    """Listen from microphone"""
+    with mic as source:
+        print("🎤 Listening...")
+        recognizer.adjust_for_ambient_noise(source, duration=0.5)
+        audio = recognizer.listen(source, timeout=5)
+
+    try:
+        text = recognizer.recognize_google(audio, language="en-US")
+        print(f"I heard: {text}")
+        return text
+    except sr.UnknownValueError:
+        return ""
+    except sr.RequestError as e:
+        print(f"Error: {e}")
+        return ""
+
+def think(text: str) -> str:
+    """Process with Gemini"""
+    response = model.generate_content(
+        f"You are a friendly assistant. Respond briefly: {text}"
+    )
+    return response.text
+
+def speak(text: str):
+    """Convert text to speech"""
+    tts = gTTS(text=text, lang="en")
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as f:
+        tts.save(f.name)
+        playsound(f.name)
+        os.unlink(f.name)
+
+def run_assistant():
+    """Main assistant loop"""
+    print("🤖 Assistant started. Say 'exit' to quit.")
+
+    while True:
+        text = listen()
+
+        if not text:
+            continue
+
+        if "exit" in text.lower():
+            speak("Goodbye!")
+            break
+
+        response = think(text)
+        print(f"🤖: {response}")
+        speak(response)
+
+# Run
+run_assistant()
+\`\`\`
+
+---
+
+## Installation
+
+\`\`\`bash
+pip install SpeechRecognition gTTS playsound pyaudio google-generativeai
+\`\`\`
+
+---
+
+## Next level
+
+→ [Multimodal App](/en/cooking/multimodal-app)
+    `,
+  },
+
+  'multimodal-app': {
+    timeEs: '50 minutos',
+    timeEn: '50 minutes',
+    prerequisitesEs: ['Python', 'Streamlit'],
+    prerequisitesEn: ['Python', 'Streamlit'],
+    contentEs: `
+## App Multimodal
+
+Crea una app web que procese texto, imágenes y audio.
+
+---
+
+## El prompt para empezar
+
+> Crea una app Streamlit multimodal que:
+> 1. Acepte texto, imagen o audio como input
+> 2. Use Gemini para procesar todos los tipos
+> 3. Muestre respuesta formateada
+> 4. Guarde historial de conversación
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+import streamlit as st
+import google.generativeai as genai
+from PIL import Image
+import io
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+st.set_page_config(page_title="App Multimodal", page_icon="🎨")
+st.title("🎨 App Multimodal con IA")
+
+# Historial en session state
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Mostrar historial
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
+        if msg.get("image"):
+            st.image(msg["image"], width=300)
+
+# Tabs para diferentes inputs
+tab1, tab2, tab3 = st.tabs(["💬 Texto", "🖼️ Imagen", "🎤 Audio"])
+
+with tab1:
+    text_input = st.text_area("Escribe tu mensaje:")
+    if st.button("Enviar texto"):
+        if text_input:
+            st.session_state.messages.append({
+                "role": "user",
+                "content": text_input
+            })
+            response = model.generate_content(text_input)
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": response.text
+            })
+            st.rerun()
+
+with tab2:
+    uploaded_image = st.file_uploader(
+        "Sube una imagen:",
+        type=["png", "jpg", "jpeg"]
+    )
+    image_prompt = st.text_input("¿Qué quieres saber de la imagen?")
+
+    if st.button("Analizar imagen"):
+        if uploaded_image and image_prompt:
+            image = Image.open(uploaded_image)
+            st.session_state.messages.append({
+                "role": "user",
+                "content": image_prompt,
+                "image": image
+            })
+
+            response = model.generate_content([image_prompt, image])
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": response.text
+            })
+            st.rerun()
+
+with tab3:
+    audio_file = st.file_uploader(
+        "Sube un audio:",
+        type=["mp3", "wav", "m4a"]
+    )
+    if st.button("Transcribir"):
+        if audio_file:
+            st.info("Transcripción con Whisper/Gemini próximamente")
+
+# Botón limpiar
+if st.button("🗑️ Limpiar historial"):
+    st.session_state.messages = []
+    st.rerun()
+\`\`\`
+
+---
+
+## Ejecutar
+
+\`\`\`bash
+pip install streamlit google-generativeai pillow
+streamlit run app.py
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [Fine-tuning de Modelo](/es/cooking/fine-tuning)
+    `,
+    contentEn: `
+## Multimodal App
+
+Create a web app that processes text, images, and audio.
+
+---
+
+## The prompt to start
+
+> Create a multimodal Streamlit app that:
+> 1. Accepts text, image, or audio as input
+> 2. Uses Gemini to process all types
+> 3. Shows formatted response
+> 4. Saves conversation history
+
+---
+
+## What the AI will create
+
+\`\`\`python
+import streamlit as st
+import google.generativeai as genai
+from PIL import Image
+import io
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+st.set_page_config(page_title="Multimodal App", page_icon="🎨")
+st.title("🎨 Multimodal AI App")
+
+# History in session state
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Show history
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
+        if msg.get("image"):
+            st.image(msg["image"], width=300)
+
+# Tabs for different inputs
+tab1, tab2, tab3 = st.tabs(["💬 Text", "🖼️ Image", "🎤 Audio"])
+
+with tab1:
+    text_input = st.text_area("Write your message:")
+    if st.button("Send text"):
+        if text_input:
+            st.session_state.messages.append({
+                "role": "user",
+                "content": text_input
+            })
+            response = model.generate_content(text_input)
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": response.text
+            })
+            st.rerun()
+
+with tab2:
+    uploaded_image = st.file_uploader(
+        "Upload an image:",
+        type=["png", "jpg", "jpeg"]
+    )
+    image_prompt = st.text_input("What do you want to know about the image?")
+
+    if st.button("Analyze image"):
+        if uploaded_image and image_prompt:
+            image = Image.open(uploaded_image)
+            st.session_state.messages.append({
+                "role": "user",
+                "content": image_prompt,
+                "image": image
+            })
+
+            response = model.generate_content([image_prompt, image])
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": response.text
+            })
+            st.rerun()
+
+with tab3:
+    audio_file = st.file_uploader(
+        "Upload audio:",
+        type=["mp3", "wav", "m4a"]
+    )
+    if st.button("Transcribe"):
+        if audio_file:
+            st.info("Transcription with Whisper/Gemini coming soon")
+
+# Clear button
+if st.button("🗑️ Clear history"):
+    st.session_state.messages = []
+    st.rerun()
+\`\`\`
+
+---
+
+## Run
+
+\`\`\`bash
+pip install streamlit google-generativeai pillow
+streamlit run app.py
+\`\`\`
+
+---
+
+## Next level
+
+→ [Model Fine-tuning](/en/cooking/fine-tuning)
+    `,
+  },
+
+  'fine-tuning': {
+    timeEs: '60 minutos',
+    timeEn: '60 minutes',
+    prerequisitesEs: ['Python', 'Dataset propio (100+ ejemplos)'],
+    prerequisitesEn: ['Python', 'Own dataset (100+ examples)'],
+    contentEs: `
+## Fine-tuning de Modelo
+
+Entrena un modelo con TUS datos para tareas específicas.
+
+---
+
+## El prompt para empezar
+
+> Explica cómo hacer fine-tuning de Gemini:
+> 1. Preparar dataset en formato correcto
+> 2. Subir a Google AI Studio
+> 3. Configurar entrenamiento
+> 4. Usar modelo tuneado
+
+---
+
+## Preparar dataset
+
+\`\`\`python
+# Formato JSONL para fine-tuning
+import json
+
+ejemplos = [
+    {
+        "text_input": "¿Cómo reseteo mi contraseña?",
+        "output": "Para resetear tu contraseña: 1) Ve a login 2) Click 'Olvidé contraseña' 3) Ingresa email 4) Revisa tu correo"
+    },
+    {
+        "text_input": "No puedo iniciar sesión",
+        "output": "Verifica: 1) Caps Lock desactivado 2) Email correcto 3) Prueba resetear contraseña si persiste"
+    },
+    # Mínimo 100 ejemplos recomendado
+]
+
+with open("training_data.jsonl", "w") as f:
+    for ej in ejemplos:
+        f.write(json.dumps(ej, ensure_ascii=False) + "\\n")
+\`\`\`
+
+---
+
+## Subir a AI Studio
+
+1. Ve a https://aistudio.google.com
+2. Click "Tune a model"
+3. Sube tu archivo JSONL
+4. Configura epochs (2-5 recomendado)
+5. Inicia entrenamiento
+
+---
+
+## Usar modelo tuneado
+
+\`\`\`python
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+# Usar tu modelo tuneado
+model = genai.GenerativeModel(
+    model_name="tunedModels/mi-modelo-soporte-xxx"
+)
+
+response = model.generate_content(
+    "¿Cómo cambio mi foto de perfil?"
+)
+print(response.text)
+# → Respuesta en el estilo de tus datos de entrenamiento
+\`\`\`
+
+---
+
+## Alternativa: OpenAI Fine-tuning
+
+\`\`\`python
+from openai import OpenAI
+client = OpenAI()
+
+# Subir archivo
+file = client.files.create(
+    file=open("training_data.jsonl", "rb"),
+    purpose="fine-tune"
+)
+
+# Crear fine-tune job
+job = client.fine_tuning.jobs.create(
+    training_file=file.id,
+    model="gpt-4o-mini-2024-07-18"
+)
+
+# Usar modelo tuneado
+response = client.chat.completions.create(
+    model="ft:gpt-4o-mini:mi-org::xxx",
+    messages=[{"role": "user", "content": "¿Cómo reseteo?"}]
+)
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [Code Review con IA](/es/cooking/ai-code-review)
+    `,
+    contentEn: `
+## Model Fine-tuning
+
+Train a model with YOUR data for specific tasks.
+
+---
+
+## The prompt to start
+
+> Explain how to fine-tune Gemini:
+> 1. Prepare dataset in correct format
+> 2. Upload to Google AI Studio
+> 3. Configure training
+> 4. Use tuned model
+
+---
+
+## Prepare dataset
+
+\`\`\`python
+# JSONL format for fine-tuning
+import json
+
+examples = [
+    {
+        "text_input": "How do I reset my password?",
+        "output": "To reset your password: 1) Go to login 2) Click 'Forgot password' 3) Enter email 4) Check your inbox"
+    },
+    {
+        "text_input": "I can't log in",
+        "output": "Check: 1) Caps Lock off 2) Correct email 3) Try resetting password if persists"
+    },
+    # Minimum 100 examples recommended
+]
+
+with open("training_data.jsonl", "w") as f:
+    for ex in examples:
+        f.write(json.dumps(ex) + "\\n")
+\`\`\`
+
+---
+
+## Upload to AI Studio
+
+1. Go to https://aistudio.google.com
+2. Click "Tune a model"
+3. Upload your JSONL file
+4. Configure epochs (2-5 recommended)
+5. Start training
+
+---
+
+## Use tuned model
+
+\`\`\`python
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+# Use your tuned model
+model = genai.GenerativeModel(
+    model_name="tunedModels/my-support-model-xxx"
+)
+
+response = model.generate_content(
+    "How do I change my profile picture?"
+)
+print(response.text)
+# → Response in your training data style
+\`\`\`
+
+---
+
+## Alternative: OpenAI Fine-tuning
+
+\`\`\`python
+from openai import OpenAI
+client = OpenAI()
+
+# Upload file
+file = client.files.create(
+    file=open("training_data.jsonl", "rb"),
+    purpose="fine-tune"
+)
+
+# Create fine-tune job
+job = client.fine_tuning.jobs.create(
+    training_file=file.id,
+    model="gpt-4o-mini-2024-07-18"
+)
+
+# Use tuned model
+response = client.chat.completions.create(
+    model="ft:gpt-4o-mini:my-org::xxx",
+    messages=[{"role": "user", "content": "How do I reset?"}]
+)
+\`\`\`
+
+---
+
+## Next level
+
+→ [AI Code Review](/en/cooking/ai-code-review)
+    `,
+  },
+
+  'ai-code-review': {
+    timeEs: '40 minutos',
+    timeEn: '40 minutes',
+    prerequisitesEs: ['Python o Node.js', 'Git'],
+    prerequisitesEn: ['Python or Node.js', 'Git'],
+    contentEs: `
+## Code Review con IA
+
+Automatiza revisiones de código usando IA.
+
+---
+
+## El prompt para empezar
+
+> Crea un script que:
+> 1. Obtenga diff de un PR de GitHub
+> 2. Envíe a Gemini para análisis
+> 3. Genere comentarios de review
+> 4. (Opcional) Postee en GitHub
+
+---
+
+## Lo que la IA creará
+
+\`\`\`python
+import google.generativeai as genai
+import subprocess
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+def get_diff(base: str = "main") -> str:
+    """Obtener diff del branch actual vs base"""
+    result = subprocess.run(
+        ["git", "diff", base],
+        capture_output=True,
+        text=True
+    )
+    return result.stdout
+
+def review_code(diff: str) -> str:
+    """Revisar código con IA"""
+    prompt = f"""Eres un senior developer haciendo code review.
+
+Analiza este diff y proporciona:
+1. **Resumen**: Qué hace este cambio
+2. **Bugs potenciales**: Errores que podrían ocurrir
+3. **Seguridad**: Vulnerabilidades detectadas
+4. **Mejoras**: Sugerencias de refactoring
+5. **Score**: 1-10 de calidad
+
+DIFF:
+\`\`\`diff
+{diff[:10000]}
+\`\`\`
+
+Responde en español, sé constructivo y específico."""
+
+    response = model.generate_content(prompt)
+    return response.text
+
+def main():
+    print("🔍 Obteniendo diff...")
+    diff = get_diff()
+
+    if not diff:
+        print("No hay cambios para revisar")
+        return
+
+    print(f"📝 Analizando {len(diff)} caracteres de diff...")
+    review = review_code(diff)
+
+    print("\\n" + "=" * 50)
+    print("📋 CODE REVIEW")
+    print("=" * 50)
+    print(review)
+
+if __name__ == "__main__":
+    main()
+\`\`\`
+
+---
+
+## Integración con GitHub Actions
+
+\`\`\`yaml
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get diff
+        run: |
+          git diff origin/main > diff.txt
+
+      - name: AI Review
+        env:
+          GEMINI_API_KEY: \${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python review.py diff.txt > review.md
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const review = fs.readFileSync('review.md', 'utf8');
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: review
+            });
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [SaaS Completo con IA](/es/cooking/full-saas)
+    `,
+    contentEn: `
+## AI Code Review
+
+Automate code reviews using AI.
+
+---
+
+## The prompt to start
+
+> Create a script that:
+> 1. Gets diff from a GitHub PR
+> 2. Sends to Gemini for analysis
+> 3. Generates review comments
+> 4. (Optional) Posts on GitHub
+
+---
+
+## What the AI will create
+
+\`\`\`python
+import google.generativeai as genai
+import subprocess
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+def get_diff(base: str = "main") -> str:
+    """Get diff from current branch vs base"""
+    result = subprocess.run(
+        ["git", "diff", base],
+        capture_output=True,
+        text=True
+    )
+    return result.stdout
+
+def review_code(diff: str) -> str:
+    """Review code with AI"""
+    prompt = f"""You are a senior developer doing code review.
+
+Analyze this diff and provide:
+1. **Summary**: What this change does
+2. **Potential bugs**: Errors that could occur
+3. **Security**: Detected vulnerabilities
+4. **Improvements**: Refactoring suggestions
+5. **Score**: 1-10 quality
+
+DIFF:
+\`\`\`diff
+{diff[:10000]}
+\`\`\`
+
+Be constructive and specific."""
+
+    response = model.generate_content(prompt)
+    return response.text
+
+def main():
+    print("🔍 Getting diff...")
+    diff = get_diff()
+
+    if not diff:
+        print("No changes to review")
+        return
+
+    print(f"📝 Analyzing {len(diff)} characters of diff...")
+    review = review_code(diff)
+
+    print("\\n" + "=" * 50)
+    print("📋 CODE REVIEW")
+    print("=" * 50)
+    print(review)
+
+if __name__ == "__main__":
+    main()
+\`\`\`
+
+---
+
+## GitHub Actions integration
+
+\`\`\`yaml
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get diff
+        run: |
+          git diff origin/main > diff.txt
+
+      - name: AI Review
+        env:
+          GEMINI_API_KEY: \${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python review.py diff.txt > review.md
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const review = fs.readFileSync('review.md', 'utf8');
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: review
+            });
+\`\`\`
+
+---
+
+## Next level
+
+→ [Full SaaS with AI](/en/cooking/full-saas)
+    `,
+  },
+
+  'full-saas': {
+    timeEs: '120+ minutos',
+    timeEn: '120+ minutes',
+    prerequisitesEs: ['Todos los niveles anteriores'],
+    prerequisitesEn: ['All previous levels'],
+    contentEs: `
+## SaaS Completo con IA
+
+El proyecto final: un SaaS completo con autenticación, pagos e IA.
+
+---
+
+## El prompt para empezar
+
+> Diseña la arquitectura de un SaaS con:
+> 1. Auth con Google (Firebase)
+> 2. Pagos con Stripe (suscripciones)
+> 3. Feature de IA (elige: chat, análisis, generación)
+> 4. Base de datos PostgreSQL
+> 5. Deploy en Docker
+
+---
+
+## Arquitectura sugerida
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│                    FRONTEND                          │
+│                  (Next.js 15)                        │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐             │
+│  │  Auth   │  │ Billing │  │   AI    │             │
+│  │  Page   │  │  Page   │  │  Chat   │             │
+│  └────┬────┘  └────┬────┘  └────┬────┘             │
+└───────┼────────────┼────────────┼───────────────────┘
+        │            │            │
+        ▼            ▼            ▼
+┌─────────────────────────────────────────────────────┐
+│                     API                              │
+│                 (Next.js API)                        │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐             │
+│  │Firebase │  │ Stripe  │  │ Gemini  │             │
+│  │  Auth   │  │Webhooks │  │   API   │             │
+│  └────┬────┘  └────┬────┘  └────┬────┘             │
+└───────┼────────────┼────────────┼───────────────────┘
+        │            │            │
+        ▼            ▼            ▼
+┌─────────────────────────────────────────────────────┐
+│                   STORAGE                            │
+│  ┌─────────────┐  ┌─────────────┐                   │
+│  │ PostgreSQL  │  │    Redis    │                   │
+│  │   (users,   │  │   (cache,   │                   │
+│  │   chats)    │  │  sessions)  │                   │
+│  └─────────────┘  └─────────────┘                   │
+└─────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Componentes clave
+
+### 1. Auth
+\`\`\`typescript
+// Usa lo aprendido en auth-firebase
+import { signInWithGoogle } from './firebase'
+\`\`\`
+
+### 2. Pagos
+\`\`\`typescript
+// Usa lo aprendido en payment-stripe
+import { createCheckoutSession } from './stripe'
+\`\`\`
+
+### 3. IA
+\`\`\`typescript
+// Usa lo aprendido en chatbot-gemini
+import { generateResponse } from './gemini'
+\`\`\`
+
+### 4. Database
+\`\`\`typescript
+// Usa lo aprendido en crud-postgres
+import { prisma } from './db'
+\`\`\`
+
+---
+
+## Modelo de datos
+
+\`\`\`prisma
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  plan          Plan     @default(FREE)
+  stripeId      String?
+  chats         Chat[]
+  tokensUsed    Int      @default(0)
+  createdAt     DateTime @default(now())
+}
+
+model Chat {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  messages  Message[]
+  createdAt DateTime  @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  role      String   // user | assistant
+  content   String
+  createdAt DateTime @default(now())
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+\`\`\`
+
+---
+
+## Límites por plan
+
+| Feature | Free | Pro | Enterprise |
+|---------|------|-----|------------|
+| Mensajes/mes | 100 | 10,000 | Ilimitado |
+| Modelos | Gemini Flash | Gemini Pro | Todos |
+| Historial | 7 días | 1 año | Ilimitado |
+| Soporte | Comunidad | Email | Dedicado |
+
+---
+
+## Docker Compose
+
+\`\`\`yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://...
+      - GEMINI_API_KEY=...
+      - STRIPE_SECRET_KEY=...
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  pgdata:
+\`\`\`
+
+---
+
+## Felicitaciones
+
+Has completado todos los niveles de luxIA Cooking.
+
+Ahora tienes las habilidades para construir productos reales con IA.
+
+→ [Volver al inicio](/es/cooking)
+    `,
+    contentEn: `
+## Full SaaS with AI
+
+The final project: a complete SaaS with auth, payments, and AI.
+
+---
+
+## The prompt to start
+
+> Design the architecture of a SaaS with:
+> 1. Auth with Google (Firebase)
+> 2. Payments with Stripe (subscriptions)
+> 3. AI feature (choose: chat, analysis, generation)
+> 4. PostgreSQL database
+> 5. Docker deploy
+
+---
+
+## Suggested architecture
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│                    FRONTEND                          │
+│                  (Next.js 15)                        │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐             │
+│  │  Auth   │  │ Billing │  │   AI    │             │
+│  │  Page   │  │  Page   │  │  Chat   │             │
+│  └────┬────┘  └────┬────┘  └────┬────┘             │
+└───────┼────────────┼────────────┼───────────────────┘
+        │            │            │
+        ▼            ▼            ▼
+┌─────────────────────────────────────────────────────┐
+│                     API                              │
+│                 (Next.js API)                        │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐             │
+│  │Firebase │  │ Stripe  │  │ Gemini  │             │
+│  │  Auth   │  │Webhooks │  │   API   │             │
+│  └────┬────┘  └────┬────┘  └────┬────┘             │
+└───────┼────────────┼────────────┼───────────────────┘
+        │            │            │
+        ▼            ▼            ▼
+┌─────────────────────────────────────────────────────┐
+│                   STORAGE                            │
+│  ┌─────────────┐  ┌─────────────┐                   │
+│  │ PostgreSQL  │  │    Redis    │                   │
+│  │   (users,   │  │   (cache,   │                   │
+│  │   chats)    │  │  sessions)  │                   │
+│  └─────────────┘  └─────────────┘                   │
+└─────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Key components
+
+### 1. Auth
+\`\`\`typescript
+// Use what you learned in auth-firebase
+import { signInWithGoogle } from './firebase'
+\`\`\`
+
+### 2. Payments
+\`\`\`typescript
+// Use what you learned in payment-stripe
+import { createCheckoutSession } from './stripe'
+\`\`\`
+
+### 3. AI
+\`\`\`typescript
+// Use what you learned in chatbot-gemini
+import { generateResponse } from './gemini'
+\`\`\`
+
+### 4. Database
+\`\`\`typescript
+// Use what you learned in crud-postgres
+import { prisma } from './db'
+\`\`\`
+
+---
+
+## Data model
+
+\`\`\`prisma
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  plan          Plan     @default(FREE)
+  stripeId      String?
+  chats         Chat[]
+  tokensUsed    Int      @default(0)
+  createdAt     DateTime @default(now())
+}
+
+model Chat {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  messages  Message[]
+  createdAt DateTime  @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  role      String   // user | assistant
+  content   String
+  createdAt DateTime @default(now())
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+\`\`\`
+
+---
+
+## Limits by plan
+
+| Feature | Free | Pro | Enterprise |
+|---------|------|-----|------------|
+| Messages/month | 100 | 10,000 | Unlimited |
+| Models | Gemini Flash | Gemini Pro | All |
+| History | 7 days | 1 year | Unlimited |
+| Support | Community | Email | Dedicated |
+
+---
+
+## Docker Compose
+
+\`\`\`yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://...
+      - GEMINI_API_KEY=...
+      - STRIPE_SECRET_KEY=...
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  pgdata:
+\`\`\`
+
+---
+
+## Congratulations
+
+You've completed all levels of luxIA Cooking.
+
+You now have the skills to build real products with AI.
+
+→ [Back to start](/en/cooking)
+    `,
+  },
 }
 
 const dishOrder = dishes.map(d => d.slug)
