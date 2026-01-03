@@ -551,7 +551,7 @@ Leyenda: ✅✅ Excelente | ✅ Bueno | ⚠️ Limitado | ❌ No disponible
 │  ✗ Sin autocompletado inline                                │
 │  ✗ Requiere API key (pago por uso)                          │
 │                                                              │
-│  💰 Costo: ~$0.003 por 1K tokens (~$3/M tokens)              │
+│  💰 Costo: ~$3/M tokens, $20/mes pro, $100/mes max          │
 │  🔗 https://docs.anthropic.com/en/docs/claude-code          │
 └─────────────────────────────────────────────────────────────┘
 
