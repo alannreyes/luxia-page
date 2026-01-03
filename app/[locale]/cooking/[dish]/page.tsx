@@ -3146,14 +3146,18 @@ done
     `,
   },
   'docker-hello': {
-    timeEs: '20 minutos',
-    timeEn: '20 minutes',
-    prerequisitesEs: ['Terminal básica'],
-    prerequisitesEn: ['Basic terminal'],
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Terminal básica', '4GB RAM mínimo'],
+    prerequisitesEn: ['Basic terminal', '4GB RAM minimum'],
     contentEs: `
-## Contenedores: Tu código empaquetado
+## ¿Por qué Docker?
 
-Docker empaqueta tu aplicación con todo lo que necesita para correr. Funciona igual en tu máquina y en producción.
+**El problema:** "En mi máquina funciona" es la frase más frustrante del desarrollo.
+
+**La solución:** Docker empaqueta tu app + dependencias + configuración en un **contenedor** que funciona **igual en cualquier lugar**.
+
+> 📖 Para entender la diferencia entre Docker y máquinas virtuales, lee [Docker Básico en Learning](/es/learning/docker-intro)
 
 ---
 
@@ -3163,7 +3167,7 @@ Docker empaqueta tu aplicación con todo lo que necesita para correr. Funciona i
 |---------|-------------|
 | **macOS** | [Docker Desktop](https://docker.com/products/docker-desktop) |
 | **Windows** | [Docker Desktop](https://docker.com/products/docker-desktop) |
-| **Linux** | \`sudo apt install docker.io\` |
+| **Linux** | \`curl -fsSL https://get.docker.com | sh\` |
 
 Verifica:
 
@@ -3172,24 +3176,166 @@ docker --version
 docker run hello-world
 \`\`\`
 
+> ⚠️ **Windows**: Necesitas WSL2 habilitado. Docker Desktop te guía en la instalación.
+
 ---
 
 ## Paso 2: Tu primer contenedor
 
 \`\`\`bash
-# Corre un contenedor de Ubuntu
+# Descarga y corre Ubuntu en segundos
 docker run -it ubuntu bash
 
 # Ahora estás DENTRO del contenedor
-cat /etc/os-release
-exit
+cat /etc/os-release   # Verás "Ubuntu"
+apt update            # Funciona como Linux real
+exit                  # Sales del contenedor
 \`\`\`
+
+**¿Qué pasó?** Docker descargó una imagen de Ubuntu (~30MB, no 4GB) y la ejecutó **aislada** de tu sistema.
 
 ---
 
-## Paso 3: Crea tu propia imagen
+## Paso 3: Corre servicios útiles
 
-Crea \`Dockerfile\`:
+Docker brilla cuando necesitas bases de datos o servicios sin instalar nada permanente:
+
+\`\`\`bash
+# PostgreSQL listo en 10 segundos
+docker run -d --name mi-postgres \\
+  -e POSTGRES_PASSWORD=secreto \\
+  -p 5432:5432 \\
+  postgres:16-alpine
+
+# Redis para caché
+docker run -d --name mi-redis -p 6379:6379 redis:alpine
+
+# Adminer (interfaz web para bases de datos)
+docker run -d --name adminer -p 8080:8080 adminer
+\`\`\`
+
+Abre http://localhost:8080 para ver Adminer funcionando.
+
+**⚠️ PROBLEMA:** Si haces \`docker rm mi-postgres\`, pierdes TODOS los datos. Sigue leyendo para solucionarlo.
+
+---
+
+## Paso 4: Volúmenes (Datos Persistentes)
+
+**El problema más común de principiantes:** Crean una base de datos, guardan datos, eliminan el contenedor... y pierden todo.
+
+### ¿Por qué pasa esto?
+
+\`\`\`
+SIN VOLUMEN:
+┌─────────────────────────┐
+│     Contenedor          │
+│  ┌─────────────────┐    │
+│  │   Base de datos │    │  ← Los datos viven DENTRO
+│  │   (tus datos)   │    │     del contenedor
+│  └─────────────────┘    │
+└─────────────────────────┘
+        ↓
+   docker rm postgres
+        ↓
+   💀 DATOS PERDIDOS
+
+CON VOLUMEN:
+┌─────────────────────────┐      ┌─────────────────┐
+│     Contenedor          │      │    Volumen      │
+│  ┌─────────────────┐    │ ──── │  (tu disco)     │
+│  │   Base de datos │────│──────│   tus datos     │
+│  └─────────────────┘    │      └─────────────────┘
+└─────────────────────────┘              ↓
+        ↓                         Los datos están
+   docker rm postgres             FUERA del contenedor
+        ↓                                ↓
+   Contenedor eliminado           ✅ DATOS SEGUROS
+\`\`\`
+
+### Crear PostgreSQL con volumen persistente
+
+\`\`\`bash
+# Crea un volumen con nombre
+docker volume create postgres_data
+
+# Corre PostgreSQL usando ese volumen
+docker run -d --name mi-postgres \\
+  -e POSTGRES_PASSWORD=secreto \\
+  -e POSTGRES_USER=dev \\
+  -e POSTGRES_DB=miapp \\
+  -p 5432:5432 \\
+  -v postgres_data:/var/lib/postgresql/data \\
+  postgres:16-alpine
+\`\`\`
+
+**La magia está en \`-v postgres_data:/var/lib/postgresql/data\`**:
+- \`postgres_data\` = nombre del volumen en tu máquina
+- \`/var/lib/postgresql/data\` = donde Postgres guarda datos dentro del contenedor
+
+### Prueba que funciona
+
+\`\`\`bash
+# Conecta y crea una tabla
+docker exec -it mi-postgres psql -U dev -d miapp -c "CREATE TABLE test (id INT);"
+docker exec -it mi-postgres psql -U dev -d miapp -c "INSERT INTO test VALUES (1), (2), (3);"
+
+# Elimina el contenedor
+docker stop mi-postgres && docker rm mi-postgres
+
+# Crea uno nuevo con el MISMO volumen
+docker run -d --name mi-postgres \\
+  -e POSTGRES_PASSWORD=secreto \\
+  -e POSTGRES_USER=dev \\
+  -e POSTGRES_DB=miapp \\
+  -p 5432:5432 \\
+  -v postgres_data:/var/lib/postgresql/data \\
+  postgres:16-alpine
+
+# Verifica que los datos siguen ahí
+docker exec -it mi-postgres psql -U dev -d miapp -c "SELECT * FROM test;"
+# Resultado: 1, 2, 3 ✅
+\`\`\`
+
+### Comandos de volúmenes
+
+| Comando | Qué hace |
+|---------|----------|
+| \`docker volume create nombre\` | Crea un volumen |
+| \`docker volume ls\` | Lista todos los volúmenes |
+| \`docker volume inspect nombre\` | Ver detalles (ubicación real) |
+| \`docker volume rm nombre\` | Elimina volumen (¡y sus datos!) |
+| \`docker volume prune\` | Elimina volúmenes no usados |
+
+### Tipos de montaje
+
+| Tipo | Sintaxis | Uso |
+|------|----------|-----|
+| **Named Volume** | \`-v mi_volumen:/data\` | Producción, bases de datos |
+| **Bind Mount** | \`-v ./local:/data\` | Desarrollo, ver cambios en vivo |
+| **Anonymous** | \`-v /data\` | Temporal, no recomendado |
+
+**Ejemplo de Bind Mount para desarrollo:**
+
+\`\`\`bash
+# Tu código local se sincroniza con el contenedor
+docker run -d --name mi-app \\
+  -v $(pwd):/app \\
+  -p 3000:3000 \\
+  node:20-alpine npm start
+\`\`\`
+
+Cambias un archivo → el contenedor lo ve inmediatamente.
+
+---
+
+## Paso 5: Crea tu propia imagen
+
+Ahora que entiendes contenedores y volúmenes, crea tu propia imagen.
+
+Crea una carpeta \`docker-hello\` con estos 3 archivos:
+
+**Dockerfile:**
 
 \`\`\`dockerfile
 FROM node:20-alpine
@@ -3200,28 +3346,77 @@ COPY . .
 CMD ["node", "index.js"]
 \`\`\`
 
-Crea \`index.js\`:
+**index.js:**
 
 \`\`\`javascript
-console.log("¡Hola desde Docker!");
+console.log("¡Hola desde Docker! 🐳");
+console.log("Fecha:", new Date().toISOString());
+console.log("Node version:", process.version);
 \`\`\`
 
-Crea \`package.json\`:
+**package.json:**
 
 \`\`\`json
 { "name": "docker-hello", "version": "1.0.0" }
 \`\`\`
 
----
-
-## Paso 4: Construye y corre
+Construye y ejecuta:
 
 \`\`\`bash
 docker build -t mi-app .
 docker run mi-app
 \`\`\`
 
-Deberías ver: "¡Hola desde Docker!"
+---
+
+## Paso 6: Instala Portainer (Gestión Visual)
+
+**Portainer** es una interfaz web para Docker. Perfecto para principiantes:
+
+\`\`\`bash
+# Crea un volumen para persistir datos
+docker volume create portainer_data
+
+# Instala Portainer
+docker run -d -p 9000:9000 \\
+  --name portainer \\
+  --restart=always \\
+  -v /var/run/docker.sock:/var/run/docker.sock \\
+  -v portainer_data:/data \\
+  portainer/portainer-ce:latest
+\`\`\`
+
+Abre **http://localhost:9000** y crea tu usuario admin.
+
+**¿Qué puedes hacer con Portainer?**
+- Ver todos tus contenedores en una tabla
+- Iniciar/detener/eliminar con un click
+- Ver logs en tiempo real
+- Crear contenedores sin comandos
+- Gestionar imágenes, volúmenes, redes
+
+> 💡 **Tip**: Deja Portainer corriendo siempre. Es como el "Finder" o "Explorer" pero para Docker.
+
+---
+
+## 🛠️ Herramientas de gestión
+
+| Herramienta | Tipo | Ideal para |
+|-------------|------|------------|
+| [Portainer](https://portainer.io) | UI local/servidor | Gestionar Docker visualmente |
+| [Docker Desktop](https://docker.com/products/docker-desktop) | App desktop | Mac/Windows, incluye UI básica |
+| [Lazydocker](https://github.com/jesseduffield/lazydocker) | TUI terminal | Fans de la terminal |
+
+### Para deploy en producción
+
+| Herramienta | Descripción | Costo |
+|-------------|-------------|-------|
+| [EasyPanel](https://easypanel.io) | Deploy como Heroku, pero en tu VPS | Gratis self-hosted |
+| [Coolify](https://coolify.io) | Open source, muy completo | Gratis self-hosted |
+| [Dokku](https://dokku.com) | Mini-Heroku en tu servidor | Gratis |
+| [CapRover](https://caprover.com) | PaaS simple con Let's Encrypt | Gratis |
+
+> 🎯 **Recomendación para principiantes**: Usa **Portainer** para aprender, luego **EasyPanel** o **Coolify** cuando quieras deploy fácil.
 
 ---
 
@@ -3229,11 +3424,16 @@ Deberías ver: "¡Hola desde Docker!"
 
 | Comando | Qué hace |
 |---------|----------|
-| \`docker build -t nombre .\` | Construye imagen |
-| \`docker run nombre\` | Corre contenedor |
+| \`docker run -d nombre\` | Corre en background |
 | \`docker ps\` | Lista contenedores activos |
-| \`docker images\` | Lista imágenes |
-| \`docker stop ID\` | Detiene contenedor |
+| \`docker ps -a\` | Lista TODOS (incluso detenidos) |
+| \`docker logs nombre\` | Ver logs |
+| \`docker logs -f nombre\` | Logs en tiempo real |
+| \`docker stop nombre\` | Detener contenedor |
+| \`docker rm nombre\` | Eliminar contenedor |
+| \`docker images\` | Lista imágenes descargadas |
+| \`docker rmi nombre\` | Eliminar imagen |
+| \`docker system prune\` | Limpia todo lo no usado |
 
 ---
 
@@ -3242,19 +3442,38 @@ Deberías ver: "¡Hola desde Docker!"
 | Error | Causa | Solución |
 |-------|-------|----------|
 | \`daemon not running\` | Docker no está corriendo | Abre Docker Desktop |
-| \`permission denied\` | Sin permisos | Usa \`sudo\` o agrega usuario al grupo docker |
-| \`no such file\` | Dockerfile mal ubicado | Corre desde la carpeta del Dockerfile |
+| \`permission denied\` | Sin permisos | Linux: \`sudo usermod -aG docker $USER\` y reinicia sesión |
+| \`port already in use\` | Puerto ocupado | Cambia el puerto: \`-p 9001:9000\` |
+| \`no space left\` | Disco lleno de imágenes | \`docker system prune -a\` |
+| \`cannot connect\` a localhost | Contenedor no expone puerto | Agrega \`-p puerto:puerto\` |
 
 ---
 
-## Próximo paso
+## Lo que aprendiste
 
-→ [Consumir una API JSON](/es/cooking/json-api-fetch) — Datos del mundo real
+✅ Instalar Docker y verificar que funcione
+✅ Correr contenedores pre-hechos (Ubuntu, Postgres, Redis)
+✅ **Usar volúmenes para no perder datos** (el error #1 de principiantes)
+✅ Crear tu propia imagen con Dockerfile
+✅ Usar Portainer para gestión visual
+✅ Comandos esenciales para el día a día
+
+---
+
+## Próximos pasos
+
+→ [Consumir una API JSON](/es/cooking/json-api-fetch) — Conecta tu app con datos reales
+→ [Deploy con Docker](/es/cooking/docker-deploy) — Lleva tu contenedor a producción
+→ [Docker Básico (teoría)](/es/learning/docker-intro) — Entiende containers vs VMs
     `,
     contentEn: `
-## Containers: Your packaged code
+## Why Docker?
 
-Docker packages your application with everything it needs to run. Works the same on your machine and in production.
+**The problem:** "It works on my machine" is the most frustrating phrase in development.
+
+**The solution:** Docker packages your app + dependencies + configuration in a **container** that works **identically anywhere**.
+
+> 📖 To understand the difference between Docker and virtual machines, read [Docker Basics in Learning](/en/learning/docker-intro)
 
 ---
 
@@ -3264,7 +3483,7 @@ Docker packages your application with everything it needs to run. Works the same
 |--------|--------------|
 | **macOS** | [Docker Desktop](https://docker.com/products/docker-desktop) |
 | **Windows** | [Docker Desktop](https://docker.com/products/docker-desktop) |
-| **Linux** | \`sudo apt install docker.io\` |
+| **Linux** | \`curl -fsSL https://get.docker.com | sh\` |
 
 Verify:
 
@@ -3273,24 +3492,166 @@ docker --version
 docker run hello-world
 \`\`\`
 
+> ⚠️ **Windows**: You need WSL2 enabled. Docker Desktop guides you through installation.
+
 ---
 
 ## Step 2: Your first container
 
 \`\`\`bash
-# Run an Ubuntu container
+# Download and run Ubuntu in seconds
 docker run -it ubuntu bash
 
 # Now you're INSIDE the container
-cat /etc/os-release
-exit
+cat /etc/os-release   # You'll see "Ubuntu"
+apt update            # Works like real Linux
+exit                  # Exit the container
 \`\`\`
+
+**What happened?** Docker downloaded an Ubuntu image (~30MB, not 4GB) and ran it **isolated** from your system.
 
 ---
 
-## Step 3: Create your own image
+## Step 3: Run useful services
 
-Create \`Dockerfile\`:
+Docker shines when you need databases or services without permanent installation:
+
+\`\`\`bash
+# PostgreSQL ready in 10 seconds
+docker run -d --name my-postgres \\
+  -e POSTGRES_PASSWORD=secret \\
+  -p 5432:5432 \\
+  postgres:16-alpine
+
+# Redis for caching
+docker run -d --name my-redis -p 6379:6379 redis:alpine
+
+# Adminer (web interface for databases)
+docker run -d --name adminer -p 8080:8080 adminer
+\`\`\`
+
+Open http://localhost:8080 to see Adminer running.
+
+**⚠️ PROBLEM:** If you run \`docker rm my-postgres\`, you lose ALL the data. Keep reading to fix this.
+
+---
+
+## Step 4: Volumes (Persistent Data)
+
+**The most common beginner mistake:** They create a database, save data, remove the container... and lose everything.
+
+### Why does this happen?
+
+\`\`\`
+WITHOUT VOLUME:
+┌─────────────────────────┐
+│      Container          │
+│  ┌─────────────────┐    │
+│  │    Database     │    │  ← Data lives INSIDE
+│  │   (your data)   │    │     the container
+│  └─────────────────┘    │
+└─────────────────────────┘
+        ↓
+   docker rm postgres
+        ↓
+   💀 DATA LOST
+
+WITH VOLUME:
+┌─────────────────────────┐      ┌─────────────────┐
+│      Container          │      │     Volume      │
+│  ┌─────────────────┐    │ ──── │  (your disk)    │
+│  │    Database     │────│──────│   your data     │
+│  └─────────────────┘    │      └─────────────────┘
+└─────────────────────────┘              ↓
+        ↓                         Data is stored
+   docker rm postgres             OUTSIDE container
+        ↓                                ↓
+   Container removed              ✅ DATA SAFE
+\`\`\`
+
+### Create PostgreSQL with persistent volume
+
+\`\`\`bash
+# Create a named volume
+docker volume create postgres_data
+
+# Run PostgreSQL using that volume
+docker run -d --name my-postgres \\
+  -e POSTGRES_PASSWORD=secret \\
+  -e POSTGRES_USER=dev \\
+  -e POSTGRES_DB=myapp \\
+  -p 5432:5432 \\
+  -v postgres_data:/var/lib/postgresql/data \\
+  postgres:16-alpine
+\`\`\`
+
+**The magic is in \`-v postgres_data:/var/lib/postgresql/data\`**:
+- \`postgres_data\` = volume name on your machine
+- \`/var/lib/postgresql/data\` = where Postgres stores data inside the container
+
+### Test that it works
+
+\`\`\`bash
+# Connect and create a table
+docker exec -it my-postgres psql -U dev -d myapp -c "CREATE TABLE test (id INT);"
+docker exec -it my-postgres psql -U dev -d myapp -c "INSERT INTO test VALUES (1), (2), (3);"
+
+# Remove the container
+docker stop my-postgres && docker rm my-postgres
+
+# Create a new one with the SAME volume
+docker run -d --name my-postgres \\
+  -e POSTGRES_PASSWORD=secret \\
+  -e POSTGRES_USER=dev \\
+  -e POSTGRES_DB=myapp \\
+  -p 5432:5432 \\
+  -v postgres_data:/var/lib/postgresql/data \\
+  postgres:16-alpine
+
+# Verify the data is still there
+docker exec -it my-postgres psql -U dev -d myapp -c "SELECT * FROM test;"
+# Result: 1, 2, 3 ✅
+\`\`\`
+
+### Volume commands
+
+| Command | What it does |
+|---------|--------------|
+| \`docker volume create name\` | Create a volume |
+| \`docker volume ls\` | List all volumes |
+| \`docker volume inspect name\` | See details (real location) |
+| \`docker volume rm name\` | Delete volume (and its data!) |
+| \`docker volume prune\` | Delete unused volumes |
+
+### Mount types
+
+| Type | Syntax | Use case |
+|------|--------|----------|
+| **Named Volume** | \`-v my_volume:/data\` | Production, databases |
+| **Bind Mount** | \`-v ./local:/data\` | Development, live reload |
+| **Anonymous** | \`-v /data\` | Temporary, not recommended |
+
+**Bind Mount example for development:**
+
+\`\`\`bash
+# Your local code syncs with the container
+docker run -d --name my-app \\
+  -v $(pwd):/app \\
+  -p 3000:3000 \\
+  node:20-alpine npm start
+\`\`\`
+
+Change a file → the container sees it immediately.
+
+---
+
+## Step 5: Create your own image
+
+Now that you understand containers and volumes, create your own image.
+
+Create a \`docker-hello\` folder with these 3 files:
+
+**Dockerfile:**
 
 \`\`\`dockerfile
 FROM node:20-alpine
@@ -3301,28 +3662,77 @@ COPY . .
 CMD ["node", "index.js"]
 \`\`\`
 
-Create \`index.js\`:
+**index.js:**
 
 \`\`\`javascript
-console.log("Hello from Docker!");
+console.log("Hello from Docker! 🐳");
+console.log("Date:", new Date().toISOString());
+console.log("Node version:", process.version);
 \`\`\`
 
-Create \`package.json\`:
+**package.json:**
 
 \`\`\`json
 { "name": "docker-hello", "version": "1.0.0" }
 \`\`\`
 
----
-
-## Step 4: Build and run
+Build and run:
 
 \`\`\`bash
 docker build -t my-app .
 docker run my-app
 \`\`\`
 
-You should see: "Hello from Docker!"
+---
+
+## Step 6: Install Portainer (Visual Management)
+
+**Portainer** is a web interface for Docker. Perfect for beginners:
+
+\`\`\`bash
+# Create a volume to persist data
+docker volume create portainer_data
+
+# Install Portainer
+docker run -d -p 9000:9000 \\
+  --name portainer \\
+  --restart=always \\
+  -v /var/run/docker.sock:/var/run/docker.sock \\
+  -v portainer_data:/data \\
+  portainer/portainer-ce:latest
+\`\`\`
+
+Open **http://localhost:9000** and create your admin user.
+
+**What can you do with Portainer?**
+- See all your containers in a table
+- Start/stop/remove with one click
+- View logs in real-time
+- Create containers without commands
+- Manage images, volumes, networks
+
+> 💡 **Tip**: Keep Portainer running always. It's like "Finder" or "Explorer" but for Docker.
+
+---
+
+## 🛠️ Management tools
+
+| Tool | Type | Ideal for |
+|------|------|-----------|
+| [Portainer](https://portainer.io) | Local/server UI | Visual Docker management |
+| [Docker Desktop](https://docker.com/products/docker-desktop) | Desktop app | Mac/Windows, includes basic UI |
+| [Lazydocker](https://github.com/jesseduffield/lazydocker) | Terminal TUI | Terminal fans |
+
+### For production deployment
+
+| Tool | Description | Cost |
+|------|-------------|------|
+| [EasyPanel](https://easypanel.io) | Deploy like Heroku, but on your VPS | Free self-hosted |
+| [Coolify](https://coolify.io) | Open source, very complete | Free self-hosted |
+| [Dokku](https://dokku.com) | Mini-Heroku on your server | Free |
+| [CapRover](https://caprover.com) | Simple PaaS with Let's Encrypt | Free |
+
+> 🎯 **Recommendation for beginners**: Use **Portainer** to learn, then **EasyPanel** or **Coolify** when you want easy deployment.
 
 ---
 
@@ -3330,11 +3740,16 @@ You should see: "Hello from Docker!"
 
 | Command | What it does |
 |---------|--------------|
-| \`docker build -t name .\` | Build image |
-| \`docker run name\` | Run container |
+| \`docker run -d name\` | Run in background |
 | \`docker ps\` | List active containers |
-| \`docker images\` | List images |
-| \`docker stop ID\` | Stop container |
+| \`docker ps -a\` | List ALL (even stopped) |
+| \`docker logs name\` | View logs |
+| \`docker logs -f name\` | Real-time logs |
+| \`docker stop name\` | Stop container |
+| \`docker rm name\` | Remove container |
+| \`docker images\` | List downloaded images |
+| \`docker rmi name\` | Remove image |
+| \`docker system prune\` | Clean all unused |
 
 ---
 
@@ -3343,14 +3758,29 @@ You should see: "Hello from Docker!"
 | Error | Cause | Solution |
 |-------|-------|----------|
 | \`daemon not running\` | Docker not running | Open Docker Desktop |
-| \`permission denied\` | No permissions | Use \`sudo\` or add user to docker group |
-| \`no such file\` | Dockerfile misplaced | Run from Dockerfile folder |
+| \`permission denied\` | No permissions | Linux: \`sudo usermod -aG docker $USER\` and restart session |
+| \`port already in use\` | Port occupied | Change port: \`-p 9001:9000\` |
+| \`no space left\` | Disk full of images | \`docker system prune -a\` |
+| \`cannot connect\` to localhost | Container not exposing port | Add \`-p port:port\` |
 
 ---
 
-## Next step
+## What you learned
 
-→ [Consume a JSON API](/en/cooking/json-api-fetch) — Real world data
+✅ Install Docker and verify it works
+✅ Run pre-made containers (Ubuntu, Postgres, Redis)
+✅ **Use volumes to not lose data** (beginner's #1 mistake)
+✅ Create your own image with Dockerfile
+✅ Use Portainer for visual management
+✅ Essential commands for daily use
+
+---
+
+## Next steps
+
+→ [Consume a JSON API](/en/cooking/json-api-fetch) — Connect your app with real data
+→ [Deploy with Docker](/en/cooking/docker-deploy) — Take your container to production
+→ [Docker Basics (theory)](/en/learning/docker-intro) — Understand containers vs VMs
     `,
   },
   'json-api-fetch': {

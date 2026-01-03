@@ -2734,9 +2734,89 @@ sudo apt install git nodejs npm python3
   },
   'docker-intro': {
     contentEs: `
-## Contenedores: Tu app empaquetada
+## ¿Qué problema resuelve Docker?
 
-Docker empaqueta tu aplicación con todo lo que necesita para funcionar. "Funciona en mi máquina" ya no es excusa.
+Imagina este escenario (que pasa TODO el tiempo):
+
+| Situación | Lo que escuchas |
+|-----------|-----------------|
+| Desarrollador | "En mi máquina funciona perfecto" |
+| Servidor de producción | Error 500, crash, dependencias faltantes |
+| Nuevo desarrollador | "Llevo 2 días configurando el entorno" |
+| DevOps | "¿Qué versión de Node usaste? ¿Y de Python?" |
+
+**Docker resuelve esto** empaquetando tu aplicación CON TODO lo que necesita: código, runtime, librerías, configuración. Si funciona en Docker, funciona en cualquier lado.
+
+---
+
+## 🖥️ Máquinas Virtuales vs Contenedores
+
+\`\`\`
+    MÁQUINA VIRTUAL                    CONTENEDOR (DOCKER)
+    ─────────────────                  ────────────────────
+
+    ┌─────────────────┐               ┌──────┐ ┌──────┐ ┌──────┐
+    │      App        │               │ App1 │ │ App2 │ │ App3 │
+    ├─────────────────┤               ├──────┴─┴──────┴─┴──────┤
+    │  Libs/Binaries  │               │     Libs/Binaries      │
+    ├─────────────────┤               ├────────────────────────┤
+    │   Guest OS      │  ← SO completo│     Docker Engine      │
+    │  (Ubuntu 8GB)   │               │       (~100MB)         │
+    ├─────────────────┤               ├────────────────────────┤
+    │   Hypervisor    │               │        Host OS         │
+    ├─────────────────┤               ├────────────────────────┤
+    │    Host OS      │               │       Hardware         │
+    ├─────────────────┤               └────────────────────────┘
+    │   Hardware      │
+    └─────────────────┘
+
+    🐢 Pesado: 10-20 GB por VM        🚀 Ligero: 100-500 MB
+    ⏱️ Boot: 1-2 minutos              ⏱️ Boot: 1-2 segundos
+    📦 Aislamiento completo           📦 Aislamiento a nivel proceso
+\`\`\`
+
+---
+
+## 💰 Ahorro de recursos
+
+| Métrica | VM Tradicional | Contenedor Docker |
+|---------|----------------|-------------------|
+| **RAM por instancia** | 1-8 GB | 50-500 MB |
+| **Disco** | 10-40 GB | 100 MB - 2 GB |
+| **Tiempo de inicio** | 30s - 2min | 1-5 segundos |
+| **Apps por servidor** | 5-10 VMs | 50-100+ contenedores |
+| **CPU overhead** | 15-20% | 1-5% |
+
+> 💡 **En un servidor con 32GB RAM**: puedes correr ~4 VMs o ~50 contenedores haciendo lo mismo.
+
+---
+
+## ¿Por qué es esencial para el desarrollador moderno?
+
+| Uso | Beneficio |
+|-----|-----------|
+| **Desarrollo local** | El mismo entorno que producción |
+| **Onboarding** | Nuevo dev productivo en minutos, no días |
+| **CI/CD** | Tests en ambiente idéntico a producción |
+| **Microservicios** | Cada servicio en su contenedor |
+| **Experimentar** | Probar tecnologías sin ensuciar tu sistema |
+| **Escalabilidad** | Kubernetes orquesta miles de contenedores |
+
+---
+
+## 🔧 Alternativas a Docker
+
+Docker popularizó los contenedores, pero no es la única opción:
+
+| Tecnología | Creador | Características |
+|------------|---------|-----------------|
+| **Docker** | Docker Inc | El más popular, Docker Hub, Docker Desktop |
+| **Podman** | Red Hat | Sin daemon, rootless, compatible con Docker CLI |
+| **containerd** | CNCF | Runtime usado por Docker y Kubernetes |
+| **LXC/LXD** | Canonical | Contenedores de sistema (más parecido a VMs) |
+| **Colima** | Open Source | Docker en macOS/Linux sin Docker Desktop |
+
+> 💡 **Tip**: Si usas Linux y quieres evitar Docker Desktop, **Podman** es la alternativa más popular. Los comandos son casi idénticos: \`podman run\` en lugar de \`docker run\`.
 
 ---
 
@@ -2744,32 +2824,58 @@ Docker empaqueta tu aplicación con todo lo que necesita para funcionar. "Funcio
 
 | Concepto | Qué es | Analogía |
 |----------|--------|----------|
-| **Imagen** | Receta/plantilla | Receta de cocina |
-| **Contenedor** | Imagen ejecutándose | Platillo preparado |
+| **Imagen** | Plantilla inmutable | Receta escrita |
+| **Contenedor** | Instancia de una imagen | Platillo preparado |
 | **Dockerfile** | Instrucciones para crear imagen | Pasos de la receta |
-| **Docker Hub** | Repositorio de imágenes | Libro de recetas público |
+| **Registry** | Repositorio de imágenes | Biblioteca de recetas |
+| **Volumen** | Datos persistentes | Ingredientes que guardas |
+| **Red** | Comunicación entre contenedores | Conexión entre cocinas |
 
 ---
 
 ## Instalación
 
-| Sistema | Instalación |
-|---------|-------------|
-| **macOS** | \`brew install --cask docker\` |
-| **Windows** | Docker Desktop desde docker.com |
-| **Linux** | Ver docs.docker.com/engine/install |
+| Sistema | Opción recomendada | Alternativa ligera |
+|---------|-------------------|-------------------|
+| **macOS** | \`brew install --cask docker\` | Colima + Docker CLI |
+| **Windows** | Docker Desktop (WSL2) | Podman Desktop |
+| **Linux** | Docker Engine | Podman (sin daemon) |
 
-Después de instalar, abre Docker Desktop y espera a que inicie.
+\`\`\`bash
+# Verificar instalación
+docker --version
+docker run hello-world
+\`\`\`
+
+---
+
+## Ciclo de vida de un contenedor
+
+\`\`\`
+    Dockerfile     docker build      Imagen        docker run      Contenedor
+    ──────────  ─────────────────▶  ────────  ───────────────────▶  ──────────
+    (receta)                        (platillo                       (servido)
+                                    congelado)
+
+    docker push                     docker pull
+    ───────────▶ Docker Hub ◀───────────────────
+                 (registro)
+\`\`\`
 
 ---
 
 ## Tu primer contenedor
 
 \`\`\`bash
-# Ejecutar contenedor de prueba
+# Prueba que Docker funciona
 docker run hello-world
 
-# Si ves "Hello from Docker!" funcionó
+# Ejecutar Ubuntu interactivo
+docker run -it ubuntu bash
+
+# Dentro del contenedor:
+cat /etc/os-release  # Ubuntu!
+exit                 # Salir
 \`\`\`
 
 ---
@@ -2777,35 +2883,34 @@ docker run hello-world
 ## Comandos esenciales
 
 \`\`\`bash
-# Ver contenedores corriendo
-docker ps
+# ===== CONTENEDORES =====
+docker ps                    # Ver corriendo
+docker ps -a                 # Ver todos
+docker run -d nginx          # Ejecutar en background
+docker run -p 8080:80 nginx  # Mapear puerto
+docker stop <id>             # Parar
+docker rm <id>               # Eliminar
+docker logs <id>             # Ver logs
+docker exec -it <id> bash    # Entrar a contenedor
 
-# Ver todos los contenedores
-docker ps -a
+# ===== IMÁGENES =====
+docker images                # Ver imágenes locales
+docker pull node:20          # Descargar imagen
+docker rmi <imagen>          # Eliminar imagen
 
-# Ver imágenes descargadas
-docker images
-
-# Ejecutar con shell interactivo
-docker run -it ubuntu bash
-
-# Parar contenedor
-docker stop <container_id>
-
-# Eliminar contenedor
-docker rm <container_id>
+# ===== LIMPIEZA =====
+docker system prune          # Eliminar todo lo no usado
 \`\`\`
 
 ---
 
-## Ejemplo práctico: Node.js
+## Ejemplo práctico: Servidor web en 10 segundos
 
 \`\`\`bash
-# Correr Node.js 20
-docker run -it node:20 node
+# Nginx sirviendo archivos de tu carpeta actual
+docker run -d -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx
 
-# Ahora puedes escribir JavaScript
-> console.log("Hola desde Docker!")
+# Abre http://localhost:8080
 \`\`\`
 
 ---
@@ -2813,10 +2918,23 @@ docker run -it node:20 node
 ## Tu primer Dockerfile
 
 \`\`\`dockerfile
-FROM node:20
+# Imagen base
+FROM node:20-alpine
+
+# Directorio de trabajo
 WORKDIR /app
+
+# Copiar dependencias primero (mejor cache)
+COPY package*.json ./
+RUN npm ci
+
+# Copiar código
 COPY . .
-RUN npm install
+
+# Puerto que expone
+EXPOSE 3000
+
+# Comando al iniciar
 CMD ["npm", "start"]
 \`\`\`
 
@@ -2830,7 +2948,44 @@ docker run -p 3000:3000 mi-app
 
 ---
 
-## Practica
+## Casos de uso comunes
+
+\`\`\`bash
+# Base de datos PostgreSQL (datos persistentes)
+docker run -d \\
+  --name postgres \\
+  -e POSTGRES_PASSWORD=secreto \\
+  -v pgdata:/var/lib/postgresql/data \\
+  -p 5432:5432 \\
+  postgres:16
+
+# Redis para cache
+docker run -d --name redis -p 6379:6379 redis:alpine
+
+# Adminer (interfaz web para DBs)
+docker run -d -p 8081:8080 adminer
+\`\`\`
+
+---
+
+## ¿Cuándo NO usar Docker?
+
+| Situación | Por qué |
+|-----------|---------|
+| Apps GUI desktop | Docker es para servicios, no para apps visuales |
+| Máximo rendimiento | El overhead es mínimo pero existe |
+| Scripts simples | Overkill para un script de 10 líneas |
+| Hardware específico | GPUs requieren configuración extra |
+
+---
+
+## Siguiente nivel
+
+→ [Docker Compose](/es/learning/docker-compose) — Orquesta múltiples contenedores
+
+---
+
+## 🍳 Practica
 
 → [Docker Hello World](/es/cooking/docker-hello) — Tu primer contenedor
 
@@ -2839,12 +2994,94 @@ docker run -p 3000:3000 mi-app
 ## Enlaces útiles
 
 - 📖 [Docker Docs](https://docs.docker.com/)
+- 📖 [Podman](https://podman.io/) — Alternativa de Red Hat
 - 🎓 [Docker Getting Started](https://docs.docker.com/get-started/)
+- 📖 [Awesome Docker](https://github.com/veggiemonk/awesome-docker)
     `,
     contentEn: `
-## Containers: Your app packaged
+## What problem does Docker solve?
 
-Docker packages your application with everything it needs to run. "Works on my machine" is no longer an excuse.
+Imagine this scenario (which happens ALL the time):
+
+| Situation | What you hear |
+|-----------|---------------|
+| Developer | "It works perfectly on my machine" |
+| Production server | Error 500, crash, missing dependencies |
+| New developer | "I've spent 2 days setting up the environment" |
+| DevOps | "What Node version did you use? And Python?" |
+
+**Docker solves this** by packaging your application WITH EVERYTHING it needs: code, runtime, libraries, configuration. If it works in Docker, it works anywhere.
+
+---
+
+## 🖥️ Virtual Machines vs Containers
+
+\`\`\`
+    VIRTUAL MACHINE                    CONTAINER (DOCKER)
+    ───────────────                    ──────────────────
+
+    ┌─────────────────┐               ┌──────┐ ┌──────┐ ┌──────┐
+    │      App        │               │ App1 │ │ App2 │ │ App3 │
+    ├─────────────────┤               ├──────┴─┴──────┴─┴──────┤
+    │  Libs/Binaries  │               │     Libs/Binaries      │
+    ├─────────────────┤               ├────────────────────────┤
+    │   Guest OS      │  ← Full OS    │     Docker Engine      │
+    │  (Ubuntu 8GB)   │               │       (~100MB)         │
+    ├─────────────────┤               ├────────────────────────┤
+    │   Hypervisor    │               │        Host OS         │
+    ├─────────────────┤               ├────────────────────────┤
+    │    Host OS      │               │       Hardware         │
+    ├─────────────────┤               └────────────────────────┘
+    │   Hardware      │
+    └─────────────────┘
+
+    🐢 Heavy: 10-20 GB per VM         🚀 Light: 100-500 MB
+    ⏱️ Boot: 1-2 minutes              ⏱️ Boot: 1-2 seconds
+    📦 Full isolation                 📦 Process-level isolation
+\`\`\`
+
+---
+
+## 💰 Resource savings
+
+| Metric | Traditional VM | Docker Container |
+|--------|----------------|------------------|
+| **RAM per instance** | 1-8 GB | 50-500 MB |
+| **Disk** | 10-40 GB | 100 MB - 2 GB |
+| **Startup time** | 30s - 2min | 1-5 seconds |
+| **Apps per server** | 5-10 VMs | 50-100+ containers |
+| **CPU overhead** | 15-20% | 1-5% |
+
+> 💡 **On a 32GB RAM server**: you can run ~4 VMs or ~50 containers doing the same thing.
+
+---
+
+## Why is it essential for the modern developer?
+
+| Use | Benefit |
+|-----|---------|
+| **Local development** | Same environment as production |
+| **Onboarding** | New dev productive in minutes, not days |
+| **CI/CD** | Tests in identical environment to production |
+| **Microservices** | Each service in its container |
+| **Experimenting** | Try technologies without polluting your system |
+| **Scalability** | Kubernetes orchestrates thousands of containers |
+
+---
+
+## 🔧 Docker alternatives
+
+Docker popularized containers, but it's not the only option:
+
+| Technology | Creator | Characteristics |
+|------------|---------|-----------------|
+| **Docker** | Docker Inc | Most popular, Docker Hub, Docker Desktop |
+| **Podman** | Red Hat | Daemonless, rootless, Docker CLI compatible |
+| **containerd** | CNCF | Runtime used by Docker and Kubernetes |
+| **LXC/LXD** | Canonical | System containers (more like VMs) |
+| **Colima** | Open Source | Docker on macOS/Linux without Docker Desktop |
+
+> 💡 **Tip**: If you use Linux and want to avoid Docker Desktop, **Podman** is the most popular alternative. Commands are almost identical: \`podman run\` instead of \`docker run\`.
 
 ---
 
@@ -2852,32 +3089,58 @@ Docker packages your application with everything it needs to run. "Works on my m
 
 | Concept | What it is | Analogy |
 |---------|------------|---------|
-| **Image** | Recipe/template | Cooking recipe |
-| **Container** | Image running | Prepared dish |
+| **Image** | Immutable template | Written recipe |
+| **Container** | Instance of an image | Prepared dish |
 | **Dockerfile** | Instructions to create image | Recipe steps |
-| **Docker Hub** | Image repository | Public cookbook |
+| **Registry** | Image repository | Recipe library |
+| **Volume** | Persistent data | Ingredients you save |
+| **Network** | Communication between containers | Connection between kitchens |
 
 ---
 
 ## Installation
 
-| System | Installation |
-|--------|--------------|
-| **macOS** | \`brew install --cask docker\` |
-| **Windows** | Docker Desktop from docker.com |
-| **Linux** | See docs.docker.com/engine/install |
+| System | Recommended option | Lightweight alternative |
+|--------|-------------------|------------------------|
+| **macOS** | \`brew install --cask docker\` | Colima + Docker CLI |
+| **Windows** | Docker Desktop (WSL2) | Podman Desktop |
+| **Linux** | Docker Engine | Podman (daemonless) |
 
-After installing, open Docker Desktop and wait for it to start.
+\`\`\`bash
+# Verify installation
+docker --version
+docker run hello-world
+\`\`\`
+
+---
+
+## Container lifecycle
+
+\`\`\`
+    Dockerfile     docker build      Image         docker run      Container
+    ──────────  ─────────────────▶  ────────  ───────────────────▶  ──────────
+    (recipe)                        (frozen                         (served)
+                                    dish)
+
+    docker push                     docker pull
+    ───────────▶ Docker Hub ◀───────────────────
+                 (registry)
+\`\`\`
 
 ---
 
 ## Your first container
 
 \`\`\`bash
-# Run test container
+# Test that Docker works
 docker run hello-world
 
-# If you see "Hello from Docker!" it worked
+# Run Ubuntu interactively
+docker run -it ubuntu bash
+
+# Inside the container:
+cat /etc/os-release  # Ubuntu!
+exit                 # Exit
 \`\`\`
 
 ---
