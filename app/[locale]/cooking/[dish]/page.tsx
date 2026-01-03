@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import MarkdownContent from '@/components/MarkdownContent'
 
 // 52 platillos organizados por nivel
 const dishes = [
@@ -571,8 +572,8 @@ export default async function DishPage({ params }: PageProps) {
 
       {/* Content */}
       {hasContent ? (
-        <article className="prose prose-slate max-w-none prose-headings:font-semibold prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:bg-slate-900 prose-pre:text-slate-100">
-          <div dangerouslySetInnerHTML={{ __html: parseMarkdown(isSpanish ? content.contentEs : content.contentEn) }} />
+        <article className="prose-custom">
+          <MarkdownContent content={isSpanish ? content.contentEs : content.contentEn} />
         </article>
       ) : (
         /* Coming Soon */
@@ -636,22 +637,4 @@ export default async function DishPage({ params }: PageProps) {
       </nav>
     </div>
   )
-}
-
-// Simple markdown parser
-function parseMarkdown(md: string): string {
-  return md
-    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>')
-    .replace(/^- \[ \] (.*$)/gm, '<li class="flex items-center gap-2"><input type="checkbox" disabled /> $1</li>')
-    .replace(/^- \[x\] (.*$)/gm, '<li class="flex items-center gap-2"><input type="checkbox" checked disabled /> $1</li>')
-    .replace(/^- (.*$)/gm, '<li>$1</li>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/---/g, '<hr />')
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import MarkdownContent from '@/components/MarkdownContent'
 
 // 28 temas organizados por nivel
 const sections = [
@@ -49,13 +50,13 @@ const sectionsContent: Record<string, {
 }> = {
   terminal: {
     contentEs: `
-## Antes de escribir código, necesitas entender tu taller
+## Antes de cocinar, necesitas conocer tu cocina
 
-Imagina que eres un carpintero. Antes de construir un mueble, necesitas conocer tu taller: dónde están las herramientas, cómo funcionan, y por qué usas un serrucho en vez de un martillo para cortar madera.
+Imagina que eres un chef. Antes de preparar un platillo, necesitas conocer tu cocina: dónde están los utensilios, cómo funciona cada uno, y por qué usas un cuchillo de chef en vez de una cuchara para picar verduras.
 
-El desarrollo de software es igual. Tu computadora es el taller. La Terminal es tu mesa de trabajo principal. Y las herramientas que instalaremos son tus instrumentos de precisión.
+El desarrollo de software es igual. Tu computadora es la cocina. La Terminal es tu estación de trabajo principal. Y las herramientas que instalaremos son tus utensilios de precisión.
 
-> **La diferencia entre un desarrollador junior y uno senior no es solo el código que escriben, sino qué tan bien conocen sus herramientas.**
+> **La diferencia entre un cocinero novato y un chef experimentado no es solo los platillos que preparan, sino qué tan bien conocen su cocina y sus herramientas.**
 
 ---
 
@@ -147,13 +148,13 @@ echo $PATH
 - 🎓 [Tutorial interactivo de Terminal](https://www.terminaltutor.com/)
     `,
     contentEn: `
-## Before writing code, you need to understand your workshop
+## Before cooking, you need to know your kitchen
 
-Imagine you're a carpenter. Before building furniture, you need to know your workshop: where the tools are, how they work, and why you use a saw instead of a hammer to cut wood.
+Imagine you're a chef. Before preparing a dish, you need to know your kitchen: where the utensils are, how each one works, and why you use a chef's knife instead of a spoon to chop vegetables.
 
-Software development is the same. Your computer is the workshop. The Terminal is your main workbench. And the tools we'll install are your precision instruments.
+Software development is the same. Your computer is the kitchen. The Terminal is your main workstation. And the tools we'll install are your precision utensils.
 
-> **The difference between a junior and senior developer isn't just the code they write, but how well they know their tools.**
+> **The difference between a novice cook and an experienced chef isn't just the dishes they prepare, but how well they know their kitchen and tools.**
 
 ---
 
@@ -644,8 +645,8 @@ export default async function SectionPage({ params }: PageProps) {
 
       {/* Content */}
       {hasContent ? (
-        <article className="prose prose-slate max-w-none prose-headings:font-semibold prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:bg-slate-900 prose-pre:text-slate-100">
-          <div dangerouslySetInnerHTML={{ __html: parseMarkdown(isSpanish ? content.contentEs : content.contentEn) }} />
+        <article className="prose-custom">
+          <MarkdownContent content={isSpanish ? content.contentEs : content.contentEn} />
         </article>
       ) : (
         /* Coming Soon */
@@ -709,29 +710,4 @@ export default async function SectionPage({ params }: PageProps) {
       </nav>
     </div>
   )
-}
-
-// Simple markdown parser
-function parseMarkdown(md: string): string {
-  return md
-    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/^\|(.+)\|$/gm, (match, content) => {
-      const cells = content.split('|').map((cell: string) => cell.trim())
-      const isHeader = cells.some((cell: string) => cell.match(/^-+$/))
-      if (isHeader) return ''
-      const tag = match.includes('---') ? 'th' : 'td'
-      return `<tr>${cells.map((cell: string) => `<${tag}>${cell}</${tag}>`).join('')}</tr>`
-    })
-    .replace(/(<tr>[\s\S]*?<\/tr>)/g, '<table class="w-full">$1</table>')
-    .replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>')
-    .replace(/^- (.*$)/gm, '<li>$1</li>')
-    .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/---/g, '<hr />')
 }
