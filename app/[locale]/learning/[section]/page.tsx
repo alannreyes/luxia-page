@@ -2713,6 +2713,1601 @@ To store and search embeddings efficiently:
 - 📖 [Pinecone Docs](https://docs.pinecone.io/)
     `,
   },
+  // ===== CHEF LEVEL =====
+  nextjs: {
+    contentEs: `
+## React para producción
+
+Next.js es el framework React para aplicaciones web completas.
+
+---
+
+## Por qué Next.js
+
+| Feature | Beneficio |
+|---------|-----------|
+| **Server Components** | Menos JavaScript al cliente |
+| **App Router** | Rutas basadas en carpetas |
+| **SSR/SSG** | SEO y performance |
+| **API Routes** | Backend integrado |
+
+---
+
+## Instalación
+
+\`\`\`bash
+npx create-next-app@latest mi-app --typescript --tailwind --app
+cd mi-app
+npm run dev
+\`\`\`
+
+---
+
+## Estructura de carpetas
+
+\`\`\`
+app/
+├── layout.tsx      # Layout global
+├── page.tsx        # Página /
+├── about/
+│   └── page.tsx    # Página /about
+├── api/
+│   └── hello/
+│       └── route.ts  # API endpoint
+└── [slug]/
+    └── page.tsx    # Ruta dinámica
+\`\`\`
+
+---
+
+## Server vs Client Components
+
+\`\`\`tsx
+// Server Component (default)
+async function ProductList() {
+  const products = await db.products.findMany()
+  return <ul>{products.map(p => <li key={p.id}>{p.name}</li>)}</ul>
+}
+
+// Client Component
+'use client'
+function Counter() {
+  const [count, setCount] = useState(0)
+  return <button onClick={() => setCount(count + 1)}>{count}</button>
+}
+\`\`\`
+
+---
+
+## API Routes
+
+\`\`\`typescript
+// app/api/users/route.ts
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  return NextResponse.json({ users: [] })
+}
+
+export async function POST(request: Request) {
+  const body = await request.json()
+  return NextResponse.json({ created: body })
+}
+\`\`\`
+
+---
+
+## Practica
+
+→ [Blog con Next.js + MDX](/es/cooking/nextjs-blog)
+    `,
+    contentEn: `
+## React for production
+
+Next.js is the React framework for complete web applications.
+
+---
+
+## Why Next.js
+
+| Feature | Benefit |
+|---------|---------|
+| **Server Components** | Less JavaScript to client |
+| **App Router** | Folder-based routes |
+| **SSR/SSG** | SEO and performance |
+| **API Routes** | Integrated backend |
+
+---
+
+## Installation
+
+\`\`\`bash
+npx create-next-app@latest my-app --typescript --tailwind --app
+cd my-app
+npm run dev
+\`\`\`
+
+---
+
+## Folder structure
+
+\`\`\`
+app/
+├── layout.tsx      # Global layout
+├── page.tsx        # Page /
+├── about/
+│   └── page.tsx    # Page /about
+├── api/
+│   └── hello/
+│       └── route.ts  # API endpoint
+└── [slug]/
+    └── page.tsx    # Dynamic route
+\`\`\`
+
+---
+
+## Server vs Client Components
+
+\`\`\`tsx
+// Server Component (default)
+async function ProductList() {
+  const products = await db.products.findMany()
+  return <ul>{products.map(p => <li key={p.id}>{p.name}</li>)}</ul>
+}
+
+// Client Component
+'use client'
+function Counter() {
+  const [count, setCount] = useState(0)
+  return <button onClick={() => setCount(count + 1)}>{count}</button>
+}
+\`\`\`
+
+---
+
+## API Routes
+
+\`\`\`typescript
+// app/api/users/route.ts
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  return NextResponse.json({ users: [] })
+}
+
+export async function POST(request: Request) {
+  const body = await request.json()
+  return NextResponse.json({ created: body })
+}
+\`\`\`
+
+---
+
+## Practice
+
+→ [Blog with Next.js + MDX](/en/cooking/nextjs-blog)
+    `,
+  },
+  auth: {
+    contentEs: `
+## Identidad y seguridad
+
+La autenticación verifica quién eres. La autorización verifica qué puedes hacer.
+
+---
+
+## Métodos de autenticación
+
+| Método | Cuándo usar |
+|--------|-------------|
+| **OAuth** | Login con Google, GitHub |
+| **Email/Password** | Usuarios propios |
+| **Magic Links** | Sin contraseñas |
+| **JWT** | APIs stateless |
+
+---
+
+## OAuth 2.0 Flow
+
+\`\`\`
+Usuario → Tu app → Proveedor (Google)
+                          ↓
+Usuario ← Tu app ← Token + Info
+\`\`\`
+
+---
+
+## JWT (JSON Web Tokens)
+
+\`\`\`typescript
+// Estructura: header.payload.signature
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+// Contenido (payload)
+{
+  "sub": "user123",
+  "email": "user@email.com",
+  "exp": 1699999999
+}
+\`\`\`
+
+---
+
+## Servicios recomendados
+
+| Servicio | Tipo | Ideal para |
+|----------|------|------------|
+| **Firebase Auth** | BaaS | Apps móviles, web |
+| **Supabase Auth** | BaaS | Full-stack |
+| **Auth0** | SaaS | Enterprise |
+| **NextAuth.js** | Library | Next.js apps |
+
+---
+
+## Seguridad básica
+
+| Práctica | Por qué |
+|----------|---------|
+| HTTPS siempre | Encripta tráfico |
+| Tokens cortos | Limita daño si roban |
+| Refresh tokens | Renovar sin re-login |
+| Rate limiting | Previene brute force |
+
+---
+
+## Practica
+
+→ [Auth con Firebase Google](/es/cooking/auth-firebase)
+    `,
+    contentEn: `
+## Identity and security
+
+Authentication verifies who you are. Authorization verifies what you can do.
+
+---
+
+## Authentication methods
+
+| Method | When to use |
+|--------|-------------|
+| **OAuth** | Login with Google, GitHub |
+| **Email/Password** | Own users |
+| **Magic Links** | Passwordless |
+| **JWT** | Stateless APIs |
+
+---
+
+## OAuth 2.0 Flow
+
+\`\`\`
+User → Your app → Provider (Google)
+                        ↓
+User ← Your app ← Token + Info
+\`\`\`
+
+---
+
+## JWT (JSON Web Tokens)
+
+\`\`\`typescript
+// Structure: header.payload.signature
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+// Content (payload)
+{
+  "sub": "user123",
+  "email": "user@email.com",
+  "exp": 1699999999
+}
+\`\`\`
+
+---
+
+## Recommended services
+
+| Service | Type | Ideal for |
+|---------|------|-----------|
+| **Firebase Auth** | BaaS | Mobile, web apps |
+| **Supabase Auth** | BaaS | Full-stack |
+| **Auth0** | SaaS | Enterprise |
+| **NextAuth.js** | Library | Next.js apps |
+
+---
+
+## Basic security
+
+| Practice | Why |
+|----------|-----|
+| HTTPS always | Encrypts traffic |
+| Short tokens | Limits damage if stolen |
+| Refresh tokens | Renew without re-login |
+| Rate limiting | Prevents brute force |
+
+---
+
+## Practice
+
+→ [Auth with Firebase Google](/en/cooking/auth-firebase)
+    `,
+  },
+  webhooks: {
+    contentEs: `
+## Eventos en tiempo real
+
+Los webhooks permiten que servicios te notifiquen cuando algo pasa.
+
+---
+
+## Cómo funcionan
+
+\`\`\`
+Evento en servicio externo
+         ↓
+POST a tu endpoint
+         ↓
+Tu código procesa
+\`\`\`
+
+---
+
+## Ejemplo: Stripe webhook
+
+\`\`\`typescript
+// app/api/webhooks/stripe/route.ts
+export async function POST(request: Request) {
+  const body = await request.text()
+  const signature = request.headers.get('stripe-signature')!
+
+  const event = stripe.webhooks.constructEvent(
+    body,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET!
+  )
+
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      // Marcar orden como pagada
+      break
+    case 'customer.subscription.deleted':
+      // Cancelar suscripción
+      break
+  }
+
+  return new Response('OK')
+}
+\`\`\`
+
+---
+
+## Verificar firma
+
+Siempre verifica que el webhook viene del servicio real:
+
+\`\`\`typescript
+import crypto from 'crypto'
+
+function verifySignature(payload: string, signature: string, secret: string) {
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex')
+
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  )
+}
+\`\`\`
+
+---
+
+## Servicios con webhooks
+
+- Stripe (pagos)
+- GitHub (commits, PRs)
+- Slack (mensajes)
+- Twilio (SMS, llamadas)
+
+---
+
+## Practica
+
+→ [Receptor de Webhooks](/es/cooking/webhook-receiver)
+    `,
+    contentEn: `
+## Real-time events
+
+Webhooks allow services to notify you when something happens.
+
+---
+
+## How they work
+
+\`\`\`
+Event in external service
+         ↓
+POST to your endpoint
+         ↓
+Your code processes
+\`\`\`
+
+---
+
+## Example: Stripe webhook
+
+\`\`\`typescript
+// app/api/webhooks/stripe/route.ts
+export async function POST(request: Request) {
+  const body = await request.text()
+  const signature = request.headers.get('stripe-signature')!
+
+  const event = stripe.webhooks.constructEvent(
+    body,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET!
+  )
+
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      // Mark order as paid
+      break
+    case 'customer.subscription.deleted':
+      // Cancel subscription
+      break
+  }
+
+  return new Response('OK')
+}
+\`\`\`
+
+---
+
+## Verify signature
+
+Always verify the webhook comes from the real service:
+
+\`\`\`typescript
+import crypto from 'crypto'
+
+function verifySignature(payload: string, signature: string, secret: string) {
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex')
+
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  )
+}
+\`\`\`
+
+---
+
+## Services with webhooks
+
+- Stripe (payments)
+- GitHub (commits, PRs)
+- Slack (messages)
+- Twilio (SMS, calls)
+
+---
+
+## Practice
+
+→ [Webhook Receiver](/en/cooking/webhook-receiver)
+    `,
+  },
+  nestjs: {
+    contentEs: `
+## APIs estructuradas
+
+NestJS (Node) y FastAPI (Python) son frameworks para APIs robustas.
+
+---
+
+## NestJS (TypeScript)
+
+\`\`\`bash
+npm i -g @nestjs/cli
+nest new mi-api
+cd mi-api
+npm run start:dev
+\`\`\`
+
+---
+
+## Estructura NestJS
+
+\`\`\`
+src/
+├── app.module.ts
+├── users/
+│   ├── users.controller.ts  # Endpoints
+│   ├── users.service.ts     # Lógica
+│   ├── users.module.ts      # Registro
+│   └── dto/                 # Validación
+\`\`\`
+
+---
+
+## Controller
+
+\`\`\`typescript
+@Controller('users')
+export class UsersController {
+  constructor(private usersService: UsersService) {}
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll()
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto)
+  }
+}
+\`\`\`
+
+---
+
+## FastAPI (Python)
+
+Ya lo vimos en el nivel Cocinero. Comparación:
+
+| Aspecto | NestJS | FastAPI |
+|---------|--------|---------|
+| Lenguaje | TypeScript | Python |
+| Estilo | OOP, decoradores | Funcional |
+| Docs | Swagger manual | Auto /docs |
+| Performance | Bueno | Excelente |
+
+---
+
+## Cuándo usar cada uno
+
+- **NestJS**: Equipos grandes, microservicios
+- **FastAPI**: IA/ML, prototipos rápidos
+    `,
+    contentEn: `
+## Structured APIs
+
+NestJS (Node) and FastAPI (Python) are frameworks for robust APIs.
+
+---
+
+## NestJS (TypeScript)
+
+\`\`\`bash
+npm i -g @nestjs/cli
+nest new my-api
+cd my-api
+npm run start:dev
+\`\`\`
+
+---
+
+## NestJS Structure
+
+\`\`\`
+src/
+├── app.module.ts
+├── users/
+│   ├── users.controller.ts  # Endpoints
+│   ├── users.service.ts     # Logic
+│   ├── users.module.ts      # Registration
+│   └── dto/                 # Validation
+\`\`\`
+
+---
+
+## Controller
+
+\`\`\`typescript
+@Controller('users')
+export class UsersController {
+  constructor(private usersService: UsersService) {}
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll()
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto)
+  }
+}
+\`\`\`
+
+---
+
+## FastAPI (Python)
+
+We saw it in the Cook level. Comparison:
+
+| Aspect | NestJS | FastAPI |
+|--------|--------|---------|
+| Language | TypeScript | Python |
+| Style | OOP, decorators | Functional |
+| Docs | Manual Swagger | Auto /docs |
+| Performance | Good | Excellent |
+
+---
+
+## When to use each
+
+- **NestJS**: Large teams, microservices
+- **FastAPI**: AI/ML, fast prototypes
+    `,
+  },
+  postgresql: {
+    contentEs: `
+## Base de datos relacional
+
+PostgreSQL es la base de datos open source más avanzada.
+
+---
+
+## Instalación
+
+\`\`\`bash
+# macOS
+brew install postgresql@16
+brew services start postgresql@16
+
+# Docker
+docker run -d --name pg -e POSTGRES_PASSWORD=secret -p 5432:5432 postgres:16
+\`\`\`
+
+---
+
+## Conectar
+
+\`\`\`bash
+psql -U postgres
+# o con Docker
+docker exec -it pg psql -U postgres
+\`\`\`
+
+---
+
+## SQL básico
+
+\`\`\`sql
+-- Crear tabla
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Insertar
+INSERT INTO users (email, name) VALUES ('ana@email.com', 'Ana');
+
+-- Consultar
+SELECT * FROM users WHERE email LIKE '%@email.com';
+
+-- Actualizar
+UPDATE users SET name = 'Ana García' WHERE id = 1;
+
+-- Eliminar
+DELETE FROM users WHERE id = 1;
+\`\`\`
+
+---
+
+## ORMs recomendados
+
+| ORM | Lenguaje |
+|-----|----------|
+| **Prisma** | TypeScript |
+| **Drizzle** | TypeScript |
+| **SQLAlchemy** | Python |
+
+---
+
+## Prisma ejemplo
+
+\`\`\`typescript
+const user = await prisma.user.create({
+  data: { email: 'ana@email.com', name: 'Ana' }
+})
+
+const users = await prisma.user.findMany({
+  where: { email: { contains: '@email.com' } }
+})
+\`\`\`
+
+---
+
+## Practica
+
+→ [CRUD con PostgreSQL](/es/cooking/crud-postgres)
+    `,
+    contentEn: `
+## Relational database
+
+PostgreSQL is the most advanced open source database.
+
+---
+
+## Installation
+
+\`\`\`bash
+# macOS
+brew install postgresql@16
+brew services start postgresql@16
+
+# Docker
+docker run -d --name pg -e POSTGRES_PASSWORD=secret -p 5432:5432 postgres:16
+\`\`\`
+
+---
+
+## Connect
+
+\`\`\`bash
+psql -U postgres
+# or with Docker
+docker exec -it pg psql -U postgres
+\`\`\`
+
+---
+
+## Basic SQL
+
+\`\`\`sql
+-- Create table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Insert
+INSERT INTO users (email, name) VALUES ('ana@email.com', 'Ana');
+
+-- Query
+SELECT * FROM users WHERE email LIKE '%@email.com';
+
+-- Update
+UPDATE users SET name = 'Ana García' WHERE id = 1;
+
+-- Delete
+DELETE FROM users WHERE id = 1;
+\`\`\`
+
+---
+
+## Recommended ORMs
+
+| ORM | Language |
+|-----|----------|
+| **Prisma** | TypeScript |
+| **Drizzle** | TypeScript |
+| **SQLAlchemy** | Python |
+
+---
+
+## Prisma example
+
+\`\`\`typescript
+const user = await prisma.user.create({
+  data: { email: 'ana@email.com', name: 'Ana' }
+})
+
+const users = await prisma.user.findMany({
+  where: { email: { contains: '@email.com' } }
+})
+\`\`\`
+
+---
+
+## Practice
+
+→ [CRUD with PostgreSQL](/en/cooking/crud-postgres)
+    `,
+  },
+  redis: {
+    contentEs: `
+## Cache y datos en memoria
+
+Redis guarda datos en RAM para acceso ultra-rápido.
+
+---
+
+## Casos de uso
+
+| Uso | Por qué Redis |
+|-----|---------------|
+| **Cache** | Evitar queries lentas |
+| **Sessions** | Estado de usuario |
+| **Rate limiting** | Contar requests |
+| **Queues** | Jobs en background |
+
+---
+
+## Instalación
+
+\`\`\`bash
+# macOS
+brew install redis
+brew services start redis
+
+# Docker
+docker run -d --name redis -p 6379:6379 redis:7
+\`\`\`
+
+---
+
+## Comandos básicos
+
+\`\`\`bash
+redis-cli
+
+# Strings
+SET user:1 "Ana"
+GET user:1
+SETEX token:abc 3600 "data"  # Expira en 1 hora
+
+# Contadores
+INCR page:views
+INCRBY api:calls 10
+
+# Hashes
+HSET user:1 name "Ana" email "ana@email.com"
+HGETALL user:1
+\`\`\`
+
+---
+
+## Con Node.js
+
+\`\`\`typescript
+import { Redis } from 'ioredis'
+
+const redis = new Redis()
+
+// Cache
+async function getUser(id: string) {
+  const cached = await redis.get(\`user:\${id}\`)
+  if (cached) return JSON.parse(cached)
+
+  const user = await db.users.findUnique({ where: { id } })
+  await redis.setex(\`user:\${id}\`, 3600, JSON.stringify(user))
+  return user
+}
+\`\`\`
+
+---
+
+## Practica
+
+→ [Cache con Redis](/es/cooking/redis-cache)
+    `,
+    contentEn: `
+## Cache and in-memory data
+
+Redis stores data in RAM for ultra-fast access.
+
+---
+
+## Use cases
+
+| Use | Why Redis |
+|-----|-----------|
+| **Cache** | Avoid slow queries |
+| **Sessions** | User state |
+| **Rate limiting** | Count requests |
+| **Queues** | Background jobs |
+
+---
+
+## Installation
+
+\`\`\`bash
+# macOS
+brew install redis
+brew services start redis
+
+# Docker
+docker run -d --name redis -p 6379:6379 redis:7
+\`\`\`
+
+---
+
+## Basic commands
+
+\`\`\`bash
+redis-cli
+
+# Strings
+SET user:1 "Ana"
+GET user:1
+SETEX token:abc 3600 "data"  # Expires in 1 hour
+
+# Counters
+INCR page:views
+INCRBY api:calls 10
+
+# Hashes
+HSET user:1 name "Ana" email "ana@email.com"
+HGETALL user:1
+\`\`\`
+
+---
+
+## With Node.js
+
+\`\`\`typescript
+import { Redis } from 'ioredis'
+
+const redis = new Redis()
+
+// Cache
+async function getUser(id: string) {
+  const cached = await redis.get(\`user:\${id}\`)
+  if (cached) return JSON.parse(cached)
+
+  const user = await db.users.findUnique({ where: { id } })
+  await redis.setex(\`user:\${id}\`, 3600, JSON.stringify(user))
+  return user
+}
+\`\`\`
+
+---
+
+## Practice
+
+→ [Cache with Redis](/en/cooking/redis-cache)
+    `,
+  },
+  'docker-compose': {
+    contentEs: `
+## Múltiples contenedores
+
+Docker Compose orquesta múltiples contenedores como un solo sistema.
+
+---
+
+## docker-compose.yml
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://postgres:secret@db:5432/mydb
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+volumes:
+  postgres_data:
+\`\`\`
+
+---
+
+## Comandos
+
+\`\`\`bash
+# Iniciar todo
+docker compose up -d
+
+# Ver logs
+docker compose logs -f
+
+# Parar
+docker compose down
+
+# Reconstruir
+docker compose build --no-cache
+docker compose up -d
+\`\`\`
+
+---
+
+## Networking
+
+Los servicios se comunican por nombre:
+
+\`\`\`typescript
+// Desde 'app', conectar a 'db'
+const db = new Pool({
+  host: 'db',  // Nombre del servicio
+  port: 5432,
+})
+\`\`\`
+
+---
+
+## Practica
+
+→ [Deploy con Docker](/es/cooking/docker-deploy)
+    `,
+    contentEn: `
+## Multiple containers
+
+Docker Compose orchestrates multiple containers as a single system.
+
+---
+
+## docker-compose.yml
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://postgres:secret@db:5432/mydb
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+volumes:
+  postgres_data:
+\`\`\`
+
+---
+
+## Commands
+
+\`\`\`bash
+# Start everything
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+
+# Rebuild
+docker compose build --no-cache
+docker compose up -d
+\`\`\`
+
+---
+
+## Networking
+
+Services communicate by name:
+
+\`\`\`typescript
+// From 'app', connect to 'db'
+const db = new Pool({
+  host: 'db',  // Service name
+  port: 5432,
+})
+\`\`\`
+
+---
+
+## Practice
+
+→ [Deploy with Docker](/en/cooking/docker-deploy)
+    `,
+  },
+  cicd: {
+    contentEs: `
+## Automatización de deploys
+
+CI/CD ejecuta tests y despliega automáticamente cuando haces push.
+
+---
+
+## CI vs CD
+
+| Fase | Qué hace |
+|------|----------|
+| **CI** (Continuous Integration) | Tests automáticos |
+| **CD** (Continuous Deployment) | Deploy automático |
+
+---
+
+## GitHub Actions
+
+\`\`\`yaml
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to VPS
+        run: |
+          ssh user@server "cd /app && git pull && docker compose up -d --build"
+\`\`\`
+
+---
+
+## Secretos
+
+\`\`\`yaml
+env:
+  API_KEY: \${{ secrets.API_KEY }}
+\`\`\`
+
+Configura en: Settings → Secrets → Actions
+
+---
+
+## Buenas prácticas
+
+| Práctica | Por qué |
+|----------|---------|
+| Tests antes de deploy | No romper producción |
+| Branch protection | Review obligatorio |
+| Rollback fácil | Volver rápido si falla |
+
+---
+
+## Practica
+
+→ [CI/CD con GitHub Actions](/es/cooking/github-actions)
+    `,
+    contentEn: `
+## Deploy automation
+
+CI/CD runs tests and deploys automatically when you push.
+
+---
+
+## CI vs CD
+
+| Phase | What it does |
+|-------|--------------|
+| **CI** (Continuous Integration) | Automatic tests |
+| **CD** (Continuous Deployment) | Automatic deploy |
+
+---
+
+## GitHub Actions
+
+\`\`\`yaml
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to VPS
+        run: |
+          ssh user@server "cd /app && git pull && docker compose up -d --build"
+\`\`\`
+
+---
+
+## Secrets
+
+\`\`\`yaml
+env:
+  API_KEY: \${{ secrets.API_KEY }}
+\`\`\`
+
+Configure at: Settings → Secrets → Actions
+
+---
+
+## Best practices
+
+| Practice | Why |
+|----------|-----|
+| Tests before deploy | Don't break production |
+| Branch protection | Required review |
+| Easy rollback | Quick recovery if fails |
+
+---
+
+## Practice
+
+→ [CI/CD with GitHub Actions](/en/cooking/github-actions)
+    `,
+  },
+  mobile: {
+    contentEs: `
+## Apps móviles con React
+
+React Native y Expo te permiten crear apps iOS y Android con React.
+
+---
+
+## Expo vs React Native CLI
+
+| Aspecto | Expo | RN CLI |
+|---------|------|--------|
+| Setup | Fácil | Complejo |
+| Build | En la nube | Local |
+| Native modules | Limitado | Total |
+| Ideal para | 90% de apps | Casos especiales |
+
+---
+
+## Instalación Expo
+
+\`\`\`bash
+npx create-expo-app mi-app
+cd mi-app
+npx expo start
+\`\`\`
+
+Escanea el QR con la app Expo Go.
+
+---
+
+## Componentes móviles
+
+\`\`\`tsx
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Hola Móvil!</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Presionar</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 24, fontWeight: 'bold' },
+  button: { backgroundColor: '#3b82f6', padding: 12, borderRadius: 8 },
+  buttonText: { color: 'white' },
+})
+\`\`\`
+
+---
+
+## Navegación
+
+\`\`\`tsx
+import { createStackNavigator } from '@react-navigation/stack'
+
+const Stack = createStackNavigator()
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+\`\`\`
+
+---
+
+## Practica
+
+→ [App Móvil con Expo](/es/cooking/mobile-expo)
+    `,
+    contentEn: `
+## Mobile apps with React
+
+React Native and Expo let you create iOS and Android apps with React.
+
+---
+
+## Expo vs React Native CLI
+
+| Aspect | Expo | RN CLI |
+|--------|------|--------|
+| Setup | Easy | Complex |
+| Build | In cloud | Local |
+| Native modules | Limited | Full |
+| Ideal for | 90% of apps | Special cases |
+
+---
+
+## Expo installation
+
+\`\`\`bash
+npx create-expo-app my-app
+cd my-app
+npx expo start
+\`\`\`
+
+Scan the QR with the Expo Go app.
+
+---
+
+## Mobile components
+
+\`\`\`tsx
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Hello Mobile!</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Press</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 24, fontWeight: 'bold' },
+  button: { backgroundColor: '#3b82f6', padding: 12, borderRadius: 8 },
+  buttonText: { color: 'white' },
+})
+\`\`\`
+
+---
+
+## Navigation
+
+\`\`\`tsx
+import { createStackNavigator } from '@react-navigation/stack'
+
+const Stack = createStackNavigator()
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+\`\`\`
+
+---
+
+## Practice
+
+→ [Mobile App with Expo](/en/cooking/mobile-expo)
+    `,
+  },
+  iot: {
+    contentEs: `
+## Hardware + Software
+
+IoT conecta dispositivos físicos a internet y la nube.
+
+---
+
+## Componentes típicos
+
+| Componente | Función |
+|------------|---------|
+| **Microcontroller** | Arduino, ESP32 |
+| **Sensores** | Temperatura, movimiento |
+| **Actuadores** | LEDs, motores, relays |
+| **Comunicación** | WiFi, MQTT, HTTP |
+
+---
+
+## Arduino básico
+
+\`\`\`cpp
+// Blink LED
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(1000);
+}
+\`\`\`
+
+---
+
+## MQTT
+
+Protocolo ligero para IoT:
+
+\`\`\`
+Sensor → Broker MQTT → Tu servidor
+                    ↓
+                 Dashboard
+\`\`\`
+
+---
+
+## ESP32 + MQTT
+
+\`\`\`cpp
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  WiFi.begin("SSID", "password");
+  client.setServer("broker.hivemq.com", 1883);
+}
+
+void loop() {
+  float temp = readTemperature();
+  client.publish("home/temperature", String(temp).c_str());
+  delay(5000);
+}
+\`\`\`
+
+---
+
+## Servicios cloud
+
+| Servicio | Uso |
+|----------|-----|
+| **AWS IoT** | Enterprise |
+| **HiveMQ** | MQTT gratis |
+| **Adafruit IO** | Hobby |
+
+---
+
+## Practica
+
+→ [Arduino + MQTT](/es/cooking/arduino-sensor)
+    `,
+    contentEn: `
+## Hardware + Software
+
+IoT connects physical devices to the internet and cloud.
+
+---
+
+## Typical components
+
+| Component | Function |
+|-----------|----------|
+| **Microcontroller** | Arduino, ESP32 |
+| **Sensors** | Temperature, motion |
+| **Actuators** | LEDs, motors, relays |
+| **Communication** | WiFi, MQTT, HTTP |
+
+---
+
+## Basic Arduino
+
+\`\`\`cpp
+// Blink LED
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(1000);
+}
+\`\`\`
+
+---
+
+## MQTT
+
+Lightweight protocol for IoT:
+
+\`\`\`
+Sensor → MQTT Broker → Your server
+                    ↓
+                 Dashboard
+\`\`\`
+
+---
+
+## ESP32 + MQTT
+
+\`\`\`cpp
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  WiFi.begin("SSID", "password");
+  client.setServer("broker.hivemq.com", 1883);
+}
+
+void loop() {
+  float temp = readTemperature();
+  client.publish("home/temperature", String(temp).c_str());
+  delay(5000);
+}
+\`\`\`
+
+---
+
+## Cloud services
+
+| Service | Use |
+|---------|-----|
+| **AWS IoT** | Enterprise |
+| **HiveMQ** | Free MQTT |
+| **Adafruit IO** | Hobby |
+
+---
+
+## Practice
+
+→ [Arduino + MQTT](/en/cooking/arduino-sensor)
+    `,
+  },
 }
 
 // Mapear slugs alternativos

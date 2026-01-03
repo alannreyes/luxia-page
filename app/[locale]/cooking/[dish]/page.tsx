@@ -6553,6 +6553,2447 @@ with open('results.json', 'w') as f:
 → [Public AI Chat with Auth](/en/cooking/public-ai-chat) — Chef Level
     `,
   },
+  // ===== CHEF LEVEL =====
+  'public-ai-chat': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Chat IA con interfaz web', 'Firebase Auth'],
+    prerequisitesEn: ['AI Chat with web interface', 'Firebase Auth'],
+    contentEs: `
+## Chat IA público con autenticación
+
+Despliega un chat IA que cualquiera pueda usar, con login y límites de uso.
+
+---
+
+## Arquitectura
+
+\`\`\`
+Usuario → Firebase Auth → Tu app Next.js
+                              ↓
+                         API de IA (Gemini/Claude)
+                              ↓
+                         Historial en DB
+\`\`\`
+
+---
+
+## Paso 1: Pídele a una IA la app completa
+
+\`\`\`
+Necesito una app de chat IA pública con:
+- Next.js App Router
+- Firebase Auth (Google login)
+- Límite de 10 mensajes/día para usuarios free
+- Historial de conversaciones en Firestore
+- UI tipo ChatGPT
+- API route que llame a Gemini
+- TypeScript y Tailwind CSS
+
+Dame la estructura de archivos y código completo.
+\`\`\`
+
+---
+
+## Componentes clave
+
+| Archivo | Función |
+|---------|---------|
+| \`app/api/chat/route.ts\` | Llama a la API de IA |
+| \`lib/firebase.ts\` | Config Firebase |
+| \`components/ChatUI.tsx\` | Interfaz del chat |
+| \`hooks/useAuth.ts\` | Hook de autenticación |
+
+---
+
+## Rate limiting
+
+\`\`\`typescript
+async function checkRateLimit(userId: string): Promise<boolean> {
+  const today = new Date().toISOString().split('T')[0]
+  const ref = doc(db, 'usage', \`\${userId}_\${today}\`)
+  const snap = await getDoc(ref)
+
+  if (!snap.exists()) {
+    await setDoc(ref, { count: 1 })
+    return true
+  }
+
+  const { count } = snap.data()
+  if (count >= 10) return false
+
+  await updateDoc(ref, { count: count + 1 })
+  return true
+}
+\`\`\`
+
+---
+
+## Deploy
+
+Vercel + Firebase = gratis para empezar.
+
+---
+
+## Próximo paso
+
+→ [Blog con Next.js + MDX](/es/cooking/nextjs-blog)
+    `,
+    contentEn: `
+## Public AI chat with authentication
+
+Deploy an AI chat anyone can use, with login and usage limits.
+
+---
+
+## Architecture
+
+\`\`\`
+User → Firebase Auth → Your Next.js app
+                            ↓
+                       AI API (Gemini/Claude)
+                            ↓
+                       History in DB
+\`\`\`
+
+---
+
+## Step 1: Ask an AI for the complete app
+
+\`\`\`
+I need a public AI chat app with:
+- Next.js App Router
+- Firebase Auth (Google login)
+- Limit of 10 messages/day for free users
+- Conversation history in Firestore
+- ChatGPT-like UI
+- API route calling Gemini
+- TypeScript and Tailwind CSS
+
+Give me the file structure and complete code.
+\`\`\`
+
+---
+
+## Key components
+
+| File | Function |
+|------|----------|
+| \`app/api/chat/route.ts\` | Calls AI API |
+| \`lib/firebase.ts\` | Firebase config |
+| \`components/ChatUI.tsx\` | Chat interface |
+| \`hooks/useAuth.ts\` | Auth hook |
+
+---
+
+## Rate limiting
+
+\`\`\`typescript
+async function checkRateLimit(userId: string): Promise<boolean> {
+  const today = new Date().toISOString().split('T')[0]
+  const ref = doc(db, 'usage', \`\${userId}_\${today}\`)
+  const snap = await getDoc(ref)
+
+  if (!snap.exists()) {
+    await setDoc(ref, { count: 1 })
+    return true
+  }
+
+  const { count } = snap.data()
+  if (count >= 10) return false
+
+  await updateDoc(ref, { count: count + 1 })
+  return true
+}
+\`\`\`
+
+---
+
+## Deploy
+
+Vercel + Firebase = free to start.
+
+---
+
+## Next step
+
+→ [Blog with Next.js + MDX](/en/cooking/nextjs-blog)
+    `,
+  },
+  'nextjs-blog': {
+    timeEs: '40 minutos',
+    timeEn: '40 minutes',
+    prerequisitesEs: ['Next.js básico', 'Markdown'],
+    prerequisitesEn: ['Basic Next.js', 'Markdown'],
+    contentEs: `
+## Blog con contenido Markdown
+
+Un blog estático con MDX permite escribir en Markdown con componentes React.
+
+---
+
+## Paso 1: Pídele a una IA el blog
+
+\`\`\`
+Necesito un blog con Next.js que:
+- Use MDX para los posts
+- Tenga una página listando todos los posts
+- Cada post tenga metadata (título, fecha, tags)
+- Sintaxis highlighting para código
+- Genere rutas estáticas (SSG)
+- TypeScript y Tailwind CSS
+
+Dame la estructura completa con 2 posts de ejemplo.
+\`\`\`
+
+---
+
+## Estructura
+
+\`\`\`
+app/
+├── blog/
+│   ├── page.tsx          # Lista de posts
+│   └── [slug]/
+│       └── page.tsx      # Post individual
+content/
+├── posts/
+│   ├── hello-world.mdx
+│   └── segundo-post.mdx
+\`\`\`
+
+---
+
+## MDX ejemplo
+
+\`\`\`mdx
+---
+title: "Mi Primer Post"
+date: "2026-01-01"
+tags: ["nextjs", "tutorial"]
+---
+
+# Bienvenido
+
+Este es mi primer post con **MDX**.
+
+<CustomComponent prop="valor" />
+
+\\\`\\\`\\\`typescript
+const greeting = "Hola mundo!"
+\\\`\\\`\\\`
+\`\`\`
+
+---
+
+## Librerías útiles
+
+| Librería | Para qué |
+|----------|----------|
+| \`@next/mdx\` | MDX en Next.js |
+| \`gray-matter\` | Parsear frontmatter |
+| \`rehype-highlight\` | Syntax highlighting |
+
+---
+
+## Próximo paso
+
+→ [Auth con Firebase Google](/es/cooking/auth-firebase)
+    `,
+    contentEn: `
+## Blog with Markdown content
+
+A static blog with MDX lets you write in Markdown with React components.
+
+---
+
+## Step 1: Ask an AI for the blog
+
+\`\`\`
+I need a blog with Next.js that:
+- Uses MDX for posts
+- Has a page listing all posts
+- Each post has metadata (title, date, tags)
+- Syntax highlighting for code
+- Generates static routes (SSG)
+- TypeScript and Tailwind CSS
+
+Give me the complete structure with 2 example posts.
+\`\`\`
+
+---
+
+## Structure
+
+\`\`\`
+app/
+├── blog/
+│   ├── page.tsx          # Post list
+│   └── [slug]/
+│       └── page.tsx      # Individual post
+content/
+├── posts/
+│   ├── hello-world.mdx
+│   └── second-post.mdx
+\`\`\`
+
+---
+
+## MDX example
+
+\`\`\`mdx
+---
+title: "My First Post"
+date: "2026-01-01"
+tags: ["nextjs", "tutorial"]
+---
+
+# Welcome
+
+This is my first post with **MDX**.
+
+<CustomComponent prop="value" />
+
+\\\`\\\`\\\`typescript
+const greeting = "Hello world!"
+\\\`\\\`\\\`
+\`\`\`
+
+---
+
+## Useful libraries
+
+| Library | What for |
+|---------|----------|
+| \`@next/mdx\` | MDX in Next.js |
+| \`gray-matter\` | Parse frontmatter |
+| \`rehype-highlight\` | Syntax highlighting |
+
+---
+
+## Next step
+
+→ [Auth with Firebase Google](/en/cooking/auth-firebase)
+    `,
+  },
+  'auth-firebase': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['React básico', 'Firebase console'],
+    prerequisitesEn: ['Basic React', 'Firebase console'],
+    contentEs: `
+## Login con Google en minutos
+
+Firebase Auth maneja toda la complejidad de autenticación por ti.
+
+---
+
+## Setup Firebase
+
+1. Ir a [console.firebase.google.com](https://console.firebase.google.com)
+2. Crear proyecto
+3. Authentication → Sign-in method → Google → Enable
+4. Copiar config
+
+---
+
+## Paso 1: Pídele a una IA la integración
+
+\`\`\`
+Necesito integrar Firebase Auth con Google en React:
+- Hook personalizado useAuth
+- Botón de login/logout
+- Mostrar info del usuario
+- Proteger rutas
+- TypeScript
+
+Config Firebase: (pegar tu config)
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Código típico
+
+\`\`\`typescript
+// lib/firebase.ts
+import { initializeApp } from 'firebase/app'
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'
+
+const app = initializeApp({ /* tu config */ })
+export const auth = getAuth(app)
+export const googleProvider = new GoogleAuthProvider()
+\`\`\`
+
+\`\`\`typescript
+// hooks/useAuth.ts
+import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth'
+
+export function useAuth() {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, setUser)
+  }, [])
+
+  const login = () => signInWithPopup(auth, googleProvider)
+  const logout = () => signOut(auth)
+
+  return { user, login, logout }
+}
+\`\`\`
+
+---
+
+## Proteger rutas
+
+\`\`\`tsx
+function ProtectedPage() {
+  const { user, login } = useAuth()
+
+  if (!user) {
+    return <button onClick={login}>Login con Google</button>
+  }
+
+  return <div>Bienvenido, {user.displayName}</div>
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [CRUD con PostgreSQL](/es/cooking/crud-postgres)
+    `,
+    contentEn: `
+## Login with Google in minutes
+
+Firebase Auth handles all authentication complexity for you.
+
+---
+
+## Firebase Setup
+
+1. Go to [console.firebase.google.com](https://console.firebase.google.com)
+2. Create project
+3. Authentication → Sign-in method → Google → Enable
+4. Copy config
+
+---
+
+## Step 1: Ask an AI for the integration
+
+\`\`\`
+I need to integrate Firebase Auth with Google in React:
+- Custom useAuth hook
+- Login/logout button
+- Show user info
+- Protect routes
+- TypeScript
+
+Firebase config: (paste your config)
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Typical code
+
+\`\`\`typescript
+// lib/firebase.ts
+import { initializeApp } from 'firebase/app'
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'
+
+const app = initializeApp({ /* your config */ })
+export const auth = getAuth(app)
+export const googleProvider = new GoogleAuthProvider()
+\`\`\`
+
+\`\`\`typescript
+// hooks/useAuth.ts
+import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth'
+
+export function useAuth() {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, setUser)
+  }, [])
+
+  const login = () => signInWithPopup(auth, googleProvider)
+  const logout = () => signOut(auth)
+
+  return { user, login, logout }
+}
+\`\`\`
+
+---
+
+## Protect routes
+
+\`\`\`tsx
+function ProtectedPage() {
+  const { user, login } = useAuth()
+
+  if (!user) {
+    return <button onClick={login}>Login with Google</button>
+  }
+
+  return <div>Welcome, {user.displayName}</div>
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [CRUD with PostgreSQL](/en/cooking/crud-postgres)
+    `,
+  },
+  'crud-postgres': {
+    timeEs: '35 minutos',
+    timeEn: '35 minutes',
+    prerequisitesEs: ['PostgreSQL', 'Next.js API Routes'],
+    prerequisitesEn: ['PostgreSQL', 'Next.js API Routes'],
+    contentEs: `
+## Base de datos real
+
+Un CRUD completo con PostgreSQL usando Prisma.
+
+---
+
+## Setup
+
+\`\`\`bash
+pnpm add prisma @prisma/client
+npx prisma init
+\`\`\`
+
+---
+
+## Paso 1: Pídele a una IA el CRUD
+
+\`\`\`
+Necesito un CRUD completo en Next.js con:
+- PostgreSQL + Prisma
+- Modelo: User (id, email, name, createdAt)
+- API routes para CRUD
+- Página con tabla de usuarios
+- Formulario para crear/editar
+- Validación con Zod
+- TypeScript
+
+Dame el schema de Prisma y código completo.
+\`\`\`
+
+---
+
+## Schema Prisma
+
+\`\`\`prisma
+// prisma/schema.prisma
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+}
+\`\`\`
+
+\`\`\`bash
+npx prisma migrate dev --name init
+npx prisma generate
+\`\`\`
+
+---
+
+## API Route
+
+\`\`\`typescript
+// app/api/users/route.ts
+import { prisma } from '@/lib/prisma'
+
+export async function GET() {
+  const users = await prisma.user.findMany()
+  return Response.json(users)
+}
+
+export async function POST(request: Request) {
+  const body = await request.json()
+  const user = await prisma.user.create({ data: body })
+  return Response.json(user)
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Chat en Tiempo Real](/es/cooking/realtime-chat)
+    `,
+    contentEn: `
+## Real database
+
+A complete CRUD with PostgreSQL using Prisma.
+
+---
+
+## Setup
+
+\`\`\`bash
+pnpm add prisma @prisma/client
+npx prisma init
+\`\`\`
+
+---
+
+## Step 1: Ask an AI for the CRUD
+
+\`\`\`
+I need a complete CRUD in Next.js with:
+- PostgreSQL + Prisma
+- Model: User (id, email, name, createdAt)
+- API routes for CRUD
+- Page with users table
+- Form to create/edit
+- Validation with Zod
+- TypeScript
+
+Give me the Prisma schema and complete code.
+\`\`\`
+
+---
+
+## Prisma Schema
+
+\`\`\`prisma
+// prisma/schema.prisma
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+}
+\`\`\`
+
+\`\`\`bash
+npx prisma migrate dev --name init
+npx prisma generate
+\`\`\`
+
+---
+
+## API Route
+
+\`\`\`typescript
+// app/api/users/route.ts
+import { prisma } from '@/lib/prisma'
+
+export async function GET() {
+  const users = await prisma.user.findMany()
+  return Response.json(users)
+}
+
+export async function POST(request: Request) {
+  const body = await request.json()
+  const user = await prisma.user.create({ data: body })
+  return Response.json(user)
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Real-time Chat](/en/cooking/realtime-chat)
+    `,
+  },
+  'realtime-chat': {
+    timeEs: '40 minutos',
+    timeEn: '40 minutes',
+    prerequisitesEs: ['WebSockets', 'React'],
+    prerequisitesEn: ['WebSockets', 'React'],
+    contentEs: `
+## Mensajes instantáneos
+
+Un chat en tiempo real con WebSockets o Firebase.
+
+---
+
+## Opciones
+
+| Tecnología | Ideal para |
+|------------|------------|
+| **Socket.io** | Control total |
+| **Firebase Realtime** | Rápido de implementar |
+| **Supabase Realtime** | Con PostgreSQL |
+
+---
+
+## Paso 1: Pídele a una IA el chat
+
+\`\`\`
+Necesito un chat en tiempo real con:
+- Firebase Realtime Database
+- Múltiples usuarios
+- Mensajes con timestamp
+- Scroll automático al nuevo mensaje
+- Indicador de "escribiendo..."
+- React + TypeScript
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Código típico (Firebase)
+
+\`\`\`typescript
+import { ref, push, onValue } from 'firebase/database'
+
+// Enviar mensaje
+const sendMessage = (text: string) => {
+  push(ref(db, 'messages'), {
+    text,
+    userId: user.uid,
+    userName: user.displayName,
+    timestamp: Date.now()
+  })
+}
+
+// Escuchar mensajes
+useEffect(() => {
+  const messagesRef = ref(db, 'messages')
+  return onValue(messagesRef, (snapshot) => {
+    const data = snapshot.val()
+    setMessages(Object.values(data || {}))
+  })
+}, [])
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Subida de Archivos S3](/es/cooking/file-upload)
+    `,
+    contentEn: `
+## Instant messages
+
+A real-time chat with WebSockets or Firebase.
+
+---
+
+## Options
+
+| Technology | Ideal for |
+|------------|-----------|
+| **Socket.io** | Full control |
+| **Firebase Realtime** | Quick to implement |
+| **Supabase Realtime** | With PostgreSQL |
+
+---
+
+## Step 1: Ask an AI for the chat
+
+\`\`\`
+I need a real-time chat with:
+- Firebase Realtime Database
+- Multiple users
+- Messages with timestamp
+- Auto scroll to new message
+- "Typing..." indicator
+- React + TypeScript
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Typical code (Firebase)
+
+\`\`\`typescript
+import { ref, push, onValue } from 'firebase/database'
+
+// Send message
+const sendMessage = (text: string) => {
+  push(ref(db, 'messages'), {
+    text,
+    userId: user.uid,
+    userName: user.displayName,
+    timestamp: Date.now()
+  })
+}
+
+// Listen to messages
+useEffect(() => {
+  const messagesRef = ref(db, 'messages')
+  return onValue(messagesRef, (snapshot) => {
+    const data = snapshot.val()
+    setMessages(Object.values(data || {}))
+  })
+}, [])
+\`\`\`
+
+---
+
+## Next step
+
+→ [S3 File Upload](/en/cooking/file-upload)
+    `,
+  },
+  'file-upload': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['AWS S3', 'Next.js API'],
+    prerequisitesEn: ['AWS S3', 'Next.js API'],
+    contentEs: `
+## Subida segura de archivos
+
+Sube archivos a S3 usando URLs pre-firmadas.
+
+---
+
+## Por qué pre-signed URLs
+
+- El archivo va directo a S3 (no pasa por tu servidor)
+- Más rápido y económico
+- Tu servidor solo genera la URL
+
+---
+
+## Paso 1: Pídele a una IA la implementación
+
+\`\`\`
+Necesito subida de archivos a S3 con:
+- URLs pre-firmadas
+- API route que genere la URL
+- Componente de upload con drag & drop
+- Barra de progreso
+- Validación de tipo y tamaño
+- TypeScript
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## API Route
+
+\`\`\`typescript
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+
+const s3 = new S3Client({ region: 'us-east-1' })
+
+export async function POST(request: Request) {
+  const { filename, contentType } = await request.json()
+
+  const command = new PutObjectCommand({
+    Bucket: process.env.S3_BUCKET,
+    Key: \`uploads/\${Date.now()}-\${filename}\`,
+    ContentType: contentType
+  })
+
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600 })
+  return Response.json({ url })
+}
+\`\`\`
+
+---
+
+## Cliente
+
+\`\`\`typescript
+async function uploadFile(file: File) {
+  // 1. Obtener URL pre-firmada
+  const { url } = await fetch('/api/upload', {
+    method: 'POST',
+    body: JSON.stringify({ filename: file.name, contentType: file.type })
+  }).then(r => r.json())
+
+  // 2. Subir directo a S3
+  await fetch(url, {
+    method: 'PUT',
+    body: file,
+    headers: { 'Content-Type': file.type }
+  })
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Pagos con Stripe](/es/cooking/payment-stripe)
+    `,
+    contentEn: `
+## Secure file upload
+
+Upload files to S3 using pre-signed URLs.
+
+---
+
+## Why pre-signed URLs
+
+- File goes directly to S3 (doesn't pass through your server)
+- Faster and cheaper
+- Your server only generates the URL
+
+---
+
+## Step 1: Ask an AI for the implementation
+
+\`\`\`
+I need file upload to S3 with:
+- Pre-signed URLs
+- API route that generates the URL
+- Upload component with drag & drop
+- Progress bar
+- Type and size validation
+- TypeScript
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## API Route
+
+\`\`\`typescript
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+
+const s3 = new S3Client({ region: 'us-east-1' })
+
+export async function POST(request: Request) {
+  const { filename, contentType } = await request.json()
+
+  const command = new PutObjectCommand({
+    Bucket: process.env.S3_BUCKET,
+    Key: \`uploads/\${Date.now()}-\${filename}\`,
+    ContentType: contentType
+  })
+
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600 })
+  return Response.json({ url })
+}
+\`\`\`
+
+---
+
+## Client
+
+\`\`\`typescript
+async function uploadFile(file: File) {
+  // 1. Get pre-signed URL
+  const { url } = await fetch('/api/upload', {
+    method: 'POST',
+    body: JSON.stringify({ filename: file.name, contentType: file.type })
+  }).then(r => r.json())
+
+  // 2. Upload directly to S3
+  await fetch(url, {
+    method: 'PUT',
+    body: file,
+    headers: { 'Content-Type': file.type }
+  })
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Payments with Stripe](/en/cooking/payment-stripe)
+    `,
+  },
+  'payment-stripe': {
+    timeEs: '35 minutos',
+    timeEn: '35 minutes',
+    prerequisitesEs: ['Stripe account', 'Next.js API'],
+    prerequisitesEn: ['Stripe account', 'Next.js API'],
+    contentEs: `
+## Pagos seguros
+
+Stripe maneja tarjetas, suscripciones y cumplimiento por ti.
+
+---
+
+## Setup
+
+1. Crear cuenta en [stripe.com](https://stripe.com)
+2. Copiar API keys (test mode)
+3. \`pnpm add stripe @stripe/stripe-js\`
+
+---
+
+## Paso 1: Pídele a una IA la integración
+
+\`\`\`
+Necesito integrar pagos con Stripe:
+- Checkout Session para pago único
+- Webhook para confirmar pago
+- Página de éxito/cancelación
+- Next.js App Router
+- TypeScript
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## API Route
+
+\`\`\`typescript
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+
+export async function POST(request: Request) {
+  const { priceId } = await request.json()
+
+  const session = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    line_items: [{ price: priceId, quantity: 1 }],
+    success_url: \`\${process.env.URL}/success\`,
+    cancel_url: \`\${process.env.URL}/cancel\`
+  })
+
+  return Response.json({ url: session.url })
+}
+\`\`\`
+
+---
+
+## Botón de pago
+
+\`\`\`tsx
+const handleCheckout = async () => {
+  const { url } = await fetch('/api/checkout', {
+    method: 'POST',
+    body: JSON.stringify({ priceId: 'price_xxx' })
+  }).then(r => r.json())
+
+  window.location.href = url
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Emails Transaccionales](/es/cooking/email-notifications)
+    `,
+    contentEn: `
+## Secure payments
+
+Stripe handles cards, subscriptions, and compliance for you.
+
+---
+
+## Setup
+
+1. Create account at [stripe.com](https://stripe.com)
+2. Copy API keys (test mode)
+3. \`pnpm add stripe @stripe/stripe-js\`
+
+---
+
+## Step 1: Ask an AI for the integration
+
+\`\`\`
+I need to integrate payments with Stripe:
+- Checkout Session for one-time payment
+- Webhook to confirm payment
+- Success/cancel page
+- Next.js App Router
+- TypeScript
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## API Route
+
+\`\`\`typescript
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+
+export async function POST(request: Request) {
+  const { priceId } = await request.json()
+
+  const session = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    line_items: [{ price: priceId, quantity: 1 }],
+    success_url: \`\${process.env.URL}/success\`,
+    cancel_url: \`\${process.env.URL}/cancel\`
+  })
+
+  return Response.json({ url: session.url })
+}
+\`\`\`
+
+---
+
+## Payment button
+
+\`\`\`tsx
+const handleCheckout = async () => {
+  const { url } = await fetch('/api/checkout', {
+    method: 'POST',
+    body: JSON.stringify({ priceId: 'price_xxx' })
+  }).then(r => r.json())
+
+  window.location.href = url
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Transactional Emails](/en/cooking/email-notifications)
+    `,
+  },
+  'email-notifications': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Node.js', 'API REST'],
+    prerequisitesEn: ['Node.js', 'REST API'],
+    contentEs: `
+## Emails que llegan
+
+Envía emails transaccionales con Resend o SendGrid.
+
+---
+
+## Servicios recomendados
+
+| Servicio | Gratis | Ideal para |
+|----------|--------|------------|
+| **Resend** | 3000/mes | Developers |
+| **SendGrid** | 100/día | Enterprise |
+| **Postmark** | 100/mes | Transaccional |
+
+---
+
+## Setup Resend
+
+\`\`\`bash
+pnpm add resend
+\`\`\`
+
+---
+
+## Código
+
+\`\`\`typescript
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+export async function sendWelcomeEmail(to: string, name: string) {
+  await resend.emails.send({
+    from: 'Tu App <noreply@tudominio.com>',
+    to,
+    subject: 'Bienvenido!',
+    html: \`
+      <h1>Hola \${name}!</h1>
+      <p>Gracias por registrarte.</p>
+    \`
+  })
+}
+\`\`\`
+
+---
+
+## Con React Email
+
+\`\`\`tsx
+import { render } from '@react-email/render'
+import WelcomeEmail from './emails/Welcome'
+
+const html = render(<WelcomeEmail name={name} />)
+await resend.emails.send({ ..., html })
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Deploy con Docker](/es/cooking/docker-deploy)
+    `,
+    contentEn: `
+## Emails that arrive
+
+Send transactional emails with Resend or SendGrid.
+
+---
+
+## Recommended services
+
+| Service | Free | Ideal for |
+|---------|------|-----------|
+| **Resend** | 3000/month | Developers |
+| **SendGrid** | 100/day | Enterprise |
+| **Postmark** | 100/month | Transactional |
+
+---
+
+## Resend Setup
+
+\`\`\`bash
+pnpm add resend
+\`\`\`
+
+---
+
+## Code
+
+\`\`\`typescript
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+export async function sendWelcomeEmail(to: string, name: string) {
+  await resend.emails.send({
+    from: 'Your App <noreply@yourdomain.com>',
+    to,
+    subject: 'Welcome!',
+    html: \`
+      <h1>Hello \${name}!</h1>
+      <p>Thanks for signing up.</p>
+    \`
+  })
+}
+\`\`\`
+
+---
+
+## With React Email
+
+\`\`\`tsx
+import { render } from '@react-email/render'
+import WelcomeEmail from './emails/Welcome'
+
+const html = render(<WelcomeEmail name={name} />)
+await resend.emails.send({ ..., html })
+\`\`\`
+
+---
+
+## Next step
+
+→ [Deploy with Docker](/en/cooking/docker-deploy)
+    `,
+  },
+  'docker-deploy': {
+    timeEs: '40 minutos',
+    timeEn: '40 minutes',
+    prerequisitesEs: ['Docker Compose', 'VPS básico'],
+    prerequisitesEn: ['Docker Compose', 'Basic VPS'],
+    contentEs: `
+## Tu app en producción
+
+Despliega tu aplicación con Docker en un VPS.
+
+---
+
+## Requisitos
+
+- VPS (DigitalOcean, Hetzner, etc.)
+- Docker instalado en el VPS
+- Dominio (opcional pero recomendado)
+
+---
+
+## Paso 1: Pídele a una IA el setup
+
+\`\`\`
+Necesito desplegar una app Next.js con:
+- Dockerfile optimizado (multi-stage)
+- docker-compose.yml con:
+  - App Next.js
+  - PostgreSQL
+  - Redis
+  - Nginx como reverse proxy
+- HTTPS con Let's Encrypt
+- Scripts de deploy
+
+Dame todos los archivos necesarios.
+\`\`\`
+
+---
+
+## Dockerfile
+
+\`\`\`dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+CMD ["node", "server.js"]
+\`\`\`
+
+---
+
+## Deploy
+
+\`\`\`bash
+ssh user@server "cd /app && git pull && docker compose up -d --build"
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [CI/CD con GitHub Actions](/es/cooking/github-actions)
+    `,
+    contentEn: `
+## Your app in production
+
+Deploy your application with Docker on a VPS.
+
+---
+
+## Requirements
+
+- VPS (DigitalOcean, Hetzner, etc.)
+- Docker installed on VPS
+- Domain (optional but recommended)
+
+---
+
+## Step 1: Ask an AI for the setup
+
+\`\`\`
+I need to deploy a Next.js app with:
+- Optimized Dockerfile (multi-stage)
+- docker-compose.yml with:
+  - Next.js App
+  - PostgreSQL
+  - Redis
+  - Nginx as reverse proxy
+- HTTPS with Let's Encrypt
+- Deploy scripts
+
+Give me all necessary files.
+\`\`\`
+
+---
+
+## Dockerfile
+
+\`\`\`dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+CMD ["node", "server.js"]
+\`\`\`
+
+---
+
+## Deploy
+
+\`\`\`bash
+ssh user@server "cd /app && git pull && docker compose up -d --build"
+\`\`\`
+
+---
+
+## Next step
+
+→ [CI/CD with GitHub Actions](/en/cooking/github-actions)
+    `,
+  },
+  'github-actions': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['GitHub repo', 'Docker deploy'],
+    prerequisitesEn: ['GitHub repo', 'Docker deploy'],
+    contentEs: `
+## Deploy automático
+
+GitHub Actions ejecuta tests y despliega cuando haces push.
+
+---
+
+## Paso 1: Pídele a una IA el workflow
+
+\`\`\`
+Necesito un workflow de GitHub Actions que:
+- Corra en push a main
+- Ejecute tests
+- Build de Docker
+- Deploy a VPS via SSH
+- Notifique en Slack si falla
+
+Dame el archivo .yml completo.
+\`\`\`
+
+---
+
+## Workflow
+
+\`\`\`yaml
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci && npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: \${{ secrets.HOST }}
+          username: \${{ secrets.USER }}
+          key: \${{ secrets.SSH_KEY }}
+          script: |
+            cd /app
+            git pull
+            docker compose up -d --build
+\`\`\`
+
+---
+
+## Secretos necesarios
+
+- \`HOST\`: IP del servidor
+- \`USER\`: Usuario SSH
+- \`SSH_KEY\`: Llave privada
+
+---
+
+## Próximo paso
+
+→ [Testing de APIs](/es/cooking/api-testing)
+    `,
+    contentEn: `
+## Automatic deploy
+
+GitHub Actions runs tests and deploys when you push.
+
+---
+
+## Step 1: Ask an AI for the workflow
+
+\`\`\`
+I need a GitHub Actions workflow that:
+- Runs on push to main
+- Runs tests
+- Docker build
+- Deploy to VPS via SSH
+- Notify on Slack if fails
+
+Give me the complete .yml file.
+\`\`\`
+
+---
+
+## Workflow
+
+\`\`\`yaml
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci && npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: \${{ secrets.HOST }}
+          username: \${{ secrets.USER }}
+          key: \${{ secrets.SSH_KEY }}
+          script: |
+            cd /app
+            git pull
+            docker compose up -d --build
+\`\`\`
+
+---
+
+## Required secrets
+
+- \`HOST\`: Server IP
+- \`USER\`: SSH user
+- \`SSH_KEY\`: Private key
+
+---
+
+## Next step
+
+→ [API Testing](/en/cooking/api-testing)
+    `,
+  },
+  'api-testing': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['API REST', 'Jest o Vitest'],
+    prerequisitesEn: ['REST API', 'Jest or Vitest'],
+    contentEs: `
+## Tests que previenen bugs
+
+Testea tus APIs automáticamente con cada cambio.
+
+---
+
+## Paso 1: Pídele a una IA los tests
+
+\`\`\`
+Necesito tests para una API REST con:
+- Vitest + supertest
+- Tests para cada endpoint (GET, POST, PUT, DELETE)
+- Mock de base de datos
+- Tests de autenticación
+- Coverage report
+
+Dame los tests completos para un CRUD de users.
+\`\`\`
+
+---
+
+## Setup
+
+\`\`\`bash
+pnpm add -D vitest supertest @types/supertest
+\`\`\`
+
+---
+
+## Test ejemplo
+
+\`\`\`typescript
+import { describe, it, expect } from 'vitest'
+import request from 'supertest'
+import { app } from '../app'
+
+describe('Users API', () => {
+  it('GET /api/users returns users', async () => {
+    const res = await request(app).get('/api/users')
+    expect(res.status).toBe(200)
+    expect(Array.isArray(res.body)).toBe(true)
+  })
+
+  it('POST /api/users creates user', async () => {
+    const res = await request(app)
+      .post('/api/users')
+      .send({ email: 'test@test.com', name: 'Test' })
+
+    expect(res.status).toBe(201)
+    expect(res.body.email).toBe('test@test.com')
+  })
+})
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [App Móvil con Expo](/es/cooking/mobile-expo)
+    `,
+    contentEn: `
+## Tests that prevent bugs
+
+Test your APIs automatically with each change.
+
+---
+
+## Step 1: Ask an AI for the tests
+
+\`\`\`
+I need tests for a REST API with:
+- Vitest + supertest
+- Tests for each endpoint (GET, POST, PUT, DELETE)
+- Database mock
+- Authentication tests
+- Coverage report
+
+Give me complete tests for a users CRUD.
+\`\`\`
+
+---
+
+## Setup
+
+\`\`\`bash
+pnpm add -D vitest supertest @types/supertest
+\`\`\`
+
+---
+
+## Test example
+
+\`\`\`typescript
+import { describe, it, expect } from 'vitest'
+import request from 'supertest'
+import { app } from '../app'
+
+describe('Users API', () => {
+  it('GET /api/users returns users', async () => {
+    const res = await request(app).get('/api/users')
+    expect(res.status).toBe(200)
+    expect(Array.isArray(res.body)).toBe(true)
+  })
+
+  it('POST /api/users creates user', async () => {
+    const res = await request(app)
+      .post('/api/users')
+      .send({ email: 'test@test.com', name: 'Test' })
+
+    expect(res.status).toBe(201)
+    expect(res.body.email).toBe('test@test.com')
+  })
+})
+\`\`\`
+
+---
+
+## Next step
+
+→ [Mobile App with Expo](/en/cooking/mobile-expo)
+    `,
+  },
+  'mobile-expo': {
+    timeEs: '35 minutos',
+    timeEn: '35 minutes',
+    prerequisitesEs: ['React Native', 'Expo'],
+    prerequisitesEn: ['React Native', 'Expo'],
+    contentEs: `
+## Tu primera app móvil
+
+Crea una app iOS/Android con React y Expo.
+
+---
+
+## Paso 1: Pídele a una IA la app
+
+\`\`\`
+Necesito una app móvil con Expo que:
+- Tenga 3 pantallas (Home, Lista, Perfil)
+- Use React Navigation
+- Fetch de API externa
+- Almacenamiento local (AsyncStorage)
+- Estilos consistentes
+- TypeScript
+
+Dame la estructura y código completo.
+\`\`\`
+
+---
+
+## Setup
+
+\`\`\`bash
+npx create-expo-app@latest mi-app --template blank-typescript
+cd mi-app
+npx expo install @react-navigation/native @react-navigation/stack
+npx expo start
+\`\`\`
+
+---
+
+## Navegación
+
+\`\`\`tsx
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+
+const Stack = createStackNavigator()
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Push Notifications](/es/cooking/push-notifications)
+    `,
+    contentEn: `
+## Your first mobile app
+
+Create an iOS/Android app with React and Expo.
+
+---
+
+## Step 1: Ask an AI for the app
+
+\`\`\`
+I need a mobile app with Expo that:
+- Has 3 screens (Home, List, Profile)
+- Uses React Navigation
+- Fetches from external API
+- Local storage (AsyncStorage)
+- Consistent styles
+- TypeScript
+
+Give me the structure and complete code.
+\`\`\`
+
+---
+
+## Setup
+
+\`\`\`bash
+npx create-expo-app@latest my-app --template blank-typescript
+cd my-app
+npx expo install @react-navigation/native @react-navigation/stack
+npx expo start
+\`\`\`
+
+---
+
+## Navigation
+
+\`\`\`tsx
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+
+const Stack = createStackNavigator()
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Push Notifications](/en/cooking/push-notifications)
+    `,
+  },
+  'push-notifications': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Expo app', 'Backend'],
+    prerequisitesEn: ['Expo app', 'Backend'],
+    contentEs: `
+## Notificaciones que enganchen
+
+Envía push notifications a tus usuarios.
+
+---
+
+## Con Expo Push
+
+\`\`\`bash
+npx expo install expo-notifications expo-device
+\`\`\`
+
+---
+
+## Obtener token
+
+\`\`\`typescript
+import * as Notifications from 'expo-notifications'
+import * as Device from 'expo-device'
+
+async function registerForPush() {
+  if (!Device.isDevice) return
+
+  const { status } = await Notifications.requestPermissionsAsync()
+  if (status !== 'granted') return
+
+  const token = await Notifications.getExpoPushTokenAsync()
+  // Guardar token en tu backend
+  return token.data
+}
+\`\`\`
+
+---
+
+## Enviar desde backend
+
+\`\`\`typescript
+await fetch('https://exp.host/--/api/v2/push/send', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    to: 'ExponentPushToken[xxx]',
+    title: 'Nuevo mensaje',
+    body: 'Tienes un mensaje nuevo',
+    data: { screen: 'Chat' }
+  })
+})
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Receptor de Webhooks](/es/cooking/webhook-receiver)
+    `,
+    contentEn: `
+## Notifications that engage
+
+Send push notifications to your users.
+
+---
+
+## With Expo Push
+
+\`\`\`bash
+npx expo install expo-notifications expo-device
+\`\`\`
+
+---
+
+## Get token
+
+\`\`\`typescript
+import * as Notifications from 'expo-notifications'
+import * as Device from 'expo-device'
+
+async function registerForPush() {
+  if (!Device.isDevice) return
+
+  const { status } = await Notifications.requestPermissionsAsync()
+  if (status !== 'granted') return
+
+  const token = await Notifications.getExpoPushTokenAsync()
+  // Save token to your backend
+  return token.data
+}
+\`\`\`
+
+---
+
+## Send from backend
+
+\`\`\`typescript
+await fetch('https://exp.host/--/api/v2/push/send', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    to: 'ExponentPushToken[xxx]',
+    title: 'New message',
+    body: 'You have a new message',
+    data: { screen: 'Chat' }
+  })
+})
+\`\`\`
+
+---
+
+## Next step
+
+→ [Webhook Receiver](/en/cooking/webhook-receiver)
+    `,
+  },
+  'webhook-receiver': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Next.js API', 'Webhooks'],
+    prerequisitesEn: ['Next.js API', 'Webhooks'],
+    contentEs: `
+## Recibe eventos externos
+
+Procesa webhooks de Stripe, GitHub, etc.
+
+---
+
+## Paso 1: Pídele a una IA el receptor
+
+\`\`\`
+Necesito un receptor de webhooks con:
+- Verificación de firma HMAC
+- Logging de eventos
+- Manejo de errores
+- Retry logic
+- Guardado en base de datos
+- Next.js App Router
+
+Dame el código para webhooks de Stripe.
+\`\`\`
+
+---
+
+## Código
+
+\`\`\`typescript
+// app/api/webhooks/stripe/route.ts
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+
+export async function POST(request: Request) {
+  const body = await request.text()
+  const signature = request.headers.get('stripe-signature')!
+
+  let event: Stripe.Event
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    )
+  } catch (err) {
+    return new Response('Invalid signature', { status: 400 })
+  }
+
+  // Procesar evento
+  switch (event.type) {
+    case 'checkout.session.completed':
+      // Activar suscripción
+      break
+  }
+
+  return new Response('OK')
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Cache con Redis](/es/cooking/redis-cache)
+    `,
+    contentEn: `
+## Receive external events
+
+Process webhooks from Stripe, GitHub, etc.
+
+---
+
+## Step 1: Ask an AI for the receiver
+
+\`\`\`
+I need a webhook receiver with:
+- HMAC signature verification
+- Event logging
+- Error handling
+- Retry logic
+- Save to database
+- Next.js App Router
+
+Give me the code for Stripe webhooks.
+\`\`\`
+
+---
+
+## Code
+
+\`\`\`typescript
+// app/api/webhooks/stripe/route.ts
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+
+export async function POST(request: Request) {
+  const body = await request.text()
+  const signature = request.headers.get('stripe-signature')!
+
+  let event: Stripe.Event
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    )
+  } catch (err) {
+    return new Response('Invalid signature', { status: 400 })
+  }
+
+  // Process event
+  switch (event.type) {
+    case 'checkout.session.completed':
+      // Activate subscription
+      break
+  }
+
+  return new Response('OK')
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Cache with Redis](/en/cooking/redis-cache)
+    `,
+  },
+  'redis-cache': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Redis', 'API REST'],
+    prerequisitesEn: ['Redis', 'REST API'],
+    contentEs: `
+## Respuestas instantáneas
+
+Usa Redis para cachear datos y acelerar tu app.
+
+---
+
+## Paso 1: Pídele a una IA la implementación
+
+\`\`\`
+Necesito implementar cache con Redis:
+- Wrapper para fetch con cache
+- Invalidación por tiempo (TTL)
+- Invalidación manual
+- Pattern para API routes
+- TypeScript + ioredis
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Código
+
+\`\`\`typescript
+import Redis from 'ioredis'
+
+const redis = new Redis(process.env.REDIS_URL)
+
+export async function cached<T>(
+  key: string,
+  fetcher: () => Promise<T>,
+  ttl = 3600
+): Promise<T> {
+  const cached = await redis.get(key)
+  if (cached) return JSON.parse(cached)
+
+  const data = await fetcher()
+  await redis.setex(key, ttl, JSON.stringify(data))
+  return data
+}
+
+// Uso
+const users = await cached(
+  'users:all',
+  () => prisma.user.findMany(),
+  300 // 5 minutos
+)
+\`\`\`
+
+---
+
+## Invalidar
+
+\`\`\`typescript
+// Invalidar una key
+await redis.del('users:all')
+
+// Invalidar por patrón
+const keys = await redis.keys('users:*')
+if (keys.length) await redis.del(...keys)
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Arduino + MQTT](/es/cooking/arduino-sensor)
+    `,
+    contentEn: `
+## Instant responses
+
+Use Redis to cache data and speed up your app.
+
+---
+
+## Step 1: Ask an AI for the implementation
+
+\`\`\`
+I need to implement cache with Redis:
+- Fetch wrapper with cache
+- Time-based invalidation (TTL)
+- Manual invalidation
+- Pattern for API routes
+- TypeScript + ioredis
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Code
+
+\`\`\`typescript
+import Redis from 'ioredis'
+
+const redis = new Redis(process.env.REDIS_URL)
+
+export async function cached<T>(
+  key: string,
+  fetcher: () => Promise<T>,
+  ttl = 3600
+): Promise<T> {
+  const cached = await redis.get(key)
+  if (cached) return JSON.parse(cached)
+
+  const data = await fetcher()
+  await redis.setex(key, ttl, JSON.stringify(data))
+  return data
+}
+
+// Usage
+const users = await cached(
+  'users:all',
+  () => prisma.user.findMany(),
+  300 // 5 minutes
+)
+\`\`\`
+
+---
+
+## Invalidate
+
+\`\`\`typescript
+// Invalidate one key
+await redis.del('users:all')
+
+// Invalidate by pattern
+const keys = await redis.keys('users:*')
+if (keys.length) await redis.del(...keys)
+\`\`\`
+
+---
+
+## Next step
+
+→ [Arduino + MQTT](/en/cooking/arduino-sensor)
+    `,
+  },
+  'arduino-sensor': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Arduino/ESP32', 'MQTT'],
+    prerequisitesEn: ['Arduino/ESP32', 'MQTT'],
+    contentEs: `
+## Hardware conectado
+
+Envía datos de sensores a tu app web.
+
+---
+
+## Materiales
+
+- ESP32 o Arduino + WiFi
+- Sensor (temperatura, humedad, etc.)
+- Cables
+
+---
+
+## Paso 1: Pídele a una IA el código
+
+\`\`\`
+Necesito código Arduino/ESP32 que:
+- Lea sensor DHT22 (temp y humedad)
+- Envíe datos por MQTT cada 5 segundos
+- Use WiFi
+- Reconecte automáticamente
+
+Y código Node.js que:
+- Reciba datos MQTT
+- Guarde en PostgreSQL
+- Exponga API para el dashboard
+
+Dame todo el código.
+\`\`\`
+
+---
+
+## Código ESP32
+
+\`\`\`cpp
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <DHT.h>
+
+DHT dht(4, DHT22);
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  WiFi.begin("SSID", "password");
+  client.setServer("broker.hivemq.com", 1883);
+  dht.begin();
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  String payload = String(temp) + "," + String(hum);
+  client.publish("home/sensor", payload.c_str());
+
+  delay(5000);
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Dashboard de Analytics](/es/cooking/dashboard-analytics)
+    `,
+    contentEn: `
+## Connected hardware
+
+Send sensor data to your web app.
+
+---
+
+## Materials
+
+- ESP32 or Arduino + WiFi
+- Sensor (temperature, humidity, etc.)
+- Cables
+
+---
+
+## Step 1: Ask an AI for the code
+
+\`\`\`
+I need Arduino/ESP32 code that:
+- Reads DHT22 sensor (temp and humidity)
+- Sends data via MQTT every 5 seconds
+- Uses WiFi
+- Auto reconnects
+
+And Node.js code that:
+- Receives MQTT data
+- Saves to PostgreSQL
+- Exposes API for dashboard
+
+Give me all the code.
+\`\`\`
+
+---
+
+## ESP32 Code
+
+\`\`\`cpp
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <DHT.h>
+
+DHT dht(4, DHT22);
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  WiFi.begin("SSID", "password");
+  client.setServer("broker.hivemq.com", 1883);
+  dht.begin();
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  String payload = String(temp) + "," + String(hum);
+  client.publish("home/sensor", payload.c_str());
+
+  delay(5000);
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Analytics Dashboard](/en/cooking/dashboard-analytics)
+    `,
+  },
+  'dashboard-analytics': {
+    timeEs: '35 minutos',
+    timeEn: '35 minutes',
+    prerequisitesEs: ['React', 'Charts', 'API'],
+    prerequisitesEn: ['React', 'Charts', 'API'],
+    contentEs: `
+## Visualiza tus datos
+
+Crea un dashboard con gráficos y métricas.
+
+---
+
+## Paso 1: Pídele a una IA el dashboard
+
+\`\`\`
+Necesito un dashboard de analytics con:
+- Gráfico de líneas (últimos 7 días)
+- Cards con métricas (usuarios, ventas, etc.)
+- Tabla con datos recientes
+- Filtros por fecha
+- Responsive
+- React + Recharts + Tailwind
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Librerías
+
+\`\`\`bash
+pnpm add recharts
+\`\`\`
+
+---
+
+## Gráfico
+
+\`\`\`tsx
+import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
+
+const data = [
+  { date: '01/01', users: 400 },
+  { date: '02/01', users: 300 },
+  { date: '03/01', users: 500 },
+]
+
+function Chart() {
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="users" stroke="#3b82f6" />
+    </LineChart>
+  )
+}
+\`\`\`
+
+---
+
+## Siguiente nivel
+
+→ [RAG con Documentos PDF](/es/cooking/rag-documents) — Nivel Master
+    `,
+    contentEn: `
+## Visualize your data
+
+Create a dashboard with charts and metrics.
+
+---
+
+## Step 1: Ask an AI for the dashboard
+
+\`\`\`
+I need an analytics dashboard with:
+- Line chart (last 7 days)
+- Cards with metrics (users, sales, etc.)
+- Table with recent data
+- Date filters
+- Responsive
+- React + Recharts + Tailwind
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Libraries
+
+\`\`\`bash
+pnpm add recharts
+\`\`\`
+
+---
+
+## Chart
+
+\`\`\`tsx
+import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
+
+const data = [
+  { date: '01/01', users: 400 },
+  { date: '02/01', users: 300 },
+  { date: '03/01', users: 500 },
+]
+
+function Chart() {
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="users" stroke="#3b82f6" />
+    </LineChart>
+  )
+}
+\`\`\`
+
+---
+
+## Next level
+
+→ [RAG with PDF Documents](/en/cooking/rag-documents) — Master Level
+    `,
+  },
 }
 
 const dishOrder = dishes.map(d => d.slug)
