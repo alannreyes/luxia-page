@@ -11462,6 +11462,33 @@ You now have the skills to build real products with AI.
 
 const dishOrder = dishes.map(d => d.slug)
 
+// SEO descriptions for cooking dishes
+const dishDescriptions: Record<string, { es: string; en: string }> = {
+  'chatbot-gemini': { es: 'Crea un chatbot con Gemini API gratis. Tutorial paso a paso con código funcional.', en: 'Create a chatbot with free Gemini API. Step by step tutorial with working code.' },
+  'chatbot-claude': { es: 'Construye un chatbot con Claude API de Anthropic. Integración y mejores prácticas.', en: 'Build a chatbot with Anthropic Claude API. Integration and best practices.' },
+  'chatbot-openai': { es: 'Desarrolla un chatbot con OpenAI GPT. Streaming, funciones y más.', en: 'Develop a chatbot with OpenAI GPT. Streaming, functions and more.' },
+  'chatbot-ollama': { es: 'Crea un chatbot local con Ollama. Sin API keys, privacidad total.', en: 'Create a local chatbot with Ollama. No API keys, total privacy.' },
+  'api-rest-node': { es: 'Crea una API REST con Node.js y Express. Endpoints, middleware y deploy.', en: 'Create a REST API with Node.js and Express. Endpoints, middleware and deploy.' },
+  'api-rest-python': { es: 'Construye una API REST con Python y FastAPI. Async, validación y docs.', en: 'Build a REST API with Python and FastAPI. Async, validation and docs.' },
+  'api-graphql': { es: 'Implementa una API GraphQL desde cero. Queries, mutations y resolvers.', en: 'Implement a GraphQL API from scratch. Queries, mutations and resolvers.' },
+  'landing-react': { es: 'Crea una landing page moderna con React. Componentes, estilos y animaciones.', en: 'Create a modern landing page with React. Components, styles and animations.' },
+  'landing-nextjs': { es: 'Desarrolla una landing con Next.js. SEO, SSG y optimización.', en: 'Develop a landing with Next.js. SEO, SSG and optimization.' },
+  'portfolio-dev': { es: 'Construye tu portfolio de desarrollador. Diseño, proyectos y deploy.', en: 'Build your developer portfolio. Design, projects and deploy.' },
+  'auth-firebase': { es: 'Implementa autenticación con Firebase. Google, email y gestión de usuarios.', en: 'Implement authentication with Firebase. Google, email and user management.' },
+  'auth-nextauth': { es: 'Agrega login a Next.js con NextAuth. OAuth, sesiones y providers.', en: 'Add login to Next.js with NextAuth. OAuth, sessions and providers.' },
+  'auth-jwt': { es: 'Autenticación con JWT desde cero. Tokens, refresh y seguridad.', en: 'JWT authentication from scratch. Tokens, refresh and security.' },
+  'deploy-vercel': { es: 'Despliega tu app en Vercel. CI/CD automático y configuración.', en: 'Deploy your app on Vercel. Automatic CI/CD and configuration.' },
+  'deploy-docker': { es: 'Dockeriza y despliega tu aplicación. Dockerfile, compose y producción.', en: 'Dockerize and deploy your application. Dockerfile, compose and production.' },
+  'deploy-vps': { es: 'Deploy en VPS con Docker y Nginx. SSL, dominio y automatización.', en: 'Deploy on VPS with Docker and Nginx. SSL, domain and automation.' },
+  'rag-basic': { es: 'Construye un sistema RAG básico. Embeddings, búsqueda y respuestas.', en: 'Build a basic RAG system. Embeddings, search and responses.' },
+  'rag-qdrant': { es: 'RAG con Qdrant vector database. Búsqueda semántica avanzada.', en: 'RAG with Qdrant vector database. Advanced semantic search.' },
+  'n8n-intro': { es: 'Automatiza flujos con n8n. Instalación, nodos básicos y triggers.', en: 'Automate workflows with n8n. Installation, basic nodes and triggers.' },
+  'n8n-openai': { es: 'Conecta n8n con OpenAI. Automatiza tareas con IA.', en: 'Connect n8n with OpenAI. Automate tasks with AI.' },
+  'claude-code-intro': { es: 'Aprende a usar Claude Code CLI. Tu copiloto de programación en terminal.', en: 'Learn to use Claude Code CLI. Your programming copilot in terminal.' },
+  'cursor-intro': { es: 'Domina Cursor IDE con IA. Atajos, comandos y flujo de trabajo.', en: 'Master Cursor AI IDE. Shortcuts, commands and workflow.' },
+  'mcp-server': { es: 'Crea un servidor MCP para Claude. Herramientas personalizadas.', en: 'Create an MCP server for Claude. Custom tools.' },
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; dish: string }> }): Promise<Metadata> {
   const resolvedParams = await params
   const locale = resolvedParams.locale as 'es' | 'en'
@@ -11470,9 +11497,36 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!dishData) return { title: 'Not Found' }
 
   const title = locale === 'es' ? dishData.titleEs : dishData.titleEn
+  const description = dishDescriptions[resolvedParams.dish]?.[locale] ||
+    (locale === 'es' ? `Tutorial práctico: ${title}. Código funcional paso a paso.` : `Hands-on tutorial: ${title}. Step by step working code.`)
+
+  const fullTitle = `${title} - Cooking | luxIA`
+  const url = `https://luxia.us/${locale}/cooking/${resolvedParams.dish}`
 
   return {
-    title: `${title} - Cooking | luxIA`,
+    title: fullTitle,
+    description,
+    keywords: `${title}, tutorial, proyecto, ${locale === 'es' ? 'código' : 'code'}, práctica, IA, luxIA`,
+    openGraph: {
+      title: fullTitle,
+      description,
+      url,
+      siteName: 'luxIA',
+      locale: locale === 'es' ? 'es_ES' : 'en_US',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description,
+    },
+    alternates: {
+      canonical: url,
+      languages: {
+        'es-ES': `https://luxia.us/es/cooking/${resolvedParams.dish}`,
+        'en-US': `https://luxia.us/en/cooking/${resolvedParams.dish}`,
+      },
+    },
   }
 }
 

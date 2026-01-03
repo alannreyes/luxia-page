@@ -6341,6 +6341,39 @@ const slugAliases: Record<string, string> = {
 
 const sectionOrder = sections.map(s => s.slug)
 
+// SEO descriptions for each section
+const sectionDescriptions: Record<string, { es: string; en: string }> = {
+  terminal: { es: 'Aprende a usar la terminal y shell para desarrollo. Comandos esenciales, tips y atajos para macOS, Linux y Windows.', en: 'Learn to use the terminal and shell for development. Essential commands, tips and shortcuts for macOS, Linux and Windows.' },
+  git: { es: 'Domina Git y GitHub: control de versiones, branches, commits, pull requests y colaboración en equipo.', en: 'Master Git and GitHub: version control, branches, commits, pull requests and team collaboration.' },
+  editors: { es: 'Guía completa de editores de código: VS Code, Cursor, Claude Code, Copilot. Comparativa y configuración 2026.', en: 'Complete guide to code editors: VS Code, Cursor, Claude Code, Copilot. Comparison and setup 2026.' },
+  homebrew: { es: 'Instala herramientas de desarrollo fácilmente con Homebrew y gestores de paquetes en macOS y Linux.', en: 'Easily install development tools with Homebrew and package managers on macOS and Linux.' },
+  'docker-intro': { es: 'Introducción a Docker: contenedores, imágenes y comandos básicos para principiantes.', en: 'Introduction to Docker: containers, images and basic commands for beginners.' },
+  'llms-intro': { es: 'Qué son los LLMs, cómo usarlos para programar y el concepto Prompt-First. Gemini, Claude, ChatGPT.', en: 'What are LLMs, how to use them for programming and the Prompt-First concept. Gemini, Claude, ChatGPT.' },
+  'llms-models': { es: 'Guía de modelos LLM 2026: Claude Opus, GPT-5, Gemini 3. Cuál elegir para coding vs producción. Precios y benchmarks.', en: 'LLM models guide 2026: Claude Opus, GPT-5, Gemini 3. Which to choose for coding vs production. Pricing and benchmarks.' },
+  javascript: { es: 'JavaScript y TypeScript desde cero. Sintaxis moderna, ES6+, tipos y mejores prácticas.', en: 'JavaScript and TypeScript from scratch. Modern syntax, ES6+, types and best practices.' },
+  nodejs: { es: 'Node.js, npm y pnpm: runtime de JavaScript, gestión de paquetes y creación de servidores.', en: 'Node.js, npm and pnpm: JavaScript runtime, package management and server creation.' },
+  python: { es: 'Python moderno con uv: instalación, entornos virtuales y gestión de dependencias rápida.', en: 'Modern Python with uv: installation, virtual environments and fast dependency management.' },
+  'html-css': { es: 'Fundamentos de HTML5 y CSS3: estructura web, estilos, flexbox, grid y responsive design.', en: 'HTML5 and CSS3 fundamentals: web structure, styles, flexbox, grid and responsive design.' },
+  react: { es: 'React desde cero: componentes, hooks, estado y props. Crea interfaces modernas.', en: 'React from scratch: components, hooks, state and props. Create modern interfaces.' },
+  apis: { es: 'APIs REST: métodos HTTP, endpoints, autenticación y consumo desde frontend y backend.', en: 'REST APIs: HTTP methods, endpoints, authentication and consumption from frontend and backend.' },
+  embeddings: { es: 'Embeddings y vectores: representación semántica de texto para búsqueda y similitud.', en: 'Embeddings and vectors: semantic text representation for search and similarity.' },
+  nextjs: { es: 'Next.js: el framework fullstack de React. SSR, SSG, API routes y App Router.', en: 'Next.js: the fullstack React framework. SSR, SSG, API routes and App Router.' },
+  auth: { es: 'Autenticación: Firebase Auth, NextAuth, JWT, OAuth. Implementa login seguro.', en: 'Authentication: Firebase Auth, NextAuth, JWT, OAuth. Implement secure login.' },
+  webhooks: { es: 'Webhooks: eventos en tiempo real, integración con servicios externos y manejo de callbacks.', en: 'Webhooks: real-time events, external service integration and callback handling.' },
+  nestjs: { es: 'NestJS y FastAPI: frameworks backend estructurados para APIs escalables.', en: 'NestJS and FastAPI: structured backend frameworks for scalable APIs.' },
+  postgresql: { es: 'PostgreSQL: base de datos relacional, SQL, índices y optimización de consultas.', en: 'PostgreSQL: relational database, SQL, indexes and query optimization.' },
+  redis: { es: 'Redis: cache en memoria, sesiones, pub/sub y estructuras de datos rápidas.', en: 'Redis: in-memory cache, sessions, pub/sub and fast data structures.' },
+  'docker-compose': { es: 'Docker Compose: orquestación de múltiples contenedores, redes y volúmenes.', en: 'Docker Compose: orchestration of multiple containers, networks and volumes.' },
+  cicd: { es: 'CI/CD con GitHub Actions: automatiza tests, builds y deploys de tu código.', en: 'CI/CD with GitHub Actions: automate tests, builds and deploys of your code.' },
+  mobile: { es: 'React Native y Expo: desarrollo de apps móviles multiplataforma con JavaScript.', en: 'React Native and Expo: cross-platform mobile app development with JavaScript.' },
+  iot: { es: 'IoT con Arduino y ESP32: sensores, actuadores y proyectos de electrónica.', en: 'IoT with Arduino and ESP32: sensors, actuators and electronics projects.' },
+  'vector-db': { es: 'Bases de datos vectoriales: Qdrant, pgvector, Pinecone para búsqueda semántica.', en: 'Vector databases: Qdrant, pgvector, Pinecone for semantic search.' },
+  rag: { es: 'RAG (Retrieval Augmented Generation): conecta LLMs con tus documentos y datos.', en: 'RAG (Retrieval Augmented Generation): connect LLMs with your documents and data.' },
+  mcp: { es: 'MCP (Model Context Protocol): herramientas y extensiones para LLMs de Anthropic.', en: 'MCP (Model Context Protocol): tools and extensions for Anthropic LLMs.' },
+  agents: { es: 'Agentes IA autónomos: LangChain, AutoGen, CrewAI. Crea agentes que ejecutan tareas.', en: 'Autonomous AI agents: LangChain, AutoGen, CrewAI. Create agents that execute tasks.' },
+  vision: { es: 'Vision y Multimodal: procesamiento de imágenes y video con IA. OCR, clasificación, detección.', en: 'Vision and Multimodal: image and video processing with AI. OCR, classification, detection.' },
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; section: string }> }): Promise<Metadata> {
   const resolvedParams = await params
   const locale = resolvedParams.locale as 'es' | 'en'
@@ -6349,9 +6382,36 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!sectionData) return { title: 'Not Found' }
 
   const title = locale === 'es' ? sectionData.titleEs : sectionData.titleEn
+  const description = sectionDescriptions[resolvedParams.section]?.[locale] ||
+    (locale === 'es' ? `Aprende ${title} en luxIA. Teoría y conceptos explicados de forma clara.` : `Learn ${title} at luxIA. Theory and concepts explained clearly.`)
+
+  const fullTitle = `${title} - Learning | luxIA`
+  const url = `https://luxia.us/${locale}/learning/${resolvedParams.section}`
 
   return {
-    title: `${title} - Learning | luxIA`,
+    title: fullTitle,
+    description,
+    keywords: `${title}, tutorial, ${locale === 'es' ? 'aprender' : 'learn'}, desarrollo, programación, IA, luxIA`,
+    openGraph: {
+      title: fullTitle,
+      description,
+      url,
+      siteName: 'luxIA',
+      locale: locale === 'es' ? 'es_ES' : 'en_US',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description,
+    },
+    alternates: {
+      canonical: url,
+      languages: {
+        'es-ES': `https://luxia.us/es/learning/${resolvedParams.section}`,
+        'en-US': `https://luxia.us/en/learning/${resolvedParams.section}`,
+      },
+    },
   }
 }
 
