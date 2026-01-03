@@ -564,6 +564,242 @@ The only difference is the API you use. The workflow is the same.
 → [What is an LLM?](/en/learning/llms-intro)
     `,
   },
+  'chatbot-openai': {
+    timeEs: '15 minutos',
+    timeEn: '15 minutes',
+    prerequisitesEs: ['Chatbot con Gemini completado', 'Tarjeta de crédito (para API)'],
+    prerequisitesEn: ['Chatbot with Gemini completed', 'Credit card (for API)'],
+    contentEs: `
+## El trío completo
+
+Ya usaste Gemini y Claude. Ahora toca OpenAI, los creadores de ChatGPT.
+
+El proceso es el mismo. Solo cambia la API.
+
+> ⚠️ **Nota**: OpenAI API requiere agregar créditos. Mínimo $5 USD.
+
+---
+
+## Paso 1: Obtén tu API Key de OpenAI
+
+1. Ve a [platform.openai.com](https://platform.openai.com)
+2. Crea una cuenta o inicia sesión
+3. Ve a **API Keys** (menú izquierdo)
+4. Click en **Create new secret key**
+5. Copia la key (solo se muestra una vez)
+
+---
+
+## Paso 2: Agrega créditos
+
+1. Ve a **Settings** → **Billing**
+2. Agrega un método de pago
+3. Agrega créditos (mínimo $5)
+
+> 💡 $5 USD te alcanzan para miles de mensajes con GPT-4o-mini.
+
+---
+
+## Paso 3: Pídele a una IA que escriba el código
+
+Abre [Google AI Studio](https://aistudio.google.com), ChatGPT, o cualquier chat de IA.
+
+Copia y pega este prompt:
+
+\`\`\`
+Necesito un chatbot simple en Node.js que:
+- Use la API de OpenAI (GPT-4o-mini)
+- Funcione en la terminal
+- Mantenga el historial de la conversación
+- La API key la leo de la variable de entorno OPENAI_API_KEY
+
+Dame el código completo y los comandos para instalarlo.
+\`\`\`
+
+---
+
+## Paso 4: Configura la key en tu sistema
+
+| Sistema | Comando |
+|---------|---------|
+| **macOS/Linux** | \`export OPENAI_API_KEY="tu-key-aqui"\` |
+| **Windows PowerShell** | \`$env:OPENAI_API_KEY="tu-key-aqui"\` |
+
+---
+
+## Paso 5: Sigue las instrucciones
+
+La IA te dio:
+1. Comandos para crear el proyecto
+2. Código para el archivo
+3. El comando para ejecutarlo
+
+**Sigue sus instrucciones paso a paso.**
+
+---
+
+## ¿Funcionó?
+
+\`\`\`
+Tú: Hola GPT
+GPT: ¡Hola! ¿En qué puedo ayudarte?
+\`\`\`
+
+---
+
+## Si algo falló
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`invalid_api_key\` | Key incorrecta | Verifica en [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
+| \`insufficient_quota\` | Sin créditos | Agrega créditos en Billing |
+| \`Cannot find module\` | Falta SDK | Ejecuta \`npm install openai\` |
+| \`rate_limit_exceeded\` | Muchas peticiones | Espera unos segundos |
+| \`model_not_found\` | Modelo incorrecto | Usa \`gpt-4o-mini\` o \`gpt-4o\` |
+
+---
+
+## Comparación: ¿Cuál usar?
+
+| API | Costo | Fortaleza | Mejor para |
+|-----|-------|-----------|------------|
+| **Gemini** | Gratis | Fácil empezar | Aprender, prototipos |
+| **Claude** | ~$3/M tokens | Código, razonamiento | Desarrollo serio |
+| **OpenAI** | ~$0.15/M tokens | Versátil, ecosistema | Producción, plugins |
+
+> 💡 Para aprender, usa Gemini. Para proyectos serios, prueba los tres y elige.
+
+---
+
+## ¿Qué sigue?
+
+Has completado el trío de APIs cloud. Ahora puedes:
+
+→ [Chatbot Local con Ollama](/es/cooking/chatbot-local) — 100% privado, sin internet
+→ [Chat con Interfaz Web](/es/cooking/chat-web-ui) — Dale una cara bonita
+
+---
+
+## ¿Quieres entender más?
+
+→ [¿Qué es un LLM?](/es/learning/llms-intro)
+    `,
+    contentEn: `
+## The complete trio
+
+You already used Gemini and Claude. Now it's OpenAI's turn, the creators of ChatGPT.
+
+The process is the same. Only the API changes.
+
+> ⚠️ **Note**: OpenAI API requires adding credits. Minimum $5 USD.
+
+---
+
+## Step 1: Get your OpenAI API Key
+
+1. Go to [platform.openai.com](https://platform.openai.com)
+2. Create an account or sign in
+3. Go to **API Keys** (left menu)
+4. Click **Create new secret key**
+5. Copy the key (only shown once)
+
+---
+
+## Step 2: Add credits
+
+1. Go to **Settings** → **Billing**
+2. Add a payment method
+3. Add credits (minimum $5)
+
+> 💡 $5 USD is enough for thousands of messages with GPT-4o-mini.
+
+---
+
+## Step 3: Ask an AI to write the code
+
+Open [Google AI Studio](https://aistudio.google.com), ChatGPT, or any AI chat.
+
+Copy and paste this prompt:
+
+\`\`\`
+I need a simple Node.js chatbot that:
+- Uses the OpenAI API (GPT-4o-mini)
+- Works in the terminal
+- Maintains conversation history
+- Reads the API key from the OPENAI_API_KEY environment variable
+
+Give me the complete code and installation commands.
+\`\`\`
+
+---
+
+## Step 4: Configure the key in your system
+
+| System | Command |
+|--------|---------|
+| **macOS/Linux** | \`export OPENAI_API_KEY="your-key-here"\` |
+| **Windows PowerShell** | \`$env:OPENAI_API_KEY="your-key-here"\` |
+
+---
+
+## Step 5: Follow the instructions
+
+The AI gave you:
+1. Commands to create the project
+2. Code for the file
+3. The command to run it
+
+**Follow its instructions step by step.**
+
+---
+
+## Did it work?
+
+\`\`\`
+You: Hello GPT
+GPT: Hello! How can I help you?
+\`\`\`
+
+---
+
+## If something failed
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`invalid_api_key\` | Wrong key | Check at [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
+| \`insufficient_quota\` | No credits | Add credits in Billing |
+| \`Cannot find module\` | Missing SDK | Run \`npm install openai\` |
+| \`rate_limit_exceeded\` | Too many requests | Wait a few seconds |
+| \`model_not_found\` | Wrong model | Use \`gpt-4o-mini\` or \`gpt-4o\` |
+
+---
+
+## Comparison: Which one to use?
+
+| API | Cost | Strength | Best for |
+|-----|------|----------|----------|
+| **Gemini** | Free | Easy to start | Learning, prototypes |
+| **Claude** | ~$3/M tokens | Code, reasoning | Serious development |
+| **OpenAI** | ~$0.15/M tokens | Versatile, ecosystem | Production, plugins |
+
+> 💡 For learning, use Gemini. For serious projects, try all three and choose.
+
+---
+
+## What's next?
+
+You've completed the cloud API trio. Now you can:
+
+→ [Local Chatbot with Ollama](/en/cooking/chatbot-local) — 100% private, no internet
+→ [Chat with Web UI](/en/cooking/chat-web-ui) — Give it a nice face
+
+---
+
+## Want to understand more?
+
+→ [What is an LLM?](/en/learning/llms-intro)
+    `,
+  },
   'chatbot-local': {
     timeEs: '30 minutos',
     timeEn: '30 minutes',
