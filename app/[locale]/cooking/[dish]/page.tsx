@@ -4599,6 +4599,1960 @@ chmod +x tasks.py
 → [Responsive Landing Page](/en/cooking/landing-page) — Modern web design
     `,
   },
+  'landing-page': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['HTML/CSS básico', 'Página Web Estática completada'],
+    prerequisitesEn: ['Basic HTML/CSS', 'Static Web Page completed'],
+    contentEs: `
+## Una página que vende
+
+Una landing page tiene un objetivo: que el visitante haga algo (comprar, suscribirse, contactar).
+
+---
+
+## Estructura típica
+
+1. **Hero** - Título grande + llamada a acción
+2. **Beneficios** - Por qué elegirte
+3. **Cómo funciona** - Pasos simples
+4. **Testimonios** - Prueba social
+5. **CTA final** - Botón de acción
+
+---
+
+## Paso 1: Pídele a una IA el diseño
+
+\`\`\`
+Necesito una landing page moderna con:
+- Hero con gradiente de fondo
+- Sección de 3 beneficios con iconos
+- Sección "Cómo funciona" con 3 pasos
+- Testimonios con avatares
+- Footer con links
+- HTML + Tailwind CSS
+- Responsive (móvil primero)
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Paso 2: Crea el proyecto
+
+\`\`\`bash
+mkdir mi-landing
+cd mi-landing
+\`\`\`
+
+Pega el HTML en \`index.html\`
+
+---
+
+## Paso 3: Ábrelo
+
+\`\`\`bash
+open index.html  # macOS
+\`\`\`
+
+---
+
+## Tips de diseño
+
+| Elemento | Tip |
+|----------|-----|
+| **Título** | Claro, beneficio directo |
+| **CTA** | Color contrastante, verbo de acción |
+| **Imágenes** | Optimizadas, relevantes |
+| **Espaciado** | Abundante espacio en blanco |
+
+---
+
+## Publicar
+
+Sube a GitHub Pages o Vercel:
+
+\`\`\`bash
+git init
+git add .
+git commit -m "Landing page"
+# Sube a GitHub y activa Pages
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Portfolio Personal](/es/cooking/portfolio) — Muestra tu trabajo
+    `,
+    contentEn: `
+## A page that sells
+
+A landing page has one goal: get the visitor to do something (buy, subscribe, contact).
+
+---
+
+## Typical structure
+
+1. **Hero** - Big title + call to action
+2. **Benefits** - Why choose you
+3. **How it works** - Simple steps
+4. **Testimonials** - Social proof
+5. **Final CTA** - Action button
+
+---
+
+## Step 1: Ask an AI for the design
+
+\`\`\`
+I need a modern landing page with:
+- Hero with gradient background
+- Section with 3 benefits with icons
+- "How it works" section with 3 steps
+- Testimonials with avatars
+- Footer with links
+- HTML + Tailwind CSS
+- Responsive (mobile first)
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Step 2: Create the project
+
+\`\`\`bash
+mkdir my-landing
+cd my-landing
+\`\`\`
+
+Paste the HTML in \`index.html\`
+
+---
+
+## Step 3: Open it
+
+\`\`\`bash
+open index.html  # macOS
+\`\`\`
+
+---
+
+## Design tips
+
+| Element | Tip |
+|---------|-----|
+| **Title** | Clear, direct benefit |
+| **CTA** | Contrasting color, action verb |
+| **Images** | Optimized, relevant |
+| **Spacing** | Plenty of white space |
+
+---
+
+## Publish
+
+Upload to GitHub Pages or Vercel:
+
+\`\`\`bash
+git init
+git add .
+git commit -m "Landing page"
+# Push to GitHub and enable Pages
+\`\`\`
+
+---
+
+## Next step
+
+→ [Personal Portfolio](/en/cooking/portfolio) — Show your work
+    `,
+  },
+  'portfolio': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Landing Page completada'],
+    prerequisitesEn: ['Landing Page completed'],
+    contentEs: `
+## Tu carta de presentación
+
+Un portfolio muestra quién eres y qué puedes hacer. Es tu CV visual.
+
+---
+
+## Secciones esenciales
+
+1. **Sobre mí** - Quién eres, qué haces
+2. **Proyectos** - Tu mejor trabajo
+3. **Skills** - Tecnologías que dominas
+4. **Contacto** - Cómo contactarte
+
+---
+
+## Paso 1: Pídele a una IA el diseño
+
+\`\`\`
+Necesito un portfolio personal con:
+- Header con navegación sticky
+- Hero con mi nombre y rol
+- Sección de proyectos con cards (imagen, título, link)
+- Skills con iconos de tecnologías
+- Formulario de contacto
+- Modo oscuro toggle
+- Next.js + Tailwind CSS
+- Animaciones sutiles
+
+Dame los comandos y código.
+\`\`\`
+
+---
+
+## Paso 2: Sigue las instrucciones
+
+La IA te dará:
+
+\`\`\`bash
+npx create-next-app@latest portfolio --typescript --tailwind
+cd portfolio
+npm run dev
+\`\`\`
+
+Y el código para los componentes.
+
+---
+
+## Qué incluir en proyectos
+
+Para cada proyecto:
+- Screenshot o gif
+- Título claro
+- Descripción breve (1-2 líneas)
+- Tecnologías usadas
+- Links: Demo + GitHub
+
+---
+
+## Tips
+
+| Tip | Por qué |
+|-----|---------|
+| Menos es más | 3-5 proyectos buenos > 10 mediocres |
+| Actualízalo | Proyectos recientes primero |
+| Hazlo tuyo | Personalidad en el diseño |
+| Optimiza | Carga rápida = buena impresión |
+
+---
+
+## Próximo paso
+
+→ [Blog Estático](/es/cooking/blog-static) — Comparte tu conocimiento
+    `,
+    contentEn: `
+## Your business card
+
+A portfolio shows who you are and what you can do. It's your visual CV.
+
+---
+
+## Essential sections
+
+1. **About me** - Who you are, what you do
+2. **Projects** - Your best work
+3. **Skills** - Technologies you master
+4. **Contact** - How to reach you
+
+---
+
+## Step 1: Ask an AI for the design
+
+\`\`\`
+I need a personal portfolio with:
+- Header with sticky navigation
+- Hero with my name and role
+- Projects section with cards (image, title, link)
+- Skills with technology icons
+- Contact form
+- Dark mode toggle
+- Next.js + Tailwind CSS
+- Subtle animations
+
+Give me the commands and code.
+\`\`\`
+
+---
+
+## Step 2: Follow the instructions
+
+The AI will give you:
+
+\`\`\`bash
+npx create-next-app@latest portfolio --typescript --tailwind
+cd portfolio
+npm run dev
+\`\`\`
+
+And the code for the components.
+
+---
+
+## What to include in projects
+
+For each project:
+- Screenshot or gif
+- Clear title
+- Brief description (1-2 lines)
+- Technologies used
+- Links: Demo + GitHub
+
+---
+
+## Tips
+
+| Tip | Why |
+|-----|-----|
+| Less is more | 3-5 good projects > 10 mediocre |
+| Keep it updated | Recent projects first |
+| Make it yours | Personality in design |
+| Optimize | Fast load = good impression |
+
+---
+
+## Next step
+
+→ [Static Blog](/en/cooking/blog-static) — Share your knowledge
+    `,
+  },
+  'blog-static': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Markdown básico', 'Git básico'],
+    prerequisitesEn: ['Basic Markdown', 'Basic Git'],
+    contentEs: `
+## Comparte lo que aprendes
+
+Un blog estático es rápido, seguro, y gratis de hostear. Escribes en Markdown, se genera HTML.
+
+---
+
+## Opciones populares
+
+| Herramienta | Lenguaje | Ideal para |
+|-------------|----------|------------|
+| **Astro** | JS | Contenido + componentes |
+| **Hugo** | Go | Velocidad extrema |
+| **Jekyll** | Ruby | GitHub Pages nativo |
+| **11ty** | JS | Simplicidad |
+
+---
+
+## Paso 1: Pídele a una IA el setup
+
+\`\`\`
+Necesito un blog estático con Astro que:
+- Tenga posts en Markdown
+- Muestre lista de posts con fecha
+- Tenga página individual por post
+- Use Tailwind CSS
+- Tenga modo oscuro
+- Sea deployable en Vercel
+
+Dame los comandos y estructura.
+\`\`\`
+
+---
+
+## Paso 2: Crea el proyecto
+
+\`\`\`bash
+npm create astro@latest my-blog
+cd my-blog
+npm run dev
+\`\`\`
+
+---
+
+## Estructura típica
+
+\`\`\`
+my-blog/
+├── src/
+│   ├── content/
+│   │   └── posts/
+│   │       ├── primer-post.md
+│   │       └── segundo-post.md
+│   ├── layouts/
+│   │   └── PostLayout.astro
+│   └── pages/
+│       ├── index.astro
+│       └── posts/[slug].astro
+└── astro.config.mjs
+\`\`\`
+
+---
+
+## Formato de post
+
+\`\`\`markdown
+---
+title: "Mi primer post"
+date: 2024-01-15
+description: "Qué aprendí hoy"
+tags: ["javascript", "aprendizaje"]
+---
+
+# Mi primer post
+
+Contenido en **Markdown**...
+\`\`\`
+
+---
+
+## Publicar
+
+\`\`\`bash
+# Vercel (automático desde GitHub)
+npm run build
+# Sube a GitHub, conecta con Vercel
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Formulario con Validación](/es/cooking/form-validation) — Inputs seguros
+    `,
+    contentEn: `
+## Share what you learn
+
+A static blog is fast, secure, and free to host. You write in Markdown, HTML is generated.
+
+---
+
+## Popular options
+
+| Tool | Language | Ideal for |
+|------|----------|-----------|
+| **Astro** | JS | Content + components |
+| **Hugo** | Go | Extreme speed |
+| **Jekyll** | Ruby | Native GitHub Pages |
+| **11ty** | JS | Simplicity |
+
+---
+
+## Step 1: Ask an AI for the setup
+
+\`\`\`
+I need a static blog with Astro that:
+- Has posts in Markdown
+- Shows list of posts with date
+- Has individual page per post
+- Uses Tailwind CSS
+- Has dark mode
+- Is deployable on Vercel
+
+Give me the commands and structure.
+\`\`\`
+
+---
+
+## Step 2: Create the project
+
+\`\`\`bash
+npm create astro@latest my-blog
+cd my-blog
+npm run dev
+\`\`\`
+
+---
+
+## Typical structure
+
+\`\`\`
+my-blog/
+├── src/
+│   ├── content/
+│   │   └── posts/
+│   │       ├── first-post.md
+│   │       └── second-post.md
+│   ├── layouts/
+│   │   └── PostLayout.astro
+│   └── pages/
+│       ├── index.astro
+│       └── posts/[slug].astro
+└── astro.config.mjs
+\`\`\`
+
+---
+
+## Post format
+
+\`\`\`markdown
+---
+title: "My first post"
+date: 2024-01-15
+description: "What I learned today"
+tags: ["javascript", "learning"]
+---
+
+# My first post
+
+Content in **Markdown**...
+\`\`\`
+
+---
+
+## Publish
+
+\`\`\`bash
+# Vercel (automatic from GitHub)
+npm run build
+# Push to GitHub, connect with Vercel
+\`\`\`
+
+---
+
+## Next step
+
+→ [Form with Validation](/en/cooking/form-validation) — Secure inputs
+    `,
+  },
+  'form-validation': {
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['React básico'],
+    prerequisitesEn: ['Basic React'],
+    contentEs: `
+## Inputs que no mienten
+
+La validación previene errores y mejora la experiencia del usuario.
+
+---
+
+## Tipos de validación
+
+| Tipo | Cuándo |
+|------|--------|
+| **Cliente** | Feedback inmediato |
+| **Servidor** | Seguridad real |
+
+> Siempre valida en el servidor. El cliente es solo UX.
+
+---
+
+## Paso 1: Pídele a una IA el formulario
+
+\`\`\`
+Necesito un formulario de registro en React con:
+- Campos: nombre, email, contraseña, confirmar contraseña
+- Validación en tiempo real
+- Mensajes de error claros
+- Botón deshabilitado hasta que sea válido
+- Estilo con Tailwind CSS
+- Use react-hook-form y zod
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Librerías recomendadas
+
+| Librería | Para qué |
+|----------|----------|
+| \`react-hook-form\` | Manejo de formularios |
+| \`zod\` | Esquemas de validación |
+| \`yup\` | Alternativa a zod |
+
+---
+
+## Ejemplo con zod
+
+\`\`\`typescript
+import { z } from 'zod'
+
+const schema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(8, 'Mínimo 8 caracteres'),
+  confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: 'Las contraseñas no coinciden',
+  path: ['confirmPassword']
+})
+\`\`\`
+
+---
+
+## Validaciones comunes
+
+| Campo | Validación |
+|-------|------------|
+| Email | Formato válido |
+| Contraseña | Mín 8 chars, mayúscula, número |
+| Teléfono | Solo números, longitud |
+| URL | Formato https:// |
+
+---
+
+## Próximo paso
+
+→ [App del Clima](/es/cooking/weather-app) — APIs externas
+    `,
+    contentEn: `
+## Inputs that don't lie
+
+Validation prevents errors and improves user experience.
+
+---
+
+## Types of validation
+
+| Type | When |
+|------|------|
+| **Client** | Immediate feedback |
+| **Server** | Real security |
+
+> Always validate on server. Client is just UX.
+
+---
+
+## Step 1: Ask an AI for the form
+
+\`\`\`
+I need a registration form in React with:
+- Fields: name, email, password, confirm password
+- Real-time validation
+- Clear error messages
+- Button disabled until valid
+- Tailwind CSS styling
+- Use react-hook-form and zod
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Recommended libraries
+
+| Library | What for |
+|---------|----------|
+| \`react-hook-form\` | Form handling |
+| \`zod\` | Validation schemas |
+| \`yup\` | Alternative to zod |
+
+---
+
+## Example with zod
+
+\`\`\`typescript
+import { z } from 'zod'
+
+const schema = z.object({
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Minimum 8 characters'),
+  confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword']
+})
+\`\`\`
+
+---
+
+## Common validations
+
+| Field | Validation |
+|-------|------------|
+| Email | Valid format |
+| Password | Min 8 chars, uppercase, number |
+| Phone | Numbers only, length |
+| URL | https:// format |
+
+---
+
+## Next step
+
+→ [Weather App](/en/cooking/weather-app) — External APIs
+    `,
+  },
+  'weather-app': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['JSON API Fetch completado', 'React básico'],
+    prerequisitesEn: ['JSON API Fetch completed', 'Basic React'],
+    contentEs: `
+## Datos del mundo real
+
+Una app del clima conecta con APIs externas y muestra datos en tiempo real.
+
+---
+
+## API recomendada
+
+[OpenWeatherMap](https://openweathermap.org/api) - Gratis hasta 1000 llamadas/día
+
+---
+
+## Paso 1: Obtén API Key
+
+1. Crea cuenta en openweathermap.org
+2. Ve a API Keys
+3. Copia tu key
+
+---
+
+## Paso 2: Pídele a una IA la app
+
+\`\`\`
+Necesito una app del clima en React que:
+- Busque ciudad por nombre
+- Muestre temperatura, humedad, condición
+- Use la API de OpenWeatherMap
+- Tenga iconos del clima
+- Sea responsive
+- Use Tailwind CSS
+
+La API key viene de VITE_WEATHER_API_KEY.
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Paso 3: Configura la key
+
+Crea \`.env\`:
+
+\`\`\`
+VITE_WEATHER_API_KEY=tu-api-key
+\`\`\`
+
+---
+
+## Código típico
+
+\`\`\`typescript
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
+
+async function getWeather(city: string) {
+  const res = await fetch(
+    \`https://api.openweathermap.org/data/2.5/weather?q=\${city}&appid=\${API_KEY}&units=metric\`
+  )
+  return res.json()
+}
+\`\`\`
+
+---
+
+## Si algo falló
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`401\` | API key inválida | Verifica la key |
+| \`404\` | Ciudad no encontrada | Verifica el nombre |
+| CORS | Llamada directa | Usa proxy o backend |
+
+---
+
+## Próximo paso
+
+→ [Calculadora Web](/es/cooking/calculator) — Lógica de UI
+    `,
+    contentEn: `
+## Real world data
+
+A weather app connects to external APIs and shows real-time data.
+
+---
+
+## Recommended API
+
+[OpenWeatherMap](https://openweathermap.org/api) - Free up to 1000 calls/day
+
+---
+
+## Step 1: Get API Key
+
+1. Create account at openweathermap.org
+2. Go to API Keys
+3. Copy your key
+
+---
+
+## Step 2: Ask an AI for the app
+
+\`\`\`
+I need a weather app in React that:
+- Searches city by name
+- Shows temperature, humidity, condition
+- Uses OpenWeatherMap API
+- Has weather icons
+- Is responsive
+- Uses Tailwind CSS
+
+The API key comes from VITE_WEATHER_API_KEY.
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Step 3: Configure the key
+
+Create \`.env\`:
+
+\`\`\`
+VITE_WEATHER_API_KEY=your-api-key
+\`\`\`
+
+---
+
+## Typical code
+
+\`\`\`typescript
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
+
+async function getWeather(city: string) {
+  const res = await fetch(
+    \`https://api.openweathermap.org/data/2.5/weather?q=\${city}&appid=\${API_KEY}&units=metric\`
+  )
+  return res.json()
+}
+\`\`\`
+
+---
+
+## If something failed
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`401\` | Invalid API key | Check the key |
+| \`404\` | City not found | Check the name |
+| CORS | Direct call | Use proxy or backend |
+
+---
+
+## Next step
+
+→ [Web Calculator](/en/cooking/calculator) — UI logic
+    `,
+  },
+  'calculator': {
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['JavaScript básico', 'HTML/CSS'],
+    prerequisitesEn: ['Basic JavaScript', 'HTML/CSS'],
+    contentEs: `
+## Lógica de interfaz
+
+Una calculadora combina estado, eventos y lógica matemática.
+
+---
+
+## Paso 1: Pídele a una IA la calculadora
+
+\`\`\`
+Necesito una calculadora web con:
+- Operaciones: +, -, *, /
+- Botones numéricos 0-9
+- Botón de igual y clear
+- Display que muestre la operación
+- Manejo de decimales
+- React con TypeScript
+- Tailwind CSS para estilos
+- Diseño tipo calculadora física
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Conceptos clave
+
+| Concepto | Implementación |
+|----------|----------------|
+| Estado | Número actual, operación pendiente |
+| Eventos | onClick en cada botón |
+| Lógica | Función que evalúa la expresión |
+
+---
+
+## Código típico
+
+\`\`\`tsx
+const [display, setDisplay] = useState('0')
+const [prevValue, setPrevValue] = useState<number | null>(null)
+const [operator, setOperator] = useState<string | null>(null)
+
+const handleNumber = (num: string) => {
+  setDisplay(display === '0' ? num : display + num)
+}
+
+const handleOperator = (op: string) => {
+  setPrevValue(parseFloat(display))
+  setOperator(op)
+  setDisplay('0')
+}
+
+const calculate = () => {
+  if (prevValue !== null && operator) {
+    const current = parseFloat(display)
+    let result: number
+    switch (operator) {
+      case '+': result = prevValue + current; break
+      case '-': result = prevValue - current; break
+      case '*': result = prevValue * current; break
+      case '/': result = prevValue / current; break
+      default: return
+    }
+    setDisplay(String(result))
+  }
+}
+\`\`\`
+
+---
+
+## Mejoras posibles
+
+- Historial de operaciones
+- Funciones científicas (%, √)
+- Teclado numérico
+- Modo oscuro
+
+---
+
+## Próximo paso
+
+→ [Quiz Interactivo](/es/cooking/quiz-game) — Lógica de juegos
+    `,
+    contentEn: `
+## Interface logic
+
+A calculator combines state, events, and mathematical logic.
+
+---
+
+## Step 1: Ask an AI for the calculator
+
+\`\`\`
+I need a web calculator with:
+- Operations: +, -, *, /
+- Numeric buttons 0-9
+- Equals and clear button
+- Display showing the operation
+- Decimal handling
+- React with TypeScript
+- Tailwind CSS for styles
+- Physical calculator design
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Key concepts
+
+| Concept | Implementation |
+|---------|----------------|
+| State | Current number, pending operation |
+| Events | onClick on each button |
+| Logic | Function that evaluates expression |
+
+---
+
+## Typical code
+
+\`\`\`tsx
+const [display, setDisplay] = useState('0')
+const [prevValue, setPrevValue] = useState<number | null>(null)
+const [operator, setOperator] = useState<string | null>(null)
+
+const handleNumber = (num: string) => {
+  setDisplay(display === '0' ? num : display + num)
+}
+
+const handleOperator = (op: string) => {
+  setPrevValue(parseFloat(display))
+  setOperator(op)
+  setDisplay('0')
+}
+
+const calculate = () => {
+  if (prevValue !== null && operator) {
+    const current = parseFloat(display)
+    let result: number
+    switch (operator) {
+      case '+': result = prevValue + current; break
+      case '-': result = prevValue - current; break
+      case '*': result = prevValue * current; break
+      case '/': result = prevValue / current; break
+      default: return
+    }
+    setDisplay(String(result))
+  }
+}
+\`\`\`
+
+---
+
+## Possible improvements
+
+- Operation history
+- Scientific functions (%, √)
+- Numeric keyboard
+- Dark mode
+
+---
+
+## Next step
+
+→ [Interactive Quiz](/en/cooking/quiz-game) — Game logic
+    `,
+  },
+  'quiz-game': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['React básico', 'useState'],
+    prerequisitesEn: ['Basic React', 'useState'],
+    contentEs: `
+## Lógica de juegos
+
+Un quiz interactivo maneja preguntas, respuestas y puntaje.
+
+---
+
+## Paso 1: Pídele a una IA el quiz
+
+\`\`\`
+Necesito un quiz interactivo en React con:
+- Array de preguntas con 4 opciones cada una
+- Solo una respuesta correcta por pregunta
+- Feedback visual (verde correcto, rojo incorrecto)
+- Contador de puntaje
+- Botón siguiente pregunta
+- Pantalla de resultados al final
+- TypeScript y Tailwind CSS
+
+Dame el código completo con 5 preguntas de ejemplo.
+\`\`\`
+
+---
+
+## Estructura de datos
+
+\`\`\`typescript
+interface Question {
+  id: number
+  question: string
+  options: string[]
+  correctIndex: number
+}
+
+const questions: Question[] = [
+  {
+    id: 1,
+    question: "¿Cuál es la capital de Francia?",
+    options: ["Londres", "París", "Madrid", "Roma"],
+    correctIndex: 1
+  },
+  // más preguntas...
+]
+\`\`\`
+
+---
+
+## Estado del quiz
+
+\`\`\`tsx
+const [currentIndex, setCurrentIndex] = useState(0)
+const [score, setScore] = useState(0)
+const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+const [showResult, setShowResult] = useState(false)
+
+const currentQuestion = questions[currentIndex]
+
+const handleAnswer = (index: number) => {
+  setSelectedAnswer(index)
+  if (index === currentQuestion.correctIndex) {
+    setScore(score + 1)
+  }
+}
+
+const nextQuestion = () => {
+  if (currentIndex < questions.length - 1) {
+    setCurrentIndex(currentIndex + 1)
+    setSelectedAnswer(null)
+  } else {
+    setShowResult(true)
+  }
+}
+\`\`\`
+
+---
+
+## Feedback visual
+
+\`\`\`tsx
+<button
+  className={\`p-3 rounded-lg \${
+    selectedAnswer === index
+      ? index === currentQuestion.correctIndex
+        ? 'bg-green-500 text-white'
+        : 'bg-red-500 text-white'
+      : 'bg-gray-100 hover:bg-gray-200'
+  }\`}
+  onClick={() => handleAnswer(index)}
+  disabled={selectedAnswer !== null}
+>
+  {option}
+</button>
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Timer con Notificaciones](/es/cooking/countdown-timer)
+    `,
+    contentEn: `
+## Game logic
+
+An interactive quiz handles questions, answers, and scoring.
+
+---
+
+## Step 1: Ask an AI for the quiz
+
+\`\`\`
+I need an interactive quiz in React with:
+- Array of questions with 4 options each
+- Only one correct answer per question
+- Visual feedback (green correct, red incorrect)
+- Score counter
+- Next question button
+- Results screen at the end
+- TypeScript and Tailwind CSS
+
+Give me the complete code with 5 example questions.
+\`\`\`
+
+---
+
+## Data structure
+
+\`\`\`typescript
+interface Question {
+  id: number
+  question: string
+  options: string[]
+  correctIndex: number
+}
+
+const questions: Question[] = [
+  {
+    id: 1,
+    question: "What is the capital of France?",
+    options: ["London", "Paris", "Madrid", "Rome"],
+    correctIndex: 1
+  },
+  // more questions...
+]
+\`\`\`
+
+---
+
+## Quiz state
+
+\`\`\`tsx
+const [currentIndex, setCurrentIndex] = useState(0)
+const [score, setScore] = useState(0)
+const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+const [showResult, setShowResult] = useState(false)
+
+const currentQuestion = questions[currentIndex]
+
+const handleAnswer = (index: number) => {
+  setSelectedAnswer(index)
+  if (index === currentQuestion.correctIndex) {
+    setScore(score + 1)
+  }
+}
+
+const nextQuestion = () => {
+  if (currentIndex < questions.length - 1) {
+    setCurrentIndex(currentIndex + 1)
+    setSelectedAnswer(null)
+  } else {
+    setShowResult(true)
+  }
+}
+\`\`\`
+
+---
+
+## Visual feedback
+
+\`\`\`tsx
+<button
+  className={\`p-3 rounded-lg \${
+    selectedAnswer === index
+      ? index === currentQuestion.correctIndex
+        ? 'bg-green-500 text-white'
+        : 'bg-red-500 text-white'
+      : 'bg-gray-100 hover:bg-gray-200'
+  }\`}
+  onClick={() => handleAnswer(index)}
+  disabled={selectedAnswer !== null}
+>
+  {option}
+</button>
+\`\`\`
+
+---
+
+## Next step
+
+→ [Timer with Notifications](/en/cooking/countdown-timer)
+    `,
+  },
+  'countdown-timer': {
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['React', 'useEffect'],
+    prerequisitesEn: ['React', 'useEffect'],
+    contentEs: `
+## Tiempo y notificaciones
+
+Un timer usa intervalos y la API de notificaciones del navegador.
+
+---
+
+## Paso 1: Pídele a una IA el timer
+
+\`\`\`
+Necesito un countdown timer en React con:
+- Input para minutos y segundos
+- Botones: Iniciar, Pausar, Reiniciar
+- Display formato MM:SS
+- Notificación del navegador cuando llegue a 0
+- Sonido de alerta
+- useEffect para el intervalo
+- TypeScript y Tailwind CSS
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Lógica del timer
+
+\`\`\`tsx
+const [timeLeft, setTimeLeft] = useState(0)
+const [isRunning, setIsRunning] = useState(false)
+
+useEffect(() => {
+  if (!isRunning || timeLeft <= 0) return
+
+  const interval = setInterval(() => {
+    setTimeLeft(prev => {
+      if (prev <= 1) {
+        setIsRunning(false)
+        notify()
+        return 0
+      }
+      return prev - 1
+    })
+  }, 1000)
+
+  return () => clearInterval(interval)
+}, [isRunning, timeLeft])
+\`\`\`
+
+---
+
+## Notificaciones
+
+\`\`\`typescript
+const requestPermission = async () => {
+  if ('Notification' in window) {
+    await Notification.requestPermission()
+  }
+}
+
+const notify = () => {
+  if (Notification.permission === 'granted') {
+    new Notification('¡Tiempo terminado!', {
+      body: 'Tu timer ha llegado a cero',
+      icon: '/timer-icon.png'
+    })
+  }
+}
+\`\`\`
+
+---
+
+## Formato de tiempo
+
+\`\`\`typescript
+const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return \`\${mins.toString().padStart(2, '0')}:\${secs.toString().padStart(2, '0')}\`
+}
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Galería de Imágenes](/es/cooking/image-gallery)
+    `,
+    contentEn: `
+## Time and notifications
+
+A timer uses intervals and the browser notification API.
+
+---
+
+## Step 1: Ask an AI for the timer
+
+\`\`\`
+I need a countdown timer in React with:
+- Input for minutes and seconds
+- Buttons: Start, Pause, Reset
+- Display format MM:SS
+- Browser notification when it reaches 0
+- Alert sound
+- useEffect for the interval
+- TypeScript and Tailwind CSS
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Timer logic
+
+\`\`\`tsx
+const [timeLeft, setTimeLeft] = useState(0)
+const [isRunning, setIsRunning] = useState(false)
+
+useEffect(() => {
+  if (!isRunning || timeLeft <= 0) return
+
+  const interval = setInterval(() => {
+    setTimeLeft(prev => {
+      if (prev <= 1) {
+        setIsRunning(false)
+        notify()
+        return 0
+      }
+      return prev - 1
+    })
+  }, 1000)
+
+  return () => clearInterval(interval)
+}, [isRunning, timeLeft])
+\`\`\`
+
+---
+
+## Notifications
+
+\`\`\`typescript
+const requestPermission = async () => {
+  if ('Notification' in window) {
+    await Notification.requestPermission()
+  }
+}
+
+const notify = () => {
+  if (Notification.permission === 'granted') {
+    new Notification('Time is up!', {
+      body: 'Your timer has reached zero',
+      icon: '/timer-icon.png'
+    })
+  }
+}
+\`\`\`
+
+---
+
+## Time format
+
+\`\`\`typescript
+const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return \`\${mins.toString().padStart(2, '0')}:\${secs.toString().padStart(2, '0')}\`
+}
+\`\`\`
+
+---
+
+## Next step
+
+→ [Image Gallery](/en/cooking/image-gallery)
+    `,
+  },
+  'image-gallery': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['React', 'CSS Grid/Flexbox'],
+    prerequisitesEn: ['React', 'CSS Grid/Flexbox'],
+    contentEs: `
+## Imágenes con estilo
+
+Una galería combina grid layout, lazy loading y lightbox.
+
+---
+
+## Paso 1: Pídele a una IA la galería
+
+\`\`\`
+Necesito una galería de imágenes en React con:
+- Grid responsive (1, 2 o 3 columnas según pantalla)
+- Lazy loading de imágenes
+- Click para abrir lightbox/modal
+- Navegación anterior/siguiente en modal
+- Cerrar con X o click fuera
+- Animaciones suaves
+- TypeScript y Tailwind CSS
+
+Usa imágenes de placeholder de Unsplash.
+\`\`\`
+
+---
+
+## Grid responsive
+
+\`\`\`tsx
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {images.map((image, index) => (
+    <div
+      key={image.id}
+      className="aspect-square overflow-hidden rounded-lg cursor-pointer"
+      onClick={() => openLightbox(index)}
+    >
+      <img
+        src={image.src}
+        alt={image.alt}
+        loading="lazy"
+        className="w-full h-full object-cover hover:scale-105 transition"
+      />
+    </div>
+  ))}
+</div>
+\`\`\`
+
+---
+
+## Lightbox
+
+\`\`\`tsx
+const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+const openLightbox = (index: number) => setLightboxIndex(index)
+const closeLightbox = () => setLightboxIndex(null)
+
+const next = () => {
+  if (lightboxIndex !== null) {
+    setLightboxIndex((lightboxIndex + 1) % images.length)
+  }
+}
+
+const prev = () => {
+  if (lightboxIndex !== null) {
+    setLightboxIndex((lightboxIndex - 1 + images.length) % images.length)
+  }
+}
+\`\`\`
+
+---
+
+## Imágenes de prueba
+
+\`\`\`typescript
+const images = [
+  { id: 1, src: 'https://picsum.photos/800/600?random=1', alt: 'Image 1' },
+  { id: 2, src: 'https://picsum.photos/800/600?random=2', alt: 'Image 2' },
+  // más...
+]
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [API con FastAPI](/es/cooking/api-fastapi)
+    `,
+    contentEn: `
+## Images with style
+
+A gallery combines grid layout, lazy loading, and lightbox.
+
+---
+
+## Step 1: Ask an AI for the gallery
+
+\`\`\`
+I need an image gallery in React with:
+- Responsive grid (1, 2 or 3 columns based on screen)
+- Lazy loading images
+- Click to open lightbox/modal
+- Previous/next navigation in modal
+- Close with X or click outside
+- Smooth animations
+- TypeScript and Tailwind CSS
+
+Use Unsplash placeholder images.
+\`\`\`
+
+---
+
+## Responsive grid
+
+\`\`\`tsx
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {images.map((image, index) => (
+    <div
+      key={image.id}
+      className="aspect-square overflow-hidden rounded-lg cursor-pointer"
+      onClick={() => openLightbox(index)}
+    >
+      <img
+        src={image.src}
+        alt={image.alt}
+        loading="lazy"
+        className="w-full h-full object-cover hover:scale-105 transition"
+      />
+    </div>
+  ))}
+</div>
+\`\`\`
+
+---
+
+## Lightbox
+
+\`\`\`tsx
+const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+const openLightbox = (index: number) => setLightboxIndex(index)
+const closeLightbox = () => setLightboxIndex(null)
+
+const next = () => {
+  if (lightboxIndex !== null) {
+    setLightboxIndex((lightboxIndex + 1) % images.length)
+  }
+}
+
+const prev = () => {
+  if (lightboxIndex !== null) {
+    setLightboxIndex((lightboxIndex - 1 + images.length) % images.length)
+  }
+}
+\`\`\`
+
+---
+
+## Test images
+
+\`\`\`typescript
+const images = [
+  { id: 1, src: 'https://picsum.photos/800/600?random=1', alt: 'Image 1' },
+  { id: 2, src: 'https://picsum.photos/800/600?random=2', alt: 'Image 2' },
+  // more...
+]
+\`\`\`
+
+---
+
+## Next step
+
+→ [API with FastAPI](/en/cooking/api-fastapi)
+    `,
+  },
+  'api-fastapi': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Python básico', 'APIs REST'],
+    prerequisitesEn: ['Basic Python', 'REST APIs'],
+    contentEs: `
+## APIs rápidas con Python
+
+FastAPI es el framework moderno para crear APIs en Python.
+
+---
+
+## Instalación
+
+\`\`\`bash
+# Con uv
+uv init mi-api
+cd mi-api
+uv add fastapi uvicorn
+
+# O con pip
+pip install fastapi uvicorn
+\`\`\`
+
+---
+
+## Paso 1: Pídele a una IA la API
+
+\`\`\`
+Necesito una API REST con FastAPI que:
+- CRUD completo de items (crear, leer, actualizar, eliminar)
+- Validación con Pydantic
+- Documentación automática en /docs
+- Almacenamiento en memoria (lista)
+- Manejo de errores 404
+- Tipado completo
+
+Dame el código completo en main.py.
+\`\`\`
+
+---
+
+## Código típico
+
+\`\`\`python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Item(BaseModel):
+    id: int
+    name: str
+    price: float
+
+items: list[Item] = []
+
+@app.get("/items")
+def get_items():
+    return items
+
+@app.post("/items")
+def create_item(item: Item):
+    items.append(item)
+    return item
+
+@app.get("/items/{item_id}")
+def get_item(item_id: int):
+    for item in items:
+        if item.id == item_id:
+            return item
+    raise HTTPException(status_code=404, detail="Item not found")
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int):
+    for i, item in enumerate(items):
+        if item.id == item_id:
+            return items.pop(i)
+    raise HTTPException(status_code=404, detail="Item not found")
+\`\`\`
+
+---
+
+## Ejecutar
+
+\`\`\`bash
+uvicorn main:app --reload
+\`\`\`
+
+Abre http://localhost:8000/docs para ver la documentación interactiva.
+
+---
+
+## Próximo paso
+
+→ [Web Scraper Básico](/es/cooking/scraper-basic)
+    `,
+    contentEn: `
+## Fast APIs with Python
+
+FastAPI is the modern framework for creating APIs in Python.
+
+---
+
+## Installation
+
+\`\`\`bash
+# With uv
+uv init my-api
+cd my-api
+uv add fastapi uvicorn
+
+# Or with pip
+pip install fastapi uvicorn
+\`\`\`
+
+---
+
+## Step 1: Ask an AI for the API
+
+\`\`\`
+I need a REST API with FastAPI that:
+- Full CRUD of items (create, read, update, delete)
+- Validation with Pydantic
+- Automatic documentation at /docs
+- In-memory storage (list)
+- 404 error handling
+- Full typing
+
+Give me the complete code in main.py.
+\`\`\`
+
+---
+
+## Typical code
+
+\`\`\`python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Item(BaseModel):
+    id: int
+    name: str
+    price: float
+
+items: list[Item] = []
+
+@app.get("/items")
+def get_items():
+    return items
+
+@app.post("/items")
+def create_item(item: Item):
+    items.append(item)
+    return item
+
+@app.get("/items/{item_id}")
+def get_item(item_id: int):
+    for item in items:
+        if item.id == item_id:
+            return item
+    raise HTTPException(status_code=404, detail="Item not found")
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int):
+    for i, item in enumerate(items):
+        if item.id == item_id:
+            return items.pop(i)
+    raise HTTPException(status_code=404, detail="Item not found")
+\`\`\`
+
+---
+
+## Run
+
+\`\`\`bash
+uvicorn main:app --reload
+\`\`\`
+
+Open http://localhost:8000/docs to see interactive documentation.
+
+---
+
+## Next step
+
+→ [Basic Web Scraper](/en/cooking/scraper-basic)
+    `,
+  },
+  'scraper-basic': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Python básico', 'HTML básico'],
+    prerequisitesEn: ['Basic Python', 'Basic HTML'],
+    contentEs: `
+## Extracción de datos web
+
+Un scraper extrae información de páginas web de forma automatizada.
+
+---
+
+## Instalación
+
+\`\`\`bash
+uv add requests beautifulsoup4
+# o
+pip install requests beautifulsoup4
+\`\`\`
+
+---
+
+## Paso 1: Pídele a una IA el scraper
+
+\`\`\`
+Necesito un web scraper en Python que:
+- Use requests y BeautifulSoup
+- Extraiga títulos y enlaces de una página
+- Maneje errores de conexión
+- Guarde resultados en JSON
+- Tenga delay entre requests (ser respetuoso)
+- Incluya user-agent apropiado
+
+Dame el código completo.
+\`\`\`
+
+---
+
+## Código típico
+
+\`\`\`python
+import requests
+from bs4 import BeautifulSoup
+import json
+import time
+
+def scrape_page(url: str) -> list[dict]:
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (educational scraper)'
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+        return []
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    results = []
+    for link in soup.find_all('a', href=True):
+        results.append({
+            'text': link.get_text(strip=True),
+            'href': link['href']
+        })
+
+    return results
+
+# Uso
+data = scrape_page('https://example.com')
+with open('results.json', 'w') as f:
+    json.dump(data, f, indent=2)
+\`\`\`
+
+---
+
+## Buenas prácticas
+
+| Práctica | Por qué |
+|----------|---------|
+| Delay entre requests | No sobrecargar el servidor |
+| User-Agent | Identificarte |
+| robots.txt | Respetar las reglas del sitio |
+| Error handling | Manejar timeouts y errores |
+
+---
+
+## Ética del scraping
+
+> ⚠️ Siempre verifica los términos de servicio del sitio. Algunos prohíben el scraping.
+
+---
+
+## Siguiente nivel
+
+→ [Chat IA Público con Auth](/es/cooking/public-ai-chat) — Nivel Chef
+    `,
+    contentEn: `
+## Web data extraction
+
+A scraper extracts information from web pages automatically.
+
+---
+
+## Installation
+
+\`\`\`bash
+uv add requests beautifulsoup4
+# or
+pip install requests beautifulsoup4
+\`\`\`
+
+---
+
+## Step 1: Ask an AI for the scraper
+
+\`\`\`
+I need a web scraper in Python that:
+- Uses requests and BeautifulSoup
+- Extracts titles and links from a page
+- Handles connection errors
+- Saves results to JSON
+- Has delay between requests (be respectful)
+- Includes appropriate user-agent
+
+Give me the complete code.
+\`\`\`
+
+---
+
+## Typical code
+
+\`\`\`python
+import requests
+from bs4 import BeautifulSoup
+import json
+import time
+
+def scrape_page(url: str) -> list[dict]:
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (educational scraper)'
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Error: {e}")
+        return []
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    results = []
+    for link in soup.find_all('a', href=True):
+        results.append({
+            'text': link.get_text(strip=True),
+            'href': link['href']
+        })
+
+    return results
+
+# Usage
+data = scrape_page('https://example.com')
+with open('results.json', 'w') as f:
+    json.dump(data, f, indent=2)
+\`\`\`
+
+---
+
+## Best practices
+
+| Practice | Why |
+|----------|-----|
+| Delay between requests | Don't overload server |
+| User-Agent | Identify yourself |
+| robots.txt | Respect site rules |
+| Error handling | Handle timeouts and errors |
+
+---
+
+## Scraping ethics
+
+> ⚠️ Always check the site's terms of service. Some prohibit scraping.
+
+---
+
+## Next level
+
+→ [Public AI Chat with Auth](/en/cooking/public-ai-chat) — Chef Level
+    `,
+  },
 }
 
 const dishOrder = dishes.map(d => d.slug)

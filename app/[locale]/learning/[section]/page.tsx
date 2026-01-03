@@ -400,6 +400,580 @@ gh pr create --fill
 - 🎓 [Learn Git Branching](https://learngitbranching.js.org/)
     `,
   },
+  editors: {
+    contentEs: `
+## Tu herramienta más importante
+
+El editor de código es donde pasarás el 90% de tu tiempo programando. Elegir uno bueno y aprenderlo bien te hace más productivo.
+
+---
+
+## Opciones populares
+
+| Editor | Tipo | Ideal para |
+|--------|------|------------|
+| **VS Code** | Gratuito, extensible | Mayoría de desarrolladores |
+| **Cursor** | VS Code + IA | Desarrollo con IA integrada |
+| **Zed** | Rápido, Rust | Performance extremo |
+| **Neovim** | Terminal | Usuarios avanzados |
+| **JetBrains** | IDEs completos | Proyectos grandes, Java |
+
+> 💡 **Recomendación**: VS Code para empezar, Cursor si usas mucho IA.
+
+---
+
+## Instalación
+
+| Sistema | VS Code | Cursor |
+|---------|---------|--------|
+| **macOS** | \`brew install --cask visual-studio-code\` | \`brew install --cask cursor\` |
+| **Windows** | \`winget install Microsoft.VisualStudioCode\` | Descargar de cursor.sh |
+| **Linux** | \`sudo snap install code --classic\` | Descargar de cursor.sh |
+
+---
+
+## Extensiones esenciales (VS Code)
+
+| Extensión | Para qué |
+|-----------|----------|
+| **ESLint** | Errores JavaScript/TypeScript |
+| **Prettier** | Formateo automático |
+| **GitLens** | Historial Git visual |
+| **Auto Close Tag** | HTML/JSX más rápido |
+| **Error Lens** | Errores inline |
+
+\`\`\`bash
+# Instalar desde terminal
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+\`\`\`
+
+---
+
+## Atajos que debes saber
+
+| Acción | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Paleta comandos | \`Cmd+Shift+P\` | \`Ctrl+Shift+P\` |
+| Buscar archivo | \`Cmd+P\` | \`Ctrl+P\` |
+| Buscar en proyecto | \`Cmd+Shift+F\` | \`Ctrl+Shift+F\` |
+| Terminal | \`Cmd+J\` | \`Ctrl+J\` |
+| Multi-cursor | \`Cmd+D\` | \`Ctrl+D\` |
+
+---
+
+## settings.json recomendado
+
+\`\`\`json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.fontSize": 14,
+  "editor.wordWrap": "on"
+}
+\`\`\`
+
+---
+
+## Enlaces útiles
+
+- 📖 [VS Code Docs](https://code.visualstudio.com/docs)
+- 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+    `,
+    contentEn: `
+## Your most important tool
+
+The code editor is where you'll spend 90% of your programming time. Choosing a good one and learning it well makes you more productive.
+
+---
+
+## Popular options
+
+| Editor | Type | Ideal for |
+|--------|------|-----------|
+| **VS Code** | Free, extensible | Most developers |
+| **Cursor** | VS Code + AI | Development with integrated AI |
+| **Zed** | Fast, Rust | Extreme performance |
+| **Neovim** | Terminal | Advanced users |
+| **JetBrains** | Full IDEs | Large projects, Java |
+
+> 💡 **Recommendation**: VS Code to start, Cursor if you use a lot of AI.
+
+---
+
+## Installation
+
+| System | VS Code | Cursor |
+|--------|---------|--------|
+| **macOS** | \`brew install --cask visual-studio-code\` | \`brew install --cask cursor\` |
+| **Windows** | \`winget install Microsoft.VisualStudioCode\` | Download from cursor.sh |
+| **Linux** | \`sudo snap install code --classic\` | Download from cursor.sh |
+
+---
+
+## Essential extensions (VS Code)
+
+| Extension | What for |
+|-----------|----------|
+| **ESLint** | JavaScript/TypeScript errors |
+| **Prettier** | Auto formatting |
+| **GitLens** | Visual Git history |
+| **Auto Close Tag** | Faster HTML/JSX |
+| **Error Lens** | Inline errors |
+
+\`\`\`bash
+# Install from terminal
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+\`\`\`
+
+---
+
+## Shortcuts you must know
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Command palette | \`Cmd+Shift+P\` | \`Ctrl+Shift+P\` |
+| Find file | \`Cmd+P\` | \`Ctrl+P\` |
+| Search in project | \`Cmd+Shift+F\` | \`Ctrl+Shift+F\` |
+| Terminal | \`Cmd+J\` | \`Ctrl+J\` |
+| Multi-cursor | \`Cmd+D\` | \`Ctrl+D\` |
+
+---
+
+## Recommended settings.json
+
+\`\`\`json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.fontSize": 14,
+  "editor.wordWrap": "on"
+}
+\`\`\`
+
+---
+
+## Useful links
+
+- 📖 [VS Code Docs](https://code.visualstudio.com/docs)
+- 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+    `,
+  },
+  homebrew: {
+    contentEs: `
+## Instalar software como profesional
+
+Los gestores de paquetes te permiten instalar, actualizar y eliminar software desde la terminal con un solo comando.
+
+---
+
+## Por sistema operativo
+
+| Sistema | Gestor | Instalación |
+|---------|--------|-------------|
+| **macOS** | Homebrew | Ver abajo |
+| **Linux** | apt, dnf, pacman | Ya instalado |
+| **Windows** | winget, scoop | winget ya viene incluido |
+
+---
+
+## Homebrew (macOS)
+
+### Instalación
+
+\`\`\`bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+\`\`\`
+
+### Comandos esenciales
+
+\`\`\`bash
+# Instalar programa
+brew install git
+
+# Instalar app gráfica
+brew install --cask visual-studio-code
+
+# Buscar paquetes
+brew search docker
+
+# Actualizar todo
+brew update && brew upgrade
+
+# Ver instalados
+brew list
+\`\`\`
+
+---
+
+## Windows: winget
+
+\`\`\`powershell
+# Buscar
+winget search vscode
+
+# Instalar
+winget install Microsoft.VisualStudioCode
+
+# Actualizar todo
+winget upgrade --all
+\`\`\`
+
+---
+
+## Linux: apt (Ubuntu/Debian)
+
+\`\`\`bash
+# Actualizar lista
+sudo apt update
+
+# Instalar
+sudo apt install git
+
+# Actualizar todo
+sudo apt upgrade
+\`\`\`
+
+---
+
+## Qué instalar primero
+
+\`\`\`bash
+# macOS
+brew install git node pnpm python
+
+# Windows
+winget install Git.Git OpenJS.NodeJS Python.Python.3
+
+# Linux
+sudo apt install git nodejs npm python3
+\`\`\`
+
+---
+
+## Enlaces útiles
+
+- 📖 [Homebrew](https://brew.sh/)
+- 📖 [Winget Docs](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
+    `,
+    contentEn: `
+## Install software like a pro
+
+Package managers let you install, update, and remove software from the terminal with a single command.
+
+---
+
+## By operating system
+
+| System | Manager | Installation |
+|--------|---------|--------------|
+| **macOS** | Homebrew | See below |
+| **Linux** | apt, dnf, pacman | Already installed |
+| **Windows** | winget, scoop | winget comes included |
+
+---
+
+## Homebrew (macOS)
+
+### Installation
+
+\`\`\`bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+\`\`\`
+
+### Essential commands
+
+\`\`\`bash
+# Install program
+brew install git
+
+# Install GUI app
+brew install --cask visual-studio-code
+
+# Search packages
+brew search docker
+
+# Update everything
+brew update && brew upgrade
+
+# List installed
+brew list
+\`\`\`
+
+---
+
+## Windows: winget
+
+\`\`\`powershell
+# Search
+winget search vscode
+
+# Install
+winget install Microsoft.VisualStudioCode
+
+# Update everything
+winget upgrade --all
+\`\`\`
+
+---
+
+## Linux: apt (Ubuntu/Debian)
+
+\`\`\`bash
+# Update list
+sudo apt update
+
+# Install
+sudo apt install git
+
+# Upgrade everything
+sudo apt upgrade
+\`\`\`
+
+---
+
+## What to install first
+
+\`\`\`bash
+# macOS
+brew install git node pnpm python
+
+# Windows
+winget install Git.Git OpenJS.NodeJS Python.Python.3
+
+# Linux
+sudo apt install git nodejs npm python3
+\`\`\`
+
+---
+
+## Useful links
+
+- 📖 [Homebrew](https://brew.sh/)
+- 📖 [Winget Docs](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
+    `,
+  },
+  'docker-intro': {
+    contentEs: `
+## Contenedores: Tu app empaquetada
+
+Docker empaqueta tu aplicación con todo lo que necesita para funcionar. "Funciona en mi máquina" ya no es excusa.
+
+---
+
+## Conceptos clave
+
+| Concepto | Qué es | Analogía |
+|----------|--------|----------|
+| **Imagen** | Receta/plantilla | Receta de cocina |
+| **Contenedor** | Imagen ejecutándose | Platillo preparado |
+| **Dockerfile** | Instrucciones para crear imagen | Pasos de la receta |
+| **Docker Hub** | Repositorio de imágenes | Libro de recetas público |
+
+---
+
+## Instalación
+
+| Sistema | Instalación |
+|---------|-------------|
+| **macOS** | \`brew install --cask docker\` |
+| **Windows** | Docker Desktop desde docker.com |
+| **Linux** | Ver docs.docker.com/engine/install |
+
+Después de instalar, abre Docker Desktop y espera a que inicie.
+
+---
+
+## Tu primer contenedor
+
+\`\`\`bash
+# Ejecutar contenedor de prueba
+docker run hello-world
+
+# Si ves "Hello from Docker!" funcionó
+\`\`\`
+
+---
+
+## Comandos esenciales
+
+\`\`\`bash
+# Ver contenedores corriendo
+docker ps
+
+# Ver todos los contenedores
+docker ps -a
+
+# Ver imágenes descargadas
+docker images
+
+# Ejecutar con shell interactivo
+docker run -it ubuntu bash
+
+# Parar contenedor
+docker stop <container_id>
+
+# Eliminar contenedor
+docker rm <container_id>
+\`\`\`
+
+---
+
+## Ejemplo práctico: Node.js
+
+\`\`\`bash
+# Correr Node.js 20
+docker run -it node:20 node
+
+# Ahora puedes escribir JavaScript
+> console.log("Hola desde Docker!")
+\`\`\`
+
+---
+
+## Tu primer Dockerfile
+
+\`\`\`dockerfile
+FROM node:20
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD ["npm", "start"]
+\`\`\`
+
+\`\`\`bash
+# Construir imagen
+docker build -t mi-app .
+
+# Ejecutar
+docker run -p 3000:3000 mi-app
+\`\`\`
+
+---
+
+## Practica
+
+→ [Docker Hello World](/es/cooking/docker-hello) — Tu primer contenedor
+
+---
+
+## Enlaces útiles
+
+- 📖 [Docker Docs](https://docs.docker.com/)
+- 🎓 [Docker Getting Started](https://docs.docker.com/get-started/)
+    `,
+    contentEn: `
+## Containers: Your app packaged
+
+Docker packages your application with everything it needs to run. "Works on my machine" is no longer an excuse.
+
+---
+
+## Key concepts
+
+| Concept | What it is | Analogy |
+|---------|------------|---------|
+| **Image** | Recipe/template | Cooking recipe |
+| **Container** | Image running | Prepared dish |
+| **Dockerfile** | Instructions to create image | Recipe steps |
+| **Docker Hub** | Image repository | Public cookbook |
+
+---
+
+## Installation
+
+| System | Installation |
+|--------|--------------|
+| **macOS** | \`brew install --cask docker\` |
+| **Windows** | Docker Desktop from docker.com |
+| **Linux** | See docs.docker.com/engine/install |
+
+After installing, open Docker Desktop and wait for it to start.
+
+---
+
+## Your first container
+
+\`\`\`bash
+# Run test container
+docker run hello-world
+
+# If you see "Hello from Docker!" it worked
+\`\`\`
+
+---
+
+## Essential commands
+
+\`\`\`bash
+# See running containers
+docker ps
+
+# See all containers
+docker ps -a
+
+# See downloaded images
+docker images
+
+# Run with interactive shell
+docker run -it ubuntu bash
+
+# Stop container
+docker stop <container_id>
+
+# Remove container
+docker rm <container_id>
+\`\`\`
+
+---
+
+## Practical example: Node.js
+
+\`\`\`bash
+# Run Node.js 20
+docker run -it node:20 node
+
+# Now you can write JavaScript
+> console.log("Hello from Docker!")
+\`\`\`
+
+---
+
+## Your first Dockerfile
+
+\`\`\`dockerfile
+FROM node:20
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD ["npm", "start"]
+\`\`\`
+
+\`\`\`bash
+# Build image
+docker build -t my-app .
+
+# Run
+docker run -p 3000:3000 my-app
+\`\`\`
+
+---
+
+## Practice
+
+→ [Docker Hello World](/en/cooking/docker-hello) — Your first container
+
+---
+
+## Useful links
+
+- 📖 [Docker Docs](https://docs.docker.com/)
+- 🎓 [Docker Getting Started](https://docs.docker.com/get-started/)
+    `,
+  },
   llms_intro: {
     contentEs: `
 ## ¿Qué es un LLM?
@@ -574,6 +1148,1569 @@ It's like a password that identifies who is using the service.
 - 📖 [Google AI Studio](https://aistudio.google.com)
 - 📖 [Anthropic API Docs](https://docs.anthropic.com/)
 - 🎓 [Prompt Engineering Guide](https://www.promptingguide.ai/)
+    `,
+  },
+  // ===== COCINERO LEVEL =====
+  javascript: {
+    contentEs: `
+## El lenguaje de la web
+
+JavaScript es el único lenguaje que corre nativamente en navegadores. TypeScript agrega tipos para menos errores.
+
+---
+
+## JavaScript vs TypeScript
+
+| Aspecto | JavaScript | TypeScript |
+|---------|------------|------------|
+| Tipos | Dinámicos | Estáticos |
+| Errores | En runtime | En desarrollo |
+| Archivos | \`.js\` | \`.ts\` |
+| Compilación | No necesita | Necesita \`tsc\` |
+
+> 💡 **Recomendación**: Usa TypeScript para proyectos serios.
+
+---
+
+## Conceptos fundamentales
+
+### Variables
+
+\`\`\`typescript
+const nombre = "Ana"     // No cambia
+let edad = 25            // Puede cambiar
+// var está obsoleto, no lo uses
+\`\`\`
+
+### Funciones
+
+\`\`\`typescript
+// Arrow function (preferida)
+const sumar = (a: number, b: number): number => a + b
+
+// Función tradicional
+function multiplicar(a: number, b: number): number {
+  return a * b
+}
+\`\`\`
+
+### Arrays
+
+\`\`\`typescript
+const frutas = ['manzana', 'pera', 'uva']
+
+frutas.map(f => f.toUpperCase())     // Transforma
+frutas.filter(f => f.length > 4)     // Filtra
+frutas.find(f => f === 'pera')       // Busca uno
+\`\`\`
+
+### Objetos
+
+\`\`\`typescript
+interface Usuario {
+  nombre: string
+  edad: number
+  email?: string  // Opcional
+}
+
+const usuario: Usuario = {
+  nombre: "Ana",
+  edad: 25
+}
+\`\`\`
+
+---
+
+## Async/Await
+
+\`\`\`typescript
+// Llamar API
+async function obtenerUsuario(id: string) {
+  const res = await fetch(\`/api/users/\${id}\`)
+  const data = await res.json()
+  return data
+}
+
+// Usar
+const usuario = await obtenerUsuario('123')
+\`\`\`
+
+---
+
+## Practica
+
+→ [Todo App con React](/es/cooking/react-todo)
+
+---
+
+## Enlaces útiles
+
+- 📖 [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/)
+- 🎓 [JavaScript.info](https://javascript.info/)
+    `,
+    contentEn: `
+## The language of the web
+
+JavaScript is the only language that runs natively in browsers. TypeScript adds types for fewer errors.
+
+---
+
+## JavaScript vs TypeScript
+
+| Aspect | JavaScript | TypeScript |
+|--------|------------|------------|
+| Types | Dynamic | Static |
+| Errors | At runtime | During development |
+| Files | \`.js\` | \`.ts\` |
+| Compilation | Not needed | Needs \`tsc\` |
+
+> 💡 **Recommendation**: Use TypeScript for serious projects.
+
+---
+
+## Fundamental concepts
+
+### Variables
+
+\`\`\`typescript
+const name = "Ana"       // Doesn't change
+let age = 25             // Can change
+// var is obsolete, don't use it
+\`\`\`
+
+### Functions
+
+\`\`\`typescript
+// Arrow function (preferred)
+const add = (a: number, b: number): number => a + b
+
+// Traditional function
+function multiply(a: number, b: number): number {
+  return a * b
+}
+\`\`\`
+
+### Arrays
+
+\`\`\`typescript
+const fruits = ['apple', 'pear', 'grape']
+
+fruits.map(f => f.toUpperCase())     // Transform
+fruits.filter(f => f.length > 4)     // Filter
+fruits.find(f => f === 'pear')       // Find one
+\`\`\`
+
+### Objects
+
+\`\`\`typescript
+interface User {
+  name: string
+  age: number
+  email?: string  // Optional
+}
+
+const user: User = {
+  name: "Ana",
+  age: 25
+}
+\`\`\`
+
+---
+
+## Async/Await
+
+\`\`\`typescript
+// Call API
+async function getUser(id: string) {
+  const res = await fetch(\`/api/users/\${id}\`)
+  const data = await res.json()
+  return data
+}
+
+// Use
+const user = await getUser('123')
+\`\`\`
+
+---
+
+## Practice
+
+→ [Todo App with React](/en/cooking/react-todo)
+
+---
+
+## Useful links
+
+- 📖 [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/)
+- 🎓 [JavaScript.info](https://javascript.info/)
+    `,
+  },
+  nodejs: {
+    contentEs: `
+## JavaScript fuera del navegador
+
+Node.js te permite ejecutar JavaScript en servidores, scripts y herramientas CLI.
+
+---
+
+## Instalación
+
+| Sistema | Comando |
+|---------|---------|
+| **macOS** | \`brew install node\` |
+| **Windows** | \`winget install OpenJS.NodeJS\` |
+| **Linux** | \`sudo apt install nodejs npm\` |
+
+\`\`\`bash
+# Verificar instalación
+node --version
+npm --version
+\`\`\`
+
+---
+
+## npm vs pnpm vs yarn
+
+| Gestor | Velocidad | Espacio | Comando |
+|--------|-----------|---------|---------|
+| **npm** | Normal | Normal | \`npm install\` |
+| **pnpm** | Rápido | Eficiente | \`pnpm install\` |
+| **yarn** | Rápido | Normal | \`yarn\` |
+
+> 💡 **Recomendación**: pnpm para proyectos nuevos.
+
+\`\`\`bash
+# Instalar pnpm
+npm install -g pnpm
+\`\`\`
+
+---
+
+## Crear proyecto
+
+\`\`\`bash
+# Inicializar
+mkdir mi-proyecto && cd mi-proyecto
+pnpm init
+
+# Agregar dependencia
+pnpm add express
+
+# Agregar dev dependency
+pnpm add -D typescript @types/node
+\`\`\`
+
+---
+
+## package.json
+
+\`\`\`json
+{
+  "name": "mi-proyecto",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node index.js",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
+\`\`\`
+
+\`\`\`bash
+# Ejecutar scripts
+pnpm dev
+pnpm build
+\`\`\`
+
+---
+
+## Ejemplo: Servidor básico
+
+\`\`\`javascript
+import express from 'express'
+
+const app = express()
+app.get('/', (req, res) => res.send('Hola!'))
+app.listen(3000, () => console.log('http://localhost:3000'))
+\`\`\`
+
+---
+
+## Practica
+
+→ [API REST con Express](/es/cooking/api-rest-basic)
+
+---
+
+## Enlaces útiles
+
+- 📖 [Node.js Docs](https://nodejs.org/docs/)
+- 📖 [pnpm Docs](https://pnpm.io/)
+    `,
+    contentEn: `
+## JavaScript outside the browser
+
+Node.js lets you run JavaScript on servers, scripts, and CLI tools.
+
+---
+
+## Installation
+
+| System | Command |
+|--------|---------|
+| **macOS** | \`brew install node\` |
+| **Windows** | \`winget install OpenJS.NodeJS\` |
+| **Linux** | \`sudo apt install nodejs npm\` |
+
+\`\`\`bash
+# Verify installation
+node --version
+npm --version
+\`\`\`
+
+---
+
+## npm vs pnpm vs yarn
+
+| Manager | Speed | Space | Command |
+|---------|-------|-------|---------|
+| **npm** | Normal | Normal | \`npm install\` |
+| **pnpm** | Fast | Efficient | \`pnpm install\` |
+| **yarn** | Fast | Normal | \`yarn\` |
+
+> 💡 **Recommendation**: pnpm for new projects.
+
+\`\`\`bash
+# Install pnpm
+npm install -g pnpm
+\`\`\`
+
+---
+
+## Create project
+
+\`\`\`bash
+# Initialize
+mkdir my-project && cd my-project
+pnpm init
+
+# Add dependency
+pnpm add express
+
+# Add dev dependency
+pnpm add -D typescript @types/node
+\`\`\`
+
+---
+
+## package.json
+
+\`\`\`json
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node index.js",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
+\`\`\`
+
+\`\`\`bash
+# Run scripts
+pnpm dev
+pnpm build
+\`\`\`
+
+---
+
+## Example: Basic server
+
+\`\`\`javascript
+import express from 'express'
+
+const app = express()
+app.get('/', (req, res) => res.send('Hello!'))
+app.listen(3000, () => console.log('http://localhost:3000'))
+\`\`\`
+
+---
+
+## Practice
+
+→ [REST API with Express](/en/cooking/api-rest-basic)
+
+---
+
+## Useful links
+
+- 📖 [Node.js Docs](https://nodejs.org/docs/)
+- 📖 [pnpm Docs](https://pnpm.io/)
+    `,
+  },
+  python: {
+    contentEs: `
+## El lenguaje versátil
+
+Python es excelente para scripts, IA, datos y backends. Fácil de leer y aprender.
+
+---
+
+## Instalación
+
+| Sistema | Comando |
+|---------|---------|
+| **macOS** | \`brew install python\` |
+| **Windows** | \`winget install Python.Python.3\` |
+| **Linux** | Ya viene instalado |
+
+\`\`\`bash
+# Verificar
+python3 --version
+\`\`\`
+
+---
+
+## uv: El gestor moderno
+
+\`uv\` es el nuevo gestor de paquetes Python (10x más rápido que pip).
+
+\`\`\`bash
+# Instalar uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Crear proyecto
+uv init mi-proyecto
+cd mi-proyecto
+
+# Agregar dependencia
+uv add requests
+
+# Ejecutar
+uv run python main.py
+\`\`\`
+
+---
+
+## Conceptos básicos
+
+### Variables
+
+\`\`\`python
+nombre = "Ana"
+edad = 25
+es_activo = True
+\`\`\`
+
+### Funciones
+
+\`\`\`python
+def saludar(nombre: str) -> str:
+    return f"Hola, {nombre}!"
+
+# Llamar
+mensaje = saludar("Ana")
+\`\`\`
+
+### Listas
+
+\`\`\`python
+frutas = ["manzana", "pera", "uva"]
+
+# List comprehension
+mayusculas = [f.upper() for f in frutas]
+
+# Filtrar
+largas = [f for f in frutas if len(f) > 4]
+\`\`\`
+
+### Diccionarios
+
+\`\`\`python
+usuario = {
+    "nombre": "Ana",
+    "edad": 25,
+    "email": "ana@email.com"
+}
+
+print(usuario["nombre"])
+\`\`\`
+
+---
+
+## Virtual environments
+
+\`\`\`bash
+# Con uv (recomendado)
+uv venv
+source .venv/bin/activate  # macOS/Linux
+.venv\\Scripts\\activate     # Windows
+
+# Con venv tradicional
+python3 -m venv .venv
+\`\`\`
+
+---
+
+## Practica
+
+→ [CLI Tool con Python](/es/cooking/python-cli)
+
+---
+
+## Enlaces útiles
+
+- 📖 [Python Docs](https://docs.python.org/3/)
+- 📖 [uv Docs](https://docs.astral.sh/uv/)
+    `,
+    contentEn: `
+## The versatile language
+
+Python is excellent for scripts, AI, data, and backends. Easy to read and learn.
+
+---
+
+## Installation
+
+| System | Command |
+|--------|---------|
+| **macOS** | \`brew install python\` |
+| **Windows** | \`winget install Python.Python.3\` |
+| **Linux** | Already installed |
+
+\`\`\`bash
+# Verify
+python3 --version
+\`\`\`
+
+---
+
+## uv: The modern manager
+
+\`uv\` is the new Python package manager (10x faster than pip).
+
+\`\`\`bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create project
+uv init my-project
+cd my-project
+
+# Add dependency
+uv add requests
+
+# Run
+uv run python main.py
+\`\`\`
+
+---
+
+## Basic concepts
+
+### Variables
+
+\`\`\`python
+name = "Ana"
+age = 25
+is_active = True
+\`\`\`
+
+### Functions
+
+\`\`\`python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+# Call
+message = greet("Ana")
+\`\`\`
+
+### Lists
+
+\`\`\`python
+fruits = ["apple", "pear", "grape"]
+
+# List comprehension
+uppercase = [f.upper() for f in fruits]
+
+# Filter
+long_ones = [f for f in fruits if len(f) > 4]
+\`\`\`
+
+### Dictionaries
+
+\`\`\`python
+user = {
+    "name": "Ana",
+    "age": 25,
+    "email": "ana@email.com"
+}
+
+print(user["name"])
+\`\`\`
+
+---
+
+## Virtual environments
+
+\`\`\`bash
+# With uv (recommended)
+uv venv
+source .venv/bin/activate  # macOS/Linux
+.venv\\Scripts\\activate     # Windows
+
+# With traditional venv
+python3 -m venv .venv
+\`\`\`
+
+---
+
+## Practice
+
+→ [CLI Tool with Python](/en/cooking/python-cli)
+
+---
+
+## Useful links
+
+- 📖 [Python Docs](https://docs.python.org/3/)
+- 📖 [uv Docs](https://docs.astral.sh/uv/)
+    `,
+  },
+  'html-css': {
+    contentEs: `
+## La estructura y el estilo
+
+HTML define la estructura. CSS define cómo se ve. Juntos crean interfaces visuales.
+
+---
+
+## HTML esencial
+
+\`\`\`html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Página</title>
+</head>
+<body>
+  <header>
+    <h1>Bienvenido</h1>
+  </header>
+  <main>
+    <p>Contenido principal</p>
+  </main>
+  <footer>
+    <p>© 2026</p>
+  </footer>
+</body>
+</html>
+\`\`\`
+
+---
+
+## Tags importantes
+
+| Tag | Uso |
+|-----|-----|
+| \`<div>\` | Contenedor genérico |
+| \`<span>\` | Texto inline |
+| \`<a href="">\` | Enlaces |
+| \`<img src="">\` | Imágenes |
+| \`<button>\` | Botones |
+| \`<input>\` | Campos de formulario |
+| \`<form>\` | Formularios |
+
+---
+
+## CSS moderno
+
+\`\`\`css
+/* Variables */
+:root {
+  --color-primary: #3b82f6;
+  --spacing: 1rem;
+}
+
+/* Estilos */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing);
+}
+
+.button {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+\`\`\`
+
+---
+
+## Flexbox
+
+\`\`\`css
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+\`\`\`
+
+---
+
+## Grid
+
+\`\`\`css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+\`\`\`
+
+---
+
+## Tailwind CSS
+
+En lugar de escribir CSS, usa clases utilitarias:
+
+\`\`\`html
+<button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+  Click me
+</button>
+\`\`\`
+
+> 💡 **Recomendación**: Usa Tailwind para proyectos nuevos.
+
+---
+
+## Practica
+
+→ [Landing Page Responsive](/es/cooking/landing-page)
+
+---
+
+## Enlaces útiles
+
+- 📖 [MDN Web Docs](https://developer.mozilla.org/)
+- 📖 [Tailwind CSS Docs](https://tailwindcss.com/docs)
+    `,
+    contentEn: `
+## Structure and style
+
+HTML defines structure. CSS defines how it looks. Together they create visual interfaces.
+
+---
+
+## Essential HTML
+
+\`\`\`html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Page</title>
+</head>
+<body>
+  <header>
+    <h1>Welcome</h1>
+  </header>
+  <main>
+    <p>Main content</p>
+  </main>
+  <footer>
+    <p>© 2026</p>
+  </footer>
+</body>
+</html>
+\`\`\`
+
+---
+
+## Important tags
+
+| Tag | Use |
+|-----|-----|
+| \`<div>\` | Generic container |
+| \`<span>\` | Inline text |
+| \`<a href="">\` | Links |
+| \`<img src="">\` | Images |
+| \`<button>\` | Buttons |
+| \`<input>\` | Form fields |
+| \`<form>\` | Forms |
+
+---
+
+## Modern CSS
+
+\`\`\`css
+/* Variables */
+:root {
+  --color-primary: #3b82f6;
+  --spacing: 1rem;
+}
+
+/* Styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing);
+}
+
+.button {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+\`\`\`
+
+---
+
+## Flexbox
+
+\`\`\`css
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+\`\`\`
+
+---
+
+## Grid
+
+\`\`\`css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+\`\`\`
+
+---
+
+## Tailwind CSS
+
+Instead of writing CSS, use utility classes:
+
+\`\`\`html
+<button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+  Click me
+</button>
+\`\`\`
+
+> 💡 **Recommendation**: Use Tailwind for new projects.
+
+---
+
+## Practice
+
+→ [Responsive Landing Page](/en/cooking/landing-page)
+
+---
+
+## Useful links
+
+- 📖 [MDN Web Docs](https://developer.mozilla.org/)
+- 📖 [Tailwind CSS Docs](https://tailwindcss.com/docs)
+    `,
+  },
+  react: {
+    contentEs: `
+## Componentes que reaccionan
+
+React es una librería para construir interfaces de usuario con componentes reutilizables.
+
+---
+
+## Conceptos clave
+
+| Concepto | Qué es |
+|----------|--------|
+| **Componente** | Pieza de UI reutilizable |
+| **Props** | Datos que recibe el componente |
+| **State** | Datos internos del componente |
+| **Hook** | Función para agregar funcionalidad |
+
+---
+
+## Tu primer componente
+
+\`\`\`tsx
+// Componente funcional
+function Saludo({ nombre }: { nombre: string }) {
+  return <h1>Hola, {nombre}!</h1>
+}
+
+// Uso
+<Saludo nombre="Ana" />
+\`\`\`
+
+---
+
+## useState: Estado local
+
+\`\`\`tsx
+import { useState } from 'react'
+
+function Contador() {
+  const [cuenta, setCuenta] = useState(0)
+
+  return (
+    <div>
+      <p>Cuenta: {cuenta}</p>
+      <button onClick={() => setCuenta(cuenta + 1)}>
+        +1
+      </button>
+    </div>
+  )
+}
+\`\`\`
+
+---
+
+## useEffect: Efectos secundarios
+
+\`\`\`tsx
+import { useState, useEffect } from 'react'
+
+function Datos() {
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(setData)
+  }, []) // [] = solo al montar
+
+  return <div>{JSON.stringify(data)}</div>
+}
+\`\`\`
+
+---
+
+## Patrón común: Lista
+
+\`\`\`tsx
+interface Item {
+  id: string
+  nombre: string
+}
+
+function Lista({ items }: { items: Item[] }) {
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>{item.nombre}</li>
+      ))}
+    </ul>
+  )
+}
+\`\`\`
+
+---
+
+## Formularios
+
+\`\`\`tsx
+function Formulario() {
+  const [texto, setTexto] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Enviado:', texto)
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={texto}
+        onChange={e => setTexto(e.target.value)}
+      />
+      <button type="submit">Enviar</button>
+    </form>
+  )
+}
+\`\`\`
+
+---
+
+## Practica
+
+→ [Todo App con React](/es/cooking/react-todo)
+
+---
+
+## Enlaces útiles
+
+- 📖 [React Docs](https://react.dev/)
+- 🎓 [React Tutorial](https://react.dev/learn)
+    `,
+    contentEn: `
+## Components that react
+
+React is a library for building user interfaces with reusable components.
+
+---
+
+## Key concepts
+
+| Concept | What it is |
+|---------|------------|
+| **Component** | Reusable UI piece |
+| **Props** | Data the component receives |
+| **State** | Internal component data |
+| **Hook** | Function to add functionality |
+
+---
+
+## Your first component
+
+\`\`\`tsx
+// Functional component
+function Greeting({ name }: { name: string }) {
+  return <h1>Hello, {name}!</h1>
+}
+
+// Usage
+<Greeting name="Ana" />
+\`\`\`
+
+---
+
+## useState: Local state
+
+\`\`\`tsx
+import { useState } from 'react'
+
+function Counter() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        +1
+      </button>
+    </div>
+  )
+}
+\`\`\`
+
+---
+
+## useEffect: Side effects
+
+\`\`\`tsx
+import { useState, useEffect } from 'react'
+
+function Data() {
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(setData)
+  }, []) // [] = only on mount
+
+  return <div>{JSON.stringify(data)}</div>
+}
+\`\`\`
+
+---
+
+## Common pattern: List
+
+\`\`\`tsx
+interface Item {
+  id: string
+  name: string
+}
+
+function List({ items }: { items: Item[] }) {
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  )
+}
+\`\`\`
+
+---
+
+## Forms
+
+\`\`\`tsx
+function Form() {
+  const [text, setText] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Submitted:', text)
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={text}
+        onChange={e => setText(e.target.value)}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  )
+}
+\`\`\`
+
+---
+
+## Practice
+
+→ [Todo App with React](/en/cooking/react-todo)
+
+---
+
+## Useful links
+
+- 📖 [React Docs](https://react.dev/)
+- 🎓 [React Tutorial](https://react.dev/learn)
+    `,
+  },
+  apis: {
+    contentEs: `
+## Comunicación entre sistemas
+
+REST APIs permiten que aplicaciones se comuniquen usando HTTP.
+
+---
+
+## Métodos HTTP
+
+| Método | Acción | Ejemplo |
+|--------|--------|---------|
+| **GET** | Obtener datos | Listar usuarios |
+| **POST** | Crear nuevo | Crear usuario |
+| **PUT** | Actualizar todo | Actualizar perfil |
+| **PATCH** | Actualizar parcial | Cambiar email |
+| **DELETE** | Eliminar | Borrar usuario |
+
+---
+
+## Estructura de URL
+
+\`\`\`
+GET    /api/users          # Listar todos
+GET    /api/users/123      # Obtener uno
+POST   /api/users          # Crear
+PUT    /api/users/123      # Actualizar
+DELETE /api/users/123      # Eliminar
+\`\`\`
+
+---
+
+## Fetch API
+
+\`\`\`typescript
+// GET
+const res = await fetch('/api/users')
+const users = await res.json()
+
+// POST
+const res = await fetch('/api/users', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ nombre: 'Ana', email: 'ana@email.com' })
+})
+
+// DELETE
+await fetch('/api/users/123', { method: 'DELETE' })
+\`\`\`
+
+---
+
+## Códigos de respuesta
+
+| Código | Significado |
+|--------|-------------|
+| **200** | OK |
+| **201** | Creado |
+| **400** | Error del cliente |
+| **401** | No autorizado |
+| **404** | No encontrado |
+| **500** | Error del servidor |
+
+---
+
+## Headers comunes
+
+\`\`\`typescript
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer tu-token',
+  'Accept': 'application/json'
+}
+\`\`\`
+
+---
+
+## Manejo de errores
+
+\`\`\`typescript
+async function fetchData() {
+  const res = await fetch('/api/data')
+
+  if (!res.ok) {
+    throw new Error(\`Error: \${res.status}\`)
+  }
+
+  return res.json()
+}
+\`\`\`
+
+---
+
+## Practica
+
+→ [API REST con Express](/es/cooking/api-rest-basic)
+
+---
+
+## Enlaces útiles
+
+- 📖 [HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+- 📖 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+    `,
+    contentEn: `
+## Communication between systems
+
+REST APIs allow applications to communicate using HTTP.
+
+---
+
+## HTTP Methods
+
+| Method | Action | Example |
+|--------|--------|---------|
+| **GET** | Get data | List users |
+| **POST** | Create new | Create user |
+| **PUT** | Update all | Update profile |
+| **PATCH** | Partial update | Change email |
+| **DELETE** | Remove | Delete user |
+
+---
+
+## URL Structure
+
+\`\`\`
+GET    /api/users          # List all
+GET    /api/users/123      # Get one
+POST   /api/users          # Create
+PUT    /api/users/123      # Update
+DELETE /api/users/123      # Delete
+\`\`\`
+
+---
+
+## Fetch API
+
+\`\`\`typescript
+// GET
+const res = await fetch('/api/users')
+const users = await res.json()
+
+// POST
+const res = await fetch('/api/users', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: 'Ana', email: 'ana@email.com' })
+})
+
+// DELETE
+await fetch('/api/users/123', { method: 'DELETE' })
+\`\`\`
+
+---
+
+## Response codes
+
+| Code | Meaning |
+|------|---------|
+| **200** | OK |
+| **201** | Created |
+| **400** | Client error |
+| **401** | Unauthorized |
+| **404** | Not found |
+| **500** | Server error |
+
+---
+
+## Common headers
+
+\`\`\`typescript
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer your-token',
+  'Accept': 'application/json'
+}
+\`\`\`
+
+---
+
+## Error handling
+
+\`\`\`typescript
+async function fetchData() {
+  const res = await fetch('/api/data')
+
+  if (!res.ok) {
+    throw new Error(\`Error: \${res.status}\`)
+  }
+
+  return res.json()
+}
+\`\`\`
+
+---
+
+## Practice
+
+→ [REST API with Express](/en/cooking/api-rest-basic)
+
+---
+
+## Useful links
+
+- 📖 [HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+- 📖 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+    `,
+  },
+  embeddings: {
+    contentEs: `
+## Texto como vectores
+
+Los embeddings convierten texto en números (vectores). Esto permite buscar por significado, no solo por palabras exactas.
+
+---
+
+## ¿Qué es un embedding?
+
+\`\`\`
+"Hola mundo" → [0.12, -0.34, 0.56, ..., 0.78]
+                     (1536 dimensiones)
+\`\`\`
+
+Textos similares tienen vectores similares.
+
+---
+
+## Casos de uso
+
+| Uso | Ejemplo |
+|-----|---------|
+| **Búsqueda semántica** | "comida italiana" encuentra "pizza" |
+| **Recomendaciones** | Productos similares |
+| **RAG** | Encontrar contexto relevante para LLMs |
+| **Clasificación** | Agrupar textos por tema |
+
+---
+
+## Modelos de embeddings
+
+| Modelo | Dimensiones | Proveedor |
+|--------|-------------|-----------|
+| \`text-embedding-3-small\` | 1536 | OpenAI |
+| \`text-embedding-3-large\` | 3072 | OpenAI |
+| \`voyage-3\` | 1024 | Voyage AI |
+| \`all-MiniLM-L6-v2\` | 384 | HuggingFace (local) |
+
+---
+
+## Ejemplo con OpenAI
+
+\`\`\`typescript
+import OpenAI from 'openai'
+
+const openai = new OpenAI()
+
+const response = await openai.embeddings.create({
+  model: 'text-embedding-3-small',
+  input: 'Tu texto aquí'
+})
+
+const vector = response.data[0].embedding
+// [0.12, -0.34, 0.56, ...]
+\`\`\`
+
+---
+
+## Similitud coseno
+
+Mide qué tan similares son dos vectores (0 a 1):
+
+\`\`\`typescript
+function cosineSimilarity(a: number[], b: number[]): number {
+  let dot = 0, normA = 0, normB = 0
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i]
+    normA += a[i] * a[i]
+    normB += b[i] * b[i]
+  }
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB))
+}
+\`\`\`
+
+---
+
+## Bases de datos vectoriales
+
+Para almacenar y buscar embeddings eficientemente:
+
+| DB | Tipo | Ideal para |
+|----|------|------------|
+| **Pinecone** | Cloud | Producción |
+| **Supabase pgvector** | Cloud | Full-stack |
+| **ChromaDB** | Local | Desarrollo |
+
+---
+
+## Practica
+
+→ [Búsqueda Vectorial](/es/cooking/vector-search)
+
+---
+
+## Enlaces útiles
+
+- 📖 [OpenAI Embeddings](https://platform.openai.com/docs/guides/embeddings)
+- 📖 [Pinecone Docs](https://docs.pinecone.io/)
+    `,
+    contentEn: `
+## Text as vectors
+
+Embeddings convert text into numbers (vectors). This allows searching by meaning, not just exact words.
+
+---
+
+## What is an embedding?
+
+\`\`\`
+"Hello world" → [0.12, -0.34, 0.56, ..., 0.78]
+                     (1536 dimensions)
+\`\`\`
+
+Similar texts have similar vectors.
+
+---
+
+## Use cases
+
+| Use | Example |
+|-----|---------|
+| **Semantic search** | "italian food" finds "pizza" |
+| **Recommendations** | Similar products |
+| **RAG** | Find relevant context for LLMs |
+| **Classification** | Group texts by topic |
+
+---
+
+## Embedding models
+
+| Model | Dimensions | Provider |
+|-------|------------|----------|
+| \`text-embedding-3-small\` | 1536 | OpenAI |
+| \`text-embedding-3-large\` | 3072 | OpenAI |
+| \`voyage-3\` | 1024 | Voyage AI |
+| \`all-MiniLM-L6-v2\` | 384 | HuggingFace (local) |
+
+---
+
+## Example with OpenAI
+
+\`\`\`typescript
+import OpenAI from 'openai'
+
+const openai = new OpenAI()
+
+const response = await openai.embeddings.create({
+  model: 'text-embedding-3-small',
+  input: 'Your text here'
+})
+
+const vector = response.data[0].embedding
+// [0.12, -0.34, 0.56, ...]
+\`\`\`
+
+---
+
+## Cosine similarity
+
+Measures how similar two vectors are (0 to 1):
+
+\`\`\`typescript
+function cosineSimilarity(a: number[], b: number[]): number {
+  let dot = 0, normA = 0, normB = 0
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i]
+    normA += a[i] * a[i]
+    normB += b[i] * b[i]
+  }
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB))
+}
+\`\`\`
+
+---
+
+## Vector databases
+
+To store and search embeddings efficiently:
+
+| DB | Type | Ideal for |
+|----|------|-----------|
+| **Pinecone** | Cloud | Production |
+| **Supabase pgvector** | Cloud | Full-stack |
+| **ChromaDB** | Local | Development |
+
+---
+
+## Practice
+
+→ [Vector Search](/en/cooking/vector-search)
+
+---
+
+## Useful links
+
+- 📖 [OpenAI Embeddings](https://platform.openai.com/docs/guides/embeddings)
+- 📖 [Pinecone Docs](https://docs.pinecone.io/)
     `,
   },
 }
