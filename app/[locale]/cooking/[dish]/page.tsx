@@ -1495,6 +1495,12 @@ Claude ejecuta curl localhost:3000/health...
 
 ---
 
+## Aprende más
+
+→ [Editores y AI Assistants](/es/learning/editors) — Comparativa completa: Claude Code vs Copilot vs Cursor vs Aider
+
+---
+
 ## Próximo paso
 
 → [Hola Mundo en Terminal](/es/cooking/hello-terminal) — Comandos básicos
@@ -1610,6 +1616,12 @@ Claude runs curl localhost:3000/health...
 | Edit code in your project | General questions |
 | Execute commands | Long conversations |
 | Local file context | Upload files manually |
+
+---
+
+## Learn more
+
+→ [Editors & AI Assistants](/en/learning/editors) — Full comparison: Claude Code vs Copilot vs Cursor vs Aider
 
 ---
 

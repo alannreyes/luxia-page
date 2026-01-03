@@ -11,6 +11,7 @@ const sections = [
   { slug: 'homebrew', titleEs: 'Homebrew & Gestores', titleEn: 'Homebrew & Package Managers', level: 'aprendiz', icon: '📦' },
   { slug: 'docker-intro', titleEs: 'Docker Básico', titleEn: 'Docker Basics', level: 'aprendiz', icon: '🐳' },
   { slug: 'llms-intro', titleEs: 'Intro a LLMs', titleEn: 'Intro to LLMs', level: 'aprendiz', icon: '🤖' },
+  { slug: 'llms-models', titleEs: 'Modelos LLM: Guía 2026', titleEn: 'LLM Models: 2026 Guide', level: 'aprendiz', icon: '🧠' },
   { slug: 'javascript', titleEs: 'JavaScript & TypeScript', titleEn: 'JavaScript & TypeScript', level: 'cocinero', icon: '📗' },
   { slug: 'nodejs', titleEs: 'Node.js & npm/pnpm', titleEn: 'Node.js & npm/pnpm', level: 'cocinero', icon: '📦' },
   { slug: 'python', titleEs: 'Python & uv', titleEn: 'Python & uv', level: 'cocinero', icon: '🐍' },
@@ -476,10 +477,315 @@ code --install-extension esbenp.prettier-vscode
 
 ---
 
+## AI Coding Assistants (Enero 2026)
+
+En la era del "prompt-first", los asistentes de código con IA son tan importantes como el editor mismo. Esta es la guía más completa para elegir tu herramienta.
+
+---
+
+### Categorías de herramientas
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    CATEGORÍAS                                │
+├─────────────────────────────────────────────────────────────┤
+│  CLI (Terminal)     │ Claude Code, OpenAI Codex CLI, Aider  │
+│  Extensiones        │ Copilot, Cody, Continue, Gemini       │
+│  Editores con IA    │ Cursor, Windsurf, Antigravity, IDX    │
+│  Agentes Cloud      │ OpenAI Codex, Antigravity Manager     │
+│  Chat + Código      │ ChatGPT, Claude.ai, Gemini            │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Comparativa completa de precios (Enero 2026)
+
+| Herramienta | Empresa | Plan Gratis | Plan Pro | Modelo base |
+|-------------|---------|-------------|----------|-------------|
+| **Claude Code** | Anthropic | - | ~$3/M tokens (API) | Claude Sonnet 4.5 |
+| **GitHub Copilot** | Microsoft | Estudiantes gratis | $10/mes Individual, $19/mes Business | GPT-4o + Claude |
+| **Cursor** | Cursor Inc | 2000 completions/mes | $20/mes Pro | GPT-4, Claude 4.5 |
+| **Google Antigravity** | Google | **Gratis (preview)** | TBD | Gemini 3 Pro |
+| **Windsurf** | Codeium | Gratis limitado | $15/mes Pro | Cascade (propio) |
+| **OpenAI Codex** | OpenAI | Codex CLI gratis | API usage | GPT-5.2-Codex |
+| **Gemini Code Assist** | Google | 6000 completions/mes | $19/mes Enterprise | Gemini 1.5 Pro |
+| **Cody** | Sourcegraph | 500 msgs/mes | $9/mes Pro | Claude 3.5 |
+| **Continue** | Continue.dev | Gratis + API | Gratis + API | Cualquiera |
+| **Aider** | Open Source | Gratis + API | Gratis + API | Cualquiera |
+
+---
+
+### Benchmark: Capacidades por herramienta
+
+| Capacidad | Claude Code | Antigravity | Codex | Copilot | Cursor | Cody |
+|-----------|:-----------:|:-----------:|:-----:|:-------:|:------:|:----:|
+| Autocompletado inline | ❌ | ✅ | ❌ | ✅✅ | ✅✅ | ✅ |
+| Chat contextual | ✅✅ | ✅✅ | ✅ | ✅ | ✅✅ | ✅✅ |
+| Edición multi-archivo | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅✅ | ✅ |
+| Ejecutar comandos | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
+| Contexto proyecto | ✅✅ | ✅✅ | ✅✅ | ⚠️ | ✅✅ | ✅✅ |
+| Funciona sin editor | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Modo agente autónomo | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
+| Multi-agente paralelo | ❌ | ✅✅ | ✅ | ❌ | ❌ | ❌ |
+
+\`\`\`
+Leyenda: ✅✅ Excelente | ✅ Bueno | ⚠️ Limitado | ❌ No disponible
+\`\`\`
+
+> 🆕 **Google Antigravity** destaca por su "Manager View" que permite múltiples agentes trabajando en paralelo.
+
+---
+
+### Claude Code vs GitHub Copilot vs Cursor
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    CLAUDE CODE (Anthropic)                   │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Lee/edita archivos directamente desde terminal           │
+│  ✓ Ejecuta comandos (npm, git, docker, etc.)                │
+│  ✓ Contexto completo del proyecto (~200K tokens)            │
+│  ✓ Modo agente: resuelve tareas complejas solo              │
+│  ✓ Funciona con cualquier editor (VS Code, Vim, etc.)       │
+│  ✗ Sin autocompletado inline                                │
+│  ✗ Requiere API key (pago por uso)                          │
+│                                                              │
+│  💰 Costo: ~$0.003 por 1K tokens (~$3/M tokens)              │
+│  🔗 https://docs.anthropic.com/en/docs/claude-code          │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    GITHUB COPILOT (Microsoft)                │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Autocompletado instantáneo mientras escribes             │
+│  ✓ Integrado nativo en VS Code, JetBrains, Neovim           │
+│  ✓ Copilot Chat para preguntas                              │
+│  ✓ Copilot Workspace (beta): multi-archivo                  │
+│  ✗ No ejecuta comandos                                      │
+│  ✗ Contexto limitado a archivos abiertos                    │
+│  ✗ No tiene modo agente autónomo                            │
+│                                                              │
+│  💰 Costo: $10/mes individual, $19/mes business             │
+│  🔗 https://github.com/features/copilot                     │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                       CURSOR                                 │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Editor completo basado en VS Code                        │
+│  ✓ Autocompletado + Chat + Composer (multi-archivo)         │
+│  ✓ Cmd+K para editar código inline                          │
+│  ✓ Usa múltiples modelos (GPT-4, Claude, etc.)              │
+│  ✗ Es otro editor que aprender                              │
+│  ✗ Suscripción mensual obligatoria para Pro                 │
+│  ✗ Menos portable que una CLI                               │
+│                                                              │
+│  💰 Costo: Gratis limitado, $20/mes Pro                     │
+│  🔗 https://cursor.sh                                       │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Google Antigravity y OpenAI Codex (Novedades 2025)
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│            🆕 GOOGLE ANTIGRAVITY (Nov 2025)                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ IDE "agent-first" (fork de VS Code/Windsurf)             │
+│  ✓ Manager View: múltiples agentes en PARALELO              │
+│  ✓ 76.2% en SWE-bench (casi igual a Claude 4.5)             │
+│  ✓ Powered by Gemini 3 Pro/Flash/Deep Think                 │
+│  ✓ Soporta Claude y modelos open source también             │
+│  ✓ GRATIS durante preview público                           │
+│  ✗ Muy nuevo, ecosistema en desarrollo                      │
+│                                                              │
+│  💰 Gratis (preview) | Pricing TBD                          │
+│  🔗 https://antigravityai.org                               │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│            🆕 OPENAI CODEX (Relanzado 2025)                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Codex CLI: agente local open source (Abril 2025)         │
+│  ✓ Codex Cloud: agente autónomo en la nube (Mayo 2025)      │
+│  ✓ Powered by codex-1 (o3 optimizado para código)           │
+│  ✓ GPT-5.2-Codex: modelo más reciente                       │
+│  ✓ Ejecuta tareas, crea PRs, resuelve issues                │
+│  ⚠️ codex-mini-latest se depreca 16 Enero 2026              │
+│                                                              │
+│  💰 CLI gratis + API | Cloud: API usage                     │
+│  🔗 https://openai.com/index/introducing-codex              │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Otras opciones de Google y OpenAI
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                 GEMINI CODE ASSIST (Google)                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Extensión para VS Code y JetBrains                       │
+│  ✓ 6000 completions gratis al mes                           │
+│  ✓ Integración con Google Cloud                             │
+│  ✗ Menos contexto que Claude/Cursor                         │
+│  ✗ Enterprise enfocado, menos para indie                    │
+│                                                              │
+│  💰 Gratis: 6000/mes | Enterprise: $19/usuario/mes          │
+│  🔗 https://cloud.google.com/gemini/docs/codeassist         │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    GOOGLE IDX                                │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ IDE completo en la nube (VS Code-based)                  │
+│  ✓ Gemini integrado nativamente                             │
+│  ✓ Gratis durante beta                                      │
+│  ✓ Templates para Flutter, React, Angular, etc.             │
+│  ✗ Requiere internet siempre                                │
+│  ✗ En beta, puede cambiar                                   │
+│                                                              │
+│  💰 Gratis (beta)                                           │
+│  🔗 https://idx.dev                                         │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    CHATGPT + Code (OpenAI)                   │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Code Interpreter: ejecuta Python en sandbox              │
+│  ✓ Análisis de archivos subidos                             │
+│  ✓ Canvas: edición visual de código                         │
+│  ✗ No edita tus archivos locales                            │
+│  ✗ No tiene extensión de editor oficial                     │
+│  ✗ Contexto limitado a la conversación                      │
+│                                                              │
+│  💰 Gratis limitado | Plus: $20/mes | Pro: $200/mes         │
+│  🔗 https://chat.openai.com                                 │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Open Source: Aider, Continue, Cody
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                       AIDER                                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ 100% Open Source (Apache 2.0)                            │
+│  ✓ Usa CUALQUIER modelo (GPT, Claude, Ollama, etc.)         │
+│  ✓ Git integrado: auto-commit de cambios                    │
+│  ✓ Edita múltiples archivos                                 │
+│  ✓ Benchmarks públicos: líder en SWE-bench                  │
+│  ✗ Solo terminal, curva de aprendizaje                      │
+│                                                              │
+│  💰 Gratis + costo de API del modelo que uses               │
+│  🔗 https://aider.chat                                      │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                       CONTINUE                               │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Extensión Open Source para VS Code/JetBrains             │
+│  ✓ Usa cualquier modelo (local o API)                       │
+│  ✓ Autocompletado + Chat                                    │
+│  ✓ Totalmente personalizable                                │
+│  ✗ Requiere configuración inicial                           │
+│                                                              │
+│  💰 Gratis + costo de API                                   │
+│  🔗 https://continue.dev                                    │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                       CODY (Sourcegraph)                     │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Contexto de codebase ENORME (millones de líneas)         │
+│  ✓ Usa Claude 3.5 Sonnet                                    │
+│  ✓ Busca en todo tu código, no solo archivos abiertos       │
+│  ✓ Plan gratis generoso (500 msgs/mes)                      │
+│  ✗ Menos autonomía que Claude Code                          │
+│                                                              │
+│  💰 Gratis: 500 msgs | Pro: $9/mes | Enterprise: custom     │
+│  🔗 https://sourcegraph.com/cody                            │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### ¿Cuál elegir? Guía de decisión
+
+| Tu situación | Recomendación | Por qué |
+|--------------|---------------|---------|
+| **Empezando a programar** | GitHub Copilot Free | Autocompletado ayuda a aprender |
+| **Quiero máximo poder** | Claude Code | Modo agente, ejecuta comandos |
+| **Multi-agente paralelo** | Google Antigravity | Manager View con 5+ agentes |
+| **Ecosistema OpenAI** | Codex CLI + Cloud | Integrado con GPT-5.2 |
+| **Todo en un editor** | Cursor | Mejor UX integrada |
+| **Presupuesto cero** | Continue + Ollama | 100% local y gratis |
+| **Codebase empresarial** | Cody | Mejor contexto de código |
+| **Ecosistema Google** | Antigravity o Gemini | Gemini 3 nativo |
+| **Máxima flexibilidad** | Aider | Cualquier modelo, open source |
+
+---
+
+### Combinaciones recomendadas
+
+\`\`\`
+COMBO 1: Productividad máxima (Premium)
+├── Cursor (editor principal)
+└── Claude Code (tareas complejas desde terminal)
+
+COMBO 2: Equilibrio costo/beneficio
+├── VS Code + GitHub Copilot (autocompletado)
+└── Claude Code (cuando necesitas más poder)
+
+COMBO 3: 100% Gratis
+├── VS Code + Continue (autocompletado con Ollama)
+└── Aider (edición multi-archivo)
+
+COMBO 4: Enterprise
+├── VS Code + Cody (contexto masivo)
+└── Gemini Code Assist (integración Google Cloud)
+\`\`\`
+
+> 💡 **Las herramientas se complementan**: No tienes que elegir solo una.
+
+---
+
+## Practica
+
+→ [Introducción a Claude Code](/es/cooking/claude-code-intro) — Instala y usa Claude Code
+
+---
+
 ## Enlaces útiles
 
-- 📖 [VS Code Docs](https://code.visualstudio.com/docs)
-- 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+**CLIs:**
+- 🤖 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic
+- 🔧 [Aider](https://aider.chat) - Open Source
+- ⚡ [OpenAI Codex CLI](https://openai.com/index/introducing-codex) - OpenAI
+
+**Extensiones:**
+- 🐙 [GitHub Copilot](https://github.com/features/copilot) - Microsoft
+- 🔍 [Cody](https://sourcegraph.com/cody) - Sourcegraph
+- 🔓 [Continue](https://continue.dev) - Open Source
+
+**Editores con IA:**
+- ⌨️ [Cursor](https://cursor.sh) - Cursor Inc
+- 🌊 [Windsurf](https://codeium.com/windsurf) - Codeium
+- 🚀 [Google Antigravity](https://antigravityai.org) - Google (Nuevo!)
+
+**Google:**
+- 💎 [Gemini Code Assist](https://cloud.google.com/gemini/docs/codeassist)
+- 🌐 [Google IDX](https://idx.dev)
+
+**OpenAI:**
+- 💬 [ChatGPT](https://chat.openai.com)
+- 🧠 [Codex Cloud](https://openai.com/index/introducing-codex)
     `,
     contentEn: `
 ## Your most important tool
@@ -556,10 +862,315 @@ code --install-extension esbenp.prettier-vscode
 
 ---
 
-## Useful links
+## AI Coding Assistants (January 2026)
 
-- 📖 [VS Code Docs](https://code.visualstudio.com/docs)
-- 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+In the "prompt-first" era, AI code assistants are as important as the editor itself. This is the most complete guide to choosing your tool.
+
+---
+
+### Tool Categories
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    CATEGORIES                                │
+├─────────────────────────────────────────────────────────────┤
+│  CLI (Terminal)     │ Claude Code, OpenAI Codex CLI, Aider  │
+│  Extensions         │ Copilot, Cody, Continue, Gemini       │
+│  AI Editors         │ Cursor, Windsurf, Antigravity, IDX    │
+│  Cloud Agents       │ OpenAI Codex, Antigravity Manager     │
+│  Chat + Code        │ ChatGPT, Claude.ai, Gemini            │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Complete Pricing Comparison (January 2026)
+
+| Tool | Company | Free Plan | Pro Plan | Base Model |
+|------|---------|-----------|----------|------------|
+| **Claude Code** | Anthropic | - | ~$3/M tokens (API) | Claude Sonnet 4.5 |
+| **GitHub Copilot** | Microsoft | Students free | $10/mo Individual, $19/mo Business | GPT-4o + Claude |
+| **Cursor** | Cursor Inc | 2000 completions/mo | $20/mo Pro | GPT-4, Claude 4.5 |
+| **Google Antigravity** | Google | **Free (preview)** | TBD | Gemini 3 Pro |
+| **Windsurf** | Codeium | Free limited | $15/mo Pro | Cascade (proprietary) |
+| **OpenAI Codex** | OpenAI | Codex CLI free | API usage | GPT-5.2-Codex |
+| **Gemini Code Assist** | Google | 6000 completions/mo | $19/mo Enterprise | Gemini 1.5 Pro |
+| **Cody** | Sourcegraph | 500 msgs/mo | $9/mo Pro | Claude 3.5 |
+| **Continue** | Continue.dev | Free + API | Free + API | Any |
+| **Aider** | Open Source | Free + API | Free + API | Any |
+
+---
+
+### Benchmark: Capabilities by Tool
+
+| Capability | Claude Code | Antigravity | Codex | Copilot | Cursor | Cody |
+|------------|:-----------:|:-----------:|:-----:|:-------:|:------:|:----:|
+| Inline autocomplete | ❌ | ✅ | ❌ | ✅✅ | ✅✅ | ✅ |
+| Contextual chat | ✅✅ | ✅✅ | ✅ | ✅ | ✅✅ | ✅✅ |
+| Multi-file editing | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅✅ | ✅ |
+| Execute commands | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
+| Full project context | ✅✅ | ✅✅ | ✅✅ | ⚠️ | ✅✅ | ✅✅ |
+| Works without editor | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Autonomous agent mode | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
+| Parallel multi-agent | ❌ | ✅✅ | ✅ | ❌ | ❌ | ❌ |
+
+\`\`\`
+Legend: ✅✅ Excellent | ✅ Good | ⚠️ Limited | ❌ Not available
+\`\`\`
+
+> 🆕 **Google Antigravity** stands out with its "Manager View" allowing multiple agents working in parallel.
+
+---
+
+### Claude Code vs GitHub Copilot vs Cursor
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    CLAUDE CODE (Anthropic)                   │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Reads/edits files directly from terminal                │
+│  ✓ Executes commands (npm, git, docker, etc.)              │
+│  ✓ Full project context (~200K tokens)                     │
+│  ✓ Agent mode: solves complex tasks autonomously           │
+│  ✓ Works with any editor (VS Code, Vim, etc.)              │
+│  ✗ No inline autocomplete                                  │
+│  ✗ Requires API key (pay per use)                          │
+│                                                              │
+│  💰 Cost: ~$0.003 per 1K tokens (~$3/M tokens)              │
+│  🔗 https://docs.anthropic.com/en/docs/claude-code          │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    GITHUB COPILOT (Microsoft)                │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Instant autocomplete as you type                        │
+│  ✓ Native integration in VS Code, JetBrains, Neovim        │
+│  ✓ Copilot Chat for questions                              │
+│  ✓ Copilot Workspace (beta): multi-file                    │
+│  ✗ Doesn't execute commands                                │
+│  ✗ Limited to open files context                           │
+│  ✗ No autonomous agent mode                                │
+│                                                              │
+│  💰 Cost: $10/mo individual, $19/mo business               │
+│  🔗 https://github.com/features/copilot                     │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                       CURSOR                                 │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Full editor based on VS Code                            │
+│  ✓ Autocomplete + Chat + Composer (multi-file)             │
+│  ✓ Cmd+K to edit code inline                               │
+│  ✓ Uses multiple models (GPT-4, Claude, etc.)              │
+│  ✗ Another editor to learn                                 │
+│  ✗ Monthly subscription required for Pro                   │
+│  ✗ Less portable than a CLI                                │
+│                                                              │
+│  💰 Cost: Free limited, $20/mo Pro                         │
+│  🔗 https://cursor.sh                                       │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Google Antigravity and OpenAI Codex (2025 Releases)
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│            🆕 GOOGLE ANTIGRAVITY (Nov 2025)                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ "Agent-first" IDE (fork of VS Code/Windsurf)            │
+│  ✓ Manager View: multiple agents in PARALLEL               │
+│  ✓ 76.2% on SWE-bench (almost equals Claude 4.5)           │
+│  ✓ Powered by Gemini 3 Pro/Flash/Deep Think                │
+│  ✓ Also supports Claude and open source models             │
+│  ✓ FREE during public preview                              │
+│  ✗ Very new, ecosystem still developing                    │
+│                                                              │
+│  💰 Free (preview) | Pricing TBD                           │
+│  🔗 https://antigravityai.org                               │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│            🆕 OPENAI CODEX (Relaunched 2025)                 │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Codex CLI: open source local agent (April 2025)         │
+│  ✓ Codex Cloud: autonomous cloud agent (May 2025)          │
+│  ✓ Powered by codex-1 (o3 optimized for code)              │
+│  ✓ GPT-5.2-Codex: latest model                             │
+│  ✓ Executes tasks, creates PRs, resolves issues            │
+│  ⚠️ codex-mini-latest deprecated Jan 16, 2026              │
+│                                                              │
+│  💰 CLI free + API | Cloud: API usage                      │
+│  🔗 https://openai.com/index/introducing-codex              │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Other Google and OpenAI Options
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                 GEMINI CODE ASSIST (Google)                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Extension for VS Code and JetBrains                     │
+│  ✓ 6000 free completions per month                         │
+│  ✓ Google Cloud integration                                │
+│  ✗ Less context than Claude/Cursor                         │
+│  ✗ Enterprise focused, less for indie devs                 │
+│                                                              │
+│  💰 Free: 6000/mo | Enterprise: $19/user/mo                │
+│  🔗 https://cloud.google.com/gemini/docs/codeassist         │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    GOOGLE IDX                                │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Full cloud IDE (VS Code-based)                          │
+│  ✓ Gemini natively integrated                              │
+│  ✓ Free during beta                                        │
+│  ✓ Templates for Flutter, React, Angular, etc.             │
+│  ✗ Requires internet always                                │
+│  ✗ In beta, may change                                     │
+│                                                              │
+│  💰 Free (beta)                                             │
+│  🔗 https://idx.dev                                         │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    CHATGPT + Code (OpenAI)                   │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Code Interpreter: runs Python in sandbox                │
+│  ✓ Uploaded file analysis                                  │
+│  ✓ Canvas: visual code editing                             │
+│  ✗ Doesn't edit your local files                           │
+│  ✗ No official editor extension                            │
+│  ✗ Context limited to conversation                         │
+│                                                              │
+│  💰 Free limited | Plus: $20/mo | Pro: $200/mo             │
+│  🔗 https://chat.openai.com                                 │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Open Source: Aider, Continue, Cody
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                       AIDER                                  │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ 100% Open Source (Apache 2.0)                           │
+│  ✓ Uses ANY model (GPT, Claude, Ollama, etc.)              │
+│  ✓ Git integrated: auto-commits changes                    │
+│  ✓ Edits multiple files                                    │
+│  ✓ Public benchmarks: SWE-bench leader                     │
+│  ✗ Terminal only, learning curve                           │
+│                                                              │
+│  💰 Free + API cost for the model you use                  │
+│  🔗 https://aider.chat                                      │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                       CONTINUE                               │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ Open Source extension for VS Code/JetBrains             │
+│  ✓ Uses any model (local or API)                           │
+│  ✓ Autocomplete + Chat                                     │
+│  ✓ Fully customizable                                      │
+│  ✗ Requires initial setup                                  │
+│                                                              │
+│  💰 Free + API cost                                         │
+│  🔗 https://continue.dev                                    │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                       CODY (Sourcegraph)                     │
+├─────────────────────────────────────────────────────────────┤
+│  ✓ HUGE codebase context (millions of lines)               │
+│  ✓ Uses Claude 3.5 Sonnet                                  │
+│  ✓ Searches all your code, not just open files             │
+│  ✓ Generous free plan (500 msgs/mo)                        │
+│  ✗ Less autonomy than Claude Code                          │
+│                                                              │
+│  💰 Free: 500 msgs | Pro: $9/mo | Enterprise: custom       │
+│  🔗 https://sourcegraph.com/cody                            │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### Which to Choose? Decision Guide
+
+| Your situation | Recommendation | Why |
+|----------------|----------------|-----|
+| **Just starting to code** | GitHub Copilot Free | Autocomplete helps learn |
+| **Maximum power** | Claude Code | Agent mode, runs commands |
+| **Parallel multi-agent** | Google Antigravity | Manager View with 5+ agents |
+| **OpenAI ecosystem** | Codex CLI + Cloud | Integrated with GPT-5.2 |
+| **All in one editor** | Cursor | Best integrated UX |
+| **Zero budget** | Continue + Ollama | 100% local and free |
+| **Enterprise codebase** | Cody | Best code context |
+| **Google ecosystem** | Antigravity or Gemini | Native Gemini 3 |
+| **Maximum flexibility** | Aider | Any model, open source |
+
+---
+
+### Recommended Combinations
+
+\`\`\`
+COMBO 1: Maximum Productivity (Premium)
+├── Cursor (main editor)
+└── Claude Code (complex tasks from terminal)
+
+COMBO 2: Cost/Benefit Balance
+├── VS Code + GitHub Copilot (autocomplete)
+└── Claude Code (when you need more power)
+
+COMBO 3: 100% Free
+├── VS Code + Continue (autocomplete with Ollama)
+└── Aider (multi-file editing)
+
+COMBO 4: Enterprise
+├── VS Code + Cody (massive context)
+└── Gemini Code Assist (Google Cloud integration)
+\`\`\`
+
+> 💡 **Tools complement each other**: You don't have to choose just one.
+
+---
+
+## Practice
+
+→ [Introduction to Claude Code](/en/cooking/claude-code-intro) — Install and use Claude Code
+
+---
+
+## Useful Links
+
+**CLIs:**
+- 🤖 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic
+- 🔧 [Aider](https://aider.chat) - Open Source
+- ⚡ [OpenAI Codex CLI](https://openai.com/index/introducing-codex) - OpenAI
+
+**Extensions:**
+- 🐙 [GitHub Copilot](https://github.com/features/copilot) - Microsoft
+- 🔍 [Cody](https://sourcegraph.com/cody) - Sourcegraph
+- 🔓 [Continue](https://continue.dev) - Open Source
+
+**AI Editors:**
+- ⌨️ [Cursor](https://cursor.sh) - Cursor Inc
+- 🌊 [Windsurf](https://codeium.com/windsurf) - Codeium
+- 🚀 [Google Antigravity](https://antigravityai.org) - Google (New!)
+
+**Google:**
+- 💎 [Gemini Code Assist](https://cloud.google.com/gemini/docs/codeassist)
+- 🌐 [Google IDX](https://idx.dev)
+
+**OpenAI:**
+- 💬 [ChatGPT](https://chat.openai.com)
+- 🧠 [Codex Cloud](https://openai.com/index/introducing-codex)
     `,
   },
   homebrew: {
@@ -1148,6 +1759,354 @@ It's like a password that identifies who is using the service.
 - 📖 [Google AI Studio](https://aistudio.google.com)
 - 📖 [Anthropic API Docs](https://docs.anthropic.com/)
 - 🎓 [Prompt Engineering Guide](https://www.promptingguide.ai/)
+    `,
+  },
+  'llms-models': {
+    contentEs: `
+## Dos tipos de modelos, dos propósitos
+
+Cuando desarrollas con IA, usas modelos en **dos contextos muy diferentes**:
+
+| Contexto | Qué hace | Ejemplo |
+|----------|----------|---------|
+| **Agente de código** | Escribe TU código | Claude Code, Cursor, Copilot |
+| **Tu aplicación** | Responde a TUS usuarios | El chatbot que construyes |
+
+> ⚠️ **Error común**: Usar el mismo modelo para ambos. Un modelo caro que escribe código excelente puede ser innecesario (y costoso) para responder preguntas simples de usuarios.
+
+---
+
+## Modelos para agentes de código (Enero 2026)
+
+Estos modelos potencian las herramientas que TÚ usas para programar:
+
+| Modelo | Agente que lo usa | SWE-bench | Contexto | Precio Input/Output |
+|--------|-------------------|-----------|----------|---------------------|
+| **Claude Opus 4.5** | Claude Code | 72.0% | 200K | $5 / $25 por 1M tokens |
+| **GPT-5.2-Codex** | Codex CLI, Copilot | 69.5% | 128K | $6 / $30 por 1M tokens |
+| **Claude Sonnet 4** | Cursor, Cody | 72.7% | 200K | $3 / $15 por 1M tokens |
+| **Gemini 2.5 Pro** | Google Antigravity | 63.8% | 1M | $1.25 / $5 por 1M tokens |
+
+> 💡 **SWE-bench** mide qué tan bien un modelo resuelve bugs reales de GitHub. Mayor % = mejor para código.
+
+---
+
+## Modelos para producción (Enero 2026)
+
+Estos modelos van **dentro de tu app** para atender usuarios:
+
+| Modelo | Proveedor | Fortaleza | Contexto | Precio Input/Output |
+|--------|-----------|-----------|----------|---------------------|
+| **Gemini 2.0 Flash** | Google | Muy rápido, gratis hasta 1500/día | 1M | $0.10 / $0.40 por 1M |
+| **GLM-4.7** | Zhipu AI | Open source, muy capaz | 200K | Gratis (local) / ~$0.50 via API |
+| **DeepSeek-V3.2** | DeepSeek | Excelente calidad/precio | 128K | $0.14 / $0.28 por 1M |
+| **Claude 3.5 Haiku** | Anthropic | Rápido, económico | 200K | $0.80 / $4 por 1M |
+| **Llama 3.3 70B** | Meta | Open source, corre local | 128K | Gratis (local) |
+
+---
+
+## ¿Por qué importa el contexto (context window)?
+
+El **contexto** es cuánta información puede "ver" el modelo en una sola conversación.
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│  Contexto = Prompt + Historial + Archivos + Output  │
+└─────────────────────────────────────────────────────┘
+
+Modelo con 8K contexto:   [████____] Solo 8,000 tokens
+Modelo con 128K contexto: [████████████████████████████████] 128,000 tokens
+Modelo con 1M contexto:   [███████████████████████████████████████...] 1,000,000 tokens
+\`\`\`
+
+| Caso de uso | Contexto mínimo recomendado |
+|-------------|------------------------------|
+| Chat simple (FAQ) | 8K |
+| Análisis de documentos | 32K-128K |
+| Agente de código (lee tu repo) | 128K-200K |
+| Analizar codebase completo | 1M+ |
+
+---
+
+## Modelos Open Source: La alternativa gratuita
+
+No necesitas pagar APIs. Puedes correr modelos localmente o usar servicios como OpenRouter.
+
+### Opción 1: Correr local con Ollama
+
+\`\`\`bash
+# Instalar Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Descargar y correr GLM-4
+ollama run glm4
+
+# O DeepSeek
+ollama run deepseek-v3
+\`\`\`
+
+**Requisitos**: GPU con 8GB+ VRAM para modelos pequeños, 24GB+ para los grandes.
+
+### Opción 2: OpenRouter (API unificada)
+
+[OpenRouter](https://openrouter.ai) te da acceso a **todos los modelos** con una sola API Key:
+
+\`\`\`javascript
+// Usar cualquier modelo con OpenRouter
+const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer TU_OPENROUTER_KEY',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'deepseek/deepseek-chat-v3',  // O cualquier otro
+    messages: [{ role: 'user', content: 'Hola!' }],
+  }),
+});
+\`\`\`
+
+**Modelos populares en OpenRouter (Enero 2026)**:
+
+| Modelo | ID en OpenRouter | Precio/1M tokens |
+|--------|------------------|------------------|
+| DeepSeek V3.2 | \`deepseek/deepseek-chat-v3\` | $0.14 input / $0.28 output |
+| GLM-4.7 | \`zhipu/glm-4\` | $0.50 input / $0.50 output |
+| Llama 3.3 70B | \`meta-llama/llama-3.3-70b\` | $0.40 input / $0.40 output |
+| Mistral Large 2 | \`mistralai/mistral-large-2\` | $2 input / $6 output |
+
+---
+
+## Comparativa: ¿Qué modelo para qué?
+
+| Necesito... | Recomendación | Por qué |
+|-------------|---------------|---------|
+| **Escribir código rápido** | Claude Sonnet 4 (vía Cursor) | Balance calidad/velocidad |
+| **Tareas de código complejas** | Claude Opus 4.5 (vía Claude Code) | Mejor razonamiento |
+| **Chatbot para mi app (gratis)** | Gemini 2.0 Flash | 1500 req/día gratis |
+| **Chatbot de alta calidad** | Claude 3.5 Haiku | Rápido y capaz |
+| **Máxima privacidad** | Llama 3.3 local | Corre en tu máquina |
+| **Presupuesto muy bajo** | DeepSeek V3.2 | Excelente calidad/precio |
+
+---
+
+## Flujo de trabajo real
+
+\`\`\`
+1. DESARROLLANDO (tu computadora)
+   └── Usas Claude Code o Cursor
+       └── Modelo: Claude Opus 4.5 / Sonnet 4
+       └── Costo: ~$0.50-2 por sesión de trabajo
+
+2. EN PRODUCCIÓN (tu app)
+   └── Tu chatbot responde a usuarios
+       └── Modelo: Gemini Flash o DeepSeek
+       └── Costo: ~$0.01-0.10 por 1000 usuarios/día
+\`\`\`
+
+> 💡 **La clave**: Usa modelos premium para CREAR código, modelos económicos para SERVIR usuarios.
+
+---
+
+## Errores comunes
+
+| Error | Consecuencia | Solución |
+|-------|--------------|----------|
+| Usar Opus 4.5 en producción | Costos altísimos | Usar Haiku o Flash |
+| Usar modelo pequeño para código | Código de mala calidad | Invertir en buen modelo de desarrollo |
+| Ignorar contexto | Se "olvida" conversación | Elegir modelo con contexto adecuado |
+| No usar OpenRouter | Atado a un proveedor | Centralizar con OpenRouter |
+
+---
+
+## Practica
+
+→ [Chatbot con Gemini](/es/cooking/chatbot-gemini) — Usa Gemini Flash gratis
+→ [API con Node](/es/cooking/api-rest-node) — Backend para tu modelo
+
+---
+
+## Enlaces útiles
+
+- 📖 [OpenRouter - Modelos disponibles](https://openrouter.ai/models)
+- 📖 [Ollama - Models Library](https://ollama.com/library)
+- 📖 [Artificial Analysis - LLM Benchmarks](https://artificialanalysis.ai/)
+- 📖 [SWE-bench Leaderboard](https://www.swebench.com/)
+- 📖 [Anthropic Pricing](https://www.anthropic.com/pricing)
+- 📖 [Google AI Pricing](https://ai.google.dev/pricing)
+    `,
+    contentEn: `
+## Two types of models, two purposes
+
+When developing with AI, you use models in **two very different contexts**:
+
+| Context | What it does | Example |
+|---------|--------------|---------|
+| **Coding agent** | Writes YOUR code | Claude Code, Cursor, Copilot |
+| **Your application** | Responds to YOUR users | The chatbot you're building |
+
+> ⚠️ **Common mistake**: Using the same model for both. An expensive model that writes excellent code may be unnecessary (and costly) for answering simple user questions.
+
+---
+
+## Models for coding agents (January 2026)
+
+These models power the tools YOU use to program:
+
+| Model | Agent using it | SWE-bench | Context | Price Input/Output |
+|-------|----------------|-----------|---------|---------------------|
+| **Claude Opus 4.5** | Claude Code | 72.0% | 200K | $5 / $25 per 1M tokens |
+| **GPT-5.2-Codex** | Codex CLI, Copilot | 69.5% | 128K | $6 / $30 per 1M tokens |
+| **Claude Sonnet 4** | Cursor, Cody | 72.7% | 200K | $3 / $15 per 1M tokens |
+| **Gemini 2.5 Pro** | Google Antigravity | 63.8% | 1M | $1.25 / $5 per 1M tokens |
+
+> 💡 **SWE-bench** measures how well a model solves real GitHub bugs. Higher % = better for code.
+
+---
+
+## Models for production (January 2026)
+
+These models go **inside your app** to serve users:
+
+| Model | Provider | Strength | Context | Price Input/Output |
+|-------|----------|----------|---------|---------------------|
+| **Gemini 2.0 Flash** | Google | Very fast, free up to 1500/day | 1M | $0.10 / $0.40 per 1M |
+| **GLM-4.7** | Zhipu AI | Open source, very capable | 200K | Free (local) / ~$0.50 via API |
+| **DeepSeek-V3.2** | DeepSeek | Excellent quality/price | 128K | $0.14 / $0.28 per 1M |
+| **Claude 3.5 Haiku** | Anthropic | Fast, economical | 200K | $0.80 / $4 per 1M |
+| **Llama 3.3 70B** | Meta | Open source, runs locally | 128K | Free (local) |
+
+---
+
+## Why does context (context window) matter?
+
+The **context** is how much information the model can "see" in a single conversation.
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│  Context = Prompt + History + Files + Output        │
+└─────────────────────────────────────────────────────┘
+
+Model with 8K context:   [████____] Only 8,000 tokens
+Model with 128K context: [████████████████████████████████] 128,000 tokens
+Model with 1M context:   [███████████████████████████████████████...] 1,000,000 tokens
+\`\`\`
+
+| Use case | Minimum recommended context |
+|----------|------------------------------|
+| Simple chat (FAQ) | 8K |
+| Document analysis | 32K-128K |
+| Code agent (reads your repo) | 128K-200K |
+| Analyze complete codebase | 1M+ |
+
+---
+
+## Open Source Models: The free alternative
+
+You don't need to pay for APIs. You can run models locally or use services like OpenRouter.
+
+### Option 1: Run locally with Ollama
+
+\`\`\`bash
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Download and run GLM-4
+ollama run glm4
+
+# Or DeepSeek
+ollama run deepseek-v3
+\`\`\`
+
+**Requirements**: GPU with 8GB+ VRAM for small models, 24GB+ for large ones.
+
+### Option 2: OpenRouter (unified API)
+
+[OpenRouter](https://openrouter.ai) gives you access to **all models** with a single API Key:
+
+\`\`\`javascript
+// Use any model with OpenRouter
+const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_OPENROUTER_KEY',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'deepseek/deepseek-chat-v3',  // Or any other
+    messages: [{ role: 'user', content: 'Hello!' }],
+  }),
+});
+\`\`\`
+
+**Popular models on OpenRouter (January 2026)**:
+
+| Model | OpenRouter ID | Price/1M tokens |
+|-------|---------------|------------------|
+| DeepSeek V3.2 | \`deepseek/deepseek-chat-v3\` | $0.14 input / $0.28 output |
+| GLM-4.7 | \`zhipu/glm-4\` | $0.50 input / $0.50 output |
+| Llama 3.3 70B | \`meta-llama/llama-3.3-70b\` | $0.40 input / $0.40 output |
+| Mistral Large 2 | \`mistralai/mistral-large-2\` | $2 input / $6 output |
+
+---
+
+## Comparison: Which model for what?
+
+| I need... | Recommendation | Why |
+|-----------|----------------|-----|
+| **Fast code writing** | Claude Sonnet 4 (via Cursor) | Balance quality/speed |
+| **Complex coding tasks** | Claude Opus 4.5 (via Claude Code) | Best reasoning |
+| **Chatbot for my app (free)** | Gemini 2.0 Flash | 1500 req/day free |
+| **High-quality chatbot** | Claude 3.5 Haiku | Fast and capable |
+| **Maximum privacy** | Llama 3.3 local | Runs on your machine |
+| **Very low budget** | DeepSeek V3.2 | Excellent quality/price |
+
+---
+
+## Real workflow
+
+\`\`\`
+1. DEVELOPING (your computer)
+   └── You use Claude Code or Cursor
+       └── Model: Claude Opus 4.5 / Sonnet 4
+       └── Cost: ~$0.50-2 per work session
+
+2. IN PRODUCTION (your app)
+   └── Your chatbot responds to users
+       └── Model: Gemini Flash or DeepSeek
+       └── Cost: ~$0.01-0.10 per 1000 users/day
+\`\`\`
+
+> 💡 **The key**: Use premium models to CREATE code, economical models to SERVE users.
+
+---
+
+## Common mistakes
+
+| Mistake | Consequence | Solution |
+|---------|-------------|----------|
+| Using Opus 4.5 in production | Very high costs | Use Haiku or Flash |
+| Using small model for coding | Poor quality code | Invest in good dev model |
+| Ignoring context | "Forgets" conversation | Choose model with adequate context |
+| Not using OpenRouter | Locked to one provider | Centralize with OpenRouter |
+
+---
+
+## Practice
+
+→ [Chatbot with Gemini](/en/cooking/chatbot-gemini) — Use Gemini Flash for free
+→ [API with Node](/en/cooking/api-rest-node) — Backend for your model
+
+---
+
+## Useful links
+
+- 📖 [OpenRouter - Available Models](https://openrouter.ai/models)
+- 📖 [Ollama - Models Library](https://ollama.com/library)
+- 📖 [Artificial Analysis - LLM Benchmarks](https://artificialanalysis.ai/)
+- 📖 [SWE-bench Leaderboard](https://www.swebench.com/)
+- 📖 [Anthropic Pricing](https://www.anthropic.com/pricing)
+- 📖 [Google AI Pricing](https://ai.google.dev/pricing)
     `,
   },
   // ===== COCINERO LEVEL =====
