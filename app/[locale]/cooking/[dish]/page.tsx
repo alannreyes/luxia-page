@@ -801,33 +801,29 @@ You've completed the cloud API trio. Now you can:
     `,
   },
   'chatbot-local': {
-    timeEs: '30 minutos',
-    timeEn: '30 minutes',
-    prerequisitesEs: ['Terminal básico', '8GB RAM mínimo'],
-    prerequisitesEn: ['Basic Terminal', '8GB RAM minimum'],
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['Trío de APIs completado (opcional)', '8GB RAM mínimo'],
+    prerequisitesEn: ['API trio completed (optional)', '8GB RAM minimum'],
     contentEs: `
-## El plato final
+## IA sin internet, sin costos, 100% privada
 
-Un chatbot corriendo 100% en tu computadora, sin internet, completamente privado. Ideal para datos sensibles.
+Ya probaste APIs en la nube. Ahora corre un modelo en tu propia computadora.
 
----
-
-## Por qué un modelo local
-
-| Ventaja | Detalle |
-|---------|---------|
-| **Privacidad total** | Tus datos nunca salen de tu máquina |
-| **Sin costos** | Gratis después de descargarlo |
-| **Offline** | Funciona sin internet |
-| **Aprendizaje** | Entiende cómo funcionan los LLMs |
+**Diferencia clave**: No necesitas API key. El modelo corre local.
 
 ---
 
-## Ingredientes
+## ¿Por qué un modelo local?
 
-- macOS, Linux o Windows con WSL
-- 8GB de RAM mínimo (16GB recomendado)
-- 5GB de espacio en disco
+| Cloud (Gemini, Claude, OpenAI) | Local (Ollama) |
+|-------------------------------|----------------|
+| Requiere internet | Funciona offline |
+| Tus datos van a sus servidores | Tus datos quedan en tu máquina |
+| Pago por uso | Gratis (después de descargar) |
+| Modelos más potentes | Modelos más pequeños |
+
+> 💡 **Ideal para**: datos sensibles, sin internet, o simplemente aprender cómo funcionan los LLMs por dentro.
 
 ---
 
@@ -837,21 +833,23 @@ Un chatbot corriendo 100% en tu computadora, sin internet, completamente privado
 |---------|---------|
 | **macOS** | \`brew install ollama\` |
 | **Linux** | \`curl -fsSL https://ollama.ai/install.sh \\| sh\` |
-| **Windows** | \`winget install Ollama.Ollama\` |
+| **Windows** | Descarga desde [ollama.com/download](https://ollama.com/download) |
+
+Verifica la instalación:
+
+\`\`\`bash
+ollama --version
+\`\`\`
 
 ---
 
 ## Paso 2: Descargar un modelo
 
 \`\`\`bash
-# Modelo pequeño (3B parámetros, ~2GB)
 ollama pull llama3.2
-
-# O modelo más capaz (8B parámetros, ~5GB)
-ollama pull llama3.2:8b
 \`\`\`
 
-> 💡 **Tip**: Empieza con el modelo pequeño. Siempre puedes descargar uno más grande después.
+> ⏳ La primera vez descarga ~2GB. Después es instantáneo.
 
 ---
 
@@ -861,45 +859,75 @@ ollama pull llama3.2:8b
 ollama run llama3.2
 \`\`\`
 
-Escribe tu mensaje y presiona Enter. Para salir escribe \`/bye\`.
+Escribe tu mensaje y presiona Enter. Para salir: \`/bye\`
 
 ---
 
-## Verificación final
+## Si algo falló
 
-- [ ] Ollama instalado (\`ollama --version\`)
-- [ ] Modelo descargado (\`ollama list\`)
-- [ ] Chat funcionando
+| Error | Causa | Solución |
+|-------|-------|----------|
+| \`command not found: ollama\` | No instalado | Reinstala Ollama |
+| \`model not found\` | No descargado | Ejecuta \`ollama pull llama3.2\` |
+| Muy lento | Poca RAM | Usa modelo más pequeño: \`llama3.2:1b\` |
+| Se congela | RAM insuficiente | Cierra otras apps, necesitas 8GB libres |
 
 ---
 
-## Próximos pasos
+## Bonus: Chatbot programático
 
-→ [RAG con Documentos](/es/cooking/rag-documents) - Agrega tus propios archivos al contexto
+¿Quieres usar Ollama desde código (como hiciste con las APIs)?
+
+Pídele a cualquier IA:
+
+\`\`\`
+Necesito un chatbot en Node.js que:
+- Use Ollama localmente (no API key)
+- Funcione en terminal
+- Mantenga historial de conversación
+
+Dame el código y comandos.
+\`\`\`
+
+Ollama tiene una API REST local en \`http://localhost:11434\`.
+
+---
+
+## ¿Qué aprendiste?
+
+| API Cloud | Modelo Local |
+|-----------|--------------|
+| API key requerida | Sin API key |
+| Internet requerido | Funciona offline |
+| Servidor remoto | Tu computadora |
+
+El código es casi igual. Solo cambia el endpoint.
+
+---
+
+## Próximo paso
+
+→ [Chat con Interfaz Web](/es/cooking/chat-web-ui) — Dale una cara bonita a tu chatbot
     `,
     contentEn: `
-## The final dish
+## AI without internet, without costs, 100% private
 
-A chatbot running 100% on your computer, without internet, completely private. Ideal for sensitive data.
+You already tried cloud APIs. Now run a model on your own computer.
 
----
-
-## Why a local model
-
-| Advantage | Detail |
-|-----------|--------|
-| **Total privacy** | Your data never leaves your machine |
-| **No costs** | Free after downloading |
-| **Offline** | Works without internet |
-| **Learning** | Understand how LLMs work |
+**Key difference**: No API key needed. The model runs locally.
 
 ---
 
-## Ingredients
+## Why a local model?
 
-- macOS, Linux or Windows with WSL
-- 8GB RAM minimum (16GB recommended)
-- 5GB disk space
+| Cloud (Gemini, Claude, OpenAI) | Local (Ollama) |
+|-------------------------------|----------------|
+| Requires internet | Works offline |
+| Your data goes to their servers | Your data stays on your machine |
+| Pay per use | Free (after download) |
+| More powerful models | Smaller models |
+
+> 💡 **Ideal for**: sensitive data, no internet, or just learning how LLMs work under the hood.
 
 ---
 
@@ -909,21 +937,23 @@ A chatbot running 100% on your computer, without internet, completely private. I
 |--------|---------|
 | **macOS** | \`brew install ollama\` |
 | **Linux** | \`curl -fsSL https://ollama.ai/install.sh \\| sh\` |
-| **Windows** | \`winget install Ollama.Ollama\` |
+| **Windows** | Download from [ollama.com/download](https://ollama.com/download) |
+
+Verify installation:
+
+\`\`\`bash
+ollama --version
+\`\`\`
 
 ---
 
 ## Step 2: Download a model
 
 \`\`\`bash
-# Small model (3B parameters, ~2GB)
 ollama pull llama3.2
-
-# Or more capable model (8B parameters, ~5GB)
-ollama pull llama3.2:8b
 \`\`\`
 
-> 💡 **Tip**: Start with the small model. You can always download a bigger one later.
+> ⏳ First time downloads ~2GB. After that it's instant.
 
 ---
 
@@ -933,21 +963,55 @@ ollama pull llama3.2:8b
 ollama run llama3.2
 \`\`\`
 
-Type your message and press Enter. To exit type \`/bye\`.
+Type your message and press Enter. To exit: \`/bye\`
 
 ---
 
-## Final verification
+## If something failed
 
-- [ ] Ollama installed (\`ollama --version\`)
-- [ ] Model downloaded (\`ollama list\`)
-- [ ] Chat working
+| Error | Cause | Solution |
+|-------|-------|----------|
+| \`command not found: ollama\` | Not installed | Reinstall Ollama |
+| \`model not found\` | Not downloaded | Run \`ollama pull llama3.2\` |
+| Very slow | Low RAM | Use smaller model: \`llama3.2:1b\` |
+| Freezes | Insufficient RAM | Close other apps, need 8GB free |
 
 ---
 
-## Next steps
+## Bonus: Programmatic chatbot
 
-→ [RAG with Documents](/en/cooking/rag-documents) - Add your own files to the context
+Want to use Ollama from code (like you did with APIs)?
+
+Ask any AI:
+
+\`\`\`
+I need a Node.js chatbot that:
+- Uses Ollama locally (no API key)
+- Works in terminal
+- Maintains conversation history
+
+Give me the code and commands.
+\`\`\`
+
+Ollama has a local REST API at \`http://localhost:11434\`.
+
+---
+
+## What did you learn?
+
+| Cloud API | Local Model |
+|-----------|-------------|
+| API key required | No API key |
+| Internet required | Works offline |
+| Remote server | Your computer |
+
+The code is almost the same. Only the endpoint changes.
+
+---
+
+## Next step
+
+→ [Chat with Web UI](/en/cooking/chat-web-ui) — Give your chatbot a nice face
     `,
   },
 }
