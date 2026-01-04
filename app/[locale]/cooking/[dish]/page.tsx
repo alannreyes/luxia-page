@@ -9449,153 +9449,625 @@ if (keys.length) await redis.del(...keys)
     `,
   },
   'arduino-sensor': {
-    timeEs: '30 minutos',
-    timeEn: '30 minutes',
-    prerequisitesEs: ['Arduino/ESP32', 'MQTT'],
-    prerequisitesEn: ['Arduino/ESP32', 'MQTT'],
+    timeEs: '60 minutos',
+    timeEn: '60 minutes',
+    prerequisitesEs: ['Ninguno - empezamos desde cero'],
+    prerequisitesEn: ['None - we start from scratch'],
     contentEs: `
 ## Lo que vas a construir
 
-En este proyecto vas a conectar el mundo físico con tu aplicación web.
+Un sensor de temperatura y humedad conectado a internet que envia datos a tu computadora cada 5 segundos.
 
-Usarás un ESP32 (o Arduino con WiFi) para leer datos de un sensor de temperatura y humedad. Esos datos viajarán por WiFi usando el protocolo MQTT hasta un servidor Node.js que los guardará en una base de datos.
+Al terminar tendras:
+- Un ESP32 leyendo temperatura y humedad real de tu habitacion
+- Los datos viajando por WiFi a un broker MQTT publico
+- Un script en tu computadora mostrando los datos en tiempo real
 
-Al terminar tendrás un sistema IoT completo: hardware que mide, servidor que procesa, y datos listos para mostrar en un dashboard.
-
----
-
-## Materiales
-
-- ESP32 o Arduino + WiFi
-- Sensor (temperatura, humedad, etc.)
-- Cables
+Este es tu primer proyecto IoT real. Hardware + Software + Internet.
 
 ---
 
-## Paso 1: Pídele a una IA el código
+## Lista de compras (exacta)
+
+Necesitas estos componentes especificos:
+
+| Componente | Modelo exacto | Precio aprox | Donde comprar |
+|------------|---------------|--------------|---------------|
+| **Microcontrolador** | ESP32 DevKit V1 (30 pines) | $5-8 USD | Amazon, AliExpress, MercadoLibre |
+| **Sensor** | DHT22 (azul) o DHT11 (azul barato) | $2-5 USD | Amazon, AliExpress |
+| **Cables** | Jumper wires hembra-hembra (3 cables) | $2 USD | Cualquier tienda electronica |
+| **Cable USB** | Micro USB (para programar el ESP32) | $2 USD | Probablemente ya tienes uno |
+
+**Total: ~$12-15 USD**
+
+> **Nota**: El DHT22 es mas preciso que el DHT11. Si puedes, compra el DHT22.
+
+---
+
+## Diagrama de conexiones
+
+Conecta el sensor DHT22 al ESP32 asi:
 
 \`\`\`
-Necesito código Arduino/ESP32 que:
-- Lea sensor DHT22 (temp y humedad)
-- Envíe datos por MQTT cada 5 segundos
-- Use WiFi
-- Reconecte automáticamente
+    ESP32 DevKit V1                    DHT22
+    +--------------+                  +-------+
+    |              |                  |       |
+    |         3.3V |------ cable -----| VCC   |  (pin 1 - izquierda)
+    |              |                  |       |
+    |        GPIO4 |------ cable -----| DATA  |  (pin 2)
+    |              |                  |       |
+    |          GND |------ cable -----| GND   |  (pin 4 - derecha)
+    |              |                  |       |
+    +--------------+                  +-------+
 
-Y código Node.js que:
-- Reciba datos MQTT
-- Guarde en PostgreSQL
-- Exponga API para el dashboard
-
-Dame todo el código.
+    Nota: El pin 3 del DHT22 no se usa (dejalo sin conectar)
 \`\`\`
+
+**Tabla de conexiones:**
+
+| ESP32 Pin | Cable | DHT22 Pin | Descripcion |
+|-----------|-------|-----------|-------------|
+| 3.3V | Rojo | Pin 1 (VCC) | Alimentacion del sensor |
+| GPIO4 | Amarillo | Pin 2 (DATA) | Datos del sensor |
+| GND | Negro | Pin 4 (GND) | Tierra |
+
+> **Importante**: Usa 3.3V, NO 5V. El ESP32 trabaja a 3.3V.
 
 ---
 
-## Código ESP32
+## Paso 1: Instalar Arduino IDE
+
+1. Ve a [arduino.cc/en/software](https://www.arduino.cc/en/software)
+2. Descarga Arduino IDE 2.x para tu sistema operativo
+3. Instala y abre Arduino IDE
+
+---
+
+## Paso 2: Configurar ESP32 en Arduino IDE
+
+El ESP32 no viene preinstalado. Hay que agregarlo:
+
+1. Abre Arduino IDE
+2. Ve a **File → Preferences** (o Arduino IDE → Settings en Mac)
+3. En "Additional boards manager URLs" agrega:
+   \`\`\`
+   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+   \`\`\`
+4. Click OK
+5. Ve a **Tools → Board → Boards Manager**
+6. Busca "esp32"
+7. Instala "esp32 by Espressif Systems" (tarda 2-3 minutos)
+
+---
+
+## Paso 3: Instalar librerias
+
+Necesitas 2 librerias:
+
+1. Ve a **Tools → Manage Libraries**
+2. Busca "DHT sensor library" por Adafruit → Instalar
+3. Busca "PubSubClient" por Nick O'Leary → Instalar
+
+> Si te pregunta por dependencias, acepta instalarlas.
+
+---
+
+## Paso 4: Conectar el ESP32
+
+1. Conecta el ESP32 a tu computadora con el cable USB
+2. Ve a **Tools → Board** y selecciona "ESP32 Dev Module"
+3. Ve a **Tools → Port** y selecciona el puerto (COM3, COM4 en Windows, o /dev/cu.usbserial en Mac)
+
+> **No aparece el puerto?** Necesitas el driver CP210x:
+> - Windows/Mac: [silabs.com/developers/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
+
+---
+
+## Paso 5: El codigo completo
+
+Crea un nuevo sketch y pega este codigo:
 
 \`\`\`cpp
+// ============================================
+// Sensor IoT: ESP32 + DHT22 + MQTT
+// luxIA.us - Tutorial completo
+// ============================================
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <DHT.h>
 
-DHT dht(4, DHT22);
+// --- CONFIGURACION: EDITA ESTOS VALORES ---
+const char* WIFI_SSID = "TU_NOMBRE_WIFI";      // Nombre de tu WiFi
+const char* WIFI_PASS = "TU_PASSWORD_WIFI";    // Password de tu WiFi
+const char* MQTT_SERVER = "broker.hivemq.com"; // Broker MQTT publico (gratis)
+const int MQTT_PORT = 1883;
+const char* MQTT_TOPIC = "luxia/sensor/tuNombre"; // Cambia "tuNombre" por algo unico
+// ------------------------------------------
+
+// Configuracion del sensor
+#define DHT_PIN 4        // GPIO4 - donde conectaste DATA
+#define DHT_TYPE DHT22   // Cambia a DHT11 si usas ese modelo
+
+DHT dht(DHT_PIN, DHT_TYPE);
 WiFiClient espClient;
-PubSubClient client(espClient);
+PubSubClient mqtt(espClient);
 
 void setup() {
-  WiFi.begin("SSID", "password");
-  client.setServer("broker.hivemq.com", 1883);
+  // Iniciar monitor serial (para ver mensajes en tu computadora)
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println("=== Sensor IoT iniciando ===");
+
+  // Iniciar sensor
   dht.begin();
+  Serial.println("Sensor DHT iniciado");
+
+  // Conectar WiFi
+  Serial.print("Conectando a WiFi: ");
+  Serial.println(WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.print("WiFi conectado! IP: ");
+  Serial.println(WiFi.localIP());
+
+  // Configurar MQTT
+  mqtt.setServer(MQTT_SERVER, MQTT_PORT);
+  Serial.println("MQTT configurado");
+}
+
+void conectarMQTT() {
+  while (!mqtt.connected()) {
+    Serial.print("Conectando a MQTT...");
+
+    // Crear ID unico para este dispositivo
+    String clientId = "ESP32-" + String(random(0xffff), HEX);
+
+    if (mqtt.connect(clientId.c_str())) {
+      Serial.println(" conectado!");
+    } else {
+      Serial.print(" fallo, codigo: ");
+      Serial.print(mqtt.state());
+      Serial.println(" - reintentando en 5 segundos");
+      delay(5000);
+    }
+  }
 }
 
 void loop() {
-  float temp = dht.readTemperature();
-  float hum = dht.readHumidity();
+  // Asegurar conexion MQTT
+  if (!mqtt.connected()) {
+    conectarMQTT();
+  }
+  mqtt.loop();
 
-  String payload = String(temp) + "," + String(hum);
-  client.publish("home/sensor", payload.c_str());
+  // Leer sensor
+  float temperatura = dht.readTemperature();
+  float humedad = dht.readHumidity();
 
+  // Verificar lectura valida
+  if (isnan(temperatura) || isnan(humedad)) {
+    Serial.println("Error leyendo el sensor!");
+    delay(2000);
+    return;
+  }
+
+  // Crear mensaje JSON
+  String mensaje = "{\\"temp\\":" + String(temperatura, 1) +
+                   ",\\"hum\\":" + String(humedad, 1) + "}";
+
+  // Enviar por MQTT
+  mqtt.publish(MQTT_TOPIC, mensaje.c_str());
+
+  // Mostrar en Serial Monitor
+  Serial.print("Enviado: ");
+  Serial.println(mensaje);
+
+  // Esperar 5 segundos
   delay(5000);
 }
 \`\`\`
 
 ---
 
-## Próximo paso
+## Paso 6: Configurar TU WiFi
 
-→ [Dashboard de Analytics](/es/cooking/dashboard-analytics)
+En el codigo, cambia estas lineas con tus datos:
+
+\`\`\`cpp
+const char* WIFI_SSID = "TU_NOMBRE_WIFI";      // El nombre de tu red WiFi
+const char* WIFI_PASS = "TU_PASSWORD_WIFI";    // La contraseña de tu WiFi
+const char* MQTT_TOPIC = "luxia/sensor/tuNombre"; // Cambia tuNombre
+\`\`\`
+
+---
+
+## Paso 7: Subir el codigo
+
+1. Click en el boton **Upload** (flecha hacia la derecha) en Arduino IDE
+2. Espera a que compile (30-60 segundos)
+3. Espera a que suba al ESP32 (aparece "Connecting..." y luego porcentajes)
+4. Cuando termine, abre **Tools → Serial Monitor**
+5. Selecciona **115200 baud** en la esquina inferior derecha
+
+---
+
+## Paso 8: Verificar que funciona
+
+En el Serial Monitor deberias ver:
+
+\`\`\`
+=== Sensor IoT iniciando ===
+Sensor DHT iniciado
+Conectando a WiFi: TU_WIFI
+....
+WiFi conectado! IP: 192.168.1.105
+MQTT configurado
+Conectando a MQTT... conectado!
+Enviado: {"temp":23.5,"hum":45.2}
+Enviado: {"temp":23.6,"hum":45.1}
+Enviado: {"temp":23.5,"hum":45.3}
+\`\`\`
+
+**Si ves esto, funciona!** Tu sensor esta enviando datos a internet.
+
+---
+
+## Paso 9: Ver los datos desde tu computadora
+
+Ahora vamos a recibir esos datos en tu computadora.
+
+Instala un cliente MQTT:
+
+\`\`\`bash
+npm install -g mqtt
+\`\`\`
+
+Suscribete a tu topic:
+
+\`\`\`bash
+mqtt sub -h broker.hivemq.com -t "luxia/sensor/tuNombre"
+\`\`\`
+
+Deberias ver los datos llegando:
+
+\`\`\`
+{"temp":23.5,"hum":45.2}
+{"temp":23.6,"hum":45.1}
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Problema | Solucion |
+|----------|----------|
+| No aparece puerto COM | Instala driver CP210x (link arriba) |
+| "Error leyendo sensor" | Verifica cables: 3.3V a VCC, GPIO4 a DATA, GND a GND |
+| No conecta WiFi | Verifica nombre y password exactos (mayusculas/minusculas) |
+| No conecta MQTT | Verifica conexion a internet, prueba reiniciar ESP32 |
+| Temperatura incorrecta | Espera 2 minutos para que el sensor se estabilice |
+
+---
+
+## Proximo paso
+
+→ [Dashboard de Analytics](/es/cooking/dashboard-analytics) - Muestra estos datos en graficos
+
     `,
     contentEn: `
 ## What you'll build
 
-In this project you'll connect the physical world with your web application.
+A temperature and humidity sensor connected to the internet that sends data to your computer every 5 seconds.
 
-You'll use an ESP32 (or Arduino with WiFi) to read data from a temperature and humidity sensor. That data will travel over WiFi using the MQTT protocol to a Node.js server that will save it to a database.
+When finished you'll have:
+- An ESP32 reading real temperature and humidity from your room
+- Data traveling over WiFi to a public MQTT broker
+- A script on your computer showing real-time data
 
-When finished, you'll have a complete IoT system: hardware that measures, a server that processes, and data ready to display on a dashboard.
-
----
-
-## Materials
-
-- ESP32 or Arduino + WiFi
-- Sensor (temperature, humidity, etc.)
-- Cables
+This is your first real IoT project. Hardware + Software + Internet.
 
 ---
 
-## Step 1: Ask an AI for the code
+## Shopping list (exact)
+
+You need these specific components:
+
+| Component | Exact model | Approx price | Where to buy |
+|-----------|-------------|--------------|--------------|
+| **Microcontroller** | ESP32 DevKit V1 (30 pins) | $5-8 USD | Amazon, AliExpress |
+| **Sensor** | DHT22 (blue) or DHT11 (cheaper blue) | $2-5 USD | Amazon, AliExpress |
+| **Cables** | Jumper wires female-female (3 cables) | $2 USD | Any electronics store |
+| **USB Cable** | Micro USB (to program ESP32) | $2 USD | You probably have one |
+
+**Total: ~$12-15 USD**
+
+> **Note**: DHT22 is more accurate than DHT11. If you can, buy the DHT22.
+
+---
+
+## Wiring diagram
+
+Connect the DHT22 sensor to the ESP32 like this:
 
 \`\`\`
-I need Arduino/ESP32 code that:
-- Reads DHT22 sensor (temp and humidity)
-- Sends data via MQTT every 5 seconds
-- Uses WiFi
-- Auto reconnects
+    ESP32 DevKit V1                    DHT22
+    +--------------+                  +-------+
+    |              |                  |       |
+    |         3.3V |------ wire ------| VCC   |  (pin 1 - left)
+    |              |                  |       |
+    |        GPIO4 |------ wire ------| DATA  |  (pin 2)
+    |              |                  |       |
+    |          GND |------ wire ------| GND   |  (pin 4 - right)
+    |              |                  |       |
+    +--------------+                  +-------+
 
-And Node.js code that:
-- Receives MQTT data
-- Saves to PostgreSQL
-- Exposes API for dashboard
-
-Give me all the code.
+    Note: DHT22 pin 3 is not used (leave disconnected)
 \`\`\`
+
+**Connection table:**
+
+| ESP32 Pin | Wire | DHT22 Pin | Description |
+|-----------|------|-----------|-------------|
+| 3.3V | Red | Pin 1 (VCC) | Sensor power |
+| GPIO4 | Yellow | Pin 2 (DATA) | Sensor data |
+| GND | Black | Pin 4 (GND) | Ground |
+
+> **Important**: Use 3.3V, NOT 5V. The ESP32 works at 3.3V.
 
 ---
 
-## ESP32 Code
+## Step 1: Install Arduino IDE
+
+1. Go to [arduino.cc/en/software](https://www.arduino.cc/en/software)
+2. Download Arduino IDE 2.x for your operating system
+3. Install and open Arduino IDE
+
+---
+
+## Step 2: Configure ESP32 in Arduino IDE
+
+ESP32 doesn't come pre-installed. We need to add it:
+
+1. Open Arduino IDE
+2. Go to **File → Preferences** (or Arduino IDE → Settings on Mac)
+3. In "Additional boards manager URLs" add:
+   \`\`\`
+   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+   \`\`\`
+4. Click OK
+5. Go to **Tools → Board → Boards Manager**
+6. Search "esp32"
+7. Install "esp32 by Espressif Systems" (takes 2-3 minutes)
+
+---
+
+## Step 3: Install libraries
+
+You need 2 libraries:
+
+1. Go to **Tools → Manage Libraries**
+2. Search "DHT sensor library" by Adafruit → Install
+3. Search "PubSubClient" by Nick O'Leary → Install
+
+> If asked about dependencies, accept to install them.
+
+---
+
+## Step 4: Connect the ESP32
+
+1. Connect ESP32 to your computer with USB cable
+2. Go to **Tools → Board** and select "ESP32 Dev Module"
+3. Go to **Tools → Port** and select the port (COM3, COM4 on Windows, or /dev/cu.usbserial on Mac)
+
+> **Port not showing?** You need the CP210x driver:
+> - Windows/Mac: [silabs.com/developers/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
+
+---
+
+## Step 5: The complete code
+
+Create a new sketch and paste this code:
 
 \`\`\`cpp
+// ============================================
+// IoT Sensor: ESP32 + DHT22 + MQTT
+// luxIA.us - Complete tutorial
+// ============================================
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <DHT.h>
 
-DHT dht(4, DHT22);
+// --- CONFIGURATION: EDIT THESE VALUES ---
+const char* WIFI_SSID = "YOUR_WIFI_NAME";      // Your WiFi name
+const char* WIFI_PASS = "YOUR_WIFI_PASSWORD";  // Your WiFi password
+const char* MQTT_SERVER = "broker.hivemq.com"; // Public MQTT broker (free)
+const int MQTT_PORT = 1883;
+const char* MQTT_TOPIC = "luxia/sensor/yourName"; // Change "yourName" to something unique
+// ----------------------------------------
+
+// Sensor configuration
+#define DHT_PIN 4        // GPIO4 - where you connected DATA
+#define DHT_TYPE DHT22   // Change to DHT11 if using that model
+
+DHT dht(DHT_PIN, DHT_TYPE);
 WiFiClient espClient;
-PubSubClient client(espClient);
+PubSubClient mqtt(espClient);
 
 void setup() {
-  WiFi.begin("SSID", "password");
-  client.setServer("broker.hivemq.com", 1883);
+  // Start serial monitor (to see messages on your computer)
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println("=== IoT Sensor starting ===");
+
+  // Start sensor
   dht.begin();
+  Serial.println("DHT sensor started");
+
+  // Connect WiFi
+  Serial.print("Connecting to WiFi: ");
+  Serial.println(WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.print("WiFi connected! IP: ");
+  Serial.println(WiFi.localIP());
+
+  // Configure MQTT
+  mqtt.setServer(MQTT_SERVER, MQTT_PORT);
+  Serial.println("MQTT configured");
+}
+
+void connectMQTT() {
+  while (!mqtt.connected()) {
+    Serial.print("Connecting to MQTT...");
+
+    // Create unique ID for this device
+    String clientId = "ESP32-" + String(random(0xffff), HEX);
+
+    if (mqtt.connect(clientId.c_str())) {
+      Serial.println(" connected!");
+    } else {
+      Serial.print(" failed, code: ");
+      Serial.print(mqtt.state());
+      Serial.println(" - retrying in 5 seconds");
+      delay(5000);
+    }
+  }
 }
 
 void loop() {
-  float temp = dht.readTemperature();
-  float hum = dht.readHumidity();
+  // Ensure MQTT connection
+  if (!mqtt.connected()) {
+    connectMQTT();
+  }
+  mqtt.loop();
 
-  String payload = String(temp) + "," + String(hum);
-  client.publish("home/sensor", payload.c_str());
+  // Read sensor
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
 
+  // Check valid reading
+  if (isnan(temperature) || isnan(humidity)) {
+    Serial.println("Error reading sensor!");
+    delay(2000);
+    return;
+  }
+
+  // Create JSON message
+  String message = "{\\"temp\\":" + String(temperature, 1) +
+                   ",\\"hum\\":" + String(humidity, 1) + "}";
+
+  // Send via MQTT
+  mqtt.publish(MQTT_TOPIC, message.c_str());
+
+  // Show in Serial Monitor
+  Serial.print("Sent: ");
+  Serial.println(message);
+
+  // Wait 5 seconds
   delay(5000);
 }
 \`\`\`
+
+---
+
+## Step 6: Configure YOUR WiFi
+
+In the code, change these lines with your data:
+
+\`\`\`cpp
+const char* WIFI_SSID = "YOUR_WIFI_NAME";      // Your WiFi network name
+const char* WIFI_PASS = "YOUR_WIFI_PASSWORD";  // Your WiFi password
+const char* MQTT_TOPIC = "luxia/sensor/yourName"; // Change yourName
+\`\`\`
+
+---
+
+## Step 7: Upload the code
+
+1. Click the **Upload** button (right arrow) in Arduino IDE
+2. Wait for compilation (30-60 seconds)
+3. Wait for upload to ESP32 (shows "Connecting..." then percentages)
+4. When done, open **Tools → Serial Monitor**
+5. Select **115200 baud** in the bottom right corner
+
+---
+
+## Step 8: Verify it works
+
+In Serial Monitor you should see:
+
+\`\`\`
+=== IoT Sensor starting ===
+DHT sensor started
+Connecting to WiFi: YOUR_WIFI
+....
+WiFi connected! IP: 192.168.1.105
+MQTT configured
+Connecting to MQTT... connected!
+Sent: {"temp":23.5,"hum":45.2}
+Sent: {"temp":23.6,"hum":45.1}
+Sent: {"temp":23.5,"hum":45.3}
+\`\`\`
+
+**If you see this, it works!** Your sensor is sending data to the internet.
+
+---
+
+## Step 9: View data from your computer
+
+Now let's receive that data on your computer.
+
+Install an MQTT client:
+
+\`\`\`bash
+npm install -g mqtt
+\`\`\`
+
+Subscribe to your topic:
+
+\`\`\`bash
+mqtt sub -h broker.hivemq.com -t "luxia/sensor/yourName"
+\`\`\`
+
+You should see data arriving:
+
+\`\`\`
+{"temp":23.5,"hum":45.2}
+{"temp":23.6,"hum":45.1}
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| COM port not showing | Install CP210x driver (link above) |
+| "Error reading sensor" | Check wires: 3.3V to VCC, GPIO4 to DATA, GND to GND |
+| Won't connect to WiFi | Verify exact name and password (case-sensitive) |
+| Won't connect to MQTT | Check internet connection, try restarting ESP32 |
+| Wrong temperature | Wait 2 minutes for sensor to stabilize |
 
 ---
 
 ## Next step
 
-→ [Analytics Dashboard](/en/cooking/dashboard-analytics)
+→ [Analytics Dashboard](/en/cooking/dashboard-analytics) - Display this data in charts
+
     `,
   },
   'dashboard-analytics': {
