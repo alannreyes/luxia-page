@@ -91,11 +91,12 @@ const dishesContent: Record<string, {
     prerequisitesEs: ['Cuenta de Google (Gmail)'],
     prerequisitesEn: ['Google account (Gmail)'],
     contentEs: `
-## Tu primer chatbot con IA
+## Lo que vas a construir
 
-Vas a crear un chatbot que corre en tu computadora.
-
-Lo interesante: **no vas a escribir el código**. Se lo vas a pedir a una IA.
+Vas a crear tu primer chatbot con inteligencia artificial usando la API de Gemini de Google, que es completamente gratis.
+Lo interesante: la IA va a escribir el codigo por ti. Tu solo copias, pegas y ejecutas.
+Al terminar tendras un chatbot funcionando en tu terminal que responde a cualquier pregunta.
+Es el primer paso para entender como funcionan las APIs de IA y crear tus propias aplicaciones inteligentes.
 
 ---
 
@@ -275,11 +276,12 @@ Si te interesa saber qué es una API, qué es un LLM, o cómo funciona esto por 
 → [Terminal básico](/es/learning/terminal)
     `,
     contentEn: `
-## Your first AI chatbot
+## What you'll build
 
-You're going to create a chatbot that runs on your computer.
-
-The interesting part: **you won't write the code**. You'll ask an AI to do it.
+You'll create your first AI chatbot using Google's Gemini API, which is completely free.
+The interesting part: the AI will write the code for you. You just copy, paste, and run.
+When you're done, you'll have a working chatbot in your terminal that answers any question.
+It's the first step to understanding how AI APIs work and creating your own intelligent applications.
 
 ---
 
@@ -465,13 +467,12 @@ If you're interested in learning what an API is, what an LLM is, or how this wor
     prerequisitesEs: ['Chatbot con Gemini completado', 'Tarjeta de crédito (para API)'],
     prerequisitesEn: ['Chatbot with Gemini completed', 'Credit card (for API)'],
     contentEs: `
-## Mismo proceso, diferente IA
+## Lo que vas a construir
 
-Ya sabes cómo funciona: le pides a una IA que escriba el código.
-
-Esta vez usaremos la API de Claude, de Anthropic.
-
-> ⚠️ **Nota**: Claude API requiere agregar una tarjeta de crédito. Hay $5 USD de crédito gratis para empezar.
+Vas a crear un chatbot usando la API de Claude, de Anthropic, el mismo proceso que con Gemini pero con un proveedor diferente.
+Requiere tarjeta de credito para registrarte, pero tienes $5 USD de credito gratis para empezar.
+Al terminar tendras otro chatbot funcionando en tu terminal, esta vez conectado a Claude.
+Aprenderas a trabajar con multiples proveedores de IA, una habilidad clave para elegir la mejor herramienta segun el proyecto.
 
 ---
 
@@ -566,13 +567,12 @@ La única diferencia es la API que usas. El flujo de trabajo es el mismo.
 → [¿Qué es un LLM?](/es/learning/llms-intro)
     `,
     contentEn: `
-## Same process, different AI
+## What you'll build
 
-You already know how it works: you ask an AI to write the code.
-
-This time we'll use Claude's API, from Anthropic.
-
-> ⚠️ **Note**: Claude API requires adding a credit card. There's $5 USD free credit to start.
+You'll create a chatbot using Claude's API from Anthropic, the same process as Gemini but with a different provider.
+It requires a credit card to register, but you get $5 USD free credit to start.
+When you're done, you'll have another chatbot running in your terminal, this time connected to Claude.
+You'll learn to work with multiple AI providers, a key skill for choosing the best tool for each project.
 
 ---
 
@@ -673,13 +673,14 @@ The only difference is the API you use. The workflow is the same.
     prerequisitesEs: ['Chatbot con Gemini completado', 'Tarjeta de crédito (para API)'],
     prerequisitesEn: ['Chatbot with Gemini completed', 'Credit card (for API)'],
     contentEs: `
-## El trío completo
+## Lo que vas a construir
 
-Ya usaste Gemini y Claude. Ahora toca OpenAI, los creadores de ChatGPT.
+Vas a completar el trio creando un chatbot con la API de OpenAI, los creadores de ChatGPT.
+El proceso es identico a Gemini y Claude: obtener API key, crear el codigo, ejecutar.
+Al terminar sabras conectarte a los tres principales proveedores de IA: Gemini, Claude y OpenAI.
+Tendras la flexibilidad de elegir cualquier proveedor segun costos, capacidades o preferencias del proyecto.
 
-El proceso es el mismo. Solo cambia la API.
-
-> ⚠️ **Nota**: OpenAI API requiere agregar créditos. Mínimo $5 USD.
+> ⚠️ **Nota**: OpenAI API requiere agregar creditos. Minimo $5 USD.
 
 ---
 
@@ -788,11 +789,12 @@ Has completado el trío de APIs cloud. Ahora puedes:
 → [¿Qué es un LLM?](/es/learning/llms-intro)
     `,
     contentEn: `
-## The complete trio
+## What you'll build
 
-You already used Gemini and Claude. Now it's OpenAI's turn, the creators of ChatGPT.
-
-The process is the same. Only the API changes.
+You'll complete the trio by creating a chatbot with OpenAI's API, the creators of ChatGPT.
+The process is identical to Gemini and Claude: get API key, create the code, run it.
+When you're done, you'll know how to connect to the three main AI providers: Gemini, Claude, and OpenAI.
+You'll have the flexibility to choose any provider based on costs, capabilities, or project preferences.
 
 > ⚠️ **Note**: OpenAI API requires adding credits. Minimum $5 USD.
 
@@ -1481,14 +1483,12 @@ The flow is still:
     prerequisitesEs: ['Terminal básica', 'Node.js instalado'],
     prerequisitesEn: ['Basic terminal', 'Node.js installed'],
     contentEs: `
-## Claude en tu terminal
+## Lo que vas a construir
 
-Claude Code es una herramienta de línea de comandos que te permite hablar con Claude directamente desde tu terminal.
-
-**¿Por qué usarlo?**
-- Claude puede **leer y editar tus archivos**
-- Puede **ejecutar comandos** por ti
-- Entiende el **contexto de tu proyecto**
+Vas a instalar Claude Code CLI, la herramienta de Anthropic que pone a Claude directamente en tu terminal.
+Tendras un asistente de IA que puede leer tus archivos, ejecutar comandos y entender el contexto completo de tu proyecto.
+Es como tener un desarrollador senior a tu lado, ayudandote desde la linea de comandos.
+Al terminar, podras pedirle a Claude que explique codigo, corrija bugs, cree tests y ejecute comandos por ti.
 
 ---
 
@@ -1605,14 +1605,12 @@ Claude ejecuta curl localhost:3000/health...
 → [Mi Primer Repositorio](/es/cooking/first-repo) — Git básico
     `,
     contentEn: `
-## Claude in your terminal
+## What you'll build
 
-Claude Code is a command-line tool that lets you talk to Claude directly from your terminal.
-
-**Why use it?**
-- Claude can **read and edit your files**
-- It can **execute commands** for you
-- It understands your **project context**
+You'll install Claude Code CLI, Anthropic's tool that puts Claude directly in your terminal.
+You'll have an AI assistant that can read your files, execute commands, and understand your entire project context.
+It's like having a senior developer by your side, helping you from the command line.
+By the end, you'll be able to ask Claude to explain code, fix bugs, create tests, and run commands for you.
 
 ---
 
@@ -1735,11 +1733,12 @@ Claude runs curl localhost:3000/health...
     prerequisitesEs: ['Ninguno'],
     prerequisitesEn: ['None'],
     contentEs: `
-## Tu primera vez en la terminal
+## Lo que vas a construir
 
-La terminal es donde los desarrolladores trabajan. Es texto, no botones.
-
-No te asustes. Son solo comandos.
+Vas a aprender los comandos basicos de terminal que todo desarrollador necesita.
+Navegaras entre carpetas, crearas y editaras archivos, y ejecutaras programas desde la linea de comandos.
+Estas son las habilidades fundamentales que usaras todos los dias como programador.
+Al terminar, habras perdido el miedo a la pantalla negra y tendras confianza para usar la terminal.
 
 ---
 
@@ -1845,11 +1844,12 @@ La terminal no es magia. Son comandos de texto:
 → [Mi Primer Repositorio](/es/cooking/first-repo) — Guarda tu código con Git
     `,
     contentEn: `
-## Your first time in the terminal
+## What you'll build
 
-The terminal is where developers work. It's text, not buttons.
-
-Don't be scared. They're just commands.
+You'll learn the basic terminal commands that every developer needs.
+You'll navigate between folders, create and edit files, and run programs from the command line.
+These are the foundational skills you'll use every day as a programmer.
+By the end, you'll have lost your fear of the black screen and gained confidence using the terminal.
 
 ---
 
@@ -1961,11 +1961,12 @@ The terminal isn't magic. They're text commands:
     prerequisitesEs: ['Hola Mundo en Terminal completado', 'Cuenta de GitHub'],
     prerequisitesEn: ['Hello World in Terminal completed', 'GitHub account'],
     contentEs: `
-## Guarda tu código para siempre
+## Lo que vas a construir
 
-Git es como un "guardado" de videojuego para tu código. Cada vez que haces un commit, guardas el estado de tu proyecto.
-
-GitHub es donde subes esos guardados para no perderlos.
+Vas a crear tu primer repositorio de Git y aprender el flujo basico de control de versiones.
+Entenderas los commits como "guardados" de tu codigo que puedes recuperar en cualquier momento.
+Subiras tu proyecto a GitHub para que nunca pierdas tu trabajo, incluso si tu computadora falla.
+Esta es la base del control de versiones que usan todos los desarrolladores profesionales del mundo.
 
 ---
 
@@ -2154,11 +2155,12 @@ git reset --hard HEAD
 → [Git & GitHub (Teoría completa)](/es/learning/git) — Conceptos, branches, .gitignore y más
     `,
     contentEn: `
-## Save your code forever
+## What you'll build
 
-Git is like a video game "save" for your code. Every time you make a commit, you save the state of your project.
-
-GitHub is where you upload those saves so you don't lose them.
+You'll create your first Git repository and learn the basic version control workflow.
+You'll understand commits as "saves" of your code that you can recover at any time.
+You'll push your project to GitHub so you never lose your work, even if your computer fails.
+This is the foundation of version control that all professional developers around the world use.
 
 ---
 
@@ -2787,9 +2789,12 @@ For others to see it, upload to GitHub Pages:
     prerequisitesEs: ['Terminal básica'],
     prerequisitesEn: ['Basic terminal'],
     contentEs: `
-## Tu ambiente de desarrollo
+## Lo que vas a construir
 
-Un buen ambiente de desarrollo te hace más productivo. Configurémoslo.
+Vas a configurar un ambiente de desarrollo completo y profesional.
+Instalaras VS Code con las extensiones esenciales, personalizaras tu terminal y configuraras las herramientas que te haran mas productivo.
+Aprenderas a organizar tu espacio de trabajo como lo hacen los desarrolladores profesionales.
+Al terminar, tendras todo listo y organizado para empezar a programar de inmediato.
 
 ---
 
@@ -2896,9 +2901,12 @@ node_modules/
 → [Mi Primer Script Bash](/es/cooking/first-script) — Automatiza tareas
     `,
     contentEn: `
-## Your development environment
+## What you'll build
 
-A good dev environment makes you more productive. Let's set it up.
+You'll configure a complete and professional development environment.
+You'll install VS Code with essential extensions, customize your terminal, and set up the tools that will make you more productive.
+You'll learn to organize your workspace like professional developers do.
+By the end, you'll have everything ready and organized to start coding right away.
 
 ---
 
@@ -5675,9 +5683,9 @@ npm run build
 → [Formulario con Validación](/es/cooking/form-validation) — Inputs seguros
     `,
     contentEn: `
-## Share what you learn
+## What you'll build
 
-A static blog is fast, secure, and free to host. You write in Markdown, HTML is generated.
+Your own static blog with Astro. You'll be able to write posts in Markdown, have a main page with articles sorted by date, and individual pages for each post. The site will be ultra fast, secure, and free to host on Vercel or GitHub Pages. It's the perfect way to document what you learn and build your online presence.
 
 ---
 
@@ -5775,9 +5783,9 @@ npm run build
     prerequisitesEs: ['React básico'],
     prerequisitesEn: ['Basic React'],
     contentEs: `
-## Inputs que no mienten
+## Lo que vas a construir
 
-La validación previene errores y mejora la experiencia del usuario.
+Un formulario de registro con validacion profesional usando React, react-hook-form y zod. Tendra campos de nombre, email, contrasena y confirmacion con validacion en tiempo real. Los usuarios veran mensajes de error claros al instante, y el boton de enviar solo se activara cuando todo sea valido. Aprenderas el patron estandar de la industria para manejar formularios.
 
 ---
 
@@ -5851,9 +5859,9 @@ const schema = z.object({
 → [App del Clima](/es/cooking/weather-app) — APIs externas
     `,
     contentEn: `
-## Inputs that don't lie
+## What you'll build
 
-Validation prevents errors and improves user experience.
+A registration form with professional validation using React, react-hook-form and zod. It will have name, email, password and confirmation fields with real-time validation. Users will see clear error messages instantly, and the submit button will only activate when everything is valid. You'll learn the industry-standard pattern for handling forms.
 
 ---
 
@@ -5933,9 +5941,9 @@ const schema = z.object({
     prerequisitesEs: ['JSON API Fetch completado', 'React básico'],
     prerequisitesEn: ['JSON API Fetch completed', 'Basic React'],
     contentEs: `
-## Datos del mundo real
+## Lo que vas a construir
 
-Una app del clima conecta con APIs externas y muestra datos en tiempo real.
+Una aplicacion del clima con React que consume la API de OpenWeatherMap. Podras buscar cualquier ciudad y ver temperatura actual, humedad, condicion climatica e iconos del clima en tiempo real. Aprenderas a trabajar con APIs externas, manejar API keys de forma segura, y mostrar datos dinamicos en una interfaz responsive.
 
 ---
 
@@ -6011,9 +6019,9 @@ async function getWeather(city: string) {
 → [Calculadora Web](/es/cooking/calculator) — Lógica de UI
     `,
     contentEn: `
-## Real world data
+## What you'll build
 
-A weather app connects to external APIs and shows real-time data.
+A weather application with React that consumes the OpenWeatherMap API. You'll be able to search any city and see current temperature, humidity, weather condition and weather icons in real-time. You'll learn to work with external APIs, handle API keys securely, and display dynamic data in a responsive interface.
 
 ---
 
@@ -6095,9 +6103,9 @@ async function getWeather(city: string) {
     prerequisitesEs: ['JavaScript básico', 'HTML/CSS'],
     prerequisitesEn: ['Basic JavaScript', 'HTML/CSS'],
     contentEs: `
-## Lógica de interfaz
+## Lo que vas a construir
 
-Una calculadora combina estado, eventos y lógica matemática.
+Una calculadora web funcional con React y TypeScript. Tendra botones numericos del 0-9, operaciones basicas (+, -, *, /), manejo de decimales, y un display que muestra la operacion actual. El diseno imitara una calculadora fisica real. Aprenderas a manejar estado complejo, eventos de click, y logica matematica en una interfaz interactiva.
 
 ---
 
@@ -6178,9 +6186,9 @@ const calculate = () => {
 → [Quiz Interactivo](/es/cooking/quiz-game) — Lógica de juegos
     `,
     contentEn: `
-## Interface logic
+## What you'll build
 
-A calculator combines state, events, and mathematical logic.
+A functional web calculator with React and TypeScript. It will have numeric buttons 0-9, basic operations (+, -, *, /), decimal handling, and a display showing the current operation. The design will mimic a real physical calculator. You'll learn to handle complex state, click events, and mathematical logic in an interactive interface.
 
 ---
 
@@ -6267,9 +6275,9 @@ const calculate = () => {
     prerequisitesEs: ['React básico', 'useState'],
     prerequisitesEn: ['Basic React', 'useState'],
     contentEs: `
-## Lógica de juegos
+## Lo que vas a construir
 
-Un quiz interactivo maneja preguntas, respuestas y puntaje.
+Un juego de quiz interactivo con React. Tendra preguntas con 4 opciones cada una, feedback visual instantaneo (verde para correcto, rojo para incorrecto), contador de puntaje, y una pantalla de resultados al final. Aprenderas a manejar flujo de juego, estado de seleccion, y logica condicional para crear experiencias interactivas.
 
 ---
 
@@ -6367,9 +6375,9 @@ const nextQuestion = () => {
 → [Timer con Notificaciones](/es/cooking/countdown-timer)
     `,
     contentEn: `
-## Game logic
+## What you'll build
 
-An interactive quiz handles questions, answers, and scoring.
+An interactive quiz game with React. It will have questions with 4 options each, instant visual feedback (green for correct, red for incorrect), a score counter, and a results screen at the end. You'll learn to handle game flow, selection state, and conditional logic to create interactive experiences.
 
 ---
 
@@ -6473,9 +6481,9 @@ const nextQuestion = () => {
     prerequisitesEs: ['React', 'useEffect'],
     prerequisitesEn: ['React', 'useEffect'],
     contentEs: `
-## Tiempo y notificaciones
+## Lo que vas a construir
 
-Un timer usa intervalos y la API de notificaciones del navegador.
+Un countdown timer interactivo con React que usa intervalos y la API de notificaciones del navegador. Incluye botones para iniciar, pausar y reiniciar, display en formato MM:SS, y una notificacion del navegador cuando el tiempo termina. Excelente para entender useEffect y el manejo de tiempo en React.
 
 ---
 
@@ -6560,9 +6568,9 @@ const formatTime = (seconds: number): string => {
 → [Galería de Imágenes](/es/cooking/image-gallery)
     `,
     contentEn: `
-## Time and notifications
+## What you'll build
 
-A timer uses intervals and the browser notification API.
+An interactive countdown timer with React that uses intervals and the browser notification API. Includes buttons to start, pause, and reset, display in MM:SS format, and a browser notification when time runs out. Great for understanding useEffect and timing in React.
 
 ---
 
@@ -6653,9 +6661,9 @@ const formatTime = (seconds: number): string => {
     prerequisitesEs: ['React', 'CSS Grid/Flexbox'],
     prerequisitesEn: ['React', 'CSS Grid/Flexbox'],
     contentEs: `
-## Imágenes con estilo
+## Lo que vas a construir
 
-Una galería combina grid layout, lazy loading y lightbox.
+Una galeria de imagenes responsive con React. Usa grid layout que se adapta al tamano de pantalla, lazy loading para mejor rendimiento, y un lightbox modal al hacer click en las imagenes. Un componente reutilizable perfecto para portfolios o catalogos de productos.
 
 ---
 
@@ -6739,9 +6747,9 @@ const images = [
 → [API con FastAPI](/es/cooking/api-fastapi)
     `,
     contentEn: `
-## Images with style
+## What you'll build
 
-A gallery combines grid layout, lazy loading, and lightbox.
+A responsive image gallery with React. Uses grid layout that adapts to screen size, lazy loading for better performance, and a click-to-open lightbox modal. A reusable component perfect for portfolios or product catalogs.
 
 ---
 
@@ -6831,9 +6839,9 @@ const images = [
     prerequisitesEs: ['Python básico', 'APIs REST'],
     prerequisitesEn: ['Basic Python', 'REST APIs'],
     contentEs: `
-## APIs rápidas con Python
+## Lo que vas a construir
 
-FastAPI es el framework moderno para crear APIs en Python.
+Una API moderna con FastAPI en Python. Incluye documentacion automatica, validacion de datos con Pydantic, y soporte para async. FastAPI es el framework mas rapido de Python para APIs, ideal para backends de IA y aplicaciones de alto rendimiento.
 
 ---
 
@@ -6923,9 +6931,9 @@ Abre http://localhost:8000/docs para ver la documentación interactiva.
 → [Web Scraper Básico](/es/cooking/scraper-basic)
     `,
     contentEn: `
-## Fast APIs with Python
+## What you'll build
 
-FastAPI is the modern framework for creating APIs in Python.
+A modern API with FastAPI in Python. Includes automatic documentation, data validation with Pydantic, and async support. FastAPI is Python's fastest API framework, ideal for AI backends and high-performance applications.
 
 ---
 
@@ -7021,9 +7029,9 @@ Open http://localhost:8000/docs to see interactive documentation.
     prerequisitesEs: ['Python básico', 'HTML básico'],
     prerequisitesEn: ['Basic Python', 'Basic HTML'],
     contentEs: `
-## Extracción de datos web
+## Lo que vas a construir
 
-Un scraper extrae información de páginas web de forma automatizada.
+Un web scraper con Python que extrae datos de sitios web automaticamente. Usa requests y BeautifulSoup para hacer peticiones HTTP, parsear HTML, y guardar los datos en archivos o JSON. Muy util para investigacion y recoleccion de datos.
 
 ---
 
@@ -7114,9 +7122,9 @@ with open('results.json', 'w') as f:
 → [Chat IA Público con Auth](/es/cooking/public-ai-chat) — Nivel Chef
     `,
     contentEn: `
-## Web data extraction
+## What you'll build
 
-A scraper extracts information from web pages automatically.
+A web scraper with Python that extracts data from websites automatically. Uses requests and BeautifulSoup to make HTTP requests, parse HTML, and save data to files or JSON. Very useful for research and data collection.
 
 ---
 
@@ -7724,9 +7732,11 @@ function ProtectedPage() {
     prerequisitesEs: ['PostgreSQL', 'Next.js API Routes'],
     prerequisitesEn: ['PostgreSQL', 'Next.js API Routes'],
     contentEs: `
-## Base de datos real
+## Lo que vas a construir
 
-Un CRUD completo con PostgreSQL usando Prisma.
+Una aplicacion que conecta a una base de datos PostgreSQL real, donde puedes crear, leer, actualizar y eliminar registros.
+Usaras Prisma como ORM para definir tus modelos con TypeScript, generar migraciones automaticas y tener autocompletado perfecto en tu editor.
+Al terminar, tendras una API funcional con endpoints REST y una interfaz con tabla de datos y formularios que puedes adaptar a cualquier entidad de tu proyecto.
 
 ---
 
@@ -7800,9 +7810,11 @@ export async function POST(request: Request) {
 → [Chat en Tiempo Real](/es/cooking/realtime-chat)
     `,
     contentEn: `
-## Real database
+## What you'll build
 
-A complete CRUD with PostgreSQL using Prisma.
+An application that connects to a real PostgreSQL database, where you can create, read, update, and delete records.
+You'll use Prisma as an ORM to define your models with TypeScript, generate automatic migrations, and have perfect autocompletion in your editor.
+When finished, you'll have a functional API with REST endpoints and an interface with data tables and forms that you can adapt to any entity in your project.
 
 ---
 
@@ -7882,23 +7894,25 @@ export async function POST(request: Request) {
     prerequisitesEs: ['WebSockets', 'React'],
     prerequisitesEn: ['WebSockets', 'React'],
     contentEs: `
-## Mensajes instantáneos
+## Lo que vas a construir
 
-Un chat en tiempo real con WebSockets o Firebase.
+Una sala de chat donde los mensajes aparecen instantaneamente para todos los usuarios conectados, sin necesidad de refrescar la pagina.
+Implementaras conexiones en tiempo real con Firebase Realtime Database, sincronizacion automatica de mensajes entre clientes, indicador de "escribiendo..." y scroll automatico a nuevos mensajes.
+Al terminar, tendras un chat funcional que puedes integrar en cualquier aplicacion o usar como base para un sistema de mensajeria mas complejo.
 
 ---
 
 ## Opciones
 
-| Tecnología | Ideal para |
+| Tecnologia | Ideal para |
 |------------|------------|
 | **Socket.io** | Control total |
-| **Firebase Realtime** | Rápido de implementar |
+| **Firebase Realtime** | Rapido de implementar |
 | **Supabase Realtime** | Con PostgreSQL |
 
 ---
 
-## Paso 1: Pídele a una IA el chat
+## Paso 1: Pidele a una IA el chat
 
 \`\`\`
 Necesito un chat en tiempo real con:
@@ -7946,9 +7960,11 @@ useEffect(() => {
 → [Subida de Archivos S3](/es/cooking/file-upload)
     `,
     contentEn: `
-## Instant messages
+## What you'll build
 
-A real-time chat with WebSockets or Firebase.
+A chat room where messages appear instantly for all connected users, without needing to refresh the page.
+You'll implement real-time connections with Firebase Realtime Database, automatic message synchronization between clients, a "typing..." indicator, and automatic scroll to new messages.
+When finished, you'll have a functional chat that you can integrate into any application or use as a foundation for a more complex messaging system.
 
 ---
 
@@ -8016,9 +8032,11 @@ useEffect(() => {
     prerequisitesEs: ['AWS S3', 'Next.js API'],
     prerequisitesEn: ['AWS S3', 'Next.js API'],
     contentEs: `
-## Subida segura de archivos
+## Lo que vas a construir
 
-Sube archivos a S3 usando URLs pre-firmadas.
+Un sistema de subida de archivos donde los usuarios pueden arrastrar y soltar imagenes o documentos, ver una barra de progreso y obtener la URL del archivo subido.
+Usaras URLs pre-firmadas de AWS S3 para que los archivos vayan directamente al almacenamiento en la nube sin pasar por tu servidor, haciendolo mas rapido y economico.
+Al terminar, tendras un componente de upload reutilizable con validacion de tipo y tamano que puedes integrar en cualquier formulario.
 
 ---
 
@@ -8096,9 +8114,11 @@ async function uploadFile(file: File) {
 → [Pagos con Stripe](/es/cooking/payment-stripe)
     `,
     contentEn: `
-## Secure file upload
+## What you'll build
 
-Upload files to S3 using pre-signed URLs.
+A file upload system where users can drag and drop images or documents, see a progress bar, and get the URL of the uploaded file.
+You'll use AWS S3 pre-signed URLs so files go directly to cloud storage without passing through your server, making it faster and cheaper.
+When finished, you'll have a reusable upload component with type and size validation that you can integrate into any form.
 
 ---
 
@@ -8182,9 +8202,11 @@ async function uploadFile(file: File) {
     prerequisitesEs: ['Stripe account', 'Next.js API'],
     prerequisitesEn: ['Stripe account', 'Next.js API'],
     contentEs: `
-## Pagos seguros
+## Lo que vas a construir
 
-Stripe maneja tarjetas, suscripciones y cumplimiento por ti.
+Una pagina de pago donde tus usuarios pueden comprar productos o suscribirse a tu servicio con tarjeta de credito de forma segura.
+Implementaras Stripe Checkout que se encarga de toda la complejidad: formulario de pago, validacion de tarjetas, cumplimiento PCI y webhooks para confirmar pagos.
+Al terminar, tendras un flujo de pago completo con paginas de exito y cancelacion, listo para recibir dinero real (empezando en modo test).
 
 ---
 
@@ -8254,9 +8276,11 @@ const handleCheckout = async () => {
 → [Emails Transaccionales](/es/cooking/email-notifications)
     `,
     contentEn: `
-## Secure payments
+## What you'll build
 
-Stripe handles cards, subscriptions, and compliance for you.
+A payment page where your users can purchase products or subscribe to your service securely with a credit card.
+You'll implement Stripe Checkout which handles all the complexity: payment form, card validation, PCI compliance, and webhooks to confirm payments.
+When finished, you'll have a complete payment flow with success and cancellation pages, ready to receive real money (starting in test mode).
 
 ---
 
@@ -8332,9 +8356,11 @@ const handleCheckout = async () => {
     prerequisitesEs: ['Node.js', 'API REST'],
     prerequisitesEn: ['Node.js', 'REST API'],
     contentEs: `
-## Emails que llegan
+## Lo que vas a construir
 
-Envía emails transaccionales con Resend o SendGrid.
+Un sistema de envio de emails automaticos que notifica a tus usuarios cuando se registran, realizan una compra o cualquier evento importante en tu aplicacion.
+Usaras Resend (o SendGrid) para enviar emails HTML personalizados con tu marca, incluyendo plantillas creadas con React Email que puedes previsualizar antes de enviar.
+Al terminar, tendras funciones reutilizables para enviar diferentes tipos de emails transaccionales desde cualquier parte de tu backend.
 
 ---
 
@@ -8395,9 +8421,11 @@ await resend.emails.send({ ..., html })
 → [Deploy con Docker](/es/cooking/docker-deploy)
     `,
     contentEn: `
-## Emails that arrive
+## What you'll build
 
-Send transactional emails with Resend or SendGrid.
+An automatic email sending system that notifies your users when they register, make a purchase, or any important event in your application.
+You'll use Resend (or SendGrid) to send personalized HTML emails with your brand, including templates created with React Email that you can preview before sending.
+When finished, you'll have reusable functions to send different types of transactional emails from anywhere in your backend.
 
 ---
 
@@ -8464,9 +8492,11 @@ await resend.emails.send({ ..., html })
     prerequisitesEs: ['Docker Compose', 'VPS básico'],
     prerequisitesEn: ['Docker Compose', 'Basic VPS'],
     contentEs: `
-## Tu app en producción
+## Lo que vas a construir
 
-Despliega tu aplicación con Docker en un VPS.
+Un entorno de produccion completo donde tu aplicacion Next.js corre en contenedores Docker junto con PostgreSQL, Redis y Nginx como proxy inverso.
+Crearas un Dockerfile multi-stage optimizado, un docker-compose.yml que orquesta todos los servicios, y configuracion de HTTPS automatico con Let's Encrypt.
+Al terminar, tendras tu app corriendo en un VPS real (DigitalOcean, Hetzner) con un dominio propio y certificado SSL, lista para recibir usuarios reales.
 
 ---
 
@@ -8529,9 +8559,11 @@ ssh user@server "cd /app && git pull && docker compose up -d --build"
 → [CI/CD con GitHub Actions](/es/cooking/github-actions)
     `,
     contentEn: `
-## Your app in production
+## What you'll build
 
-Deploy your application with Docker on a VPS.
+A complete production environment where your Next.js application runs in Docker containers alongside PostgreSQL, Redis, and Nginx as a reverse proxy.
+You'll create an optimized multi-stage Dockerfile, a docker-compose.yml that orchestrates all services, and automatic HTTPS configuration with Let's Encrypt.
+When finished, you'll have your app running on a real VPS (DigitalOcean, Hetzner) with your own domain and SSL certificate, ready to receive real users.
 
 ---
 
@@ -8600,9 +8632,11 @@ ssh user@server "cd /app && git pull && docker compose up -d --build"
     prerequisitesEs: ['GitHub repo', 'Docker deploy'],
     prerequisitesEn: ['GitHub repo', 'Docker deploy'],
     contentEs: `
-## Deploy automático
+## Lo que vas a construir
 
-GitHub Actions ejecuta tests y despliega cuando haces push.
+Un pipeline de CI/CD que automaticamente ejecuta tus tests y despliega tu aplicacion cada vez que haces push a la rama main.
+Configuraras un workflow de GitHub Actions que corre en servidores de GitHub, ejecuta tu suite de tests, construye la imagen Docker y la despliega a tu VPS via SSH.
+Al terminar, tendras deploys automaticos y confiables donde solo necesitas hacer git push para ver tus cambios en produccion.
 
 ---
 
@@ -8671,9 +8705,11 @@ jobs:
 → [Testing de APIs](/es/cooking/api-testing)
     `,
     contentEn: `
-## Automatic deploy
+## What you'll build
 
-GitHub Actions runs tests and deploys when you push.
+A CI/CD pipeline that automatically runs your tests and deploys your application every time you push to the main branch.
+You'll configure a GitHub Actions workflow that runs on GitHub servers, executes your test suite, builds the Docker image, and deploys it to your VPS via SSH.
+When finished, you'll have automatic and reliable deploys where you only need to git push to see your changes in production.
 
 ---
 
@@ -8748,9 +8784,11 @@ jobs:
     prerequisitesEs: ['API REST', 'Jest o Vitest'],
     prerequisitesEn: ['REST API', 'Jest or Vitest'],
     contentEs: `
-## Tests que previenen bugs
+## Lo que vas a construir
 
-Testea tus APIs automáticamente con cada cambio.
+Una suite de tests automatizados que verifica que todos los endpoints de tu API funcionan correctamente antes de cada deploy.
+Usaras Vitest y Supertest para escribir tests que simulan peticiones HTTP, verifican respuestas, y mockean la base de datos para tests aislados y rapidos.
+Al terminar, tendras tests para operaciones CRUD completas, casos de error, autenticacion, y un reporte de cobertura que te dice que porcentaje de tu codigo esta testeado.
 
 ---
 
@@ -8809,9 +8847,11 @@ describe('Users API', () => {
 → [App Móvil con Expo](/es/cooking/mobile-expo)
     `,
     contentEn: `
-## Tests that prevent bugs
+## What you'll build
 
-Test your APIs automatically with each change.
+An automated test suite that verifies all your API endpoints work correctly before each deploy.
+You'll use Vitest and Supertest to write tests that simulate HTTP requests, verify responses, and mock the database for isolated and fast tests.
+When finished, you'll have tests for complete CRUD operations, error cases, authentication, and a coverage report that tells you what percentage of your code is tested.
 
 ---
 
@@ -8876,9 +8916,11 @@ describe('Users API', () => {
     prerequisitesEs: ['React Native', 'Expo'],
     prerequisitesEn: ['React Native', 'Expo'],
     contentEs: `
-## Tu primera app móvil
+## Lo que vas a construir
 
-Crea una app iOS/Android con React y Expo.
+Una aplicacion movil nativa para iOS y Android usando React Native y Expo, que puedes probar en tu propio telefono mientras desarrollas.
+Implementaras navegacion entre pantallas, consumo de APIs externas, almacenamiento local con AsyncStorage, y estilos consistentes para ambas plataformas.
+Al terminar, tendras una app funcional con multiples pantallas que puedes compartir con amigos via Expo Go o publicar en las tiendas de apps.
 
 ---
 
@@ -8936,9 +8978,11 @@ export default function App() {
 → [Push Notifications](/es/cooking/push-notifications)
     `,
     contentEn: `
-## Your first mobile app
+## What you'll build
 
-Create an iOS/Android app with React and Expo.
+A native mobile application for iOS and Android using React Native and Expo, which you can test on your own phone while developing.
+You'll implement navigation between screens, external API consumption, local storage with AsyncStorage, and consistent styles for both platforms.
+When finished, you'll have a functional app with multiple screens that you can share with friends via Expo Go or publish to the app stores.
 
 ---
 
@@ -9002,9 +9046,11 @@ export default function App() {
     prerequisitesEs: ['Expo app', 'Backend'],
     prerequisitesEn: ['Expo app', 'Backend'],
     contentEs: `
-## Notificaciones que enganchen
+## Lo que vas a construir
 
-Envía push notifications a tus usuarios.
+Un sistema de notificaciones push que envia alertas al telefono de tus usuarios incluso cuando no estan usando la app.
+Implementaras el flujo completo: solicitar permisos al usuario, obtener el token de Expo Push, guardarlo en tu backend y enviar notificaciones personalizadas desde tu servidor.
+Al terminar, podras enviar notificaciones con titulo, mensaje y datos extra que abren pantallas especificas de tu app cuando el usuario las toca.
 
 ---
 
@@ -9058,9 +9104,11 @@ await fetch('https://exp.host/--/api/v2/push/send', {
 → [Receptor de Webhooks](/es/cooking/webhook-receiver)
     `,
     contentEn: `
-## Notifications that engage
+## What you'll build
 
-Send push notifications to your users.
+A push notification system that sends alerts to your users' phones even when they're not using the app.
+You'll implement the complete flow: request permissions from the user, get the Expo Push token, save it to your backend, and send personalized notifications from your server.
+When finished, you'll be able to send notifications with title, message, and extra data that open specific screens of your app when the user taps them.
 
 ---
 
@@ -9120,9 +9168,11 @@ await fetch('https://exp.host/--/api/v2/push/send', {
     prerequisitesEs: ['Next.js API', 'Webhooks'],
     prerequisitesEn: ['Next.js API', 'Webhooks'],
     contentEs: `
-## Recibe eventos externos
+## Lo que vas a construir
 
-Procesa webhooks de Stripe, GitHub, etc.
+Un endpoint que recibe y procesa eventos de servicios externos como Stripe, GitHub o cualquier API que envie webhooks.
+Implementaras verificacion de firmas HMAC para asegurar que los eventos son autenticos, logging de eventos recibidos, manejo de errores robusto y procesamiento asincrono.
+Al terminar, tendras un receptor de webhooks seguro que puede activar acciones en tu app cuando ocurren eventos externos, como activar una suscripcion cuando Stripe confirma un pago.
 
 ---
 
@@ -9184,9 +9234,11 @@ export async function POST(request: Request) {
 → [Cache con Redis](/es/cooking/redis-cache)
     `,
     contentEn: `
-## Receive external events
+## What you'll build
 
-Process webhooks from Stripe, GitHub, etc.
+An endpoint that receives and processes events from external services like Stripe, GitHub, or any API that sends webhooks.
+You'll implement HMAC signature verification to ensure events are authentic, logging of received events, robust error handling, and asynchronous processing.
+When finished, you'll have a secure webhook receiver that can trigger actions in your app when external events occur, like activating a subscription when Stripe confirms a payment.
 
 ---
 
@@ -9254,9 +9306,11 @@ export async function POST(request: Request) {
     prerequisitesEs: ['Redis', 'API REST'],
     prerequisitesEn: ['Redis', 'REST API'],
     contentEs: `
-## Respuestas instantáneas
+## Lo que vas a construir
 
-Usa Redis para cachear datos y acelerar tu app.
+Una capa de cache con Redis que reduce drasticamente los tiempos de respuesta de tu API guardando datos frecuentemente consultados en memoria.
+Implementaras un wrapper de cache generico que funciona con cualquier funcion async, expiracion automatica por tiempo (TTL), invalidacion manual cuando los datos cambian y patrones para cachear responses de API.
+Al terminar, tendras respuestas que pasan de segundos a milisegundos, reduciendo la carga en tu base de datos y mejorando la experiencia del usuario.
 
 ---
 
@@ -9323,9 +9377,11 @@ if (keys.length) await redis.del(...keys)
 → [Arduino + MQTT](/es/cooking/arduino-sensor)
     `,
     contentEn: `
-## Instant responses
+## What you'll build
 
-Use Redis to cache data and speed up your app.
+A cache layer with Redis that drastically reduces your API response times by storing frequently queried data in memory.
+You'll implement a generic cache wrapper that works with any async function, automatic time-based expiration (TTL), manual invalidation when data changes, and patterns for caching API responses.
+When finished, you'll have responses that go from seconds to milliseconds, reducing the load on your database and improving user experience.
 
 ---
 
@@ -9548,9 +9604,11 @@ void loop() {
     prerequisitesEs: ['React', 'Charts', 'API'],
     prerequisitesEn: ['React', 'Charts', 'API'],
     contentEs: `
-## Visualiza tus datos
+## Lo que vas a construir
 
-Crea un dashboard con gráficos y métricas.
+Un panel de control interactivo que muestra las metricas clave de tu negocio o aplicacion con graficos en tiempo real.
+Implementaras graficos de lineas para tendencias temporales, cards con KPIs importantes (usuarios, ventas, conversiones), una tabla con datos recientes y filtros por rango de fechas.
+Al terminar, tendras un dashboard responsive con Recharts y Tailwind que puedes personalizar para mostrar cualquier dato de tu base de datos.
 
 ---
 
@@ -9608,9 +9666,11 @@ function Chart() {
 → [RAG con Documentos PDF](/es/cooking/rag-documents) — Nivel Master
     `,
     contentEn: `
-## Visualize your data
+## What you'll build
 
-Create a dashboard with charts and metrics.
+An interactive control panel that displays the key metrics of your business or application with real-time charts.
+You'll implement line charts for time trends, cards with important KPIs (users, sales, conversions), a table with recent data, and date range filters.
+When finished, you'll have a responsive dashboard with Recharts and Tailwind that you can customize to display any data from your database.
 
 ---
 
@@ -10259,9 +10319,13 @@ console.error("Servidor MCP iniciado");
 → [Agente IA Autónomo](/es/cooking/ai-agent)
     `,
     contentEn: `
-## Custom MCP Server
+## What you'll build
 
-Create your own MCP server to give tools to Claude.
+Your own MCP (Model Context Protocol) server that gives custom tools to Claude Desktop.
+
+Imagine Claude being able to check the weather, save notes, or access your database. MCP is the standard for extending Claude's capabilities. Your server exposes "tools" that Claude can call during a conversation.
+
+When finished, you'll have an MCP server in TypeScript that works with Claude Desktop. You can add any tool: external APIs, databases, file system, whatever you need.
 
 ---
 
@@ -10402,9 +10466,13 @@ console.error("MCP server started");
     prerequisitesEs: ['Python', 'API de LLM (Gemini)'],
     prerequisitesEn: ['Python', 'LLM API (Gemini)'],
     contentEs: `
-## Agente IA Autónomo
+## Lo que vas a construir
 
-Crea un agente que razona, usa herramientas y completa tareas por sí mismo.
+Un agente de IA autonomo que razona, decide que herramientas usar, y completa tareas por si mismo.
+
+Le das una tarea como "investiga cuanto cuesta un vuelo a Tokio y guardalo en un archivo", y el agente piensa paso a paso: primero busca en web, luego calcula fechas, finalmente escribe el archivo. Sin que le digas como hacerlo.
+
+Al terminar tendras un agente en Python usando el patron ReAct (Reasoning + Acting) con Gemini. Podras darle herramientas (busqueda web, calculadora, archivos) y pedirle tareas complejas que resuelve de forma autonoma.
 
 ---
 
@@ -10525,9 +10593,13 @@ run_agent("¿Cuál es el resultado de 45 * 23 + 100?")
 → [Clasificador de Imágenes](/es/cooking/image-classifier)
     `,
     contentEn: `
-## Autonomous AI Agent
+## What you'll build
 
-Create an agent that reasons, uses tools, and completes tasks by itself.
+An autonomous AI agent that reasons, decides which tools to use, and completes tasks by itself.
+
+You give it a task like "research how much a flight to Tokyo costs and save it to a file", and the agent thinks step by step: first searches the web, then calculates dates, finally writes the file. Without you telling it how to do it.
+
+When finished, you'll have an agent in Python using the ReAct pattern (Reasoning + Acting) with Gemini. You can give it tools (web search, calculator, files) and ask it complex tasks that it solves autonomously.
 
 ---
 
@@ -10655,15 +10727,19 @@ run_agent("What is the result of 45 * 23 + 100?")
     prerequisitesEs: ['Python', 'API multimodal (Gemini Vision)'],
     prerequisitesEn: ['Python', 'Multimodal API (Gemini Vision)'],
     contentEs: `
-## Clasificador de Imágenes
+## Lo que vas a construir
 
-Clasifica imágenes usando modelos multimodales de IA.
+Un clasificador de imagenes que analiza fotos y las categoriza automaticamente usando IA multimodal.
+
+Le pasas una imagen (desde archivo o URL) y te dice que es: "gato, 95% confianza, gato atigrado durmiendo en un sofa". Puedes definir tus propias categorias para clasificar productos, documentos, o lo que necesites.
+
+Al terminar tendras un script en Python que usa Gemini Vision para analizar imagenes. Devuelve la categoria, nivel de confianza, y una descripcion. Util para organizar fotos, moderar contenido, o automatizar inventario.
 
 ---
 
 ## El prompt para empezar
 
-> Crea un clasificador de imágenes en Python que:
+> Crea un clasificador de imagenes en Python que:
 > 1. Reciba una imagen (path o URL)
 > 2. Use Gemini Vision para analizarla
 > 3. Devuelva: categoría, confianza, descripción
@@ -10762,9 +10838,13 @@ def classify_batch(images: list[str], categories: list[str]) -> list[dict]:
 → [Asistente de Voz](/es/cooking/voice-assistant)
     `,
     contentEn: `
-## Image Classifier
+## What you'll build
 
-Classify images using multimodal AI models.
+An image classifier that analyzes photos and categorizes them automatically using multimodal AI.
+
+You pass it an image (from file or URL) and it tells you what it is: "cat, 95% confidence, tabby cat sleeping on a sofa". You can define your own categories to classify products, documents, or whatever you need.
+
+When finished, you'll have a Python script that uses Gemini Vision to analyze images. It returns the category, confidence level, and a description. Useful for organizing photos, moderating content, or automating inventory.
 
 ---
 
@@ -10876,18 +10956,22 @@ def classify_batch(images: list[str], categories: list[str]) -> list[dict]:
     prerequisitesEs: ['Python', 'Micrófono'],
     prerequisitesEn: ['Python', 'Microphone'],
     contentEs: `
-## Asistente de Voz
+## Lo que vas a construir
 
-Crea un asistente que escucha, entiende y responde con voz.
+Un asistente de voz que escucha lo que dices, entiende tu pregunta, y te responde hablando. Como Alexa o Siri, pero tuyo.
+
+Hablas al microfono: "Que tiempo hace hoy?". El asistente convierte tu voz a texto, lo envia a Gemini para obtener una respuesta inteligente, y te lee la respuesta en voz alta. Todo en un loop continuo de conversacion.
+
+Al terminar tendras un asistente de voz en Python que usa speech_recognition para escuchar, Gemini para pensar, y gTTS para hablar. Personalizable para cualquier caso de uso: domotica, accesibilidad, o productividad.
 
 ---
 
 ## El prompt para empezar
 
 > Crea un asistente de voz en Python que:
-> 1. Escuche del micrófono con speech_recognition
+> 1. Escuche del microfono con speech_recognition
 > 2. Convierta voz a texto
-> 3. Envíe a Gemini para procesar
+> 3. Envie a Gemini para procesar
 > 4. Convierta respuesta a voz con gTTS
 > 5. Loop continuo de escucha
 
@@ -10979,9 +11063,13 @@ pip install SpeechRecognition gTTS playsound pyaudio google-generativeai
 → [App Multimodal](/es/cooking/multimodal-app)
     `,
     contentEn: `
-## Voice Assistant
+## What you'll build
 
-Create an assistant that listens, understands, and responds with voice.
+A voice assistant that listens to what you say, understands your question, and responds by speaking. Like Alexa or Siri, but yours.
+
+You speak into the microphone: "What's the weather today?". The assistant converts your voice to text, sends it to Gemini to get an intelligent response, and reads the answer out loud. All in a continuous conversation loop.
+
+When finished, you'll have a voice assistant in Python that uses speech_recognition to listen, Gemini to think, and gTTS to speak. Customizable for any use case: home automation, accessibility, or productivity.
 
 ---
 
@@ -11089,9 +11177,13 @@ pip install SpeechRecognition gTTS playsound pyaudio google-generativeai
     prerequisitesEs: ['Python', 'Streamlit'],
     prerequisitesEn: ['Python', 'Streamlit'],
     contentEs: `
-## App Multimodal
+## Lo que vas a construir
 
-Crea una app web que procese texto, imágenes y audio.
+Una aplicacion web que entiende texto, imagenes, y audio. Todo en una sola interfaz con IA.
+
+Escribes una pregunta, subes una foto, o grabas un audio, y la IA entiende y responde. Puedes preguntarle "que hay en esta imagen?", subir un PDF y pedir un resumen, o grabar tu voz para hacer preguntas.
+
+Al terminar tendras una app con Streamlit que usa Gemini para procesar multiples tipos de entrada. Con historial de conversacion y una interfaz limpia que puedes desplegar en minutos.
 
 ---
 
@@ -11101,7 +11193,7 @@ Crea una app web que procese texto, imágenes y audio.
 > 1. Acepte texto, imagen o audio como input
 > 2. Use Gemini para procesar todos los tipos
 > 3. Muestre respuesta formateada
-> 4. Guarde historial de conversación
+> 4. Guarde historial de conversacion
 
 ---
 
@@ -11203,9 +11295,13 @@ streamlit run app.py
 → [Fine-tuning de Modelo](/es/cooking/fine-tuning)
     `,
     contentEn: `
-## Multimodal App
+## What you'll build
 
-Create a web app that processes text, images, and audio.
+A web application that understands text, images, and audio. All in one interface with AI.
+
+You type a question, upload a photo, or record audio, and the AI understands and responds. You can ask "what's in this image?", upload a PDF and request a summary, or record your voice to ask questions.
+
+When finished, you'll have an app with Streamlit that uses Gemini to process multiple input types. With conversation history and a clean interface you can deploy in minutes.
 
 ---
 
@@ -11324,9 +11420,13 @@ streamlit run app.py
     prerequisitesEs: ['Python', 'Dataset propio (100+ ejemplos)'],
     prerequisitesEn: ['Python', 'Own dataset (100+ examples)'],
     contentEs: `
-## Fine-tuning de Modelo
+## Lo que vas a construir
 
-Entrena un modelo con TUS datos para tareas específicas.
+Tu propio modelo de IA entrenado con TUS datos para tareas especificas de tu negocio.
+
+Tienes un chatbot de soporte? Entrenalo con las 100 preguntas mas frecuentes y sus respuestas ideales. El modelo aprende tu tono, tu estilo, y responde como si fueras tu. Mismo proceso para clasificacion de tickets, generacion de contenido, o cualquier tarea repetitiva.
+
+Al terminar sabras como preparar un dataset en formato JSONL, subirlo a Google AI Studio, configurar el entrenamiento, y usar tu modelo personalizado. El modelo responde en tu estilo, con tu conocimiento especifico.
 
 ---
 
@@ -11429,9 +11529,13 @@ response = client.chat.completions.create(
 → [Code Review con IA](/es/cooking/ai-code-review)
     `,
     contentEn: `
-## Model Fine-tuning
+## What you'll build
 
-Train a model with YOUR data for specific tasks.
+Your own AI model trained with YOUR data for specific tasks in your business.
+
+Have a support chatbot? Train it with the 100 most frequent questions and their ideal answers. The model learns your tone, your style, and responds as if it were you. Same process for ticket classification, content generation, or any repetitive task.
+
+When finished, you'll know how to prepare a dataset in JSONL format, upload it to Google AI Studio, configure the training, and use your custom model. The model responds in your style, with your specific knowledge.
 
 ---
 
@@ -11541,9 +11645,13 @@ response = client.chat.completions.create(
     prerequisitesEs: ['Python o Node.js', 'Git'],
     prerequisitesEn: ['Python or Node.js', 'Git'],
     contentEs: `
-## Code Review con IA
+## Lo que vas a construir
 
-Automatiza revisiones de código usando IA.
+Un sistema de code review automatizado que analiza pull requests y sugiere mejoras usando IA.
+
+Cada vez que alguien hace un PR, la IA revisa el diff completo. Detecta bugs potenciales, vulnerabilidades de seguridad, codigo duplicado, y oportunidades de refactoring. Genera un reporte con score de calidad y comentarios especificos por linea.
+
+Al terminar tendras un script que obtiene el diff de GitHub, lo envia a Gemini para analisis, y genera un reporte detallado. Puedes integrarlo con GitHub Actions para que corra automaticamente en cada PR.
 
 ---
 
@@ -11667,9 +11775,13 @@ jobs:
 → [SaaS Completo con IA](/es/cooking/full-saas)
     `,
     contentEn: `
-## AI Code Review
+## What you'll build
 
-Automate code reviews using AI.
+An automated code review system that analyzes pull requests and suggests improvements using AI.
+
+Every time someone makes a PR, the AI reviews the complete diff. It detects potential bugs, security vulnerabilities, duplicate code, and refactoring opportunities. It generates a report with a quality score and specific comments per line.
+
+When finished, you'll have a script that gets the diff from GitHub, sends it to Gemini for analysis, and generates a detailed report. You can integrate it with GitHub Actions to run automatically on each PR.
 
 ---
 
@@ -11800,9 +11912,13 @@ jobs:
     prerequisitesEs: ['Todos los niveles anteriores'],
     prerequisitesEn: ['All previous levels'],
     contentEs: `
-## SaaS Completo con IA
+## Lo que vas a construir
 
-El proyecto final: un SaaS completo con autenticación, pagos e IA.
+Un SaaS completo con todo lo que necesitas para lanzar: autenticacion, pagos con suscripciones, y una feature de IA.
+
+Usuarios se registran con Google, pagan una suscripcion mensual con Stripe, y acceden a funcionalidades de IA (chat, analisis, o generacion de contenido). Base de datos PostgreSQL, cache con Redis, y deploy listo con Docker.
+
+Al terminar tendras la arquitectura completa de un SaaS moderno. Desde el login hasta el cobro mensual, con una funcionalidad de IA que diferencia tu producto. Es el proyecto que integra todo lo que aprendiste en los niveles anteriores.
 
 ---
 
@@ -11970,9 +12086,13 @@ Ahora tienes las habilidades para construir productos reales con IA.
 → [Volver al inicio](/es/cooking)
     `,
     contentEn: `
-## Full SaaS with AI
+## What you'll build
 
-The final project: a complete SaaS with auth, payments, and AI.
+A complete SaaS with everything you need to launch: authentication, subscription payments, and an AI feature.
+
+Users register with Google, pay a monthly subscription with Stripe, and access AI functionalities (chat, analysis, or content generation). PostgreSQL database, Redis cache, and deploy-ready with Docker.
+
+When finished, you'll have the complete architecture of a modern SaaS. From login to monthly billing, with an AI functionality that differentiates your product. It's the project that integrates everything you learned in the previous levels.
 
 ---
 
