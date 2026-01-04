@@ -909,11 +909,12 @@ You've completed the cloud API trio. Now you can:
     prerequisitesEs: ['Trío de APIs completado (opcional)', '8GB RAM mínimo'],
     prerequisitesEn: ['API trio completed (optional)', '8GB RAM minimum'],
     contentEs: `
-## IA sin internet, sin costos, 100% privada
+## Lo que vas a construir
 
-Ya probaste APIs en la nube. Ahora corre un modelo en tu propia computadora.
-
-**Diferencia clave**: No necesitas API key. El modelo corre local.
+Vas a instalar Ollama y correr un modelo de IA directamente en tu computadora, sin internet y sin API keys.
+Descargarás un modelo como Llama 3.2, lo ejecutarás en tu terminal, y podrás chatear con él.
+Al terminar, tendrás tu propio chatbot local que funciona offline, es completamente privado, y no tiene costos por uso.
+Ideal para datos sensibles, aprender cómo funcionan los LLMs, o simplemente tener IA siempre disponible.
 
 ---
 
@@ -1013,11 +1014,12 @@ El código es casi igual. Solo cambia el endpoint.
 → [Chat con Interfaz Web](/es/cooking/chat-web-ui) — Dale una cara bonita a tu chatbot
     `,
     contentEn: `
-## AI without internet, without costs, 100% private
+## What you'll build
 
-You already tried cloud APIs. Now run a model on your own computer.
-
-**Key difference**: No API key needed. The model runs locally.
+You'll install Ollama and run an AI model directly on your computer, without internet and without API keys.
+You'll download a model like Llama 3.2, run it in your terminal, and chat with it.
+When you're done, you'll have your own local chatbot that works offline, is completely private, and has no usage costs.
+Ideal for sensitive data, learning how LLMs work, or simply having AI always available.
 
 ---
 
@@ -1123,11 +1125,9 @@ The code is almost the same. Only the endpoint changes.
     prerequisitesEs: ['Al menos un chatbot de terminal completado', 'Node.js instalado'],
     prerequisitesEn: ['At least one terminal chatbot completed', 'Node.js installed'],
     contentEs: `
-## De la terminal al navegador
+## Lo que vas a construir
 
-Ya tienes un chatbot que funciona en terminal. Ahora le darás una interfaz web bonita.
-
-**El enfoque**: Le pedirás a una IA que genere una app React/Next.js completa.
+Una aplicación web de chat con inteligencia artificial, completa y funcional. Tendrás una interfaz moderna con burbujas de conversación, un input para escribir mensajes, indicador de "escribiendo...", y respuestas renderizadas en Markdown. Tu chatbot de terminal se convertirá en algo que cualquiera puede usar desde el navegador.
 
 ---
 
@@ -1300,11 +1300,9 @@ El flujo sigue siendo:
 → [Terminal básico](/es/learning/terminal)
     `,
     contentEn: `
-## From terminal to browser
+## What you'll build
 
-You already have a chatbot that works in terminal. Now you'll give it a nice web interface.
-
-**The approach**: You'll ask an AI to generate a complete React/Next.js app.
+A complete and functional web chat application with artificial intelligence. You'll have a modern interface with conversation bubbles, a message input field, a "typing..." indicator, and responses rendered in Markdown. Your terminal chatbot will transform into something anyone can use from their browser.
 
 ---
 
@@ -2355,11 +2353,12 @@ git reset --hard HEAD
     prerequisitesEs: ['Mi Primer Repositorio completado'],
     prerequisitesEn: ['My First Repository completed'],
     contentEs: `
-## Tu configuración personal
+## Lo que vas a construir
 
-Los dotfiles son archivos de configuración que empiezan con punto: \`.bashrc\`, \`.zshrc\`, \`.gitconfig\`.
-
-Guardarlos en GitHub significa que puedes configurar cualquier computadora nueva en minutos.
+Vas a crear tu propio repositorio de dotfiles: un lugar en GitHub donde guardarás todos tus archivos de configuración (.zshrc, .gitconfig, etc.).
+Copiarás tus configuraciones actuales, crearás un script de instalación automática, y subirás todo a GitHub.
+Al terminar, tendrás un sistema que te permite configurar cualquier computadora nueva con un solo comando.
+Cada vez que mejores una configuración, la actualizas en el repo y queda sincronizada para siempre.
 
 ---
 
@@ -2463,11 +2462,12 @@ export ANTHROPIC_API_KEY="tu-key"
 → [Página Web Estática](/es/cooking/static-page) — Tu primera página web
     `,
     contentEn: `
-## Your personal configuration
+## What you'll build
 
-Dotfiles are configuration files that start with a dot: \`.bashrc\`, \`.zshrc\`, \`.gitconfig\`.
-
-Saving them to GitHub means you can configure any new computer in minutes.
+You'll create your own dotfiles repository: a place on GitHub where you'll store all your configuration files (.zshrc, .gitconfig, etc.).
+You'll copy your current configurations, create an automatic installation script, and push everything to GitHub.
+When you're done, you'll have a system that lets you configure any new computer with a single command.
+Every time you improve a configuration, you update the repo and it stays synced forever.
 
 ---
 
@@ -2577,9 +2577,12 @@ export ANTHROPIC_API_KEY="your-key"
     prerequisitesEs: ['Terminal básica'],
     prerequisitesEn: ['Basic terminal'],
     contentEs: `
-## Tu primera página web
+## Lo que vas a construir
 
-Una página web estática es solo HTML, CSS, y opcionalmente JavaScript. No necesita servidor.
+Vas a crear tu primera página web personal usando HTML y CSS, con ayuda de una IA para generar el código.
+Crearás una carpeta, pedirás a una IA que genere una página con tu información, y la abrirás en el navegador.
+Al terminar, tendrás un archivo index.html funcionando que puedes personalizar, mejorar, y eventualmente publicar.
+Es el primer paso para crear portfolios, landing pages, o cualquier sitio web estático.
 
 ---
 
@@ -2676,9 +2679,12 @@ Para que otros la vean, súbela a GitHub Pages:
 → [Mi Ambiente de Desarrollo](/es/cooking/dev-environment) — Configura VS Code
     `,
     contentEn: `
-## Your first web page
+## What you'll build
 
-A static web page is just HTML, CSS, and optionally JavaScript. No server needed.
+You'll create your first personal web page using HTML and CSS, with AI help to generate the code.
+You'll create a folder, ask an AI to generate a page with your information, and open it in the browser.
+When you're done, you'll have a working index.html file that you can customize, improve, and eventually publish.
+It's the first step to creating portfolios, landing pages, or any static website.
 
 ---
 
@@ -3005,9 +3011,12 @@ node_modules/
     prerequisitesEs: ['Terminal básica'],
     prerequisitesEn: ['Basic terminal'],
     contentEs: `
-## Automatiza tareas repetitivas
+## Lo que vas a construir
 
-Un script bash es una lista de comandos que se ejecutan uno tras otro. Perfecto para automatizar.
+Vas a crear tu primer script de Bash: un archivo que ejecuta múltiples comandos automáticamente.
+Escribirás un script simple que muestra información del sistema, y luego uno más útil que crea proyectos con estructura lista.
+Al terminar, tendrás scripts reutilizables que puedes ejecutar con un solo comando para automatizar tareas repetitivas.
+Es la base para crear herramientas propias, automatizar backups, deployments, y cualquier tarea de terminal.
 
 ---
 
@@ -3125,9 +3134,12 @@ done
 → [Docker Hello World](/es/cooking/docker-hello) — Contenedores básicos
     `,
     contentEn: `
-## Automate repetitive tasks
+## What you'll build
 
-A bash script is a list of commands that run one after another. Perfect for automation.
+You'll create your first Bash script: a file that executes multiple commands automatically.
+You'll write a simple script that shows system information, and then a more useful one that creates projects with ready structure.
+When you're done, you'll have reusable scripts you can run with a single command to automate repetitive tasks.
+It's the foundation for creating your own tools, automating backups, deployments, and any terminal task.
 
 ---
 
@@ -3251,13 +3263,12 @@ done
     prerequisitesEs: ['Terminal básica', '4GB RAM mínimo'],
     prerequisitesEn: ['Basic terminal', '4GB RAM minimum'],
     contentEs: `
-## ¿Por qué Docker?
+## Lo que vas a construir
 
-**El problema:** "En mi máquina funciona" es la frase más frustrante del desarrollo.
-
-**La solución:** Docker empaqueta tu app + dependencias + configuración en un **contenedor** que funciona **igual en cualquier lugar**.
-
-> 📖 Para entender la diferencia entre Docker y máquinas virtuales, lee [Docker Básico en Learning](/es/learning/docker-intro)
+Vas a instalar Docker y crear tu primer contenedor: una app Node.js empaquetada que funciona igual en cualquier computadora.
+Aprenderás a correr contenedores de Ubuntu, bases de datos como PostgreSQL, y a usar volúmenes para no perder datos.
+Al terminar, tendrás una app Dockerizada con su Dockerfile, docker-compose.yml, y la capacidad de levantar servicios con un comando.
+Es la base para trabajar en equipos donde "en mi máquina funciona" ya no será un problema.
 
 ---
 
@@ -3567,13 +3578,12 @@ Abre **http://localhost:9000** y crea tu usuario admin.
 → [Docker Básico (teoría)](/es/learning/docker-intro) — Entiende containers vs VMs
     `,
     contentEn: `
-## Why Docker?
+## What you'll build
 
-**The problem:** "It works on my machine" is the most frustrating phrase in development.
-
-**The solution:** Docker packages your app + dependencies + configuration in a **container** that works **identically anywhere**.
-
-> 📖 To understand the difference between Docker and virtual machines, read [Docker Basics in Learning](/en/learning/docker-intro)
+You'll install Docker and create your first container: a Node.js app packaged to work identically on any computer.
+You'll learn to run Ubuntu containers, databases like PostgreSQL, and use volumes to avoid losing data.
+When you're done, you'll have a Dockerized app with its Dockerfile, docker-compose.yml, and the ability to spin up services with one command.
+It's the foundation for working in teams where "it works on my machine" will no longer be a problem.
 
 ---
 
@@ -3889,9 +3899,13 @@ Open **http://localhost:9000** and create your admin user.
     prerequisitesEs: ['Node.js instalado'],
     prerequisitesEn: ['Node.js installed'],
     contentEs: `
-## Datos del mundo real
+## Lo que vas a construir
 
-Las APIs devuelven datos en formato JSON. Vamos a consumir una.
+En este proyecto vas a aprender a obtener datos de internet usando APIs.
+
+Crearás un script que se conecta a una API pública, descarga información de usuarios, y la muestra formateada en tu terminal. Esta es la base de cualquier aplicación moderna: obtener datos externos y procesarlos.
+
+Al terminar entenderás cómo funcionan las APIs REST y podrás conectarte a cualquier servicio que ofrezca una.
 
 ---
 
@@ -3993,9 +4007,13 @@ async function getUsers() {
 → [Sistema de Notas Markdown](/es/cooking/markdown-notes) — Organiza tu conocimiento
     `,
     contentEn: `
-## Real world data
+## What you'll build
 
-APIs return data in JSON format. Let's consume one.
+In this project you'll learn how to fetch data from the internet using APIs.
+
+You'll create a script that connects to a public API, downloads user information, and displays it formatted in your terminal. This is the foundation of any modern application: getting external data and processing it.
+
+When finished, you'll understand how REST APIs work and be able to connect to any service that offers one.
 
 ---
 
@@ -4103,9 +4121,12 @@ async function getUsers() {
     prerequisitesEs: ['Terminal básica', 'Git básico'],
     prerequisitesEn: ['Basic terminal', 'Basic Git'],
     contentEs: `
-## Organiza tu conocimiento
+## Lo que vas a construir
 
-Markdown es texto plano con formato. Perfecto para documentar y aprender.
+Vas a crear tu propio sistema de notas en Markdown: una estructura de carpetas organizada para documentar todo lo que aprendes.
+Aprenderás la sintaxis de Markdown, crearás templates para diferentes tipos de notas, y organizarás todo en carpetas temáticas.
+Al terminar, tendrás un sistema personal de conocimiento con notas de aprendizaje, proyectos, y un diario de progreso.
+Puedes versionarlo con Git, sincronizarlo en la nube, o usarlo con apps como Obsidian para tener tu segundo cerebro.
 
 ---
 
@@ -4209,9 +4230,12 @@ git commit -m "Mis notas"
 → [Colaborar con Git](/es/cooking/git-collaboration) — Trabaja en equipo
     `,
     contentEn: `
-## Organize your knowledge
+## What you'll build
 
-Markdown is plain text with formatting. Perfect for documenting and learning.
+You'll create your own Markdown notes system: an organized folder structure to document everything you learn.
+You'll learn Markdown syntax, create templates for different types of notes, and organize everything in thematic folders.
+When you're done, you'll have a personal knowledge system with learning notes, projects, and a progress journal.
+You can version it with Git, sync it to the cloud, or use it with apps like Obsidian to have your second brain.
 
 ---
 
@@ -4321,9 +4345,12 @@ git commit -m "My notes"
     prerequisitesEs: ['Mi Primer Repositorio completado'],
     prerequisitesEn: ['My First Repository completed'],
     contentEs: `
-## Trabaja en equipo con Git
+## Lo que vas a construir
 
-Git permite que múltiples personas trabajen en el mismo código sin pisarse.
+Vas a aprender el flujo completo de colaboración en Git: clonar repos, crear ramas, hacer commits, y abrir Pull Requests.
+Practicarás el ciclo de trabajo en equipo simulando contribuciones a un proyecto, resolviendo conflictos, y haciendo merge.
+Al terminar, sabrás trabajar en cualquier proyecto open source o equipo de desarrollo usando el flujo estándar de Git.
+Es la habilidad que te permite contribuir a proyectos reales y trabajar profesionalmente con otros desarrolladores.
 
 ---
 
@@ -4436,9 +4463,12 @@ Has terminado el nivel Aprendiz. Ahora tienes las bases para:
 → [Chat con Interfaz Web](/es/cooking/chat-web-ui) — Empieza nivel Cocinero
     `,
     contentEn: `
-## Work as a team with Git
+## What you'll build
 
-Git allows multiple people to work on the same code without stepping on each other.
+You'll learn the complete Git collaboration workflow: clone repos, create branches, make commits, and open Pull Requests.
+You'll practice the team workflow by simulating contributions to a project, resolving conflicts, and merging.
+When you're done, you'll know how to work on any open source project or development team using the standard Git flow.
+It's the skill that allows you to contribute to real projects and work professionally with other developers.
 
 ---
 
@@ -4557,18 +4587,9 @@ You've finished the Apprentice level. Now you have the basics for:
     prerequisitesEs: ['Terminal básica', 'Node.js instalado'],
     prerequisitesEn: ['Basic terminal', 'Node.js installed'],
     contentEs: `
-## Tu primera app React
+## Lo que vas a construir
 
-Una Todo App es el "Hola Mundo" de las aplicaciones web. Simple pero completa.
-
----
-
-## Lo que construirás
-
-- Agregar tareas
-- Marcar como completadas
-- Eliminar tareas
-- Filtrar (todas/activas/completadas)
+Una aplicación de tareas completa con React. Podrás agregar nuevas tareas, marcarlas como completadas con un click, eliminarlas, y filtrarlas por estado (todas, activas, completadas). Las tareas se guardarán en localStorage para que persistan aunque cierres el navegador. Es el proyecto perfecto para aprender los fundamentos de React: componentes, estado, y eventos.
 
 ---
 
@@ -4660,18 +4681,9 @@ const toggleTodo = (id: number) => {
 → [API REST con Express](/es/cooking/api-rest-basic) — Tu primer backend
     `,
     contentEn: `
-## Your first React app
-
-A Todo App is the "Hello World" of web applications. Simple but complete.
-
----
-
 ## What you'll build
 
-- Add tasks
-- Mark as completed
-- Delete tasks
-- Filter (all/active/completed)
+A complete task management application with React. You'll be able to add new tasks, mark them as completed with a click, delete them, and filter by status (all, active, completed). Tasks will be saved in localStorage so they persist even after closing the browser. It's the perfect project to learn React fundamentals: components, state, and events.
 
 ---
 
@@ -4769,19 +4781,9 @@ const toggleTodo = (id: number) => {
     prerequisitesEs: ['Node.js instalado', 'JSON API Fetch completado'],
     prerequisitesEn: ['Node.js installed', 'JSON API Fetch completed'],
     contentEs: `
-## Tu primer backend
+## Lo que vas a construir
 
-Una API REST es un servidor que responde a peticiones HTTP. Tu frontend habla con ella.
-
----
-
-## Lo que construirás
-
-Un servidor con:
-- GET /todos - Lista todas las tareas
-- POST /todos - Crea una tarea
-- PUT /todos/:id - Actualiza una tarea
-- DELETE /todos/:id - Elimina una tarea
+Tu primer servidor backend con Node.js y Express. Crearás una API REST completa con endpoints para listar, crear, actualizar y eliminar tareas (CRUD). Aprenderás cómo funcionan las peticiones HTTP (GET, POST, PUT, DELETE) y cómo el frontend se comunica con el backend. Al terminar, tendrás un servidor corriendo en tu computadora que responde a peticiones como una API real.
 
 ---
 
@@ -4897,19 +4899,9 @@ app.listen(3001, () => console.log('API en puerto 3001'))
 → [CLI Tool con Python](/es/cooking/python-cli) — Automatiza con Python
     `,
     contentEn: `
-## Your first backend
-
-A REST API is a server that responds to HTTP requests. Your frontend talks to it.
-
----
-
 ## What you'll build
 
-A server with:
-- GET /todos - List all tasks
-- POST /todos - Create a task
-- PUT /todos/:id - Update a task
-- DELETE /todos/:id - Delete a task
+Your first backend server with Node.js and Express. You'll create a complete REST API with endpoints to list, create, update, and delete tasks (CRUD). You'll learn how HTTP requests work (GET, POST, PUT, DELETE) and how the frontend communicates with the backend. By the end, you'll have a server running on your computer that responds to requests like a real API.
 
 ---
 
@@ -5031,9 +5023,9 @@ app.listen(3001, () => console.log('API on port 3001'))
     prerequisitesEs: ['Terminal básica'],
     prerequisitesEn: ['Basic terminal'],
     contentEs: `
-## Automatiza con Python
+## Lo que vas a construir
 
-Python es excelente para crear herramientas de línea de comandos. Rápido de escribir, fácil de leer.
+Una herramienta de linea de comandos (CLI) en Python para gestionar tareas. Podrás escribir comandos como \`./tasks.py add "Comprar leche"\` o \`./tasks.py list\` directamente en tu terminal. Las tareas se guardarán en un archivo JSON. Es el primer paso para automatizar cualquier tarea repetitiva con scripts propios.
 
 ---
 
@@ -5146,9 +5138,9 @@ chmod +x tasks.py
 → [Landing Page Responsive](/es/cooking/landing-page) — Diseño web moderno
     `,
     contentEn: `
-## Automate with Python
+## What you'll build
 
-Python is excellent for creating command-line tools. Quick to write, easy to read.
+A command-line tool (CLI) in Python for managing tasks. You'll be able to type commands like \`./tasks.py add "Buy milk"\` or \`./tasks.py list\` directly in your terminal. Tasks will be saved in a JSON file. It's the first step to automating any repetitive task with your own scripts.
 
 ---
 
@@ -5267,19 +5259,19 @@ chmod +x tasks.py
     prerequisitesEs: ['HTML/CSS básico', 'Página Web Estática completada'],
     prerequisitesEn: ['Basic HTML/CSS', 'Static Web Page completed'],
     contentEs: `
-## Una página que vende
+## Lo que vas a construir
 
-Una landing page tiene un objetivo: que el visitante haga algo (comprar, suscribirse, contactar).
+Una landing page profesional y responsive que funciona en cualquier dispositivo. Tendra un hero section con gradiente llamativo, secciones de beneficios con iconos, testimonios de clientes, y un boton de llamada a accion (CTA). Usaras HTML y Tailwind CSS para crear un diseno moderno que puedes publicar gratis en GitHub Pages o Vercel.
 
 ---
 
-## Estructura típica
+## Estructura tipica
 
-1. **Hero** - Título grande + llamada a acción
-2. **Beneficios** - Por qué elegirte
-3. **Cómo funciona** - Pasos simples
+1. **Hero** - Titulo grande + llamada a accion
+2. **Beneficios** - Por que elegirte
+3. **Como funciona** - Pasos simples
 4. **Testimonios** - Prueba social
-5. **CTA final** - Botón de acción
+5. **CTA final** - Boton de accion
 
 ---
 
@@ -5348,9 +5340,9 @@ git commit -m "Landing page"
 → [Portfolio Personal](/es/cooking/portfolio) — Muestra tu trabajo
     `,
     contentEn: `
-## A page that sells
+## What you'll build
 
-A landing page has one goal: get the visitor to do something (buy, subscribe, contact).
+A professional, responsive landing page that works on any device. It will have a hero section with an eye-catching gradient, benefits sections with icons, customer testimonials, and a call-to-action (CTA) button. You'll use HTML and Tailwind CSS to create a modern design that you can publish for free on GitHub Pages or Vercel.
 
 ---
 
@@ -5435,9 +5427,9 @@ git commit -m "Landing page"
     prerequisitesEs: ['Landing Page completada'],
     prerequisitesEn: ['Landing Page completed'],
     contentEs: `
-## Tu carta de presentación
+## Lo que vas a construir
 
-Un portfolio muestra quién eres y qué puedes hacer. Es tu CV visual.
+Tu sitio web portfolio personal con Next.js y Tailwind CSS. Tendra una seccion "Sobre mi", galeria de proyectos con cards interactivas, lista de tecnologias que dominas, formulario de contacto, y toggle de modo oscuro. Al terminar tendras un sitio profesional listo para mostrar a reclutadores o clientes, que puedes publicar en Vercel con un click.
 
 ---
 
@@ -5509,9 +5501,9 @@ Para cada proyecto:
 → [Blog Estático](/es/cooking/blog-static) — Comparte tu conocimiento
     `,
     contentEn: `
-## Your business card
+## What you'll build
 
-A portfolio shows who you are and what you can do. It's your visual CV.
+Your personal portfolio website with Next.js and Tailwind CSS. It will have an "About me" section, a project gallery with interactive cards, a list of technologies you master, a contact form, and a dark mode toggle. By the end, you'll have a professional site ready to show recruiters or clients, that you can publish to Vercel with one click.
 
 ---
 
@@ -5589,9 +5581,9 @@ For each project:
     prerequisitesEs: ['Markdown básico', 'Git básico'],
     prerequisitesEn: ['Basic Markdown', 'Basic Git'],
     contentEs: `
-## Comparte lo que aprendes
+## Lo que vas a construir
 
-Un blog estático es rápido, seguro, y gratis de hostear. Escribes en Markdown, se genera HTML.
+Tu propio blog estatico con Astro. Podras escribir posts en Markdown, tendras una pagina principal con lista de articulos ordenados por fecha, y paginas individuales para cada post. El sitio sera ultra rapido, seguro, y gratis de hostear en Vercel o GitHub Pages. Es la forma perfecta de documentar lo que aprendes y construir tu presencia online.
 
 ---
 
@@ -7222,9 +7214,11 @@ with open('results.json', 'w') as f:
     prerequisitesEs: ['Chat IA con interfaz web', 'Firebase Auth'],
     prerequisitesEn: ['AI Chat with web interface', 'Firebase Auth'],
     contentEs: `
-## Chat IA público con autenticación
+## Lo que vas a construir
 
-Despliega un chat IA que cualquiera pueda usar, con login y límites de uso.
+Un asistente de inteligencia artificial accesible desde internet, donde cualquier persona puede crear una cuenta con Google, chatear con la IA y ver su historial de conversaciones.
+Implementaras autenticacion con Firebase, limites de uso diario por usuario (10 mensajes gratis), persistencia de conversaciones en Firestore y una interfaz tipo ChatGPT.
+Al terminar, tendras una app desplegada en Vercel que puedes compartir con amigos o usar como base para tu propio producto SaaS.
 
 ---
 
@@ -7302,9 +7296,11 @@ Vercel + Firebase = gratis para empezar.
 → [Blog con Next.js + MDX](/es/cooking/nextjs-blog)
     `,
     contentEn: `
-## Public AI chat with authentication
+## What you'll build
 
-Deploy an AI chat anyone can use, with login and usage limits.
+An AI assistant accessible from the internet, where anyone can create an account with Google, chat with the AI, and view their conversation history.
+You'll implement authentication with Firebase, daily usage limits per user (10 free messages), conversation persistence in Firestore, and a ChatGPT-style interface.
+When finished, you'll have an app deployed on Vercel that you can share with friends or use as a foundation for your own SaaS product.
 
 ---
 
@@ -7388,13 +7384,15 @@ Vercel + Firebase = free to start.
     prerequisitesEs: ['Next.js básico', 'Markdown'],
     prerequisitesEn: ['Basic Next.js', 'Markdown'],
     contentEs: `
-## Blog con contenido Markdown
+## Lo que vas a construir
 
-Un blog estático con MDX permite escribir en Markdown con componentes React.
+Un blog personal con Next.js donde escribes posts en archivos Markdown y automaticamente se generan paginas estaticas con URLs amigables.
+Tendras una pagina principal listando todos tus posts con titulo, fecha y tags, cada post con syntax highlighting para codigo y la posibilidad de usar componentes React dentro del Markdown.
+El sitio sera ultra-rapido porque se genera estaticamente (SSG) y puedes desplegarlo gratis en Vercel.
 
 ---
 
-## Paso 1: Pídele a una IA el blog
+## Paso 1: Pidele a una IA el blog
 
 \`\`\`
 Necesito un blog con Next.js que:
@@ -7463,9 +7461,11 @@ const greeting = "Hola mundo!"
 → [Auth con Firebase Google](/es/cooking/auth-firebase)
     `,
     contentEn: `
-## Blog with Markdown content
+## What you'll build
 
-A static blog with MDX lets you write in Markdown with React components.
+A personal blog with Next.js where you write posts in Markdown files and static pages are automatically generated with friendly URLs.
+You'll have a main page listing all your posts with title, date, and tags, each post with syntax highlighting for code and the ability to use React components inside Markdown.
+The site will be ultra-fast because it's statically generated (SSG) and you can deploy it for free on Vercel.
 
 ---
 
@@ -7544,9 +7544,11 @@ const greeting = "Hello world!"
     prerequisitesEs: ['React básico', 'Firebase console'],
     prerequisitesEn: ['Basic React', 'Firebase console'],
     contentEs: `
-## Login con Google en minutos
+## Lo que vas a construir
 
-Firebase Auth maneja toda la complejidad de autenticación por ti.
+Un sistema de autenticacion completo donde tus usuarios inician sesion con su cuenta de Google en un solo clic.
+Implementaras un hook personalizado useAuth que maneja todo el estado de autenticacion, un boton de login/logout, proteccion de rutas para contenido privado y persistencia de la sesion.
+Al terminar, tendras una base solida de autenticacion que puedes reutilizar en cualquier proyecto React o Next.js.
 
 ---
 
@@ -7629,9 +7631,11 @@ function ProtectedPage() {
 → [CRUD con PostgreSQL](/es/cooking/crud-postgres)
     `,
     contentEn: `
-## Login with Google in minutes
+## What you'll build
 
-Firebase Auth handles all authentication complexity for you.
+A complete authentication system where your users sign in with their Google account in a single click.
+You'll implement a custom useAuth hook that handles all authentication state, a login/logout button, route protection for private content, and session persistence.
+When finished, you'll have a solid authentication foundation that you can reuse in any React or Next.js project.
 
 ---
 
@@ -9394,9 +9398,13 @@ if (keys.length) await redis.del(...keys)
     prerequisitesEs: ['Arduino/ESP32', 'MQTT'],
     prerequisitesEn: ['Arduino/ESP32', 'MQTT'],
     contentEs: `
-## Hardware conectado
+## Lo que vas a construir
 
-Envía datos de sensores a tu app web.
+En este proyecto vas a conectar el mundo físico con tu aplicación web.
+
+Usarás un ESP32 (o Arduino con WiFi) para leer datos de un sensor de temperatura y humedad. Esos datos viajarán por WiFi usando el protocolo MQTT hasta un servidor Node.js que los guardará en una base de datos.
+
+Al terminar tendrás un sistema IoT completo: hardware que mide, servidor que procesa, y datos listos para mostrar en un dashboard.
 
 ---
 
@@ -9462,9 +9470,13 @@ void loop() {
 → [Dashboard de Analytics](/es/cooking/dashboard-analytics)
     `,
     contentEn: `
-## Connected hardware
+## What you'll build
 
-Send sensor data to your web app.
+In this project you'll connect the physical world with your web application.
+
+You'll use an ESP32 (or Arduino with WiFi) to read data from a temperature and humidity sensor. That data will travel over WiFi using the MQTT protocol to a Node.js server that will save it to a database.
+
+When finished, you'll have a complete IoT system: hardware that measures, a server that processes, and data ready to display on a dashboard.
 
 ---
 
@@ -9667,9 +9679,13 @@ function Chart() {
     prerequisitesEs: ['Python', 'API de LLM (Gemini)'],
     prerequisitesEn: ['Python', 'LLM API (Gemini)'],
     contentEs: `
-## RAG con Documentos PDF
+## Lo que vas a construir
 
-Crea un sistema que responda preguntas sobre TUS documentos PDF.
+Un sistema RAG (Retrieval-Augmented Generation) que responde preguntas sobre tus propios documentos PDF.
+
+Cargas tus PDFs (contratos, manuales, documentacion), y puedes preguntarle cosas como "Cual es la politica de devolucion?" o "Que dice el articulo 5?". El sistema busca en tus documentos, encuentra la informacion relevante, y genera una respuesta precisa usando IA.
+
+Al terminar tendras un script en Python que procesa PDFs, crea embeddings con Gemini, los guarda en ChromaDB, y responde preguntas basandose en el contenido real de tus documentos.
 
 ---
 
@@ -9779,9 +9795,13 @@ pip install PyPDF2 chromadb google-generativeai
 → [Búsqueda Vectorial](/es/cooking/vector-search)
     `,
     contentEn: `
-## RAG with PDF Documents
+## What you'll build
 
-Create a system that answers questions about YOUR PDF documents.
+A RAG (Retrieval-Augmented Generation) system that answers questions about your own PDF documents.
+
+You load your PDFs (contracts, manuals, documentation), and you can ask things like "What's the return policy?" or "What does article 5 say?". The system searches your documents, finds the relevant information, and generates a precise answer using AI.
+
+When finished, you'll have a Python script that processes PDFs, creates embeddings with Gemini, stores them in ChromaDB, and answers questions based on the actual content of your documents.
 
 ---
 
@@ -9898,15 +9918,19 @@ pip install PyPDF2 chromadb google-generativeai
     prerequisitesEs: ['Python básico', 'ChromaDB'],
     prerequisitesEn: ['Basic Python', 'ChromaDB'],
     contentEs: `
-## Búsqueda Vectorial
+## Lo que vas a construir
 
-Implementa búsqueda semántica que entiende el SIGNIFICADO, no solo palabras clave.
+Un motor de busqueda semantica que entiende el SIGNIFICADO de lo que buscas, no solo palabras clave.
+
+Imagina buscar "animal domestico descansando" y que encuentre documentos sobre "el gato duerme en el sofa". Eso es busqueda vectorial: convierte texto en vectores matematicos y encuentra similitudes conceptuales.
+
+Al terminar tendras un sistema en Python con ChromaDB que indexa documentos, crea embeddings con Gemini, y permite buscar por significado. Ideal para buscar en FAQs, articulos, o cualquier coleccion de texto.
 
 ---
 
 ## El prompt para empezar
 
-> Crea un sistema de búsqueda vectorial en Python con:
+> Crea un sistema de busqueda vectorial en Python con:
 > 1. ChromaDB como base de datos vectorial
 > 2. Embeddings de Gemini (gratis)
 > 3. Función para agregar documentos
@@ -9991,9 +10015,13 @@ search("animal doméstico descansando")
 → [Servidor MCP Custom](/es/cooking/mcp-server)
     `,
     contentEn: `
-## Vector Search
+## What you'll build
 
-Implement semantic search that understands MEANING, not just keywords.
+A semantic search engine that understands the MEANING of what you're looking for, not just keywords.
+
+Imagine searching for "domestic animal resting" and finding documents about "the cat sleeps on the sofa". That's vector search: it converts text into mathematical vectors and finds conceptual similarities.
+
+When finished, you'll have a Python system with ChromaDB that indexes documents, creates embeddings with Gemini, and allows searching by meaning. Perfect for searching FAQs, articles, or any text collection.
 
 ---
 
@@ -10091,9 +10119,13 @@ search("domestic animal resting")
     prerequisitesEs: ['TypeScript', 'Node.js'],
     prerequisitesEn: ['TypeScript', 'Node.js'],
     contentEs: `
-## Servidor MCP Custom
+## Lo que vas a construir
 
-Crea tu propio servidor MCP para darle herramientas a Claude.
+Tu propio servidor MCP (Model Context Protocol) que le da herramientas personalizadas a Claude Desktop.
+
+Imagina que Claude pueda consultar el clima, guardar notas, o acceder a tu base de datos. MCP es el estandar para extender las capacidades de Claude. Tu servidor expone "herramientas" que Claude puede llamar durante una conversacion.
+
+Al terminar tendras un servidor MCP en TypeScript que funciona con Claude Desktop. Podras agregar cualquier herramienta: APIs externas, bases de datos, sistema de archivos, lo que necesites.
 
 ---
 
