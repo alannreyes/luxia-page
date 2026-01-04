@@ -4985,6 +4985,79 @@ async function fetchData() {
 
 ---
 
+## 🔐 APIs para Fintech: Seguridad Obligatoria
+
+Las APIs que manejan datos financieros tienen requisitos especiales de seguridad.
+
+### Headers de Seguridad Obligatorios
+
+\`\`\`typescript
+// Headers que TODA API financiera debe incluir
+const securityHeaders = {
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'X-Request-ID': crypto.randomUUID(), // Trazabilidad
+  'Cache-Control': 'no-store', // No cachear datos sensibles
+}
+\`\`\`
+
+### Autenticación para Open Banking
+
+| Método | Uso | Cuándo |
+|--------|-----|--------|
+| **OAuth 2.0 + PKCE** | Apps móviles | Conexión con bancos |
+| **mTLS** (mutual TLS) | Server-to-server | APIs interbancarias |
+| **API Keys + HMAC** | Webhooks | Verificar origen |
+| **JWT con rotación** | Sesiones | Usuarios finales |
+
+### Logging para Auditoría
+
+En fintech, "no logueamos eso" no es respuesta aceptable ante un regulador.
+
+\`\`\`typescript
+// Middleware de auditoría
+const auditMiddleware = (req, res, next) => {
+  const auditLog = {
+    requestId: req.headers['x-request-id'] || crypto.randomUUID(),
+    timestamp: new Date().toISOString(),
+    method: req.method,
+    path: req.path,
+    userId: req.user?.id,
+    ip: req.ip,
+    userAgent: req.headers['user-agent'],
+  }
+
+  // Log al inicio
+  logger.info('API_REQUEST', auditLog)
+
+  // Log al finalizar (con duración)
+  res.on('finish', () => {
+    logger.info('API_RESPONSE', {
+      ...auditLog,
+      statusCode: res.statusCode,
+      duration: Date.now() - startTime
+    })
+  })
+
+  next()
+}
+\`\`\`
+
+### Rate Limiting por Endpoint
+
+\`\`\`typescript
+const rateLimits = {
+  '/api/login':     { limit: 5,  window: '1m' },  // Anti brute-force
+  '/api/transfer':  { limit: 10, window: '1h' },  // Límite fraude
+  '/api/balance':   { limit: 60, window: '1m' },  // Uso normal
+  '/api/verify':    { limit: 3,  window: '1d' },  // APIs costosas (KYC)
+}
+\`\`\`
+
+---
+
 ## Practica
 
 → [API REST con Express](/es/cooking/api-rest-basic)
@@ -4995,6 +5068,7 @@ async function fetchData() {
 
 - 📖 [HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 - 📖 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- 📖 [OWASP API Security](https://owasp.org/www-project-api-security/)
     `,
     contentEn: `
 ## Communication between systems
@@ -5088,6 +5162,79 @@ async function fetchData() {
 
 ---
 
+## 🔐 Fintech APIs: Mandatory Security
+
+APIs handling financial data have special security requirements.
+
+### Required Security Headers
+
+\`\`\`typescript
+// Headers that EVERY financial API must include
+const securityHeaders = {
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'X-Request-ID': crypto.randomUUID(), // Traceability
+  'Cache-Control': 'no-store', // Don't cache sensitive data
+}
+\`\`\`
+
+### Open Banking Authentication
+
+| Method | Use | When |
+|--------|-----|------|
+| **OAuth 2.0 + PKCE** | Mobile apps | Bank connections |
+| **mTLS** (mutual TLS) | Server-to-server | Interbank APIs |
+| **API Keys + HMAC** | Webhooks | Verify origin |
+| **JWT with rotation** | Sessions | End users |
+
+### Audit Logging
+
+In fintech, "we don't log that" is not an acceptable answer to a regulator.
+
+\`\`\`typescript
+// Audit middleware
+const auditMiddleware = (req, res, next) => {
+  const auditLog = {
+    requestId: req.headers['x-request-id'] || crypto.randomUUID(),
+    timestamp: new Date().toISOString(),
+    method: req.method,
+    path: req.path,
+    userId: req.user?.id,
+    ip: req.ip,
+    userAgent: req.headers['user-agent'],
+  }
+
+  // Log at start
+  logger.info('API_REQUEST', auditLog)
+
+  // Log on finish (with duration)
+  res.on('finish', () => {
+    logger.info('API_RESPONSE', {
+      ...auditLog,
+      statusCode: res.statusCode,
+      duration: Date.now() - startTime
+    })
+  })
+
+  next()
+}
+\`\`\`
+
+### Rate Limiting by Endpoint
+
+\`\`\`typescript
+const rateLimits = {
+  '/api/login':     { limit: 5,  window: '1m' },  // Anti brute-force
+  '/api/transfer':  { limit: 10, window: '1h' },  // Fraud limit
+  '/api/balance':   { limit: 60, window: '1m' },  // Normal use
+  '/api/verify':    { limit: 3,  window: '1d' },  // Expensive APIs (KYC)
+}
+\`\`\`
+
+---
+
 ## Practice
 
 → [REST API with Express](/en/cooking/api-rest-basic)
@@ -5098,6 +5245,7 @@ async function fetchData() {
 
 - 📖 [HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 - 📖 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- 📖 [OWASP API Security](https://owasp.org/www-project-api-security/)
     `,
   },
   embeddings: {
@@ -5186,6 +5334,51 @@ Para almacenar y buscar embeddings eficientemente:
 | **Pinecone** | Cloud | Producción |
 | **Supabase pgvector** | Cloud | Full-stack |
 | **ChromaDB** | Local | Desarrollo |
+
+---
+
+## 🎯 Caso Real: Detección de Anomalías
+
+Los embeddings son ideales para detectar comportamientos inusuales en fintech.
+
+### Ejemplo: Transacciones Sospechosas
+
+\`\`\`typescript
+// Vectorizar el comportamiento "normal" del usuario
+const perfilNormal = await embedTransaction({
+  montoPromedio: 150,
+  horarioUsual: '9am-6pm',
+  ubicaciones: ['Ciudad de México', 'Guadalajara'],
+  comerciosFrecuentes: ['Amazon', 'Uber', 'Starbucks']
+})
+
+// Nueva transacción
+const transaccion = await embedTransaction({
+  monto: 5000,
+  hora: '3:47am',
+  ubicacion: 'Lagos, Nigeria',
+  comercio: 'CryptoExchange_xyz'
+})
+
+// Calcular similitud
+const similitud = cosineSimilarity(perfilNormal, transaccion)
+
+if (similitud < 0.3) {
+  await flagForReview(transaccion) // 🚨 Revisar manualmente
+  await notifyUser('Detectamos actividad inusual')
+}
+\`\`\`
+
+### Aplicaciones en Fintech
+
+| Caso | Input | Output |
+|------|-------|--------|
+| **Detección de fraude** | Historial + transacción nueva | Score de riesgo 0-100 |
+| **Scoring crediticio** | Datos del perfil | Similitud con perfiles "buenos" |
+| **KYC automatizado** | Documentos + comportamiento | Match de identidad |
+| **Segmentación** | Historial de usuario | Cluster de comportamiento |
+
+> 💡 Los embeddings capturan patrones que las reglas tradicionales no pueden detectar.
 
 ---
 
@@ -5285,6 +5478,51 @@ To store and search embeddings efficiently:
 | **Pinecone** | Cloud | Production |
 | **Supabase pgvector** | Cloud | Full-stack |
 | **ChromaDB** | Local | Development |
+
+---
+
+## 🎯 Real Case: Anomaly Detection
+
+Embeddings are ideal for detecting unusual behavior in fintech.
+
+### Example: Suspicious Transactions
+
+\`\`\`typescript
+// Vectorize the user's "normal" behavior
+const normalProfile = await embedTransaction({
+  averageAmount: 150,
+  usualHours: '9am-6pm',
+  locations: ['New York', 'Boston'],
+  frequentMerchants: ['Amazon', 'Uber', 'Starbucks']
+})
+
+// New transaction
+const transaction = await embedTransaction({
+  amount: 5000,
+  time: '3:47am',
+  location: 'Lagos, Nigeria',
+  merchant: 'CryptoExchange_xyz'
+})
+
+// Calculate similarity
+const similarity = cosineSimilarity(normalProfile, transaction)
+
+if (similarity < 0.3) {
+  await flagForReview(transaction) // 🚨 Manual review
+  await notifyUser('We detected unusual activity')
+}
+\`\`\`
+
+### Fintech Applications
+
+| Case | Input | Output |
+|------|-------|--------|
+| **Fraud detection** | History + new transaction | Risk score 0-100 |
+| **Credit scoring** | Profile data | Similarity to "good" profiles |
+| **Automated KYC** | Documents + behavior | Identity match |
+| **Segmentation** | User history | Behavior cluster |
+
+> 💡 Embeddings capture patterns that traditional rules cannot detect.
 
 ---
 
@@ -5542,6 +5780,64 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 ---
 
+## 🏦 Seguridad para Apps Financieras
+
+Si tu app maneja dinero o datos financieros, necesitas medidas adicionales.
+
+### Checklist Obligatorio
+
+| Requisito | Por qué | Estándar |
+|-----------|---------|----------|
+| ✅ MFA obligatorio | Regulación PSD2/Open Banking | NIST 800-63B |
+| ✅ Logs inmutables | Auditoría ante reguladores | SOC 2 |
+| ✅ Encriptación en reposo | Datos sensibles protegidos | PCI DSS |
+| ✅ Sesiones con timeout | Prevención de fraude | OWASP |
+| ✅ Rate limiting agresivo | Anti-scraping financiero | - |
+
+### ¿Qué es PCI DSS?
+
+Si tu app procesa, almacena o transmite datos de tarjetas de pago, **debes** cumplir con PCI DSS.
+
+| Nivel | Transacciones/año | Requisitos |
+|-------|------------------|------------|
+| 4 | < 20,000 | SAQ (Self-Assessment) |
+| 3 | 20,000 - 1M | SAQ + escaneo trimestral |
+| 2 | 1M - 6M | SAQ + auditoría |
+| 1 | > 6M | Auditoría completa anual |
+
+> 💡 **Tip**: Usa Stripe, PayPal o MercadoPago para evitar manejar datos de tarjeta directamente. Ellos asumen el compliance.
+
+### Implementación MFA
+
+\`\`\`typescript
+// Verificar segundo factor antes de operaciones sensibles
+async function requireMFA(userId: string, action: string) {
+  const user = await getUser(userId)
+
+  if (SENSITIVE_ACTIONS.includes(action) && !user.mfaVerifiedAt) {
+    throw new Error('MFA_REQUIRED')
+  }
+
+  // Log para auditoría
+  await auditLog({
+    userId,
+    action,
+    mfaVerified: true,
+    timestamp: new Date().toISOString(),
+    ip: request.ip
+  })
+}
+
+const SENSITIVE_ACTIONS = [
+  'TRANSFER_FUNDS',
+  'CHANGE_PASSWORD',
+  'ADD_BENEFICIARY',
+  'EXPORT_DATA'
+]
+\`\`\`
+
+---
+
 ## Practica
 
 → [Auth con Firebase Google](/es/cooking/auth-firebase)
@@ -5609,6 +5905,64 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 | Short tokens | Limits damage if stolen |
 | Refresh tokens | Renew without re-login |
 | Rate limiting | Prevents brute force |
+
+---
+
+## 🏦 Security for Financial Apps
+
+If your app handles money or financial data, you need additional measures.
+
+### Required Checklist
+
+| Requirement | Why | Standard |
+|-------------|-----|----------|
+| ✅ Mandatory MFA | PSD2/Open Banking regulation | NIST 800-63B |
+| ✅ Immutable logs | Regulatory audits | SOC 2 |
+| ✅ Encryption at rest | Sensitive data protection | PCI DSS |
+| ✅ Session timeout | Fraud prevention | OWASP |
+| ✅ Aggressive rate limiting | Anti-scraping | - |
+
+### What is PCI DSS?
+
+If your app processes, stores or transmits payment card data, you **must** comply with PCI DSS.
+
+| Level | Transactions/year | Requirements |
+|-------|------------------|--------------|
+| 4 | < 20,000 | SAQ (Self-Assessment) |
+| 3 | 20,000 - 1M | SAQ + quarterly scan |
+| 2 | 1M - 6M | SAQ + audit |
+| 1 | > 6M | Full annual audit |
+
+> 💡 **Tip**: Use Stripe, PayPal or similar to avoid handling card data directly. They assume the compliance burden.
+
+### MFA Implementation
+
+\`\`\`typescript
+// Verify second factor before sensitive operations
+async function requireMFA(userId: string, action: string) {
+  const user = await getUser(userId)
+
+  if (SENSITIVE_ACTIONS.includes(action) && !user.mfaVerifiedAt) {
+    throw new Error('MFA_REQUIRED')
+  }
+
+  // Audit log
+  await auditLog({
+    userId,
+    action,
+    mfaVerified: true,
+    timestamp: new Date().toISOString(),
+    ip: request.ip
+  })
+}
+
+const SENSITIVE_ACTIONS = [
+  'TRANSFER_FUNDS',
+  'CHANGE_PASSWORD',
+  'ADD_BENEFICIARY',
+  'EXPORT_DATA'
+]
+\`\`\`
 
 ---
 
@@ -5697,6 +6051,69 @@ function verifySignature(payload: string, signature: string, secret: string) {
 
 ---
 
+## 🔐 Webhooks de Pago: Seguridad Crítica
+
+Los webhooks de pago son el punto más vulnerable de tu aplicación. Un atacante puede simular un pago exitoso.
+
+### Idempotencia: No proceses dos veces
+
+Stripe puede reenviar el mismo webhook múltiples veces. Sin idempotencia, cobras/acreditas doble.
+
+\`\`\`typescript
+export async function POST(request: Request) {
+  const event = await verifyAndParseWebhook(request)
+
+  // ⚠️ CRÍTICO: Verificar si ya procesamos este evento
+  const processed = await db.query(
+    'SELECT 1 FROM processed_webhooks WHERE event_id = $1',
+    [event.id]
+  )
+
+  if (processed.rows.length > 0) {
+    // Ya procesado, responder OK sin hacer nada
+    return new Response('Already processed', { status: 200 })
+  }
+
+  // Procesar el evento
+  await processPaymentEvent(event)
+
+  // Marcar como procesado DESPUÉS de procesar exitosamente
+  await db.query(
+    'INSERT INTO processed_webhooks (event_id, processed_at) VALUES ($1, NOW())',
+    [event.id]
+  )
+
+  return new Response('OK')
+}
+\`\`\`
+
+### Responde rápido, procesa después
+
+Stripe espera respuesta en 20 segundos. Si tu procesamiento es lento, hazlo async:
+
+\`\`\`typescript
+export async function POST(request: Request) {
+  const event = await verifyAndParseWebhook(request)
+
+  // Responder inmediatamente
+  // Procesar en background (cola, worker, etc.)
+  await queue.add('process-payment', { eventId: event.id })
+
+  return new Response('OK') // < 1 segundo
+}
+\`\`\`
+
+### Errores comunes en Fintech
+
+| Error | Consecuencia | Solución |
+|-------|--------------|----------|
+| No validar firma | Fraude: pagos falsos | \`constructEvent()\` siempre |
+| No manejar duplicados | Cobro/acreditación doble | Tabla de idempotencia |
+| Timeout en procesamiento | Stripe reintenta = duplicados | Responder rápido, procesar async |
+| No loguear eventos | Imposible debuggear | Log completo con timestamp |
+
+---
+
 ## Practica
 
 → [Receptor de Webhooks](/es/cooking/webhook-receiver)
@@ -5777,6 +6194,69 @@ function verifySignature(payload: string, signature: string, secret: string) {
 - GitHub (commits, PRs)
 - Slack (messages)
 - Twilio (SMS, calls)
+
+---
+
+## 🔐 Payment Webhooks: Critical Security
+
+Payment webhooks are the most vulnerable point of your application. An attacker can simulate a successful payment.
+
+### Idempotency: Don't process twice
+
+Stripe can resend the same webhook multiple times. Without idempotency, you charge/credit double.
+
+\`\`\`typescript
+export async function POST(request: Request) {
+  const event = await verifyAndParseWebhook(request)
+
+  // ⚠️ CRITICAL: Check if we already processed this event
+  const processed = await db.query(
+    'SELECT 1 FROM processed_webhooks WHERE event_id = $1',
+    [event.id]
+  )
+
+  if (processed.rows.length > 0) {
+    // Already processed, respond OK without doing anything
+    return new Response('Already processed', { status: 200 })
+  }
+
+  // Process the event
+  await processPaymentEvent(event)
+
+  // Mark as processed AFTER successful processing
+  await db.query(
+    'INSERT INTO processed_webhooks (event_id, processed_at) VALUES ($1, NOW())',
+    [event.id]
+  )
+
+  return new Response('OK')
+}
+\`\`\`
+
+### Respond fast, process later
+
+Stripe waits for response in 20 seconds. If your processing is slow, make it async:
+
+\`\`\`typescript
+export async function POST(request: Request) {
+  const event = await verifyAndParseWebhook(request)
+
+  // Respond immediately
+  // Process in background (queue, worker, etc.)
+  await queue.add('process-payment', { eventId: event.id })
+
+  return new Response('OK') // < 1 second
+}
+\`\`\`
+
+### Common Fintech Errors
+
+| Error | Consequence | Solution |
+|-------|-------------|----------|
+| Not validating signature | Fraud: fake payments | \`constructEvent()\` always |
+| Not handling duplicates | Double charge/credit | Idempotency table |
+| Timeout in processing | Stripe retries = duplicates | Respond fast, process async |
+| Not logging events | Impossible to debug | Full log with timestamp |
 
 ---
 
@@ -6010,6 +6490,119 @@ const users = await prisma.user.findMany({
 
 ---
 
+## 🏦 Caso Fintech: Audit Trail y Encriptación
+
+Las regulaciones financieras (PCI DSS, SOC 2) requieren registrar TODAS las operaciones. PostgreSQL tiene herramientas nativas para esto:
+
+### Tabla de auditoría
+
+\`\`\`sql
+-- Tabla de audit trail
+CREATE TABLE audit_log (
+  id BIGSERIAL PRIMARY KEY,
+  table_name VARCHAR(100) NOT NULL,
+  record_id VARCHAR(100) NOT NULL,
+  action VARCHAR(20) NOT NULL, -- INSERT, UPDATE, DELETE
+  old_data JSONB,
+  new_data JSONB,
+  changed_by VARCHAR(100),
+  ip_address INET,
+  user_agent TEXT,
+  timestamp TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Índices para búsquedas rápidas de auditoría
+CREATE INDEX idx_audit_table ON audit_log(table_name);
+CREATE INDEX idx_audit_timestamp ON audit_log(timestamp);
+CREATE INDEX idx_audit_user ON audit_log(changed_by);
+\`\`\`
+
+### Trigger automático
+
+\`\`\`sql
+-- Función de auditoría genérica
+CREATE OR REPLACE FUNCTION audit_trigger_func()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    INSERT INTO audit_log (table_name, record_id, action, old_data, changed_by)
+    VALUES (TG_TABLE_NAME, OLD.id::text, 'DELETE', row_to_json(OLD)::jsonb, current_setting('app.current_user', true));
+    RETURN OLD;
+  ELSIF TG_OP = 'UPDATE' THEN
+    INSERT INTO audit_log (table_name, record_id, action, old_data, new_data, changed_by)
+    VALUES (TG_TABLE_NAME, NEW.id::text, 'UPDATE', row_to_json(OLD)::jsonb, row_to_json(NEW)::jsonb, current_setting('app.current_user', true));
+    RETURN NEW;
+  ELSIF TG_OP = 'INSERT' THEN
+    INSERT INTO audit_log (table_name, record_id, action, new_data, changed_by)
+    VALUES (TG_TABLE_NAME, NEW.id::text, 'INSERT', row_to_json(NEW)::jsonb, current_setting('app.current_user', true));
+    RETURN NEW;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Aplicar a tablas sensibles
+CREATE TRIGGER audit_transactions
+AFTER INSERT OR UPDATE OR DELETE ON transactions
+FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+
+CREATE TRIGGER audit_users
+AFTER INSERT OR UPDATE OR DELETE ON users
+FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+\`\`\`
+
+### Encriptación de datos sensibles
+
+\`\`\`sql
+-- Usar pgcrypto para datos sensibles
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Tabla con datos encriptados
+CREATE TABLE payment_methods (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  card_last_four VARCHAR(4), -- Solo últimos 4 dígitos (visible)
+  card_token_encrypted BYTEA, -- Token encriptado
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Insertar con encriptación
+INSERT INTO payment_methods (user_id, card_last_four, card_token_encrypted)
+VALUES (
+  1,
+  '4242',
+  pgp_sym_encrypt('tok_visa_4242', current_setting('app.encryption_key'))
+);
+
+-- Leer (solo con la llave correcta)
+SELECT user_id, card_last_four,
+       pgp_sym_decrypt(card_token_encrypted, current_setting('app.encryption_key')) as token
+FROM payment_methods WHERE user_id = 1;
+\`\`\`
+
+### Consultas de auditoría para compliance
+
+\`\`\`sql
+-- Quién modificó este registro?
+SELECT * FROM audit_log
+WHERE table_name = 'transactions' AND record_id = '12345'
+ORDER BY timestamp DESC;
+
+-- Todas las acciones de un usuario (para investigación de fraude)
+SELECT * FROM audit_log
+WHERE changed_by = 'user@email.com'
+AND timestamp > NOW() - INTERVAL '30 days';
+
+-- Exportar para auditor externo
+COPY (
+  SELECT * FROM audit_log
+  WHERE timestamp BETWEEN '2026-01-01' AND '2026-12-31'
+) TO '/tmp/audit_2026.csv' CSV HEADER;
+\`\`\`
+
+> 💡 Un audit trail bien implementado en PostgreSQL cumple con PCI DSS Req. 10 y facilita auditorías SOC 2.
+
+---
+
 ## Practica
 
 → [CRUD con PostgreSQL](/es/cooking/crud-postgres)
@@ -6094,6 +6687,119 @@ const users = await prisma.user.findMany({
 
 ---
 
+## 🏦 Fintech Case: Audit Trail and Encryption
+
+Financial regulations (PCI DSS, SOC 2) require logging ALL operations. PostgreSQL has native tools for this:
+
+### Audit table
+
+\`\`\`sql
+-- Audit trail table
+CREATE TABLE audit_log (
+  id BIGSERIAL PRIMARY KEY,
+  table_name VARCHAR(100) NOT NULL,
+  record_id VARCHAR(100) NOT NULL,
+  action VARCHAR(20) NOT NULL, -- INSERT, UPDATE, DELETE
+  old_data JSONB,
+  new_data JSONB,
+  changed_by VARCHAR(100),
+  ip_address INET,
+  user_agent TEXT,
+  timestamp TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes for fast audit queries
+CREATE INDEX idx_audit_table ON audit_log(table_name);
+CREATE INDEX idx_audit_timestamp ON audit_log(timestamp);
+CREATE INDEX idx_audit_user ON audit_log(changed_by);
+\`\`\`
+
+### Automatic trigger
+
+\`\`\`sql
+-- Generic audit function
+CREATE OR REPLACE FUNCTION audit_trigger_func()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    INSERT INTO audit_log (table_name, record_id, action, old_data, changed_by)
+    VALUES (TG_TABLE_NAME, OLD.id::text, 'DELETE', row_to_json(OLD)::jsonb, current_setting('app.current_user', true));
+    RETURN OLD;
+  ELSIF TG_OP = 'UPDATE' THEN
+    INSERT INTO audit_log (table_name, record_id, action, old_data, new_data, changed_by)
+    VALUES (TG_TABLE_NAME, NEW.id::text, 'UPDATE', row_to_json(OLD)::jsonb, row_to_json(NEW)::jsonb, current_setting('app.current_user', true));
+    RETURN NEW;
+  ELSIF TG_OP = 'INSERT' THEN
+    INSERT INTO audit_log (table_name, record_id, action, new_data, changed_by)
+    VALUES (TG_TABLE_NAME, NEW.id::text, 'INSERT', row_to_json(NEW)::jsonb, current_setting('app.current_user', true));
+    RETURN NEW;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply to sensitive tables
+CREATE TRIGGER audit_transactions
+AFTER INSERT OR UPDATE OR DELETE ON transactions
+FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+
+CREATE TRIGGER audit_users
+AFTER INSERT OR UPDATE OR DELETE ON users
+FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+\`\`\`
+
+### Sensitive data encryption
+
+\`\`\`sql
+-- Use pgcrypto for sensitive data
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Table with encrypted data
+CREATE TABLE payment_methods (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  card_last_four VARCHAR(4), -- Only last 4 digits (visible)
+  card_token_encrypted BYTEA, -- Encrypted token
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Insert with encryption
+INSERT INTO payment_methods (user_id, card_last_four, card_token_encrypted)
+VALUES (
+  1,
+  '4242',
+  pgp_sym_encrypt('tok_visa_4242', current_setting('app.encryption_key'))
+);
+
+-- Read (only with correct key)
+SELECT user_id, card_last_four,
+       pgp_sym_decrypt(card_token_encrypted, current_setting('app.encryption_key')) as token
+FROM payment_methods WHERE user_id = 1;
+\`\`\`
+
+### Audit queries for compliance
+
+\`\`\`sql
+-- Who modified this record?
+SELECT * FROM audit_log
+WHERE table_name = 'transactions' AND record_id = '12345'
+ORDER BY timestamp DESC;
+
+-- All actions by a user (for fraud investigation)
+SELECT * FROM audit_log
+WHERE changed_by = 'user@email.com'
+AND timestamp > NOW() - INTERVAL '30 days';
+
+-- Export for external auditor
+COPY (
+  SELECT * FROM audit_log
+  WHERE timestamp BETWEEN '2026-01-01' AND '2026-12-31'
+) TO '/tmp/audit_2026.csv' CSV HEADER;
+\`\`\`
+
+> 💡 A well-implemented audit trail in PostgreSQL complies with PCI DSS Req. 10 and facilitates SOC 2 audits.
+
+---
+
 ## Practice
 
 → [CRUD with PostgreSQL](/en/cooking/crud-postgres)
@@ -6172,6 +6878,78 @@ async function getUser(id: string) {
 
 ---
 
+## 🏦 Caso Fintech: Rate Limiting para APIs
+
+Las APIs financieras son objetivo de ataques de fuerza bruta y abuso. Redis es perfecto para implementar **rate limiting** robusto:
+
+\`\`\`typescript
+import { Redis } from 'ioredis'
+
+const redis = new Redis()
+
+// Sliding window rate limiter
+async function checkRateLimit(userId: string, action: string): Promise<boolean> {
+  const key = \`ratelimit:\${action}:\${userId}\`
+  const now = Date.now()
+  const windowMs = 60000 // 1 minuto
+
+  // Límites por acción (más estrictos para operaciones sensibles)
+  const limits: Record<string, number> = {
+    'transfer': 5,      // 5 transferencias/min
+    'login': 10,        // 10 intentos/min
+    'api_call': 100,    // 100 llamadas/min
+    'otp_request': 3,   // 3 códigos OTP/min
+  }
+
+  const limit = limits[action] || 60
+
+  // Sliding window con sorted sets
+  await redis.zremrangebyscore(key, 0, now - windowMs)
+  const count = await redis.zcard(key)
+
+  if (count >= limit) {
+    // Log intento bloqueado para análisis de seguridad
+    await redis.lpush('security:blocked_requests', JSON.stringify({
+      userId, action, timestamp: now, count
+    }))
+    return false // Bloqueado
+  }
+
+  await redis.zadd(key, now, \`\${now}\`)
+  await redis.expire(key, 60)
+  return true // Permitido
+}
+
+// Middleware para Express/Fastify
+async function rateLimitMiddleware(req, res, next) {
+  const userId = req.user?.id || req.ip
+  const allowed = await checkRateLimit(userId, 'api_call')
+
+  if (!allowed) {
+    // Headers estándar de rate limiting
+    res.set('Retry-After', '60')
+    res.set('X-RateLimit-Limit', '100')
+    res.set('X-RateLimit-Remaining', '0')
+    return res.status(429).json({ error: 'Too many requests' })
+  }
+
+  next()
+}
+\`\`\`
+
+### Estrategias según operación
+
+| Operación | Límite | Ventana | Acción si excede |
+|-----------|--------|---------|------------------|
+| Login fallido | 5 | 15 min | Bloqueo temporal + alerta |
+| Transferencia | 10 | 1 hora | Requiere MFA adicional |
+| Consulta saldo | 100 | 1 min | Solo rate limit |
+| OTP request | 3 | 5 min | Bloqueo + notificación |
+
+> 💡 Rate limiting con Redis protege contra ataques de fuerza bruta y credential stuffing, cumpliendo con requisitos de seguridad de PCI DSS.
+
+---
+
 ## Practica
 
 → [Cache con Redis](/es/cooking/redis-cache)
@@ -6245,6 +7023,78 @@ async function getUser(id: string) {
   return user
 }
 \`\`\`
+
+---
+
+## 🏦 Fintech Case: Rate Limiting for APIs
+
+Financial APIs are targets for brute force attacks and abuse. Redis is perfect for implementing **robust rate limiting**:
+
+\`\`\`typescript
+import { Redis } from 'ioredis'
+
+const redis = new Redis()
+
+// Sliding window rate limiter
+async function checkRateLimit(userId: string, action: string): Promise<boolean> {
+  const key = \`ratelimit:\${action}:\${userId}\`
+  const now = Date.now()
+  const windowMs = 60000 // 1 minute
+
+  // Limits per action (stricter for sensitive operations)
+  const limits: Record<string, number> = {
+    'transfer': 5,      // 5 transfers/min
+    'login': 10,        // 10 attempts/min
+    'api_call': 100,    // 100 calls/min
+    'otp_request': 3,   // 3 OTP codes/min
+  }
+
+  const limit = limits[action] || 60
+
+  // Sliding window with sorted sets
+  await redis.zremrangebyscore(key, 0, now - windowMs)
+  const count = await redis.zcard(key)
+
+  if (count >= limit) {
+    // Log blocked attempt for security analysis
+    await redis.lpush('security:blocked_requests', JSON.stringify({
+      userId, action, timestamp: now, count
+    }))
+    return false // Blocked
+  }
+
+  await redis.zadd(key, now, \`\${now}\`)
+  await redis.expire(key, 60)
+  return true // Allowed
+}
+
+// Middleware for Express/Fastify
+async function rateLimitMiddleware(req, res, next) {
+  const userId = req.user?.id || req.ip
+  const allowed = await checkRateLimit(userId, 'api_call')
+
+  if (!allowed) {
+    // Standard rate limiting headers
+    res.set('Retry-After', '60')
+    res.set('X-RateLimit-Limit', '100')
+    res.set('X-RateLimit-Remaining', '0')
+    return res.status(429).json({ error: 'Too many requests' })
+  }
+
+  next()
+}
+\`\`\`
+
+### Strategies by operation
+
+| Operation | Limit | Window | Action when exceeded |
+|-----------|-------|--------|----------------------|
+| Failed login | 5 | 15 min | Temp block + alert |
+| Transfer | 10 | 1 hour | Require additional MFA |
+| Balance check | 100 | 1 min | Rate limit only |
+| OTP request | 3 | 5 min | Block + notification |
+
+> 💡 Rate limiting with Redis protects against brute force and credential stuffing attacks, meeting PCI DSS security requirements.
 
 ---
 
@@ -7161,6 +8011,74 @@ PREGUNTA: {user_question}
 
 ---
 
+## 📚 Caso Real: RAG para Compliance
+
+Las empresas financieras tienen cientos de PDFs de políticas y regulaciones. RAG permite buscar en ellos con lenguaje natural.
+
+### Ejemplo: Buscador de Políticas Internas
+
+\`\`\`python
+# Documentos de compliance
+docs = [
+    "politica_aml.pdf",
+    "manual_kyc.pdf",
+    "regulacion_cnbv_2024.pdf",
+    "procedimiento_fraudes.pdf",
+    "codigo_etica.pdf"
+]
+
+# Indexar una vez
+for doc in docs:
+    chunks = split_pdf(doc, chunk_size=500)
+    embeddings = model.embed(chunks)
+    vector_db.add(embeddings, chunks, metadata={"source": doc})
+
+# Consulta de empleado
+query = "¿Cuál es el límite para transacciones sin verificación adicional?"
+
+# Buscar en todos los documentos
+results = vector_db.search(query, top_k=5)
+
+# Respuesta con fuente
+response = llm.generate(
+    prompt=f"Contexto: {results}\\n\\nPregunta: {query}",
+    system="Responde citando el documento y sección específica."
+)
+# "Según la política AML sección 4.2, las transacciones
+#  mayores a $15,000 MXN requieren verificación adicional..."
+\`\`\`
+
+### Por qué es valioso en Fintech
+
+| Sin RAG | Con RAG |
+|---------|---------|
+| Buscar en 50 PDFs manualmente | Pregunta en lenguaje natural |
+| "No sé dónde está esa política" | Respuesta + fuente exacta |
+| Empleados inventan respuestas | Basado en documentos reales |
+| Auditor pide evidencia → pánico | Link directo al párrafo |
+
+### Consideraciones de seguridad
+
+\`\`\`python
+# SIEMPRE incluir la fuente para auditoría
+response = {
+    "answer": "...",
+    "sources": [
+        {"doc": "politica_aml.pdf", "page": 12, "section": "4.2"},
+        {"doc": "manual_kyc.pdf", "page": 5, "section": "2.1"}
+    ],
+    "confidence": 0.92
+}
+
+# Si no hay match confiable, NO inventar
+if confidence < 0.7:
+    response["answer"] = "No encontré información específica. Consulta con Compliance."
+\`\`\`
+
+> 💡 RAG para compliance reduce tiempo de búsqueda de horas a segundos, y siempre cita la fuente.
+
+---
+
 ## Practica
 
 → [RAG con Documentos PDF](/es/cooking/rag-documents)
@@ -7257,6 +8175,63 @@ QUESTION: {user_question}
 | **Relevance** | Correct chunks? |
 | **Faithfulness** | Response based on context? |
 | **Answer quality** | Useful response? |
+
+---
+
+## 🏦 Fintech Case: Compliance Documents
+
+Regulations (PCI DSS, SOC 2, AML) generate hundreds of PDFs. RAG lets employees **query in natural language**:
+
+\`\`\`python
+# Index compliance documents
+from langchain.document_loaders import PyPDFLoader
+from langchain.vectorstores import Qdrant
+
+# Load AML policy, KYC manual, internal procedures
+docs = []
+for pdf in ["aml_policy.pdf", "kyc_manual.pdf", "fraud_procedures.pdf"]:
+    docs.extend(PyPDFLoader(f"compliance/{pdf}").load())
+
+# Index with source metadata
+vectorstore = Qdrant.from_documents(
+    docs,
+    embeddings,
+    metadata=lambda doc: {"source": doc.metadata["source"], "page": doc.metadata["page"]}
+)
+
+# Employee query
+query = "What are the maximum limits for transactions without additional KYC verification?"
+results = vectorstore.similarity_search(query, k=3)
+\`\`\`
+
+### Why it's valuable in Fintech
+
+| Without RAG | With RAG |
+|-------------|----------|
+| Manually search 50 PDFs | Natural language query |
+| "I don't know where that policy is" | Answer + exact source |
+| Employees make up answers | Based on real documents |
+| Auditor asks for evidence → panic | Direct link to paragraph |
+
+### Security considerations
+
+\`\`\`python
+# ALWAYS include source for audit trail
+response = {
+    "answer": "...",
+    "sources": [
+        {"doc": "aml_policy.pdf", "page": 12, "section": "4.2"},
+        {"doc": "kyc_manual.pdf", "page": 5, "section": "2.1"}
+    ],
+    "confidence": 0.92
+}
+
+# If no confident match, DON'T make things up
+if confidence < 0.7:
+    response["answer"] = "I didn't find specific information. Please consult with Compliance."
+\`\`\`
+
+> 💡 RAG for compliance reduces search time from hours to seconds, and always cites the source.
 
 ---
 
@@ -7602,6 +8577,70 @@ while True:
 
 ---
 
+## 🏦 Caso Real: Agente para Conciliación Bancaria
+
+Los agentes brillan en tareas financieras que requieren múltiples pasos y decisiones.
+
+### Ejemplo: Agente de Conciliación
+
+\`\`\`python
+tools = [
+    {"name": "fetch_bank_transactions", "description": "Obtener transacciones del banco"},
+    {"name": "fetch_internal_records", "description": "Obtener registros internos"},
+    {"name": "compare_records", "description": "Comparar y encontrar diferencias"},
+    {"name": "generate_report", "description": "Crear reporte de conciliación"},
+    {"name": "flag_discrepancy", "description": "Marcar discrepancia para revisión"},
+]
+
+# El agente decide qué hacer
+system_prompt = """
+Eres un agente de conciliación bancaria. Tu trabajo:
+1. Obtener transacciones del banco (últimas 24h)
+2. Obtener registros internos del mismo período
+3. Comparar y encontrar discrepancias
+4. Si hay diferencias > $100, marcar para revisión humana
+5. Generar reporte final
+
+Sé meticuloso. Un error aquí cuesta dinero real.
+"""
+\`\`\`
+
+### Flujo del Agente
+
+\`\`\`
+Tarea: "Concilia las transacciones de ayer"
+    ↓
+Thought: Primero obtengo las transacciones del banco
+Action: fetch_bank_transactions("2024-01-15")
+Observation: 847 transacciones, total $1,234,567
+    ↓
+Thought: Ahora los registros internos
+Action: fetch_internal_records("2024-01-15")
+Observation: 845 transacciones, total $1,234,123
+    ↓
+Thought: Hay diferencia. Comparo en detalle
+Action: compare_records(bank, internal)
+Observation: 2 transacciones faltantes, diferencia $444
+    ↓
+Thought: Diferencia > $100, marco para revisión
+Action: flag_discrepancy({amount: 444, txns: [...]})
+    ↓
+Action: generate_report() → ✅ Reporte enviado
+\`\`\`
+
+### Otros casos de uso en Fintech
+
+| Caso | Herramientas | Valor |
+|------|--------------|-------|
+| **Análisis de riesgo** | APIs de credit bureau, calculadoras | Decisión de crédito automatizada |
+| **Detección de fraude** | Bases de datos, reglas, ML | Bloqueo en tiempo real |
+| **Onboarding KYC** | OCR, verificación, bases PEP | Proceso de horas → minutos |
+| **Soporte al cliente** | CRM, knowledge base | Resolución sin humanos |
+
+> 💡 Los agentes son ideales cuando la tarea tiene **múltiples pasos** y requiere **decisiones intermedias**.
+
+---
+
 ## Practica
 
 → [Agente IA Autónomo](/es/cooking/ai-agent)
@@ -7715,6 +8754,70 @@ while True:
 | **CrewAI** | Multi-agent |
 | **AutoGen** | Conversation |
 | **Claude Code** | Coding agent |
+
+---
+
+## 🏦 Real Case: Bank Reconciliation Agent
+
+Agents excel at financial tasks requiring multiple steps and decisions.
+
+### Example: Reconciliation Agent
+
+\`\`\`python
+tools = [
+    {"name": "fetch_bank_transactions", "description": "Get transactions from bank"},
+    {"name": "fetch_internal_records", "description": "Get internal records"},
+    {"name": "compare_records", "description": "Compare and find differences"},
+    {"name": "generate_report", "description": "Create reconciliation report"},
+    {"name": "flag_discrepancy", "description": "Flag discrepancy for review"},
+]
+
+# The agent decides what to do
+system_prompt = """
+You are a bank reconciliation agent. Your job:
+1. Get bank transactions (last 24h)
+2. Get internal records for the same period
+3. Compare and find discrepancies
+4. If differences > $100, flag for human review
+5. Generate final report
+
+Be meticulous. An error here costs real money.
+"""
+\`\`\`
+
+### Agent Flow
+
+\`\`\`
+Task: "Reconcile yesterday's transactions"
+    ↓
+Thought: First I get bank transactions
+Action: fetch_bank_transactions("2024-01-15")
+Observation: 847 transactions, total $1,234,567
+    ↓
+Thought: Now internal records
+Action: fetch_internal_records("2024-01-15")
+Observation: 845 transactions, total $1,234,123
+    ↓
+Thought: There's a difference. Compare in detail
+Action: compare_records(bank, internal)
+Observation: 2 missing transactions, difference $444
+    ↓
+Thought: Difference > $100, flag for review
+Action: flag_discrepancy({amount: 444, txns: [...]})
+    ↓
+Action: generate_report() → ✅ Report sent
+\`\`\`
+
+### Other Fintech Use Cases
+
+| Case | Tools | Value |
+|------|-------|-------|
+| **Risk analysis** | Credit bureau APIs, calculators | Automated credit decision |
+| **Fraud detection** | Databases, rules, ML | Real-time blocking |
+| **KYC onboarding** | OCR, verification, PEP databases | Hours → minutes |
+| **Customer support** | CRM, knowledge base | Resolution without humans |
+
+> 💡 Agents are ideal when the task has **multiple steps** and requires **intermediate decisions**.
 
 ---
 
@@ -7837,6 +8940,107 @@ objects = detector("street.jpg")
 
 ---
 
+## 🏦 Caso Fintech: Verificación KYC con Vision
+
+Know Your Customer (KYC) requiere verificar documentos de identidad. Vision AI automatiza este proceso:
+
+\`\`\`typescript
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic();
+
+interface KYCResult {
+  documentType: 'passport' | 'id_card' | 'drivers_license' | 'unknown';
+  extractedData: {
+    fullName?: string;
+    documentNumber?: string;
+    expiryDate?: string;
+    nationality?: string;
+  };
+  validationChecks: {
+    isExpired: boolean;
+    formatValid: boolean;
+    photoDetected: boolean;
+  };
+  confidence: number;
+  requiresManualReview: boolean;
+}
+
+async function verifyKYCDocument(imageBase64: string): Promise<KYCResult> {
+  const response = await anthropic.messages.create({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 1024,
+    messages: [{
+      role: "user",
+      content: [
+        {
+          type: "image",
+          source: { type: "base64", media_type: "image/jpeg", data: imageBase64 }
+        },
+        {
+          type: "text",
+          text: \`Analiza este documento de identidad para KYC. Extrae:
+1. Tipo de documento (passport, id_card, drivers_license)
+2. Nombre completo
+3. Número de documento
+4. Fecha de expiración
+5. Nacionalidad
+
+Verifica:
+- ¿El documento está expirado?
+- ¿El formato parece válido?
+- ¿Se detecta foto del titular?
+
+Responde SOLO en JSON con este formato:
+{
+  "documentType": "...",
+  "extractedData": {...},
+  "validationChecks": {...},
+  "confidence": 0.0-1.0,
+  "requiresManualReview": true/false
+}
+
+IMPORTANTE: Si hay CUALQUIER duda sobre la autenticidad, marca requiresManualReview: true\`
+        }
+      ]
+    }]
+  });
+
+  // Parsear respuesta y validar
+  const result = JSON.parse(response.content[0].text);
+
+  // Regla de negocio: baja confianza = revisión manual
+  if (result.confidence < 0.85) {
+    result.requiresManualReview = true;
+  }
+
+  // Log para auditoría (sin datos sensibles)
+  await auditLog({
+    action: 'KYC_VERIFICATION',
+    documentType: result.documentType,
+    confidence: result.confidence,
+    requiresManualReview: result.requiresManualReview,
+    timestamp: new Date().toISOString()
+  });
+
+  return result;
+}
+\`\`\`
+
+### Consideraciones de seguridad KYC
+
+| Aspecto | Recomendación |
+|---------|---------------|
+| **Almacenamiento** | Encriptar imágenes en reposo (AES-256) |
+| **Retención** | Eliminar después de verificación (30-90 días) |
+| **Logs** | NO guardar datos extraídos en logs |
+| **Fallback** | Siempre tener revisión humana disponible |
+| **Regulación** | Cumplir con GDPR/LGPD para datos biométricos |
+
+> 💡 Vision AI acelera KYC de días a minutos, pero siempre mantén un humano en el loop para casos de baja confianza.
+
+---
+
 ## Practica
 
 → [Clasificador de Imágenes](/es/cooking/image-classifier)
@@ -7951,6 +9155,107 @@ detector = pipeline("object-detection")
 objects = detector("street.jpg")
 # → [{"label": "car", "box": {...}}]
 \`\`\`
+
+---
+
+## 🏦 Fintech Case: KYC Verification with Vision
+
+Know Your Customer (KYC) requires identity document verification. Vision AI automates this process:
+
+\`\`\`typescript
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic();
+
+interface KYCResult {
+  documentType: 'passport' | 'id_card' | 'drivers_license' | 'unknown';
+  extractedData: {
+    fullName?: string;
+    documentNumber?: string;
+    expiryDate?: string;
+    nationality?: string;
+  };
+  validationChecks: {
+    isExpired: boolean;
+    formatValid: boolean;
+    photoDetected: boolean;
+  };
+  confidence: number;
+  requiresManualReview: boolean;
+}
+
+async function verifyKYCDocument(imageBase64: string): Promise<KYCResult> {
+  const response = await anthropic.messages.create({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 1024,
+    messages: [{
+      role: "user",
+      content: [
+        {
+          type: "image",
+          source: { type: "base64", media_type: "image/jpeg", data: imageBase64 }
+        },
+        {
+          type: "text",
+          text: \`Analyze this identity document for KYC. Extract:
+1. Document type (passport, id_card, drivers_license)
+2. Full name
+3. Document number
+4. Expiry date
+5. Nationality
+
+Verify:
+- Is the document expired?
+- Does the format appear valid?
+- Is a photo of the holder detected?
+
+Respond ONLY in JSON with this format:
+{
+  "documentType": "...",
+  "extractedData": {...},
+  "validationChecks": {...},
+  "confidence": 0.0-1.0,
+  "requiresManualReview": true/false
+}
+
+IMPORTANT: If there's ANY doubt about authenticity, set requiresManualReview: true\`
+        }
+      ]
+    }]
+  });
+
+  // Parse response and validate
+  const result = JSON.parse(response.content[0].text);
+
+  // Business rule: low confidence = manual review
+  if (result.confidence < 0.85) {
+    result.requiresManualReview = true;
+  }
+
+  // Audit log (no sensitive data)
+  await auditLog({
+    action: 'KYC_VERIFICATION',
+    documentType: result.documentType,
+    confidence: result.confidence,
+    requiresManualReview: result.requiresManualReview,
+    timestamp: new Date().toISOString()
+  });
+
+  return result;
+}
+\`\`\`
+
+### KYC Security Considerations
+
+| Aspect | Recommendation |
+|--------|----------------|
+| **Storage** | Encrypt images at rest (AES-256) |
+| **Retention** | Delete after verification (30-90 days) |
+| **Logs** | DO NOT store extracted data in logs |
+| **Fallback** | Always have human review available |
+| **Regulation** | Comply with GDPR/CCPA for biometric data |
+
+> 💡 Vision AI accelerates KYC from days to minutes, but always keep a human in the loop for low confidence cases.
 
 ---
 

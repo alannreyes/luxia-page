@@ -211,6 +211,56 @@ El código cambia. El proceso es el mismo.
 
 ---
 
+## 💼 Caso Real: Chatbot para Fintech
+
+Si quieres adaptar este chatbot para servicios financieros, hay consideraciones importantes de seguridad y compliance.
+
+### System Prompt Seguro
+
+Agrega restricciones claras al comportamiento del bot:
+
+\`\`\`javascript
+const systemPrompt = \`Eres un asistente financiero. Reglas estrictas:
+- NUNCA des consejos de inversión específicos ("compra X acción")
+- NUNCA solicites datos sensibles (números de tarjeta, contraseñas, CVV)
+- Siempre recomienda consultar con un asesor financiero certificado
+- Si detectas intención de fraude o phishing, responde: "No puedo ayudar con eso"
+- Incluye disclaimer: "Esto es información general, no asesoría financiera"\`;
+
+// Usar en la llamada a la API
+const response = await ai.generateContent({
+  systemInstruction: systemPrompt,
+  contents: [{ role: "user", parts: [{ text: userMessage }] }]
+});
+\`\`\`
+
+### Consideraciones de Compliance
+
+| Requisito | Por qué | Cómo implementarlo |
+|-----------|---------|-------------------|
+| **Logging** | Auditoría regulatoria | Guarda todas las conversaciones con timestamp |
+| **Rate limiting** | Prevenir abuso | Máx 10 mensajes/minuto por usuario |
+| **Disclaimer visible** | Protección legal | Footer: "No es asesoría financiera" |
+| **No guardar datos sensibles** | PCI DSS / GDPR | Filtrar antes de guardar en logs |
+
+### Ejemplo de Logging para Auditoría
+
+\`\`\`javascript
+const logConversation = async (userId, message, response) => {
+  await db.insert('chat_logs', {
+    user_id: userId,
+    timestamp: new Date().toISOString(),
+    user_message: sanitize(message), // Remover datos sensibles
+    bot_response: response,
+    session_id: sessionId
+  });
+};
+\`\`\`
+
+> 📖 Aprende más sobre seguridad en [Autenticación](/es/learning/auth) y [APIs Seguras](/es/learning/apis)
+
+---
+
 ## Próximo paso
 
 → [Chatbot con Claude](/es/cooking/chatbot-claude) — Mismo proceso, diferente IA
@@ -342,6 +392,56 @@ Go back to Google AI Studio and try variations:
 - *"...that's a math tutor"*
 
 The code changes. The process is the same.
+
+---
+
+## 💼 Real Case: Fintech Chatbot
+
+If you want to adapt this chatbot for financial services, there are important security and compliance considerations.
+
+### Secure System Prompt
+
+Add clear restrictions to the bot's behavior:
+
+\`\`\`javascript
+const systemPrompt = \`You are a financial assistant. Strict rules:
+- NEVER give specific investment advice ("buy X stock")
+- NEVER request sensitive data (card numbers, passwords, CVV)
+- Always recommend consulting with a certified financial advisor
+- If you detect fraud or phishing intent, respond: "I cannot help with that"
+- Include disclaimer: "This is general information, not financial advice"\`;
+
+// Use in the API call
+const response = await ai.generateContent({
+  systemInstruction: systemPrompt,
+  contents: [{ role: "user", parts: [{ text: userMessage }] }]
+});
+\`\`\`
+
+### Compliance Considerations
+
+| Requirement | Why | How to implement |
+|-------------|-----|------------------|
+| **Logging** | Regulatory audit | Save all conversations with timestamp |
+| **Rate limiting** | Prevent abuse | Max 10 messages/minute per user |
+| **Visible disclaimer** | Legal protection | Footer: "Not financial advice" |
+| **Don't store sensitive data** | PCI DSS / GDPR | Filter before saving to logs |
+
+### Audit Logging Example
+
+\`\`\`javascript
+const logConversation = async (userId, message, response) => {
+  await db.insert('chat_logs', {
+    user_id: userId,
+    timestamp: new Date().toISOString(),
+    user_message: sanitize(message), // Remove sensitive data
+    bot_response: response,
+    session_id: sessionId
+  });
+};
+\`\`\`
+
+> 📖 Learn more about security in [Authentication](/en/learning/auth) and [Secure APIs](/en/learning/apis)
 
 ---
 
