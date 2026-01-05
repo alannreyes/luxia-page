@@ -1774,356 +1774,278 @@ git clean -fd
   },
   editors: {
     contentEs: `
-## Tu herramienta más importante
+## ¿Qué herramienta necesito?
 
-El editor de código es donde pasarás el 90% de tu tiempo programando. Elegir uno bueno y aprenderlo bien te hace más productivo.
+El ecosistema de desarrollo en 2026 tiene dos componentes que debes entender:
+1. **El editor** → donde escribes código (VS Code, Neovim, etc.)
+2. **La IA** → que te ayuda a escribir mejor y más rápido
 
----
-
-## Opciones populares
-
-| Editor | Tipo | Ideal para |
-|--------|------|------------|
-| **VS Code** | Gratuito, extensible | Mayoría de desarrolladores |
-| **Cursor** | VS Code + IA | Desarrollo con IA integrada |
-| **Zed** | Rápido, Rust | Performance extremo |
-| **Neovim** | Terminal | Usuarios avanzados |
-| **JetBrains** | IDEs completos | Proyectos grandes, Java |
-
-> 💡 **Recomendación**: VS Code para empezar, Cursor si usas mucho IA.
+Puedes combinarlos de distintas formas. Esta guía te ayuda a elegir.
 
 ---
 
-## Instalación
+## Decisión rápida: ¿Qué debería usar?
 
-| Sistema | VS Code | Cursor |
-|---------|---------|--------|
-| **macOS** | \`brew install --cask visual-studio-code\` | \`brew install --cask cursor\` |
-| **Windows** | \`winget install Microsoft.VisualStudioCode\` | Descargar de cursor.sh |
-| **Linux** | \`sudo snap install code --classic\` | Descargar de cursor.sh |
+\`\`\`
+                    ¿Qué buscas?
+                         │
+         ┌───────────────┼───────────────┐
+         ▼               ▼               ▼
+    Simplicidad     Máximo poder    Gratis total
+         │               │               │
+         ▼               ▼               ▼
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│   CURSOR    │  │  VS Code +  │  │  VS Code +  │
+│  (todo en   │  │ Claude Code │  │  Continue + │
+│    uno)     │  │   (CLI)     │  │   Ollama    │
+│             │  │             │  │             │
+│  $20/mes    │  │  ~$20/mes   │  │    $0       │
+└─────────────┘  └─────────────┘  └─────────────┘
+\`\`\`
+
+> **¿Eres principiante?** Empieza con VS Code + GitHub Copilot ($10/mes o gratis para estudiantes).
 
 ---
 
-## Extensiones esenciales (VS Code)
+## Parte 1: Los Editores Base
 
-| Extensión | Para qué |
-|-----------|----------|
-| **ESLint** | Errores JavaScript/TypeScript |
-| **Prettier** | Formateo automático |
-| **GitLens** | Historial Git visual |
-| **Auto Close Tag** | HTML/JSX más rápido |
-| **Error Lens** | Errores inline |
+El editor es donde vives. Elige uno y apréndelo bien.
+
+| Editor | Precio | Mejor para | Curva de aprendizaje |
+|--------|--------|------------|---------------------|
+| **VS Code** | Gratis | La mayoría | ⭐ Fácil |
+| **Cursor** | $20/mes | IA integrada | ⭐ Fácil (es VS Code) |
+| **Zed** | Gratis | Velocidad extrema | ⭐⭐ Media |
+| **Neovim** | Gratis | Terminal puro | ⭐⭐⭐ Difícil |
+| **JetBrains** | $15-25/mes | Java, Android, proyectos grandes | ⭐⭐ Media |
+
+### Instalación rápida
 
 \`\`\`bash
-# Instalar desde terminal
-code --install-extension dbaeumer.vscode-eslint
-code --install-extension esbenp.prettier-vscode
+# macOS
+brew install --cask visual-studio-code  # VS Code
+brew install --cask cursor              # Cursor
+brew install neovim                     # Neovim
+
+# Windows
+winget install Microsoft.VisualStudioCode
+winget install Cursor.Cursor
 \`\`\`
 
 ---
 
-## Atajos que debes saber
+## Parte 2: Las 3 Formas de Agregar IA
 
-| Acción | macOS | Windows/Linux |
-|--------|-------|---------------|
-| Paleta comandos | \`Cmd+Shift+P\` | \`Ctrl+Shift+P\` |
-| Buscar archivo | \`Cmd+P\` | \`Ctrl+P\` |
-| Buscar en proyecto | \`Cmd+Shift+F\` | \`Ctrl+Shift+F\` |
-| Terminal | \`Cmd+J\` | \`Ctrl+J\` |
-| Multi-cursor | \`Cmd+D\` | \`Ctrl+D\` |
+Una vez tienes tu editor, puedes agregar IA de 3 formas distintas:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                     FORMAS DE AGREGAR IA                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  1. EXTENSIONES          2. EDITOR CON IA      3. CLI AGÉNTICA │
+│     (se instalan)           (ya viene)            (terminal)   │
+│                                                                 │
+│  ┌─────────────┐        ┌─────────────┐       ┌─────────────┐  │
+│  │ • Copilot   │        │ • Cursor    │       │ • Claude    │  │
+│  │ • Cody      │        │ • Windsurf  │       │   Code      │  │
+│  │ • Continue  │        │ • Antigrav. │       │ • Aider     │  │
+│  │ • Gemini    │        │ • IDX       │       │ • Codex CLI │  │
+│  └─────────────┘        └─────────────┘       └─────────────┘  │
+│                                                                 │
+│  Autocompletado ✓        Todo integrado ✓      Ejecuta cmds ✓  │
+│  Usa tu editor ✓         Cambias editor ✗      Multi-archivo ✓ │
+│  Chat básico ✓           IA profunda ✓         Modo agente ✓   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
 
 ---
 
-## settings.json recomendado
+### Opción 1: Extensiones de IA
 
+Se instalan en tu editor existente. Ideal si ya usas VS Code o JetBrains.
+
+| Extensión | Precio | Lo mejor | Lo peor |
+|-----------|--------|----------|---------|
+| **GitHub Copilot** | $10/mes | Autocompletado excelente | Contexto limitado |
+| **Cody** | Gratis (500 msgs) | Entiende codebases enormes | Menos autonomía |
+| **Continue** | Gratis + API | Usa cualquier modelo | Requiere configurar |
+| **Gemini Code Assist** | Gratis (6000/mes) | Integra con Google Cloud | Enterprise-focused |
+
+**Setup: VS Code + Copilot (5 min)**
+\`\`\`bash
+# 1. Instalar extensión
+code --install-extension GitHub.copilot
+
+# 2. Hacer login en GitHub cuando te lo pida
+
+# 3. Listo - escribe código y verás sugerencias
+\`\`\`
+
+---
+
+### Opción 2: Editores con IA Nativa
+
+El editor YA incluye IA. No configuras nada.
+
+| Editor | Precio | Lo mejor | Lo peor |
+|--------|--------|----------|---------|
+| **Cursor** | $20/mes | UX perfecta, Composer multi-archivo | Otro editor que aprender |
+| **Windsurf** | $15/mes | Cascade (agente propio) | Menos maduro |
+| **Antigravity** | Gratis (preview) | Multi-agente paralelo | Muy nuevo (Nov 2025) |
+| **Google IDX** | Gratis (beta) | 100% cloud, no instalas nada | Requiere internet |
+
+**Setup: Cursor (2 min)**
+\`\`\`bash
+# macOS
+brew install --cask cursor
+
+# Abrir y hacer login - listo
+\`\`\`
+
+---
+
+### Opción 3: CLI Agéntica (Terminal)
+
+Herramientas que viven en tu terminal y pueden ejecutar comandos, editar múltiples archivos, y resolver tareas complejas de forma autónoma.
+
+| CLI | Precio | Lo mejor | Lo peor |
+|-----|--------|----------|---------|
+| **Claude Code** | ~$20/mes | Modo agente, 200K contexto | Sin autocompletado |
+| **Aider** | Gratis + API | Open source, cualquier modelo | Solo terminal |
+| **Codex CLI** | Gratis + API | Integrado con OpenAI | Nuevo (Abril 2025) |
+
+**Setup: Claude Code (3 min)**
+\`\`\`bash
+# 1. Instalar
+npm install -g @anthropic-ai/claude-code
+
+# 2. Configurar API key
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# 3. Usar en cualquier proyecto
+cd mi-proyecto
+claude
+\`\`\`
+
+---
+
+## Parte 3: Combinaciones Recomendadas por Perfil
+
+### 🎓 Principiante ($10/mes)
+\`\`\`
+VS Code + GitHub Copilot
+└── Autocompletado te enseña patrones mientras escribes
+└── Copilot Chat para preguntas básicas
+\`\`\`
+
+### 💼 Desarrollador Profesional ($20-40/mes)
+\`\`\`
+Cursor (editor principal)
+   └── Composer para refactors multi-archivo
+   └── Cmd+K para ediciones inline rápidas
+
++ Claude Code (terminal)
+   └── Tareas complejas: "implementa auth completa"
+   └── Debugging profundo con contexto de proyecto
+\`\`\`
+
+### 🆓 Presupuesto Cero ($0)
+\`\`\`
+VS Code + Continue (extensión open source)
+   └── Conecta a Ollama para modelos locales
+   └── Autocompletado gratuito con llama3
+
++ Aider (terminal)
+   └── Usa Ollama o APIs con créditos gratuitos
+\`\`\`
+
+### 🏢 Enterprise
+\`\`\`
+VS Code + Cody (contexto masivo)
+   └── Entiende millones de líneas de código
+   └── Integración con Sourcegraph
+
++ Gemini Code Assist (si usas Google Cloud)
+\`\`\`
+
+---
+
+## Parte 4: Comparativa de Capacidades (Enero 2026)
+
+| Capacidad | Copilot | Cursor | Claude Code | Antigravity |
+|-----------|:-------:|:------:|:-----------:|:-----------:|
+| Autocompletado inline | ✅✅ | ✅✅ | ❌ | ✅ |
+| Chat contextual | ✅ | ✅✅ | ✅✅ | ✅✅ |
+| Edición multi-archivo | ❌ | ✅✅ | ✅✅ | ✅✅ |
+| Ejecutar comandos | ❌ | ✅ | ✅✅ | ✅✅ |
+| Modo agente autónomo | ❌ | ✅ | ✅✅ | ✅✅ |
+| Multi-agente paralelo | ❌ | ❌ | ❌ | ✅✅ |
+| Funciona offline | ❌ | ❌ | ❌ | ❌ |
+
+\`\`\`
+Leyenda: ✅✅ Excelente | ✅ Bueno | ❌ No disponible
+\`\`\`
+
+---
+
+## Parte 5: Setup Esencial de VS Code
+
+Si usas VS Code (solo o con extensiones de IA), estas son las configuraciones esenciales:
+
+### Extensiones imprescindibles
+\`\`\`bash
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension eamodio.gitlens
+code --install-extension usernamehw.errorlens
+\`\`\`
+
+### settings.json recomendado
 \`\`\`json
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.tabSize": 2,
   "editor.fontSize": 14,
-  "editor.wordWrap": "on"
+  "editor.minimap.enabled": false,
+  "editor.wordWrap": "on",
+  "editor.bracketPairColorization.enabled": true,
+  "files.autoSave": "onFocusChange"
 }
 \`\`\`
 
----
+### Atajos que debes memorizar
 
-## AI Coding Assistants (Enero 2026)
-
-En la era del "prompt-first", los asistentes de código con IA son tan importantes como el editor mismo. Esta es la guía más completa para elegir tu herramienta.
-
----
-
-### Categorías de herramientas
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                    CATEGORÍAS                                │
-├─────────────────────────────────────────────────────────────┤
-│  CLI (Terminal)     │ Claude Code, OpenAI Codex CLI, Aider  │
-│  Extensiones        │ Copilot, Cody, Continue, Gemini       │
-│  Editores con IA    │ Cursor, Windsurf, Antigravity, IDX    │
-│  Agentes Cloud      │ OpenAI Codex, Antigravity Manager     │
-│  Chat + Código      │ ChatGPT, Claude.ai, Gemini            │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
+| Acción | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Paleta comandos | \`Cmd+Shift+P\` | \`Ctrl+Shift+P\` |
+| Buscar archivo | \`Cmd+P\` | \`Ctrl+P\` |
+| Buscar en proyecto | \`Cmd+Shift+F\` | \`Ctrl+Shift+F\` |
+| Terminal integrada | \`Cmd+J\` | \`Ctrl+J\` |
+| Multi-cursor | \`Cmd+D\` | \`Ctrl+D\` |
+| Ir a definición | \`Cmd+Click\` | \`Ctrl+Click\` |
+| Renombrar símbolo | \`F2\` | \`F2\` |
 
 ---
 
-### Comparativa completa de precios (Enero 2026)
-
-| Herramienta | Empresa | Plan Gratis | Plan Pro | Modelo base |
-|-------------|---------|-------------|----------|-------------|
-| **Claude Code** | Anthropic | - | ~$3/M tokens (API) | Claude Sonnet 4.5 |
-| **GitHub Copilot** | Microsoft | Estudiantes gratis | $10/mes Individual, $19/mes Business | GPT-4o + Claude |
-| **Cursor** | Cursor Inc | 2000 completions/mes | $20/mes Pro | GPT-4, Claude 4.5 |
-| **Google Antigravity** | Google | **Gratis (preview)** | TBD | Gemini 3 Pro |
-| **Windsurf** | Codeium | Gratis limitado | $15/mes Pro | Cascade (propio) |
-| **OpenAI Codex** | OpenAI | Codex CLI gratis | API usage | GPT-5.2-Codex |
-| **Gemini Code Assist** | Google | 6000 completions/mes | $19/mes Enterprise | Gemini 1.5 Pro |
-| **Cody** | Sourcegraph | 500 msgs/mes | $9/mes Pro | Claude 3.5 |
-| **Continue** | Continue.dev | Gratis + API | Gratis + API | Cualquiera |
-| **Aider** | Open Source | Gratis + API | Gratis + API | Cualquiera |
-
----
-
-### Benchmark: Capacidades por herramienta
-
-| Capacidad | Claude Code | Antigravity | Codex | Copilot | Cursor | Cody |
-|-----------|:-----------:|:-----------:|:-----:|:-------:|:------:|:----:|
-| Autocompletado inline | ❌ | ✅ | ❌ | ✅✅ | ✅✅ | ✅ |
-| Chat contextual | ✅✅ | ✅✅ | ✅ | ✅ | ✅✅ | ✅✅ |
-| Edición multi-archivo | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅✅ | ✅ |
-| Ejecutar comandos | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
-| Contexto proyecto | ✅✅ | ✅✅ | ✅✅ | ⚠️ | ✅✅ | ✅✅ |
-| Funciona sin editor | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Modo agente autónomo | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
-| Multi-agente paralelo | ❌ | ✅✅ | ✅ | ❌ | ❌ | ❌ |
+## Resumen: Mi recomendación 2026
 
 \`\`\`
-Leyenda: ✅✅ Excelente | ✅ Bueno | ⚠️ Limitado | ❌ No disponible
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│   Si estás empezando:    VS Code + Copilot ($10/mes)      │
+│                                                            │
+│   Si quieres productividad máxima:                        │
+│                          Cursor + Claude Code (~$40/mes)   │
+│                                                            │
+│   Si quieres $0:         VS Code + Continue + Ollama      │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
 \`\`\`
 
-> 🆕 **Google Antigravity** destaca por su "Manager View" que permite múltiples agentes trabajando en paralelo.
-
----
-
-### Claude Code vs GitHub Copilot vs Cursor
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                    CLAUDE CODE (Anthropic)                   │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Lee/edita archivos directamente desde terminal           │
-│  ✓ Ejecuta comandos (npm, git, docker, etc.)                │
-│  ✓ Contexto completo del proyecto (~200K tokens)            │
-│  ✓ Modo agente: resuelve tareas complejas solo              │
-│  ✓ Funciona con cualquier editor (VS Code, Vim, etc.)       │
-│  ✗ Sin autocompletado inline                                │
-│  ✗ Requiere API key (pago por uso)                          │
-│                                                              │
-│  💰 Costo: ~$3/M tokens, $20/mes pro, $100/mes max          │
-│  🔗 https://docs.anthropic.com/en/docs/claude-code          │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                    GITHUB COPILOT (Microsoft)                │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Autocompletado instantáneo mientras escribes             │
-│  ✓ Integrado nativo en VS Code, JetBrains, Neovim           │
-│  ✓ Copilot Chat para preguntas                              │
-│  ✓ Copilot Workspace (beta): multi-archivo                  │
-│  ✗ No ejecuta comandos                                      │
-│  ✗ Contexto limitado a archivos abiertos                    │
-│  ✗ No tiene modo agente autónomo                            │
-│                                                              │
-│  💰 Costo: $10/mes individual, $19/mes business             │
-│  🔗 https://github.com/features/copilot                     │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CURSOR                                 │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Editor completo basado en VS Code                        │
-│  ✓ Autocompletado + Chat + Composer (multi-archivo)         │
-│  ✓ Cmd+K para editar código inline                          │
-│  ✓ Usa múltiples modelos (GPT-4, Claude, etc.)              │
-│  ✗ Es otro editor que aprender                              │
-│  ✗ Suscripción mensual obligatoria para Pro                 │
-│  ✗ Menos portable que una CLI                               │
-│                                                              │
-│  💰 Costo: Gratis limitado, $20/mes Pro                     │
-│  🔗 https://cursor.sh                                       │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Google Antigravity y OpenAI Codex (Novedades 2025)
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│            🆕 GOOGLE ANTIGRAVITY (Nov 2025)                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ IDE "agent-first" (fork de VS Code/Windsurf)             │
-│  ✓ Manager View: múltiples agentes en PARALELO              │
-│  ✓ 76.2% en SWE-bench (casi igual a Claude 4.5)             │
-│  ✓ Powered by Gemini 3 Pro/Flash/Deep Think                 │
-│  ✓ Soporta Claude y modelos open source también             │
-│  ✓ GRATIS durante preview público                           │
-│  ✗ Muy nuevo, ecosistema en desarrollo                      │
-│                                                              │
-│  💰 Gratis (preview) | Pricing TBD                          │
-│  🔗 https://antigravityai.org                               │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│            🆕 OPENAI CODEX (Relanzado 2025)                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Codex CLI: agente local open source (Abril 2025)         │
-│  ✓ Codex Cloud: agente autónomo en la nube (Mayo 2025)      │
-│  ✓ Powered by codex-1 (o3 optimizado para código)           │
-│  ✓ GPT-5.2-Codex: modelo más reciente                       │
-│  ✓ Ejecuta tareas, crea PRs, resuelve issues                │
-│  ⚠️ codex-mini-latest se depreca 16 Enero 2026              │
-│                                                              │
-│  💰 CLI gratis + API | Cloud: API usage                     │
-│  🔗 https://openai.com/index/introducing-codex              │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Otras opciones de Google y OpenAI
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                 GEMINI CODE ASSIST (Google)                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Extensión para VS Code y JetBrains                       │
-│  ✓ 6000 completions gratis al mes                           │
-│  ✓ Integración con Google Cloud                             │
-│  ✗ Menos contexto que Claude/Cursor                         │
-│  ✗ Enterprise enfocado, menos para indie                    │
-│                                                              │
-│  💰 Gratis: 6000/mes | Enterprise: $19/usuario/mes          │
-│  🔗 https://cloud.google.com/gemini/docs/codeassist         │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                    GOOGLE IDX                                │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ IDE completo en la nube (VS Code-based)                  │
-│  ✓ Gemini integrado nativamente                             │
-│  ✓ Gratis durante beta                                      │
-│  ✓ Templates para Flutter, React, Angular, etc.             │
-│  ✗ Requiere internet siempre                                │
-│  ✗ En beta, puede cambiar                                   │
-│                                                              │
-│  💰 Gratis (beta)                                           │
-│  🔗 https://idx.dev                                         │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                    CHATGPT + Code (OpenAI)                   │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Code Interpreter: ejecuta Python en sandbox              │
-│  ✓ Análisis de archivos subidos                             │
-│  ✓ Canvas: edición visual de código                         │
-│  ✗ No edita tus archivos locales                            │
-│  ✗ No tiene extensión de editor oficial                     │
-│  ✗ Contexto limitado a la conversación                      │
-│                                                              │
-│  💰 Gratis limitado | Plus: $20/mes | Pro: $200/mes         │
-│  🔗 https://chat.openai.com                                 │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Open Source: Aider, Continue, Cody
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                       AIDER                                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ 100% Open Source (Apache 2.0)                            │
-│  ✓ Usa CUALQUIER modelo (GPT, Claude, Ollama, etc.)         │
-│  ✓ Git integrado: auto-commit de cambios                    │
-│  ✓ Edita múltiples archivos                                 │
-│  ✓ Benchmarks públicos: líder en SWE-bench                  │
-│  ✗ Solo terminal, curva de aprendizaje                      │
-│                                                              │
-│  💰 Gratis + costo de API del modelo que uses               │
-│  🔗 https://aider.chat                                      │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CONTINUE                               │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Extensión Open Source para VS Code/JetBrains             │
-│  ✓ Usa cualquier modelo (local o API)                       │
-│  ✓ Autocompletado + Chat                                    │
-│  ✓ Totalmente personalizable                                │
-│  ✗ Requiere configuración inicial                           │
-│                                                              │
-│  💰 Gratis + costo de API                                   │
-│  🔗 https://continue.dev                                    │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CODY (Sourcegraph)                     │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Contexto de codebase ENORME (millones de líneas)         │
-│  ✓ Usa Claude 3.5 Sonnet                                    │
-│  ✓ Busca en todo tu código, no solo archivos abiertos       │
-│  ✓ Plan gratis generoso (500 msgs/mes)                      │
-│  ✗ Menos autonomía que Claude Code                          │
-│                                                              │
-│  💰 Gratis: 500 msgs | Pro: $9/mes | Enterprise: custom     │
-│  🔗 https://sourcegraph.com/cody                            │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### ¿Cuál elegir? Guía de decisión
-
-| Tu situación | Recomendación | Por qué |
-|--------------|---------------|---------|
-| **Empezando a programar** | GitHub Copilot Free | Autocompletado ayuda a aprender |
-| **Quiero máximo poder** | Claude Code | Modo agente, ejecuta comandos |
-| **Multi-agente paralelo** | Google Antigravity | Manager View con 5+ agentes |
-| **Ecosistema OpenAI** | Codex CLI + Cloud | Integrado con GPT-5.2 |
-| **Todo en un editor** | Cursor | Mejor UX integrada |
-| **Presupuesto cero** | Continue + Ollama | 100% local y gratis |
-| **Codebase empresarial** | Cody | Mejor contexto de código |
-| **Ecosistema Google** | Antigravity o Gemini | Gemini 3 nativo |
-| **Máxima flexibilidad** | Aider | Cualquier modelo, open source |
-
----
-
-### Combinaciones recomendadas
-
-\`\`\`
-COMBO 1: Productividad máxima (Premium)
-├── Cursor (editor principal)
-└── Claude Code (tareas complejas desde terminal)
-
-COMBO 2: Equilibrio costo/beneficio
-├── VS Code + GitHub Copilot (autocompletado)
-└── Claude Code (cuando necesitas más poder)
-
-COMBO 3: 100% Gratis
-├── VS Code + Continue (autocompletado con Ollama)
-└── Aider (edición multi-archivo)
-
-COMBO 4: Enterprise
-├── VS Code + Cody (contexto masivo)
-└── Gemini Code Assist (integración Google Cloud)
-\`\`\`
-
-> 💡 **Las herramientas se complementan**: No tienes que elegir solo una.
+Las herramientas de IA **se complementan**. No tienes que elegir solo una.
 
 ---
 
@@ -2135,380 +2057,299 @@ COMBO 4: Enterprise
 
 ## Enlaces útiles
 
-**CLIs:**
-- 🤖 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic
-- 🔧 [Aider](https://aider.chat) - Open Source
-- ⚡ [OpenAI Codex CLI](https://openai.com/index/introducing-codex) - OpenAI
+**Editores:**
+- ⌨️ [VS Code](https://code.visualstudio.com) - Microsoft (Gratis)
+- ⚡ [Cursor](https://cursor.sh) - Editor con IA nativa
+- 🚀 [Zed](https://zed.dev) - Editor ultrarrápido
 
-**Extensiones:**
+**Extensiones de IA:**
 - 🐙 [GitHub Copilot](https://github.com/features/copilot) - Microsoft
 - 🔍 [Cody](https://sourcegraph.com/cody) - Sourcegraph
 - 🔓 [Continue](https://continue.dev) - Open Source
 
+**CLIs Agénticas:**
+- 🤖 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic
+- 🔧 [Aider](https://aider.chat) - Open Source
+- ⚡ [Codex CLI](https://openai.com/index/introducing-codex) - OpenAI
+
 **Editores con IA:**
-- ⌨️ [Cursor](https://cursor.sh) - Cursor Inc
 - 🌊 [Windsurf](https://codeium.com/windsurf) - Codeium
-- 🚀 [Google Antigravity](https://antigravityai.org) - Google (Nuevo!)
-
-**Google:**
-- 💎 [Gemini Code Assist](https://cloud.google.com/gemini/docs/codeassist)
-- 🌐 [Google IDX](https://idx.dev)
-
-**OpenAI:**
-- 💬 [ChatGPT](https://chat.openai.com)
-- 🧠 [Codex Cloud](https://openai.com/index/introducing-codex)
+- 🚀 [Google Antigravity](https://idx.google.com/antigravity) - Google
+- 🌐 [Google IDX](https://idx.dev) - IDE en la nube
     `,
     contentEn: `
-## Your most important tool
+## What tool do I need?
 
-The code editor is where you'll spend 90% of your programming time. Choosing a good one and learning it well makes you more productive.
+The development ecosystem in 2026 has two components you need to understand:
+1. **The editor** → where you write code (VS Code, Neovim, etc.)
+2. **The AI** → that helps you write better and faster
 
----
-
-## Popular options
-
-| Editor | Type | Ideal for |
-|--------|------|-----------|
-| **VS Code** | Free, extensible | Most developers |
-| **Cursor** | VS Code + AI | Development with integrated AI |
-| **Zed** | Fast, Rust | Extreme performance |
-| **Neovim** | Terminal | Advanced users |
-| **JetBrains** | Full IDEs | Large projects, Java |
-
-> 💡 **Recommendation**: VS Code to start, Cursor if you use a lot of AI.
+You can combine them in different ways. This guide helps you choose.
 
 ---
 
-## Installation
+## Quick Decision: What should I use?
 
-| System | VS Code | Cursor |
-|--------|---------|--------|
-| **macOS** | \`brew install --cask visual-studio-code\` | \`brew install --cask cursor\` |
-| **Windows** | \`winget install Microsoft.VisualStudioCode\` | Download from cursor.sh |
-| **Linux** | \`sudo snap install code --classic\` | Download from cursor.sh |
+\`\`\`
+                    What are you looking for?
+                              │
+              ┌───────────────┼───────────────┐
+              ▼               ▼               ▼
+         Simplicity     Maximum power    Totally free
+              │               │               │
+              ▼               ▼               ▼
+     ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+     │   CURSOR    │  │  VS Code +  │  │  VS Code +  │
+     │  (all in    │  │ Claude Code │  │  Continue + │
+     │    one)     │  │   (CLI)     │  │   Ollama    │
+     │             │  │             │  │             │
+     │  $20/mo     │  │  ~$20/mo    │  │    $0       │
+     └─────────────┘  └─────────────┘  └─────────────┘
+\`\`\`
+
+> **Are you a beginner?** Start with VS Code + GitHub Copilot ($10/mo or free for students).
 
 ---
 
-## Essential extensions (VS Code)
+## Part 1: Base Editors
 
-| Extension | What for |
-|-----------|----------|
-| **ESLint** | JavaScript/TypeScript errors |
-| **Prettier** | Auto formatting |
-| **GitLens** | Visual Git history |
-| **Auto Close Tag** | Faster HTML/JSX |
-| **Error Lens** | Inline errors |
+The editor is where you live. Pick one and learn it well.
+
+| Editor | Price | Best for | Learning curve |
+|--------|-------|----------|----------------|
+| **VS Code** | Free | Most people | ⭐ Easy |
+| **Cursor** | $20/mo | Integrated AI | ⭐ Easy (it's VS Code) |
+| **Zed** | Free | Extreme speed | ⭐⭐ Medium |
+| **Neovim** | Free | Pure terminal | ⭐⭐⭐ Hard |
+| **JetBrains** | $15-25/mo | Java, Android, large projects | ⭐⭐ Medium |
+
+### Quick Installation
 
 \`\`\`bash
-# Install from terminal
-code --install-extension dbaeumer.vscode-eslint
-code --install-extension esbenp.prettier-vscode
+# macOS
+brew install --cask visual-studio-code  # VS Code
+brew install --cask cursor              # Cursor
+brew install neovim                     # Neovim
+
+# Windows
+winget install Microsoft.VisualStudioCode
+winget install Cursor.Cursor
 \`\`\`
 
 ---
 
-## Shortcuts you must know
+## Part 2: The 3 Ways to Add AI
 
-| Action | macOS | Windows/Linux |
-|--------|-------|---------------|
-| Command palette | \`Cmd+Shift+P\` | \`Ctrl+Shift+P\` |
-| Find file | \`Cmd+P\` | \`Ctrl+P\` |
-| Search in project | \`Cmd+Shift+F\` | \`Ctrl+Shift+F\` |
-| Terminal | \`Cmd+J\` | \`Ctrl+J\` |
-| Multi-cursor | \`Cmd+D\` | \`Ctrl+D\` |
+Once you have your editor, you can add AI in 3 different ways:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────────┐
+│                      WAYS TO ADD AI                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. EXTENSIONS          2. AI EDITOR         3. AGENTIC CLI     │
+│     (install them)         (built-in)           (terminal)      │
+│                                                                  │
+│  ┌─────────────┐        ┌─────────────┐       ┌─────────────┐   │
+│  │ • Copilot   │        │ • Cursor    │       │ • Claude    │   │
+│  │ • Cody      │        │ • Windsurf  │       │   Code      │   │
+│  │ • Continue  │        │ • Antigrav. │       │ • Aider     │   │
+│  │ • Gemini    │        │ • IDX       │       │ • Codex CLI │   │
+│  └─────────────┘        └─────────────┘       └─────────────┘   │
+│                                                                  │
+│  Autocomplete ✓          All integrated ✓     Runs commands ✓   │
+│  Use your editor ✓       Change editor ✗      Multi-file ✓      │
+│  Basic chat ✓            Deep AI ✓            Agent mode ✓      │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+\`\`\`
 
 ---
 
-## Recommended settings.json
+### Option 1: AI Extensions
 
+Install on your existing editor. Ideal if you already use VS Code or JetBrains.
+
+| Extension | Price | Best thing | Worst thing |
+|-----------|-------|------------|-------------|
+| **GitHub Copilot** | $10/mo | Excellent autocomplete | Limited context |
+| **Cody** | Free (500 msgs) | Understands huge codebases | Less autonomy |
+| **Continue** | Free + API | Uses any model | Requires setup |
+| **Gemini Code Assist** | Free (6000/mo) | Integrates with Google Cloud | Enterprise-focused |
+
+**Setup: VS Code + Copilot (5 min)**
+\`\`\`bash
+# 1. Install extension
+code --install-extension GitHub.copilot
+
+# 2. Login to GitHub when prompted
+
+# 3. Done - write code and you'll see suggestions
+\`\`\`
+
+---
+
+### Option 2: Editors with Native AI
+
+The editor ALREADY includes AI. Nothing to configure.
+
+| Editor | Price | Best thing | Worst thing |
+|--------|-------|------------|-------------|
+| **Cursor** | $20/mo | Perfect UX, Composer multi-file | Another editor to learn |
+| **Windsurf** | $15/mo | Cascade (own agent) | Less mature |
+| **Antigravity** | Free (preview) | Parallel multi-agent | Very new (Nov 2025) |
+| **Google IDX** | Free (beta) | 100% cloud, nothing to install | Requires internet |
+
+**Setup: Cursor (2 min)**
+\`\`\`bash
+# macOS
+brew install --cask cursor
+
+# Open and login - done
+\`\`\`
+
+---
+
+### Option 3: Agentic CLI (Terminal)
+
+Tools that live in your terminal and can execute commands, edit multiple files, and solve complex tasks autonomously.
+
+| CLI | Price | Best thing | Worst thing |
+|-----|-------|------------|-------------|
+| **Claude Code** | ~$20/mo | Agent mode, 200K context | No autocomplete |
+| **Aider** | Free + API | Open source, any model | Terminal only |
+| **Codex CLI** | Free + API | Integrated with OpenAI | New (April 2025) |
+
+**Setup: Claude Code (3 min)**
+\`\`\`bash
+# 1. Install
+npm install -g @anthropic-ai/claude-code
+
+# 2. Set API key
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# 3. Use in any project
+cd my-project
+claude
+\`\`\`
+
+---
+
+## Part 3: Recommended Combinations by Profile
+
+### 🎓 Beginner ($10/mo)
+\`\`\`
+VS Code + GitHub Copilot
+└── Autocomplete teaches you patterns as you type
+└── Copilot Chat for basic questions
+\`\`\`
+
+### 💼 Professional Developer ($20-40/mo)
+\`\`\`
+Cursor (main editor)
+   └── Composer for multi-file refactors
+   └── Cmd+K for quick inline edits
+
++ Claude Code (terminal)
+   └── Complex tasks: "implement complete auth"
+   └── Deep debugging with project context
+\`\`\`
+
+### 🆓 Zero Budget ($0)
+\`\`\`
+VS Code + Continue (open source extension)
+   └── Connect to Ollama for local models
+   └── Free autocomplete with llama3
+
++ Aider (terminal)
+   └── Use Ollama or APIs with free credits
+\`\`\`
+
+### 🏢 Enterprise
+\`\`\`
+VS Code + Cody (massive context)
+   └── Understands millions of lines of code
+   └── Integration with Sourcegraph
+
++ Gemini Code Assist (if you use Google Cloud)
+\`\`\`
+
+---
+
+## Part 4: Capabilities Comparison (January 2026)
+
+| Capability | Copilot | Cursor | Claude Code | Antigravity |
+|------------|:-------:|:------:|:-----------:|:-----------:|
+| Inline autocomplete | ✅✅ | ✅✅ | ❌ | ✅ |
+| Contextual chat | ✅ | ✅✅ | ✅✅ | ✅✅ |
+| Multi-file editing | ❌ | ✅✅ | ✅✅ | ✅✅ |
+| Execute commands | ❌ | ✅ | ✅✅ | ✅✅ |
+| Autonomous agent mode | ❌ | ✅ | ✅✅ | ✅✅ |
+| Parallel multi-agent | ❌ | ❌ | ❌ | ✅✅ |
+| Works offline | ❌ | ❌ | ❌ | ❌ |
+
+\`\`\`
+Legend: ✅✅ Excellent | ✅ Good | ❌ Not available
+\`\`\`
+
+---
+
+## Part 5: Essential VS Code Setup
+
+If you use VS Code (alone or with AI extensions), these are the essential settings:
+
+### Must-have extensions
+\`\`\`bash
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension eamodio.gitlens
+code --install-extension usernamehw.errorlens
+\`\`\`
+
+### Recommended settings.json
 \`\`\`json
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.tabSize": 2,
   "editor.fontSize": 14,
-  "editor.wordWrap": "on"
+  "editor.minimap.enabled": false,
+  "editor.wordWrap": "on",
+  "editor.bracketPairColorization.enabled": true,
+  "files.autoSave": "onFocusChange"
 }
 \`\`\`
 
----
+### Shortcuts you must memorize
 
-## AI Coding Assistants (January 2026)
-
-In the "prompt-first" era, AI code assistants are as important as the editor itself. This is the most complete guide to choosing your tool.
-
----
-
-### Tool Categories
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                    CATEGORIES                                │
-├─────────────────────────────────────────────────────────────┤
-│  CLI (Terminal)     │ Claude Code, OpenAI Codex CLI, Aider  │
-│  Extensions         │ Copilot, Cody, Continue, Gemini       │
-│  AI Editors         │ Cursor, Windsurf, Antigravity, IDX    │
-│  Cloud Agents       │ OpenAI Codex, Antigravity Manager     │
-│  Chat + Code        │ ChatGPT, Claude.ai, Gemini            │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Command palette | \`Cmd+Shift+P\` | \`Ctrl+Shift+P\` |
+| Find file | \`Cmd+P\` | \`Ctrl+P\` |
+| Search in project | \`Cmd+Shift+F\` | \`Ctrl+Shift+F\` |
+| Integrated terminal | \`Cmd+J\` | \`Ctrl+J\` |
+| Multi-cursor | \`Cmd+D\` | \`Ctrl+D\` |
+| Go to definition | \`Cmd+Click\` | \`Ctrl+Click\` |
+| Rename symbol | \`F2\` | \`F2\` |
 
 ---
 
-### Complete Pricing Comparison (January 2026)
-
-| Tool | Company | Free Plan | Pro Plan | Base Model |
-|------|---------|-----------|----------|------------|
-| **Claude Code** | Anthropic | - | ~$3/M tokens (API) | Claude Sonnet 4.5 |
-| **GitHub Copilot** | Microsoft | Students free | $10/mo Individual, $19/mo Business | GPT-4o + Claude |
-| **Cursor** | Cursor Inc | 2000 completions/mo | $20/mo Pro | GPT-4, Claude 4.5 |
-| **Google Antigravity** | Google | **Free (preview)** | TBD | Gemini 3 Pro |
-| **Windsurf** | Codeium | Free limited | $15/mo Pro | Cascade (proprietary) |
-| **OpenAI Codex** | OpenAI | Codex CLI free | API usage | GPT-5.2-Codex |
-| **Gemini Code Assist** | Google | 6000 completions/mo | $19/mo Enterprise | Gemini 1.5 Pro |
-| **Cody** | Sourcegraph | 500 msgs/mo | $9/mo Pro | Claude 3.5 |
-| **Continue** | Continue.dev | Free + API | Free + API | Any |
-| **Aider** | Open Source | Free + API | Free + API | Any |
-
----
-
-### Benchmark: Capabilities by Tool
-
-| Capability | Claude Code | Antigravity | Codex | Copilot | Cursor | Cody |
-|------------|:-----------:|:-----------:|:-----:|:-------:|:------:|:----:|
-| Inline autocomplete | ❌ | ✅ | ❌ | ✅✅ | ✅✅ | ✅ |
-| Contextual chat | ✅✅ | ✅✅ | ✅ | ✅ | ✅✅ | ✅✅ |
-| Multi-file editing | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅✅ | ✅ |
-| Execute commands | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
-| Full project context | ✅✅ | ✅✅ | ✅✅ | ⚠️ | ✅✅ | ✅✅ |
-| Works without editor | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Autonomous agent mode | ✅✅ | ✅✅ | ✅✅ | ❌ | ✅ | ❌ |
-| Parallel multi-agent | ❌ | ✅✅ | ✅ | ❌ | ❌ | ❌ |
+## Summary: My 2026 Recommendation
 
 \`\`\`
-Legend: ✅✅ Excellent | ✅ Good | ⚠️ Limited | ❌ Not available
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│   If you're starting:    VS Code + Copilot ($10/mo)       │
+│                                                            │
+│   If you want max productivity:                           │
+│                          Cursor + Claude Code (~$40/mo)    │
+│                                                            │
+│   If you want $0:        VS Code + Continue + Ollama      │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
 \`\`\`
 
-> 🆕 **Google Antigravity** stands out with its "Manager View" allowing multiple agents working in parallel.
-
----
-
-### Claude Code vs GitHub Copilot vs Cursor
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                    CLAUDE CODE (Anthropic)                   │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Reads/edits files directly from terminal                │
-│  ✓ Executes commands (npm, git, docker, etc.)              │
-│  ✓ Full project context (~200K tokens)                     │
-│  ✓ Agent mode: solves complex tasks autonomously           │
-│  ✓ Works with any editor (VS Code, Vim, etc.)              │
-│  ✗ No inline autocomplete                                  │
-│  ✗ Requires API key (pay per use)                          │
-│                                                              │
-│  💰 Cost: ~$3/M tokens, $20/mes pro, $100/mes max           │
-│  🔗 https://docs.anthropic.com/en/docs/claude-code          │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                    GITHUB COPILOT (Microsoft)                │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Instant autocomplete as you type                        │
-│  ✓ Native integration in VS Code, JetBrains, Neovim        │
-│  ✓ Copilot Chat for questions                              │
-│  ✓ Copilot Workspace (beta): multi-file                    │
-│  ✗ Doesn't execute commands                                │
-│  ✗ Limited to open files context                           │
-│  ✗ No autonomous agent mode                                │
-│                                                              │
-│  💰 Cost: $10/mo individual, $19/mo business               │
-│  🔗 https://github.com/features/copilot                     │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CURSOR                                 │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Full editor based on VS Code                            │
-│  ✓ Autocomplete + Chat + Composer (multi-file)             │
-│  ✓ Cmd+K to edit code inline                               │
-│  ✓ Uses multiple models (GPT-4, Claude, etc.)              │
-│  ✗ Another editor to learn                                 │
-│  ✗ Monthly subscription required for Pro                   │
-│  ✗ Less portable than a CLI                                │
-│                                                              │
-│  💰 Cost: Free limited, $20/mo Pro                         │
-│  🔗 https://cursor.sh                                       │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Google Antigravity and OpenAI Codex (2025 Releases)
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│            🆕 GOOGLE ANTIGRAVITY (Nov 2025)                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ "Agent-first" IDE (fork of VS Code/Windsurf)            │
-│  ✓ Manager View: multiple agents in PARALLEL               │
-│  ✓ 76.2% on SWE-bench (almost equals Claude 4.5)           │
-│  ✓ Powered by Gemini 3 Pro/Flash/Deep Think                │
-│  ✓ Also supports Claude and open source models             │
-│  ✓ FREE during public preview                              │
-│  ✗ Very new, ecosystem still developing                    │
-│                                                              │
-│  💰 Free (preview) | Pricing TBD                           │
-│  🔗 https://antigravityai.org                               │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│            🆕 OPENAI CODEX (Relaunched 2025)                 │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Codex CLI: open source local agent (April 2025)         │
-│  ✓ Codex Cloud: autonomous cloud agent (May 2025)          │
-│  ✓ Powered by codex-1 (o3 optimized for code)              │
-│  ✓ GPT-5.2-Codex: latest model                             │
-│  ✓ Executes tasks, creates PRs, resolves issues            │
-│  ⚠️ codex-mini-latest deprecated Jan 16, 2026              │
-│                                                              │
-│  💰 CLI free + API | Cloud: API usage                      │
-│  🔗 https://openai.com/index/introducing-codex              │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Other Google and OpenAI Options
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                 GEMINI CODE ASSIST (Google)                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Extension for VS Code and JetBrains                     │
-│  ✓ 6000 free completions per month                         │
-│  ✓ Google Cloud integration                                │
-│  ✗ Less context than Claude/Cursor                         │
-│  ✗ Enterprise focused, less for indie devs                 │
-│                                                              │
-│  💰 Free: 6000/mo | Enterprise: $19/user/mo                │
-│  🔗 https://cloud.google.com/gemini/docs/codeassist         │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                    GOOGLE IDX                                │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Full cloud IDE (VS Code-based)                          │
-│  ✓ Gemini natively integrated                              │
-│  ✓ Free during beta                                        │
-│  ✓ Templates for Flutter, React, Angular, etc.             │
-│  ✗ Requires internet always                                │
-│  ✗ In beta, may change                                     │
-│                                                              │
-│  💰 Free (beta)                                             │
-│  🔗 https://idx.dev                                         │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                    CHATGPT + Code (OpenAI)                   │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Code Interpreter: runs Python in sandbox                │
-│  ✓ Uploaded file analysis                                  │
-│  ✓ Canvas: visual code editing                             │
-│  ✗ Doesn't edit your local files                           │
-│  ✗ No official editor extension                            │
-│  ✗ Context limited to conversation                         │
-│                                                              │
-│  💰 Free limited | Plus: $20/mo | Pro: $200/mo             │
-│  🔗 https://chat.openai.com                                 │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Open Source: Aider, Continue, Cody
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                       AIDER                                  │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ 100% Open Source (Apache 2.0)                           │
-│  ✓ Uses ANY model (GPT, Claude, Ollama, etc.)              │
-│  ✓ Git integrated: auto-commits changes                    │
-│  ✓ Edits multiple files                                    │
-│  ✓ Public benchmarks: SWE-bench leader                     │
-│  ✗ Terminal only, learning curve                           │
-│                                                              │
-│  💰 Free + API cost for the model you use                  │
-│  🔗 https://aider.chat                                      │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CONTINUE                               │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ Open Source extension for VS Code/JetBrains             │
-│  ✓ Uses any model (local or API)                           │
-│  ✓ Autocomplete + Chat                                     │
-│  ✓ Fully customizable                                      │
-│  ✗ Requires initial setup                                  │
-│                                                              │
-│  💰 Free + API cost                                         │
-│  🔗 https://continue.dev                                    │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CODY (Sourcegraph)                     │
-├─────────────────────────────────────────────────────────────┤
-│  ✓ HUGE codebase context (millions of lines)               │
-│  ✓ Uses Claude 3.5 Sonnet                                  │
-│  ✓ Searches all your code, not just open files             │
-│  ✓ Generous free plan (500 msgs/mo)                        │
-│  ✗ Less autonomy than Claude Code                          │
-│                                                              │
-│  💰 Free: 500 msgs | Pro: $9/mo | Enterprise: custom       │
-│  🔗 https://sourcegraph.com/cody                            │
-└─────────────────────────────────────────────────────────────┘
-\`\`\`
-
----
-
-### Which to Choose? Decision Guide
-
-| Your situation | Recommendation | Why |
-|----------------|----------------|-----|
-| **Just starting to code** | GitHub Copilot Free | Autocomplete helps learn |
-| **Maximum power** | Claude Code | Agent mode, runs commands |
-| **Parallel multi-agent** | Google Antigravity | Manager View with 5+ agents |
-| **OpenAI ecosystem** | Codex CLI + Cloud | Integrated with GPT-5.2 |
-| **All in one editor** | Cursor | Best integrated UX |
-| **Zero budget** | Continue + Ollama | 100% local and free |
-| **Enterprise codebase** | Cody | Best code context |
-| **Google ecosystem** | Antigravity or Gemini | Native Gemini 3 |
-| **Maximum flexibility** | Aider | Any model, open source |
-
----
-
-### Recommended Combinations
-
-\`\`\`
-COMBO 1: Maximum Productivity (Premium)
-├── Cursor (main editor)
-└── Claude Code (complex tasks from terminal)
-
-COMBO 2: Cost/Benefit Balance
-├── VS Code + GitHub Copilot (autocomplete)
-└── Claude Code (when you need more power)
-
-COMBO 3: 100% Free
-├── VS Code + Continue (autocomplete with Ollama)
-└── Aider (multi-file editing)
-
-COMBO 4: Enterprise
-├── VS Code + Cody (massive context)
-└── Gemini Code Assist (Google Cloud integration)
-\`\`\`
-
-> 💡 **Tools complement each other**: You don't have to choose just one.
+AI tools **complement each other**. You don't have to choose just one.
 
 ---
 
@@ -2520,28 +2361,25 @@ COMBO 4: Enterprise
 
 ## Useful Links
 
-**CLIs:**
-- 🤖 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic
-- 🔧 [Aider](https://aider.chat) - Open Source
-- ⚡ [OpenAI Codex CLI](https://openai.com/index/introducing-codex) - OpenAI
+**Editors:**
+- ⌨️ [VS Code](https://code.visualstudio.com) - Microsoft (Free)
+- ⚡ [Cursor](https://cursor.sh) - Editor with native AI
+- 🚀 [Zed](https://zed.dev) - Ultrafast editor
 
-**Extensions:**
+**AI Extensions:**
 - 🐙 [GitHub Copilot](https://github.com/features/copilot) - Microsoft
 - 🔍 [Cody](https://sourcegraph.com/cody) - Sourcegraph
 - 🔓 [Continue](https://continue.dev) - Open Source
 
+**Agentic CLIs:**
+- 🤖 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic
+- 🔧 [Aider](https://aider.chat) - Open Source
+- ⚡ [Codex CLI](https://openai.com/index/introducing-codex) - OpenAI
+
 **AI Editors:**
-- ⌨️ [Cursor](https://cursor.sh) - Cursor Inc
 - 🌊 [Windsurf](https://codeium.com/windsurf) - Codeium
-- 🚀 [Google Antigravity](https://antigravityai.org) - Google (New!)
-
-**Google:**
-- 💎 [Gemini Code Assist](https://cloud.google.com/gemini/docs/codeassist)
-- 🌐 [Google IDX](https://idx.dev)
-
-**OpenAI:**
-- 💬 [ChatGPT](https://chat.openai.com)
-- 🧠 [Codex Cloud](https://openai.com/index/introducing-codex)
+- 🚀 [Google Antigravity](https://idx.google.com/antigravity) - Google
+- 🌐 [Google IDX](https://idx.dev) - Cloud IDE
     `,
   },
   homebrew: {
