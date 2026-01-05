@@ -60,6 +60,9 @@ const dishes = [
   { slug: 'redis-cache', titleEs: 'Cache con Redis', titleEn: 'Cache with Redis', level: 'chef', icon: '⚡' },
   { slug: 'arduino-sensor', titleEs: 'Arduino + MQTT', titleEn: 'Arduino + MQTT', level: 'chef', icon: '🔌' },
   { slug: 'dashboard-analytics', titleEs: 'Dashboard de Analytics', titleEn: 'Analytics Dashboard', level: 'chef', icon: '📊' },
+  { slug: 'monitoring-stack', titleEs: 'Stack de Monitoreo', titleEn: 'Monitoring Stack', level: 'chef', icon: '📈' },
+  { slug: 'testing-fullstack', titleEs: 'Testing Fullstack', titleEn: 'Fullstack Testing', level: 'chef', icon: '🧪' },
+  { slug: 'security-hardening', titleEs: 'Hardening de Seguridad', titleEn: 'Security Hardening', level: 'chef', icon: '🔐' },
   // ===== MASTER CHEF: IA avanzada y arquitectura =====
   { slug: 'rag-documents', titleEs: 'RAG con Documentos PDF', titleEn: 'RAG with PDF Documents', level: 'master', icon: '📚' },
   { slug: 'vector-search', titleEs: 'Búsqueda Vectorial', titleEn: 'Vector Search', level: 'master', icon: '🔍' },
@@ -11700,6 +11703,4155 @@ function Chart() {
 ## Next level
 
 → [RAG with PDF Documents](/en/cooking/rag-documents) — Master Level
+    `,
+  },
+  'monitoring-stack': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Docker', 'Docker Compose', 'Node.js basico'],
+    prerequisitesEn: ['Docker', 'Docker Compose', 'Basic Node.js'],
+    contentEs: `
+## Lo que vas a construir
+
+Un stack de monitoreo completo con Prometheus para recolectar metricas, Grafana para visualizarlas, y una aplicacion Node.js que expone metricas personalizadas.
+
+Al terminar tendras:
+- Una app Node.js con endpoint \`/metrics\` usando prom-client
+- Prometheus scrapeando metricas cada 15 segundos
+- Grafana con dashboards y alertas configuradas
+- Todo corriendo en Docker Compose con un solo comando
+
+---
+
+## Paso 1: Crea el proyecto
+
+\`\`\`bash
+mkdir monitoring-stack && cd monitoring-stack
+mkdir app prometheus grafana
+\`\`\`
+
+---
+
+## Paso 2: Crea la app Node.js con metricas
+
+Crea \`app/package.json\`:
+
+\`\`\`json
+{
+  "name": "metrics-app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "prom-client": "^15.1.0"
+  }
+}
+\`\`\`
+
+Crea \`app/server.js\`:
+
+\`\`\`javascript
+const express = require('express');
+const client = require('prom-client');
+
+const app = express();
+const PORT = 3000;
+
+// Crear registro de metricas
+const register = new client.Registry();
+
+// Agregar metricas por defecto (memoria, CPU, etc.)
+client.collectDefaultMetrics({ register });
+
+// Metrica personalizada: contador de requests
+const httpRequestsTotal = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total de requests HTTP',
+  labelNames: ['method', 'path', 'status'],
+  registers: [register]
+});
+
+// Metrica personalizada: histograma de latencia
+const httpRequestDuration = new client.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duracion de requests HTTP en segundos',
+  labelNames: ['method', 'path'],
+  buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
+  registers: [register]
+});
+
+// Metrica personalizada: gauge de usuarios activos
+const activeUsers = new client.Gauge({
+  name: 'active_users',
+  help: 'Numero de usuarios activos',
+  registers: [register]
+});
+
+// Simular usuarios activos aleatorios
+setInterval(() => {
+  activeUsers.set(Math.floor(Math.random() * 100) + 10);
+}, 5000);
+
+// Middleware para medir requests
+app.use((req, res, next) => {
+  const end = httpRequestDuration.startTimer({ method: req.method, path: req.path });
+  res.on('finish', () => {
+    httpRequestsTotal.inc({ method: req.method, path: req.path, status: res.statusCode });
+    end();
+  });
+  next();
+});
+
+// Endpoints de la app
+app.get('/', (req, res) => {
+  res.json({ message: 'Hola! Esta app tiene metricas en /metrics' });
+});
+
+app.get('/api/users', (req, res) => {
+  // Simular latencia variable
+  const delay = Math.random() * 200;
+  setTimeout(() => {
+    res.json({ users: ['alice', 'bob', 'charlie'] });
+  }, delay);
+});
+
+app.get('/api/slow', (req, res) => {
+  // Endpoint lento para probar alertas
+  setTimeout(() => {
+    res.json({ message: 'Respuesta lenta' });
+  }, 2000);
+});
+
+// Endpoint de metricas para Prometheus
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
+
+app.listen(PORT, () => {
+  console.log(\`App corriendo en http://localhost:\${PORT}\`);
+  console.log(\`Metricas en http://localhost:\${PORT}/metrics\`);
+});
+\`\`\`
+
+Crea \`app/Dockerfile\`:
+
+\`\`\`dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+\`\`\`
+
+---
+
+## Paso 3: Configura Prometheus
+
+Crea \`prometheus/prometheus.yml\`:
+
+\`\`\`yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node-app'
+    static_configs:
+      - targets: ['app:3000']
+    metrics_path: /metrics
+\`\`\`
+
+---
+
+## Paso 4: Configura Grafana
+
+Crea \`grafana/provisioning/datasources/datasources.yml\`:
+
+\`\`\`yaml
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+\`\`\`
+
+Crea \`grafana/provisioning/dashboards/dashboards.yml\`:
+
+\`\`\`yaml
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /etc/grafana/provisioning/dashboards
+\`\`\`
+
+Crea \`grafana/provisioning/dashboards/app-dashboard.json\`:
+
+\`\`\`json
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "10.0.0",
+      "targets": [{ "expr": "rate(http_requests_total[5m])", "refId": "A" }],
+      "title": "Requests por segundo",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "10.0.0",
+      "targets": [{ "expr": "active_users", "refId": "A" }],
+      "title": "Usuarios Activos",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "auto", "spanNulls": false, "stacking": { "group": "A", "mode": "none" }, "thresholdsStyle": { "mode": "off" } },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "id": 3,
+      "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single", "sort": "none" } },
+      "targets": [{ "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p95", "refId": "A" }, { "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p50", "refId": "B" }],
+      "title": "Latencia HTTP (p50 y p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "auto", "spanNulls": false, "stacking": { "group": "A", "mode": "none" }, "thresholdsStyle": { "mode": "off" } },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "id": 4,
+      "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single", "sort": "none" } },
+      "targets": [{ "expr": "process_resident_memory_bytes", "legendFormat": "Memoria RSS", "refId": "A" }],
+      "title": "Uso de Memoria",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["nodejs", "prometheus"],
+  "templating": { "list": [] },
+  "time": { "from": "now-15m", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Node.js App Metrics",
+  "uid": "nodejs-app-metrics",
+  "version": 1,
+  "weekStart": ""
+}
+\`\`\`
+
+---
+
+## Paso 5: Crea el docker-compose.yml
+
+En la raiz del proyecto, crea \`docker-compose.yml\`:
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:
+\`\`\`
+
+---
+
+## Paso 6: Levanta todo
+
+\`\`\`bash
+# Construir y levantar
+docker compose up -d --build
+
+# Verificar que esten corriendo
+docker compose ps
+\`\`\`
+
+Espera 30 segundos y verifica:
+
+| Servicio | URL | Credenciales |
+|----------|-----|--------------|
+| App | http://localhost:3000 | - |
+| Metricas | http://localhost:3000/metrics | - |
+| Prometheus | http://localhost:9090 | - |
+| Grafana | http://localhost:3001 | admin / admin123 |
+
+---
+
+## Paso 7: Explora Prometheus
+
+1. Abre http://localhost:9090
+2. En "Expression", escribe \`http_requests_total\` y da Enter
+3. Prueba estas queries:
+   - \`rate(http_requests_total[5m])\` - Requests por segundo
+   - \`histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))\` - p95 latencia
+   - \`active_users\` - Usuarios activos
+
+---
+
+## Paso 8: Configura alertas en Grafana
+
+1. Abre Grafana (http://localhost:3001)
+2. Login: admin / admin123
+3. Ve a Alerting > Alert rules > New alert rule
+4. Configura:
+   - Name: "Alta latencia"
+   - Query: \`histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 1\`
+   - Condition: IS ABOVE 1
+5. Guarda
+
+Para probar la alerta:
+
+\`\`\`bash
+# Genera requests lentos
+for i in {1..20}; do curl http://localhost:3000/api/slow; done
+\`\`\`
+
+---
+
+## Paso 9: Genera trafico de prueba
+
+\`\`\`bash
+# Script para generar trafico
+while true; do
+  curl -s http://localhost:3000/ > /dev/null
+  curl -s http://localhost:3000/api/users > /dev/null
+  sleep 0.5
+done
+\`\`\`
+
+Deja correr por 2-3 minutos y observa los dashboards.
+
+---
+
+## Estructura final
+
+\`\`\`
+monitoring-stack/
+  app/
+    package.json
+    server.js
+    Dockerfile
+  prometheus/
+    prometheus.yml
+  grafana/
+    provisioning/
+      datasources/
+        datasources.yml
+      dashboards/
+        dashboards.yml
+        app-dashboard.json
+  docker-compose.yml
+\`\`\`
+
+---
+
+## Comandos utiles
+
+\`\`\`bash
+# Ver logs
+docker compose logs -f app
+docker compose logs -f prometheus
+
+# Reiniciar prometheus (recarga config)
+curl -X POST http://localhost:9090/-/reload
+
+# Detener todo
+docker compose down
+
+# Detener y borrar datos
+docker compose down -v
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Problema | Solucion |
+|----------|----------|
+| Prometheus no scrapea | Verifica que \`app:3000\` sea accesible en la red |
+| Grafana sin datos | Espera 30s, verifica datasource en Settings |
+| Dashboard vacio | El UID del datasource debe coincidir |
+
+---
+
+## Proximo paso
+
+-> [Testing Fullstack](/es/cooking/testing-fullstack)
+    `,
+    contentEn: `
+## What you'll build
+
+A complete monitoring stack with Prometheus to collect metrics, Grafana to visualize them, and a Node.js application that exposes custom metrics.
+
+When finished you'll have:
+- A Node.js app with \`/metrics\` endpoint using prom-client
+- Prometheus scraping metrics every 15 seconds
+- Grafana with dashboards and alerts configured
+- Everything running in Docker Compose with a single command
+
+---
+
+## Step 1: Create the project
+
+\`\`\`bash
+mkdir monitoring-stack && cd monitoring-stack
+mkdir app prometheus grafana
+\`\`\`
+
+---
+
+## Step 2: Create the Node.js app with metrics
+
+Create \`app/package.json\`:
+
+\`\`\`json
+{
+  "name": "metrics-app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "prom-client": "^15.1.0"
+  }
+}
+\`\`\`
+
+Create \`app/server.js\`:
+
+\`\`\`javascript
+const express = require('express');
+const client = require('prom-client');
+
+const app = express();
+const PORT = 3000;
+
+// Create metrics registry
+const register = new client.Registry();
+
+// Add default metrics (memory, CPU, etc.)
+client.collectDefaultMetrics({ register });
+
+// Custom metric: request counter
+const httpRequestsTotal = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total HTTP requests',
+  labelNames: ['method', 'path', 'status'],
+  registers: [register]
+});
+
+// Custom metric: latency histogram
+const httpRequestDuration = new client.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'HTTP request duration in seconds',
+  labelNames: ['method', 'path'],
+  buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
+  registers: [register]
+});
+
+// Custom metric: active users gauge
+const activeUsers = new client.Gauge({
+  name: 'active_users',
+  help: 'Number of active users',
+  registers: [register]
+});
+
+// Simulate random active users
+setInterval(() => {
+  activeUsers.set(Math.floor(Math.random() * 100) + 10);
+}, 5000);
+
+// Middleware to measure requests
+app.use((req, res, next) => {
+  const end = httpRequestDuration.startTimer({ method: req.method, path: req.path });
+  res.on('finish', () => {
+    httpRequestsTotal.inc({ method: req.method, path: req.path, status: res.statusCode });
+    end();
+  });
+  next();
+});
+
+// App endpoints
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello! This app has metrics at /metrics' });
+});
+
+app.get('/api/users', (req, res) => {
+  // Simulate variable latency
+  const delay = Math.random() * 200;
+  setTimeout(() => {
+    res.json({ users: ['alice', 'bob', 'charlie'] });
+  }, delay);
+});
+
+app.get('/api/slow', (req, res) => {
+  // Slow endpoint to test alerts
+  setTimeout(() => {
+    res.json({ message: 'Slow response' });
+  }, 2000);
+});
+
+// Metrics endpoint for Prometheus
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
+
+app.listen(PORT, () => {
+  console.log(\`App running at http://localhost:\${PORT}\`);
+  console.log(\`Metrics at http://localhost:\${PORT}/metrics\`);
+});
+\`\`\`
+
+Create \`app/Dockerfile\`:
+
+\`\`\`dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+\`\`\`
+
+---
+
+## Step 3: Configure Prometheus
+
+Create \`prometheus/prometheus.yml\`:
+
+\`\`\`yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node-app'
+    static_configs:
+      - targets: ['app:3000']
+    metrics_path: /metrics
+\`\`\`
+
+---
+
+## Step 4: Configure Grafana
+
+Create \`grafana/provisioning/datasources/datasources.yml\`:
+
+\`\`\`yaml
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+\`\`\`
+
+Create \`grafana/provisioning/dashboards/dashboards.yml\`:
+
+\`\`\`yaml
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /etc/grafana/provisioning/dashboards
+\`\`\`
+
+Create \`grafana/provisioning/dashboards/app-dashboard.json\`:
+
+\`\`\`json
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "10.0.0",
+      "targets": [{ "expr": "rate(http_requests_total[5m])", "refId": "A" }],
+      "title": "Requests per second",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "10.0.0",
+      "targets": [{ "expr": "active_users", "refId": "A" }],
+      "title": "Active Users",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "auto", "spanNulls": false, "stacking": { "group": "A", "mode": "none" }, "thresholdsStyle": { "mode": "off" } },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "id": 3,
+      "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single", "sort": "none" } },
+      "targets": [{ "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p95", "refId": "A" }, { "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p50", "refId": "B" }],
+      "title": "HTTP Latency (p50 and p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "auto", "spanNulls": false, "stacking": { "group": "A", "mode": "none" }, "thresholdsStyle": { "mode": "off" } },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "id": 4,
+      "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single", "sort": "none" } },
+      "targets": [{ "expr": "process_resident_memory_bytes", "legendFormat": "Memory RSS", "refId": "A" }],
+      "title": "Memory Usage",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["nodejs", "prometheus"],
+  "templating": { "list": [] },
+  "time": { "from": "now-15m", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Node.js App Metrics",
+  "uid": "nodejs-app-metrics",
+  "version": 1,
+  "weekStart": ""
+}
+\`\`\`
+
+---
+
+## Step 5: Create docker-compose.yml
+
+In the project root, create \`docker-compose.yml\`:
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:
+\`\`\`
+
+---
+
+## Step 6: Start everything
+
+\`\`\`bash
+# Build and start
+docker compose up -d --build
+
+# Verify they're running
+docker compose ps
+\`\`\`
+
+Wait 30 seconds and verify:
+
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| App | http://localhost:3000 | - |
+| Metrics | http://localhost:3000/metrics | - |
+| Prometheus | http://localhost:9090 | - |
+| Grafana | http://localhost:3001 | admin / admin123 |
+
+---
+
+## Step 7: Explore Prometheus
+
+1. Open http://localhost:9090
+2. In "Expression", type \`http_requests_total\` and press Enter
+3. Try these queries:
+   - \`rate(http_requests_total[5m])\` - Requests per second
+   - \`histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))\` - p95 latency
+   - \`active_users\` - Active users
+
+---
+
+## Step 8: Configure alerts in Grafana
+
+1. Open Grafana (http://localhost:3001)
+2. Login: admin / admin123
+3. Go to Alerting > Alert rules > New alert rule
+4. Configure:
+   - Name: "High latency"
+   - Query: \`histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 1\`
+   - Condition: IS ABOVE 1
+5. Save
+
+To test the alert:
+
+\`\`\`bash
+# Generate slow requests
+for i in {1..20}; do curl http://localhost:3000/api/slow; done
+\`\`\`
+
+---
+
+## Step 9: Generate test traffic
+
+\`\`\`bash
+# Script to generate traffic
+while true; do
+  curl -s http://localhost:3000/ > /dev/null
+  curl -s http://localhost:3000/api/users > /dev/null
+  sleep 0.5
+done
+\`\`\`
+
+Let it run for 2-3 minutes and observe the dashboards.
+
+---
+
+## Final structure
+
+\`\`\`
+monitoring-stack/
+  app/
+    package.json
+    server.js
+    Dockerfile
+  prometheus/
+    prometheus.yml
+  grafana/
+    provisioning/
+      datasources/
+        datasources.yml
+      dashboards/
+        dashboards.yml
+        app-dashboard.json
+  docker-compose.yml
+\`\`\`
+
+---
+
+## Useful commands
+
+\`\`\`bash
+# View logs
+docker compose logs -f app
+docker compose logs -f prometheus
+
+# Restart prometheus (reload config)
+curl -X POST http://localhost:9090/-/reload
+
+# Stop everything
+docker compose down
+
+# Stop and delete data
+docker compose down -v
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Prometheus not scraping | Verify \`app:3000\` is accessible in the network |
+| Grafana no data | Wait 30s, verify datasource in Settings |
+| Empty dashboard | Datasource UID must match |
+
+---
+
+## Next step
+
+-> [Fullstack Testing](/en/cooking/testing-fullstack)
+    `,
+  },
+
+  'security-hardening': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Node.js instalado', 'Conocimientos basicos de Express.js', 'npm o pnpm'],
+    prerequisitesEn: ['Node.js installed', 'Basic Express.js knowledge', 'npm or pnpm'],
+    contentEs: `
+## Lo que vas a construir
+
+Una API REST segura con Express.js que implementa las mejores practicas de seguridad para aplicaciones web.
+
+Empezaras con una API vulnerable y paso a paso la convertiras en una API hardened con:
+- Headers de seguridad con Helmet.js
+- Rate limiting para prevenir ataques de fuerza bruta
+- Validacion de entrada con Zod
+- Prevencion de SQL Injection con queries parametrizadas
+- Proteccion XSS
+- Configuracion segura de CORS
+- Auditoria de dependencias en CI/CD
+
+Al terminar tendras una API lista para produccion con un checklist de seguridad verificable.
+
+---
+
+## Paso 1: Crea el proyecto base
+
+\`\`\`bash
+mkdir secure-api && cd secure-api
+npm init -y
+npm install express
+\`\`\`
+
+Crea \`server.js\` con una API basica (vulnerable):
+
+\`\`\`javascript
+// server.js - VERSION VULNERABLE (NO USAR EN PRODUCCION)
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// Base de datos simulada
+const users = [
+  { id: 1, name: 'Admin', email: 'admin@example.com', password: 'admin123' }
+];
+
+// Endpoint vulnerable a varios ataques
+app.get('/api/users', (req, res) => {
+  res.json(users); // Expone passwords!
+});
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  // Sin validacion de entrada
+  // Vulnerable a inyeccion
+  const user = users.find(u => u.email === email && u.password === password);
+  if (user) {
+    res.json({ message: 'Login exitoso', user }); // Expone todo el objeto
+  } else {
+    res.status(401).json({ message: 'Credenciales invalidas' });
+  }
+});
+
+app.listen(3000, () => console.log('Server en http://localhost:3000'));
+\`\`\`
+
+---
+
+## Paso 2: Agrega Helmet.js para headers de seguridad
+
+Helmet configura automaticamente headers HTTP que protegen contra vulnerabilidades comunes.
+
+\`\`\`bash
+npm install helmet
+\`\`\`
+
+**Antes (sin headers de seguridad):**
+\`\`\`javascript
+const app = express();
+// Sin proteccion - headers por defecto de Express
+\`\`\`
+
+**Despues (con Helmet):**
+\`\`\`javascript
+const express = require('express');
+const helmet = require('helmet');
+
+const app = express();
+
+// Helmet agrega 11+ headers de seguridad automaticamente
+app.use(helmet());
+
+// Headers que Helmet configura:
+// - Content-Security-Policy: previene XSS
+// - X-Content-Type-Options: nosniff
+// - X-Frame-Options: DENY (previene clickjacking)
+// - Strict-Transport-Security: fuerza HTTPS
+// - X-XSS-Protection: filtro XSS del navegador
+\`\`\`
+
+Verifica los headers:
+\`\`\`bash
+curl -I http://localhost:3000/api/users
+\`\`\`
+
+---
+
+## Paso 3: Implementa Rate Limiting
+
+Previene ataques de fuerza bruta y DDoS limitando las peticiones por IP.
+
+\`\`\`bash
+npm install express-rate-limit
+\`\`\`
+
+**Antes (sin limites):**
+\`\`\`javascript
+// Un atacante puede hacer millones de peticiones
+app.post('/api/login', (req, res) => { ... });
+\`\`\`
+
+**Despues (con rate limiting):**
+\`\`\`javascript
+const rateLimit = require('express-rate-limit');
+
+// Limite global: 100 peticiones por 15 minutos
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 100,
+  message: { error: 'Demasiadas peticiones. Intenta en 15 minutos.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Limite estricto para login: 5 intentos por 15 minutos
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: 'Demasiados intentos de login. Cuenta bloqueada temporalmente.' },
+  skipSuccessfulRequests: true, // No cuenta logins exitosos
+});
+
+app.use(globalLimiter);
+app.post('/api/login', loginLimiter, (req, res) => { ... });
+\`\`\`
+
+---
+
+## Paso 4: Validacion de entrada con Zod
+
+Nunca confies en datos del usuario. Valida TODO.
+
+\`\`\`bash
+npm install zod
+\`\`\`
+
+**Antes (sin validacion):**
+\`\`\`javascript
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  // Si email es un objeto o array, puede causar errores
+  // Si password es muy largo, puede causar DoS
+});
+\`\`\`
+
+**Despues (con Zod):**
+\`\`\`javascript
+const { z } = require('zod');
+
+// Definir esquema de validacion
+const loginSchema = z.object({
+  email: z.string()
+    .email('Email invalido')
+    .max(255, 'Email muy largo'),
+  password: z.string()
+    .min(8, 'Password debe tener al menos 8 caracteres')
+    .max(128, 'Password muy largo'),
+});
+
+// Middleware de validacion reutilizable
+const validate = (schema) => (req, res, next) => {
+  try {
+    schema.parse(req.body);
+    next();
+  } catch (error) {
+    res.status(400).json({
+      error: 'Datos invalidos',
+      details: error.errors.map(e => ({
+        field: e.path.join('.'),
+        message: e.message
+      }))
+    });
+  }
+};
+
+app.post('/api/login', validate(loginSchema), (req, res) => {
+  const { email, password } = req.body;
+  // Ahora sabemos que email y password son strings validos
+});
+
+// Esquema para crear usuario
+const userSchema = z.object({
+  name: z.string().min(2).max(100).regex(/^[a-zA-Z\\s]+$/, 'Solo letras'),
+  email: z.string().email().max(255),
+  password: z.string()
+    .min(8)
+    .regex(/[A-Z]/, 'Debe tener mayuscula')
+    .regex(/[0-9]/, 'Debe tener numero')
+    .regex(/[^A-Za-z0-9]/, 'Debe tener caracter especial'),
+});
+\`\`\`
+
+---
+
+## Paso 5: Prevencion de SQL Injection
+
+Si usas base de datos SQL, SIEMPRE usa queries parametrizadas.
+
+**Antes (VULNERABLE):**
+\`\`\`javascript
+// NUNCA hagas esto - vulnerable a SQL injection
+app.get('/api/users/:id', async (req, res) => {
+  const query = \\\`SELECT * FROM users WHERE id = \\\${req.params.id}\\\`;
+  // Atacante puede enviar: 1; DROP TABLE users; --
+  const result = await db.query(query);
+  res.json(result);
+});
+\`\`\`
+
+**Despues (SEGURO) - con pg (PostgreSQL):**
+\`\`\`javascript
+const { Pool } = require('pg');
+const pool = new Pool();
+
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    // Query parametrizada - el driver escapa automaticamente
+    const result = await pool.query(
+      'SELECT id, name, email FROM users WHERE id = $1',
+      [req.params.id]  // Parametro separado
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('DB Error:', error);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+// Para INSERT tambien usa parametros
+app.post('/api/users', validate(userSchema), async (req, res) => {
+  const { name, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  const result = await pool.query(
+    'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
+    [name, email, hashedPassword]
+  );
+
+  res.status(201).json(result.rows[0]);
+});
+\`\`\`
+
+**Con un ORM (Prisma) - tambien seguro:**
+\`\`\`javascript
+// Prisma usa queries parametrizadas internamente
+const user = await prisma.user.findUnique({
+  where: { id: parseInt(req.params.id) },
+  select: { id: true, name: true, email: true } // No seleccionar password
+});
+\`\`\`
+
+---
+
+## Paso 6: Proteccion XSS
+
+Cross-Site Scripting ocurre cuando un atacante inyecta scripts maliciosos.
+
+**Antes (VULNERABLE):**
+\`\`\`javascript
+app.get('/api/comments', async (req, res) => {
+  const comments = await db.getComments();
+  res.json(comments);
+  // Si un comentario contiene <script>alert('hacked')</script>
+  // y el frontend lo renderiza con innerHTML, se ejecuta
+});
+\`\`\`
+
+**Despues (SEGURO):**
+\`\`\`javascript
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
+
+// Sanitizar al guardar
+app.post('/api/comments', validate(commentSchema), async (req, res) => {
+  const sanitizedContent = DOMPurify.sanitize(req.body.content, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong'], // Solo tags seguros
+    ALLOWED_ATTR: [] // Sin atributos
+  });
+
+  await db.createComment({
+    content: sanitizedContent,
+    userId: req.user.id
+  });
+
+  res.status(201).json({ message: 'Comentario creado' });
+});
+
+// Alternativa: escapar HTML en el frontend
+// React lo hace automaticamente con JSX
+// Vue lo hace con {{ }} (doble llave)
+\`\`\`
+
+**Headers adicionales (ya incluidos en Helmet):**
+\`\`\`javascript
+// Content-Security-Policy estricto
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'"], // Solo scripts del mismo origen
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'", "data:", "https:"],
+    connectSrc: ["'self'"],
+    fontSrc: ["'self'"],
+    objectSrc: ["'none'"],
+    upgradeInsecureRequests: [],
+  },
+}));
+\`\`\`
+
+---
+
+## Paso 7: Configuracion segura de CORS
+
+CORS controla que dominios pueden acceder a tu API.
+
+\`\`\`bash
+npm install cors
+\`\`\`
+
+**Antes (INSEGURO):**
+\`\`\`javascript
+const cors = require('cors');
+app.use(cors()); // Permite TODOS los origenes - peligroso!
+\`\`\`
+
+**Despues (SEGURO):**
+\`\`\`javascript
+const cors = require('cors');
+
+const allowedOrigins = [
+  'https://miapp.com',
+  'https://www.miapp.com',
+  process.env.NODE_ENV === 'development' && 'http://localhost:3000'
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir requests sin origin (mobile apps, Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS no permitido'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Permite cookies
+  maxAge: 86400 // Cache preflight por 24 horas
+}));
+\`\`\`
+
+---
+
+## Paso 8: npm audit en CI/CD
+
+Detecta vulnerabilidades en dependencias automaticamente.
+
+Crea \`.github/workflows/security.yml\`:
+
+\`\`\`yaml
+name: Security Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1' # Cada lunes a medianoche
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit --audit-level=high
+        # Falla si hay vulnerabilidades high o critical
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+        continue-on-error: true # No bloquear, solo alertar
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: high
+\`\`\`
+
+**Comandos locales utiles:**
+\`\`\`bash
+# Ver vulnerabilidades
+npm audit
+
+# Arreglar automaticamente
+npm audit fix
+
+# Arreglar incluyendo breaking changes
+npm audit fix --force
+
+# Ver solo vulnerabilidades criticas
+npm audit --audit-level=critical
+\`\`\`
+
+---
+
+## Paso 9: Codigo completo seguro
+
+\`\`\`javascript
+// server.js - VERSION SEGURA
+require('dotenv').config();
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const { z } = require('zod');
+const bcrypt = require('bcrypt');
+
+const app = express();
+
+// 1. Security headers
+app.use(helmet());
+
+// 2. CORS configurado
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+// 3. Rate limiting
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+}));
+
+app.use(express.json({ limit: '10kb' })); // Limitar tamano del body
+
+// 4. Esquemas de validacion
+const loginSchema = z.object({
+  email: z.string().email().max(255),
+  password: z.string().min(8).max(128)
+});
+
+const validate = (schema) => (req, res, next) => {
+  const result = schema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ error: 'Datos invalidos' });
+  }
+  next();
+};
+
+// 5. Login seguro
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  skipSuccessfulRequests: true
+});
+
+app.post('/api/login', loginLimiter, validate(loginSchema), async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Buscar usuario (query parametrizada)
+    const user = await db.query(
+      'SELECT id, email, password_hash FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (!user.rows[0]) {
+      // Tiempo constante para prevenir timing attacks
+      await bcrypt.compare(password, '$2b$12$invalidhashtopreventtiming');
+      return res.status(401).json({ error: 'Credenciales invalidas' });
+    }
+
+    const valid = await bcrypt.compare(password, user.rows[0].password_hash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Credenciales invalidas' });
+    }
+
+    // Respuesta sin datos sensibles
+    res.json({
+      user: { id: user.rows[0].id, email: user.rows[0].email }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+// 6. Manejo de errores global
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Algo salio mal' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(\\\`Servidor seguro en puerto \\\${PORT}\\\`);
+});
+\`\`\`
+
+---
+
+## Paso 10: Checklist de verificacion
+
+Antes de ir a produccion, verifica cada punto:
+
+| Categoria | Item | Comando/Verificacion |
+|-----------|------|---------------------|
+| **Headers** | Helmet activo | \`curl -I localhost:3000\` |
+| **Headers** | CSP configurado | Verificar Content-Security-Policy |
+| **Rate Limit** | Global activo | Hacer 101+ requests |
+| **Rate Limit** | Login estricto | Hacer 6+ logins fallidos |
+| **Validacion** | Zod en endpoints | Enviar datos invalidos |
+| **SQL** | Queries parametrizadas | Revisar codigo |
+| **XSS** | Sanitizacion activa | Enviar \`<script>alert(1)</script>\` |
+| **CORS** | Solo origenes permitidos | Request desde otro dominio |
+| **Deps** | Sin vulnerabilidades | \`npm audit\` |
+| **CI/CD** | Audit automatico | Revisar GitHub Actions |
+| **Passwords** | Hasheados con bcrypt | Revisar DB |
+| **Errores** | Sin stack traces | Forzar error en prod |
+| **HTTPS** | Forzado en prod | Verificar redirect |
+
+---
+
+## Troubleshooting
+
+| Problema | Causa | Solucion |
+|----------|-------|----------|
+| CORS bloqueado | Origen no en lista | Agregar a allowedOrigins |
+| Rate limit muy estricto | Pocos requests permitidos | Ajustar max y windowMs |
+| Zod rechaza todo | Esquema muy estricto | Revisar validaciones |
+| npm audit falla | Dependencia vulnerable | \`npm audit fix\` o actualizar |
+
+---
+
+## Proximo paso
+
+-> [RAG con Documentos PDF](/es/cooking/rag-documents) - Nivel Master
+    `,
+    contentEn: `
+## What you'll build
+
+A secure REST API with Express.js that implements web application security best practices.
+
+You'll start with a vulnerable API and step by step transform it into a hardened API with:
+- Security headers with Helmet.js
+- Rate limiting to prevent brute force attacks
+- Input validation with Zod
+- SQL Injection prevention with parameterized queries
+- XSS protection
+- Secure CORS configuration
+- Dependency auditing in CI/CD
+
+When finished, you'll have a production-ready API with a verifiable security checklist.
+
+---
+
+## Step 1: Create the base project
+
+\`\`\`bash
+mkdir secure-api && cd secure-api
+npm init -y
+npm install express
+\`\`\`
+
+Create \`server.js\` with a basic (vulnerable) API:
+
+\`\`\`javascript
+// server.js - VULNERABLE VERSION (DO NOT USE IN PRODUCTION)
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// Simulated database
+const users = [
+  { id: 1, name: 'Admin', email: 'admin@example.com', password: 'admin123' }
+];
+
+// Endpoint vulnerable to various attacks
+app.get('/api/users', (req, res) => {
+  res.json(users); // Exposes passwords!
+});
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  // No input validation
+  // Vulnerable to injection
+  const user = users.find(u => u.email === email && u.password === password);
+  if (user) {
+    res.json({ message: 'Login successful', user }); // Exposes entire object
+  } else {
+    res.status(401).json({ message: 'Invalid credentials' });
+  }
+});
+
+app.listen(3000, () => console.log('Server at http://localhost:3000'));
+\`\`\`
+
+---
+
+## Step 2: Add Helmet.js for security headers
+
+Helmet automatically configures HTTP headers that protect against common vulnerabilities.
+
+\`\`\`bash
+npm install helmet
+\`\`\`
+
+**Before (no security headers):**
+\`\`\`javascript
+const app = express();
+// No protection - Express default headers
+\`\`\`
+
+**After (with Helmet):**
+\`\`\`javascript
+const express = require('express');
+const helmet = require('helmet');
+
+const app = express();
+
+// Helmet adds 11+ security headers automatically
+app.use(helmet());
+
+// Headers that Helmet configures:
+// - Content-Security-Policy: prevents XSS
+// - X-Content-Type-Options: nosniff
+// - X-Frame-Options: DENY (prevents clickjacking)
+// - Strict-Transport-Security: forces HTTPS
+// - X-XSS-Protection: browser XSS filter
+\`\`\`
+
+Verify the headers:
+\`\`\`bash
+curl -I http://localhost:3000/api/users
+\`\`\`
+
+---
+
+## Step 3: Implement Rate Limiting
+
+Prevents brute force attacks and DDoS by limiting requests per IP.
+
+\`\`\`bash
+npm install express-rate-limit
+\`\`\`
+
+**Before (no limits):**
+\`\`\`javascript
+// An attacker can make millions of requests
+app.post('/api/login', (req, res) => { ... });
+\`\`\`
+
+**After (with rate limiting):**
+\`\`\`javascript
+const rateLimit = require('express-rate-limit');
+
+// Global limit: 100 requests per 15 minutes
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: { error: 'Too many requests. Try again in 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Strict limit for login: 5 attempts per 15 minutes
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: 'Too many login attempts. Account temporarily locked.' },
+  skipSuccessfulRequests: true, // Don't count successful logins
+});
+
+app.use(globalLimiter);
+app.post('/api/login', loginLimiter, (req, res) => { ... });
+\`\`\`
+
+---
+
+## Step 4: Input validation with Zod
+
+Never trust user data. Validate EVERYTHING.
+
+\`\`\`bash
+npm install zod
+\`\`\`
+
+**Before (no validation):**
+\`\`\`javascript
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  // If email is an object or array, it can cause errors
+  // If password is too long, it can cause DoS
+});
+\`\`\`
+
+**After (with Zod):**
+\`\`\`javascript
+const { z } = require('zod');
+
+// Define validation schema
+const loginSchema = z.object({
+  email: z.string()
+    .email('Invalid email')
+    .max(255, 'Email too long'),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(128, 'Password too long'),
+});
+
+// Reusable validation middleware
+const validate = (schema) => (req, res, next) => {
+  try {
+    schema.parse(req.body);
+    next();
+  } catch (error) {
+    res.status(400).json({
+      error: 'Invalid data',
+      details: error.errors.map(e => ({
+        field: e.path.join('.'),
+        message: e.message
+      }))
+    });
+  }
+};
+
+app.post('/api/login', validate(loginSchema), (req, res) => {
+  const { email, password } = req.body;
+  // Now we know email and password are valid strings
+});
+
+// Schema for creating user
+const userSchema = z.object({
+  name: z.string().min(2).max(100).regex(/^[a-zA-Z\\s]+$/, 'Letters only'),
+  email: z.string().email().max(255),
+  password: z.string()
+    .min(8)
+    .regex(/[A-Z]/, 'Must have uppercase')
+    .regex(/[0-9]/, 'Must have number')
+    .regex(/[^A-Za-z0-9]/, 'Must have special character'),
+});
+\`\`\`
+
+---
+
+## Step 5: SQL Injection Prevention
+
+If you use SQL databases, ALWAYS use parameterized queries.
+
+**Before (VULNERABLE):**
+\`\`\`javascript
+// NEVER do this - vulnerable to SQL injection
+app.get('/api/users/:id', async (req, res) => {
+  const query = \\\`SELECT * FROM users WHERE id = \\\${req.params.id}\\\`;
+  // Attacker can send: 1; DROP TABLE users; --
+  const result = await db.query(query);
+  res.json(result);
+});
+\`\`\`
+
+**After (SECURE) - with pg (PostgreSQL):**
+\`\`\`javascript
+const { Pool } = require('pg');
+const pool = new Pool();
+
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    // Parameterized query - driver escapes automatically
+    const result = await pool.query(
+      'SELECT id, name, email FROM users WHERE id = $1',
+      [req.params.id]  // Separate parameter
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('DB Error:', error);
+    res.status(500).json({ error: 'Internal error' });
+  }
+});
+
+// For INSERT also use parameters
+app.post('/api/users', validate(userSchema), async (req, res) => {
+  const { name, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  const result = await pool.query(
+    'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
+    [name, email, hashedPassword]
+  );
+
+  res.status(201).json(result.rows[0]);
+});
+\`\`\`
+
+**With an ORM (Prisma) - also secure:**
+\`\`\`javascript
+// Prisma uses parameterized queries internally
+const user = await prisma.user.findUnique({
+  where: { id: parseInt(req.params.id) },
+  select: { id: true, name: true, email: true } // Don't select password
+});
+\`\`\`
+
+---
+
+## Step 6: XSS Protection
+
+Cross-Site Scripting occurs when an attacker injects malicious scripts.
+
+**Before (VULNERABLE):**
+\`\`\`javascript
+app.get('/api/comments', async (req, res) => {
+  const comments = await db.getComments();
+  res.json(comments);
+  // If a comment contains <script>alert('hacked')</script>
+  // and the frontend renders it with innerHTML, it executes
+});
+\`\`\`
+
+**After (SECURE):**
+\`\`\`javascript
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
+
+// Sanitize when saving
+app.post('/api/comments', validate(commentSchema), async (req, res) => {
+  const sanitizedContent = DOMPurify.sanitize(req.body.content, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong'], // Only safe tags
+    ALLOWED_ATTR: [] // No attributes
+  });
+
+  await db.createComment({
+    content: sanitizedContent,
+    userId: req.user.id
+  });
+
+  res.status(201).json({ message: 'Comment created' });
+});
+
+// Alternative: escape HTML in frontend
+// React does it automatically with JSX
+// Vue does it with {{ }} (double braces)
+\`\`\`
+
+**Additional headers (already included in Helmet):**
+\`\`\`javascript
+// Strict Content-Security-Policy
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'"], // Only scripts from same origin
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'", "data:", "https:"],
+    connectSrc: ["'self'"],
+    fontSrc: ["'self'"],
+    objectSrc: ["'none'"],
+    upgradeInsecureRequests: [],
+  },
+}));
+\`\`\`
+
+---
+
+## Step 7: Secure CORS Configuration
+
+CORS controls which domains can access your API.
+
+\`\`\`bash
+npm install cors
+\`\`\`
+
+**Before (INSECURE):**
+\`\`\`javascript
+const cors = require('cors');
+app.use(cors()); // Allows ALL origins - dangerous!
+\`\`\`
+
+**After (SECURE):**
+\`\`\`javascript
+const cors = require('cors');
+
+const allowedOrigins = [
+  'https://myapp.com',
+  'https://www.myapp.com',
+  process.env.NODE_ENV === 'development' && 'http://localhost:3000'
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests without origin (mobile apps, Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Allows cookies
+  maxAge: 86400 // Cache preflight for 24 hours
+}));
+\`\`\`
+
+---
+
+## Step 8: npm audit in CI/CD
+
+Automatically detect vulnerabilities in dependencies.
+
+Create \`.github/workflows/security.yml\`:
+
+\`\`\`yaml
+name: Security Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1' # Every Monday at midnight
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit --audit-level=high
+        # Fails if there are high or critical vulnerabilities
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+        continue-on-error: true # Don't block, just alert
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: high
+\`\`\`
+
+**Useful local commands:**
+\`\`\`bash
+# View vulnerabilities
+npm audit
+
+# Auto-fix
+npm audit fix
+
+# Fix including breaking changes
+npm audit fix --force
+
+# View only critical vulnerabilities
+npm audit --audit-level=critical
+\`\`\`
+
+---
+
+## Step 9: Complete secure code
+
+\`\`\`javascript
+// server.js - SECURE VERSION
+require('dotenv').config();
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const { z } = require('zod');
+const bcrypt = require('bcrypt');
+
+const app = express();
+
+// 1. Security headers
+app.use(helmet());
+
+// 2. CORS configured
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+// 3. Rate limiting
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+}));
+
+app.use(express.json({ limit: '10kb' })); // Limit body size
+
+// 4. Validation schemas
+const loginSchema = z.object({
+  email: z.string().email().max(255),
+  password: z.string().min(8).max(128)
+});
+
+const validate = (schema) => (req, res, next) => {
+  const result = schema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ error: 'Invalid data' });
+  }
+  next();
+};
+
+// 5. Secure login
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  skipSuccessfulRequests: true
+});
+
+app.post('/api/login', loginLimiter, validate(loginSchema), async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user (parameterized query)
+    const user = await db.query(
+      'SELECT id, email, password_hash FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (!user.rows[0]) {
+      // Constant time to prevent timing attacks
+      await bcrypt.compare(password, '$2b$12$invalidhashtopreventtiming');
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const valid = await bcrypt.compare(password, user.rows[0].password_hash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Response without sensitive data
+    res.json({
+      user: { id: user.rows[0].id, email: user.rows[0].email }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal error' });
+  }
+});
+
+// 6. Global error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(\\\`Secure server on port \\\${PORT}\\\`);
+});
+\`\`\`
+
+---
+
+## Step 10: Verification checklist
+
+Before going to production, verify each item:
+
+| Category | Item | Command/Verification |
+|----------|------|---------------------|
+| **Headers** | Helmet active | \`curl -I localhost:3000\` |
+| **Headers** | CSP configured | Check Content-Security-Policy |
+| **Rate Limit** | Global active | Make 101+ requests |
+| **Rate Limit** | Strict login | Make 6+ failed logins |
+| **Validation** | Zod on endpoints | Send invalid data |
+| **SQL** | Parameterized queries | Review code |
+| **XSS** | Sanitization active | Send \`<script>alert(1)</script>\` |
+| **CORS** | Only allowed origins | Request from other domain |
+| **Deps** | No vulnerabilities | \`npm audit\` |
+| **CI/CD** | Automatic audit | Check GitHub Actions |
+| **Passwords** | Hashed with bcrypt | Check DB |
+| **Errors** | No stack traces | Force error in prod |
+| **HTTPS** | Forced in prod | Verify redirect |
+
+---
+
+## Troubleshooting
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| CORS blocked | Origin not in list | Add to allowedOrigins |
+| Rate limit too strict | Too few requests allowed | Adjust max and windowMs |
+| Zod rejects everything | Schema too strict | Review validations |
+| npm audit fails | Vulnerable dependency | \`npm audit fix\` or update |
+
+---
+
+## Next step
+
+-> [RAG with PDF Documents](/en/cooking/rag-documents) - Master Level
+    `,
+  },
+  'testing-fullstack': {
+    timeEs: '60 minutos',
+    timeEn: '60 minutes',
+    prerequisitesEs: ['Node.js', 'React basico', 'Entender APIs REST'],
+    prerequisitesEn: ['Node.js', 'Basic React', 'Understanding of REST APIs'],
+    contentEs: `
+## Lo que vas a construir
+
+Una aplicacion fullstack completamente testeada: un API REST con Express y un frontend React, con tests en todos los niveles de la piramide de testing.
+Escribiras tests unitarios con Jest para la logica de negocio, tests de integracion con Supertest para los endpoints, tests de base de datos con Testcontainers, tests de componentes React con Testing Library, y tests end-to-end con Playwright.
+Al terminar, tendras una suite de tests completa con reporte de cobertura que te da confianza para hacer cambios sin romper nada.
+
+---
+
+## Paso 1: Crear el proyecto
+
+\`\`\`bash
+mkdir fullstack-testing && cd fullstack-testing
+npm init -y
+\`\`\`
+
+Instala las dependencias del backend:
+
+\`\`\`bash
+npm install express cors
+npm install -D typescript @types/node @types/express ts-node nodemon
+\`\`\`
+
+---
+
+## Paso 2: Configurar TypeScript
+
+\`\`\`json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
+\`\`\`
+
+---
+
+## Paso 3: Crear la logica de negocio
+
+\`\`\`typescript
+// src/services/userService.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Date;
+}
+
+export interface CreateUserDTO {
+  name: string;
+  email: string;
+}
+
+// Simulamos una base de datos en memoria
+const users: Map<string, User> = new Map();
+
+export function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function validateName(name: string): boolean {
+  return name.length >= 2 && name.length <= 50;
+}
+
+export function createUser(data: CreateUserDTO): User {
+  if (!validateEmail(data.email)) {
+    throw new Error('Email invalido');
+  }
+  if (!validateName(data.name)) {
+    throw new Error('Nombre debe tener entre 2 y 50 caracteres');
+  }
+
+  // Verificar email unico
+  for (const user of users.values()) {
+    if (user.email === data.email) {
+      throw new Error('Email ya existe');
+    }
+  }
+
+  const user: User = {
+    id: crypto.randomUUID(),
+    name: data.name.trim(),
+    email: data.email.toLowerCase(),
+    createdAt: new Date()
+  };
+
+  users.set(user.id, user);
+  return user;
+}
+
+export function getUser(id: string): User | undefined {
+  return users.get(id);
+}
+
+export function getAllUsers(): User[] {
+  return Array.from(users.values());
+}
+
+export function deleteUser(id: string): boolean {
+  return users.delete(id);
+}
+
+export function clearUsers(): void {
+  users.clear();
+}
+\`\`\`
+
+---
+
+## Paso 4: Crear el API REST
+
+\`\`\`typescript
+// src/app.ts
+import express from 'express';
+import cors from 'cors';
+import * as userService from './services/userService';
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// GET /api/users - Listar usuarios
+app.get('/api/users', (req, res) => {
+  const users = userService.getAllUsers();
+  res.json(users);
+});
+
+// GET /api/users/:id - Obtener usuario
+app.get('/api/users/:id', (req, res) => {
+  const user = userService.getUser(req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  res.json(user);
+});
+
+// POST /api/users - Crear usuario
+app.post('/api/users', (req, res) => {
+  try {
+    const user = userService.createUser(req.body);
+    res.status(201).json(user);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Error desconocido';
+    res.status(400).json({ error: message });
+  }
+});
+
+// DELETE /api/users/:id - Eliminar usuario
+app.delete('/api/users/:id', (req, res) => {
+  const deleted = userService.deleteUser(req.params.id);
+  if (!deleted) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  res.status(204).send();
+});
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+export { app };
+\`\`\`
+
+\`\`\`typescript
+// src/server.ts
+import { app } from './app';
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(\`Servidor corriendo en http://localhost:\${PORT}\`);
+});
+\`\`\`
+
+---
+
+## Paso 5: Tests unitarios con Jest
+
+\`\`\`bash
+npm install -D jest @types/jest ts-jest
+\`\`\`
+
+\`\`\`javascript
+// jest.config.js
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['<rootDir>/src'],
+  testMatch: ['**/*.test.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/server.ts'
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  }
+};
+\`\`\`
+
+\`\`\`typescript
+// src/services/userService.test.ts
+import {
+  validateEmail,
+  validateName,
+  createUser,
+  getUser,
+  getAllUsers,
+  deleteUser,
+  clearUsers
+} from './userService';
+
+describe('UserService', () => {
+  beforeEach(() => {
+    clearUsers();
+  });
+
+  describe('validateEmail', () => {
+    it('acepta emails validos', () => {
+      expect(validateEmail('test@example.com')).toBe(true);
+      expect(validateEmail('user.name@domain.org')).toBe(true);
+    });
+
+    it('rechaza emails invalidos', () => {
+      expect(validateEmail('invalid')).toBe(false);
+      expect(validateEmail('no@domain')).toBe(false);
+      expect(validateEmail('@nodomain.com')).toBe(false);
+      expect(validateEmail('')).toBe(false);
+    });
+  });
+
+  describe('validateName', () => {
+    it('acepta nombres validos', () => {
+      expect(validateName('Juan')).toBe(true);
+      expect(validateName('Ana Maria Lopez')).toBe(true);
+    });
+
+    it('rechaza nombres muy cortos', () => {
+      expect(validateName('A')).toBe(false);
+    });
+
+    it('rechaza nombres muy largos', () => {
+      expect(validateName('A'.repeat(51))).toBe(false);
+    });
+  });
+
+  describe('createUser', () => {
+    it('crea usuario con datos validos', () => {
+      const user = createUser({
+        name: 'Juan Perez',
+        email: 'juan@example.com'
+      });
+
+      expect(user.id).toBeDefined();
+      expect(user.name).toBe('Juan Perez');
+      expect(user.email).toBe('juan@example.com');
+      expect(user.createdAt).toBeInstanceOf(Date);
+    });
+
+    it('normaliza el email a minusculas', () => {
+      const user = createUser({
+        name: 'Test User',
+        email: 'TEST@EXAMPLE.COM'
+      });
+
+      expect(user.email).toBe('test@example.com');
+    });
+
+    it('lanza error con email invalido', () => {
+      expect(() => createUser({
+        name: 'Test',
+        email: 'invalid'
+      })).toThrow('Email invalido');
+    });
+
+    it('lanza error con nombre invalido', () => {
+      expect(() => createUser({
+        name: 'A',
+        email: 'test@example.com'
+      })).toThrow('Nombre debe tener entre 2 y 50 caracteres');
+    });
+
+    it('lanza error si email ya existe', () => {
+      createUser({ name: 'User 1', email: 'test@example.com' });
+
+      expect(() => createUser({
+        name: 'User 2',
+        email: 'test@example.com'
+      })).toThrow('Email ya existe');
+    });
+  });
+
+  describe('getUser', () => {
+    it('retorna usuario existente', () => {
+      const created = createUser({
+        name: 'Test',
+        email: 'test@example.com'
+      });
+
+      const found = getUser(created.id);
+      expect(found).toEqual(created);
+    });
+
+    it('retorna undefined para usuario inexistente', () => {
+      expect(getUser('nonexistent-id')).toBeUndefined();
+    });
+  });
+
+  describe('getAllUsers', () => {
+    it('retorna array vacio sin usuarios', () => {
+      expect(getAllUsers()).toEqual([]);
+    });
+
+    it('retorna todos los usuarios', () => {
+      createUser({ name: 'User 1', email: 'user1@example.com' });
+      createUser({ name: 'User 2', email: 'user2@example.com' });
+
+      const users = getAllUsers();
+      expect(users).toHaveLength(2);
+    });
+  });
+
+  describe('deleteUser', () => {
+    it('elimina usuario existente', () => {
+      const user = createUser({
+        name: 'Test',
+        email: 'test@example.com'
+      });
+
+      expect(deleteUser(user.id)).toBe(true);
+      expect(getUser(user.id)).toBeUndefined();
+    });
+
+    it('retorna false para usuario inexistente', () => {
+      expect(deleteUser('nonexistent-id')).toBe(false);
+    });
+  });
+});
+\`\`\`
+
+---
+
+## Paso 6: Tests de integracion con Supertest
+
+\`\`\`bash
+npm install -D supertest @types/supertest
+\`\`\`
+
+\`\`\`typescript
+// src/app.test.ts
+import request from 'supertest';
+import { app } from './app';
+import { clearUsers } from './services/userService';
+
+describe('Users API', () => {
+  beforeEach(() => {
+    clearUsers();
+  });
+
+  describe('GET /health', () => {
+    it('retorna status ok', async () => {
+      const res = await request(app).get('/health');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ status: 'ok' });
+    });
+  });
+
+  describe('POST /api/users', () => {
+    it('crea usuario con datos validos', async () => {
+      const res = await request(app)
+        .post('/api/users')
+        .send({ name: 'Juan Perez', email: 'juan@example.com' });
+
+      expect(res.status).toBe(201);
+      expect(res.body).toMatchObject({
+        name: 'Juan Perez',
+        email: 'juan@example.com'
+      });
+      expect(res.body.id).toBeDefined();
+    });
+
+    it('retorna 400 con email invalido', async () => {
+      const res = await request(app)
+        .post('/api/users')
+        .send({ name: 'Test', email: 'invalid' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Email invalido');
+    });
+
+    it('retorna 400 si email duplicado', async () => {
+      await request(app)
+        .post('/api/users')
+        .send({ name: 'User 1', email: 'test@example.com' });
+
+      const res = await request(app)
+        .post('/api/users')
+        .send({ name: 'User 2', email: 'test@example.com' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Email ya existe');
+    });
+  });
+
+  describe('GET /api/users', () => {
+    it('retorna lista vacia inicialmente', async () => {
+      const res = await request(app).get('/api/users');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual([]);
+    });
+
+    it('retorna usuarios creados', async () => {
+      await request(app)
+        .post('/api/users')
+        .send({ name: 'User 1', email: 'user1@example.com' });
+      await request(app)
+        .post('/api/users')
+        .send({ name: 'User 2', email: 'user2@example.com' });
+
+      const res = await request(app).get('/api/users');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveLength(2);
+    });
+  });
+
+  describe('GET /api/users/:id', () => {
+    it('retorna usuario existente', async () => {
+      const createRes = await request(app)
+        .post('/api/users')
+        .send({ name: 'Test User', email: 'test@example.com' });
+
+      const res = await request(app)
+        .get(\`/api/users/\${createRes.body.id}\`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.name).toBe('Test User');
+    });
+
+    it('retorna 404 para usuario inexistente', async () => {
+      const res = await request(app)
+        .get('/api/users/nonexistent-id');
+
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe('Usuario no encontrado');
+    });
+  });
+
+  describe('DELETE /api/users/:id', () => {
+    it('elimina usuario existente', async () => {
+      const createRes = await request(app)
+        .post('/api/users')
+        .send({ name: 'Test', email: 'test@example.com' });
+
+      const res = await request(app)
+        .delete(\`/api/users/\${createRes.body.id}\`);
+
+      expect(res.status).toBe(204);
+
+      // Verificar que fue eliminado
+      const getRes = await request(app)
+        .get(\`/api/users/\${createRes.body.id}\`);
+      expect(getRes.status).toBe(404);
+    });
+
+    it('retorna 404 para usuario inexistente', async () => {
+      const res = await request(app)
+        .delete('/api/users/nonexistent-id');
+
+      expect(res.status).toBe(404);
+    });
+  });
+});
+\`\`\`
+
+---
+
+## Paso 7: Tests de base de datos con Testcontainers
+
+\`\`\`bash
+npm install -D testcontainers @testcontainers/postgresql pg @types/pg
+\`\`\`
+
+\`\`\`typescript
+// src/database/db.integration.test.ts
+import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { Pool } from 'pg';
+
+describe('Database Integration', () => {
+  let container: StartedPostgreSqlContainer;
+  let pool: Pool;
+
+  beforeAll(async () => {
+    // Inicia un contenedor PostgreSQL real
+    container = await new PostgreSqlContainer()
+      .withDatabase('testdb')
+      .withUsername('testuser')
+      .withPassword('testpass')
+      .start();
+
+    pool = new Pool({
+      connectionString: container.getConnectionUri()
+    });
+
+    // Crear tabla
+    await pool.query(\`
+      CREATE TABLE users (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    \`);
+  }, 60000); // Timeout de 60s para descargar imagen
+
+  afterAll(async () => {
+    await pool.end();
+    await container.stop();
+  });
+
+  beforeEach(async () => {
+    await pool.query('DELETE FROM users');
+  });
+
+  it('inserta y recupera usuario', async () => {
+    const insertResult = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      ['Juan Perez', 'juan@example.com']
+    );
+
+    expect(insertResult.rows[0].name).toBe('Juan Perez');
+    expect(insertResult.rows[0].email).toBe('juan@example.com');
+
+    const selectResult = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      ['juan@example.com']
+    );
+
+    expect(selectResult.rows).toHaveLength(1);
+  });
+
+  it('rechaza emails duplicados', async () => {
+    await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2)',
+      ['User 1', 'test@example.com']
+    );
+
+    await expect(
+      pool.query(
+        'INSERT INTO users (name, email) VALUES ($1, $2)',
+        ['User 2', 'test@example.com']
+      )
+    ).rejects.toThrow(/unique constraint/i);
+  });
+
+  it('genera UUID automaticamente', async () => {
+    const result = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
+      ['Test', 'test@example.com']
+    );
+
+    expect(result.rows[0].id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+    );
+  });
+});
+\`\`\`
+
+---
+
+## Paso 8: Crear componente React
+
+Crea el frontend en una carpeta separada:
+
+\`\`\`bash
+mkdir -p client/src
+cd client
+npm init -y
+npm install react react-dom
+npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-dom
+\`\`\`
+
+\`\`\`typescript
+// client/src/components/UserForm.tsx
+import { useState } from 'react';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface Props {
+  onUserCreated: (user: User) => void;
+}
+
+export function UserForm({ onUserCreated }: Props) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:3001/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Error al crear usuario');
+      }
+
+      onUserCreated(data);
+      setName('');
+      setEmail('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error desconocido');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="user-form">
+      <div>
+        <label htmlFor="name">Nombre:</label>
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Tu nombre"
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="tu@email.com"
+          required
+        />
+      </div>
+      {error && <p className="error" role="alert">{error}</p>}
+      <button type="submit" disabled={loading}>
+        {loading ? 'Creando...' : 'Crear Usuario'}
+      </button>
+    </form>
+  );
+}
+\`\`\`
+
+---
+
+## Paso 9: Tests de componentes con Testing Library
+
+\`\`\`bash
+cd client
+npm install -D vitest jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom
+\`\`\`
+
+\`\`\`typescript
+// client/vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    globals: true
+  }
+});
+\`\`\`
+
+\`\`\`typescript
+// client/src/test/setup.ts
+import '@testing-library/jest-dom';
+\`\`\`
+
+\`\`\`typescript
+// client/src/components/UserForm.test.tsx
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { UserForm } from './UserForm';
+
+describe('UserForm', () => {
+  const mockOnUserCreated = vi.fn();
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+    global.fetch = vi.fn();
+  });
+
+  it('renderiza el formulario correctamente', () => {
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    expect(screen.getByLabelText(/nombre/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /crear usuario/i })).toBeInTheDocument();
+  });
+
+  it('permite escribir en los campos', async () => {
+    const user = userEvent.setup();
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/nombre/i), 'Juan Perez');
+    await user.type(screen.getByLabelText(/email/i), 'juan@example.com');
+
+    expect(screen.getByLabelText(/nombre/i)).toHaveValue('Juan Perez');
+    expect(screen.getByLabelText(/email/i)).toHaveValue('juan@example.com');
+  });
+
+  it('envia formulario y llama callback con usuario creado', async () => {
+    const user = userEvent.setup();
+    const mockUser = { id: '123', name: 'Juan', email: 'juan@example.com' };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockUser
+    });
+
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/nombre/i), 'Juan');
+    await user.type(screen.getByLabelText(/email/i), 'juan@example.com');
+    await user.click(screen.getByRole('button', { name: /crear usuario/i }));
+
+    await waitFor(() => {
+      expect(mockOnUserCreated).toHaveBeenCalledWith(mockUser);
+    });
+
+    // Verifica que los campos se limpiaron
+    expect(screen.getByLabelText(/nombre/i)).toHaveValue('');
+    expect(screen.getByLabelText(/email/i)).toHaveValue('');
+  });
+
+  it('muestra error del servidor', async () => {
+    const user = userEvent.setup();
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ error: 'Email ya existe' })
+    });
+
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/nombre/i), 'Test');
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.click(screen.getByRole('button'));
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('Email ya existe');
+    });
+
+    expect(mockOnUserCreated).not.toHaveBeenCalled();
+  });
+
+  it('deshabilita boton mientras carga', async () => {
+    const user = userEvent.setup();
+
+    let resolvePromise: any;
+    (global.fetch as any).mockImplementationOnce(
+      () => new Promise((resolve) => { resolvePromise = resolve; })
+    );
+
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/nombre/i), 'Test');
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.getByRole('button')).toHaveTextContent('Creando...');
+
+    // Resolver la promesa para limpiar
+    resolvePromise({ ok: true, json: async () => ({ id: '1' }) });
+  });
+});
+\`\`\`
+
+---
+
+## Paso 10: Tests E2E con Playwright
+
+\`\`\`bash
+npm install -D @playwright/test
+npx playwright install
+\`\`\`
+
+\`\`\`typescript
+// e2e/users.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('User Management', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173');
+  });
+
+  test('puede crear un nuevo usuario', async ({ page }) => {
+    // Llenar formulario
+    await page.getByLabel(/nombre/i).fill('Juan Perez');
+    await page.getByLabel(/email/i).fill('juan@example.com');
+
+    // Enviar
+    await page.getByRole('button', { name: /crear usuario/i }).click();
+
+    // Verificar que aparece en la lista
+    await expect(page.getByText('Juan Perez')).toBeVisible();
+    await expect(page.getByText('juan@example.com')).toBeVisible();
+  });
+
+  test('muestra error con email duplicado', async ({ page }) => {
+    // Crear primer usuario
+    await page.getByLabel(/nombre/i).fill('User 1');
+    await page.getByLabel(/email/i).fill('duplicate@example.com');
+    await page.getByRole('button', { name: /crear usuario/i }).click();
+
+    // Esperar que se cree
+    await expect(page.getByText('User 1')).toBeVisible();
+
+    // Intentar crear con mismo email
+    await page.getByLabel(/nombre/i).fill('User 2');
+    await page.getByLabel(/email/i).fill('duplicate@example.com');
+    await page.getByRole('button', { name: /crear usuario/i }).click();
+
+    // Verificar error
+    await expect(page.getByRole('alert')).toContainText(/ya existe/i);
+  });
+
+  test('valida campos requeridos', async ({ page }) => {
+    // Intentar enviar sin datos
+    await page.getByRole('button', { name: /crear usuario/i }).click();
+
+    // Verificar validacion HTML5
+    const nameInput = page.getByLabel(/nombre/i);
+    await expect(nameInput).toHaveAttribute('required');
+  });
+
+  test('puede eliminar usuario', async ({ page }) => {
+    // Crear usuario
+    await page.getByLabel(/nombre/i).fill('Delete Me');
+    await page.getByLabel(/email/i).fill('delete@example.com');
+    await page.getByRole('button', { name: /crear usuario/i }).click();
+
+    await expect(page.getByText('Delete Me')).toBeVisible();
+
+    // Eliminar
+    await page.getByRole('button', { name: /eliminar/i }).first().click();
+
+    // Verificar que desaparecio
+    await expect(page.getByText('Delete Me')).not.toBeVisible();
+  });
+});
+\`\`\`
+
+\`\`\`typescript
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  retries: 2,
+  reporter: 'html',
+  use: {
+    baseURL: 'http://localhost:5173',
+    trace: 'on-first-retry',
+  },
+  webServer: [
+    {
+      command: 'npm run dev:server',
+      port: 3001,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'npm run dev:client',
+      port: 5173,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
+});
+\`\`\`
+
+---
+
+## Paso 11: Configurar scripts de test
+
+\`\`\`json
+// package.json
+{
+  "scripts": {
+    "dev:server": "nodemon --exec ts-node src/server.ts",
+    "dev:client": "cd client && npm run dev",
+    "build": "tsc",
+
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+
+    "test:integration": "jest --testPathPattern=integration",
+
+    "test:client": "cd client && npm run test",
+
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+
+    "test:all": "npm run test:coverage && npm run test:client && npm run test:e2e"
+  }
+}
+\`\`\`
+
+---
+
+## Paso 12: Ejecutar y ver cobertura
+
+\`\`\`bash
+# Tests unitarios + integracion con cobertura
+npm run test:coverage
+\`\`\`
+
+Veras un reporte asi:
+
+\`\`\`
+--------------------|---------|----------|---------|---------|
+File                | % Stmts | % Branch | % Funcs | % Lines |
+--------------------|---------|----------|---------|---------|
+All files           |   92.45 |    85.71 |   91.67 |   92.16 |
+ services           |         |          |         |         |
+  userService.ts    |   95.24 |    90.00 |   100.0 |   95.00 |
+ app.ts             |   89.47 |    80.00 |   83.33 |   89.19 |
+--------------------|---------|----------|---------|---------|
+
+Test Suites: 3 passed, 3 total
+Tests:       24 passed, 24 total
+\`\`\`
+
+\`\`\`bash
+# Tests E2E
+npm run test:e2e
+\`\`\`
+
+\`\`\`
+Running 4 tests using 2 workers
+  4 passed (12.3s)
+
+To open last HTML report run:
+  npx playwright show-report
+\`\`\`
+
+---
+
+## Piramide de testing
+
+| Nivel | Herramienta | Que prueba | Velocidad |
+|-------|-------------|------------|-----------|
+| **Unitarios** | Jest | Logica aislada | Rapido |
+| **Integracion** | Supertest | Endpoints HTTP | Medio |
+| **Base de datos** | Testcontainers | Queries reales | Lento |
+| **Componentes** | Testing Library | UI aislada | Rapido |
+| **E2E** | Playwright | Flujos completos | Lento |
+
+---
+
+## Siguiente paso
+
+-> [CI/CD con GitHub Actions](/es/cooking/github-actions) para correr tus tests en cada push
+    `,
+    contentEn: `
+## What you'll build
+
+A fully tested fullstack application: a REST API with Express and a React frontend, with tests at every level of the testing pyramid.
+You'll write unit tests with Jest for business logic, integration tests with Supertest for endpoints, database tests with Testcontainers, React component tests with Testing Library, and end-to-end tests with Playwright.
+When finished, you'll have a complete test suite with coverage reporting that gives you confidence to make changes without breaking anything.
+
+---
+
+## Step 1: Create the project
+
+\`\`\`bash
+mkdir fullstack-testing && cd fullstack-testing
+npm init -y
+\`\`\`
+
+Install backend dependencies:
+
+\`\`\`bash
+npm install express cors
+npm install -D typescript @types/node @types/express ts-node nodemon
+\`\`\`
+
+---
+
+## Step 2: Configure TypeScript
+
+\`\`\`json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
+\`\`\`
+
+---
+
+## Step 3: Create business logic
+
+\`\`\`typescript
+// src/services/userService.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Date;
+}
+
+export interface CreateUserDTO {
+  name: string;
+  email: string;
+}
+
+// Simulate an in-memory database
+const users: Map<string, User> = new Map();
+
+export function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function validateName(name: string): boolean {
+  return name.length >= 2 && name.length <= 50;
+}
+
+export function createUser(data: CreateUserDTO): User {
+  if (!validateEmail(data.email)) {
+    throw new Error('Invalid email');
+  }
+  if (!validateName(data.name)) {
+    throw new Error('Name must be between 2 and 50 characters');
+  }
+
+  // Check unique email
+  for (const user of users.values()) {
+    if (user.email === data.email) {
+      throw new Error('Email already exists');
+    }
+  }
+
+  const user: User = {
+    id: crypto.randomUUID(),
+    name: data.name.trim(),
+    email: data.email.toLowerCase(),
+    createdAt: new Date()
+  };
+
+  users.set(user.id, user);
+  return user;
+}
+
+export function getUser(id: string): User | undefined {
+  return users.get(id);
+}
+
+export function getAllUsers(): User[] {
+  return Array.from(users.values());
+}
+
+export function deleteUser(id: string): boolean {
+  return users.delete(id);
+}
+
+export function clearUsers(): void {
+  users.clear();
+}
+\`\`\`
+
+---
+
+## Step 4: Create the REST API
+
+\`\`\`typescript
+// src/app.ts
+import express from 'express';
+import cors from 'cors';
+import * as userService from './services/userService';
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// GET /api/users - List users
+app.get('/api/users', (req, res) => {
+  const users = userService.getAllUsers();
+  res.json(users);
+});
+
+// GET /api/users/:id - Get user
+app.get('/api/users/:id', (req, res) => {
+  const user = userService.getUser(req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  res.json(user);
+});
+
+// POST /api/users - Create user
+app.post('/api/users', (req, res) => {
+  try {
+    const user = userService.createUser(req.body);
+    res.status(201).json(user);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
+  }
+});
+
+// DELETE /api/users/:id - Delete user
+app.delete('/api/users/:id', (req, res) => {
+  const deleted = userService.deleteUser(req.params.id);
+  if (!deleted) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  res.status(204).send();
+});
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+export { app };
+\`\`\`
+
+\`\`\`typescript
+// src/server.ts
+import { app } from './app';
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(\`Server running at http://localhost:\${PORT}\`);
+});
+\`\`\`
+
+---
+
+## Step 5: Unit tests with Jest
+
+\`\`\`bash
+npm install -D jest @types/jest ts-jest
+\`\`\`
+
+\`\`\`javascript
+// jest.config.js
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['<rootDir>/src'],
+  testMatch: ['**/*.test.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/server.ts'
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  }
+};
+\`\`\`
+
+\`\`\`typescript
+// src/services/userService.test.ts
+import {
+  validateEmail,
+  validateName,
+  createUser,
+  getUser,
+  getAllUsers,
+  deleteUser,
+  clearUsers
+} from './userService';
+
+describe('UserService', () => {
+  beforeEach(() => {
+    clearUsers();
+  });
+
+  describe('validateEmail', () => {
+    it('accepts valid emails', () => {
+      expect(validateEmail('test@example.com')).toBe(true);
+      expect(validateEmail('user.name@domain.org')).toBe(true);
+    });
+
+    it('rejects invalid emails', () => {
+      expect(validateEmail('invalid')).toBe(false);
+      expect(validateEmail('no@domain')).toBe(false);
+      expect(validateEmail('@nodomain.com')).toBe(false);
+      expect(validateEmail('')).toBe(false);
+    });
+  });
+
+  describe('validateName', () => {
+    it('accepts valid names', () => {
+      expect(validateName('John')).toBe(true);
+      expect(validateName('Jane Mary Smith')).toBe(true);
+    });
+
+    it('rejects names too short', () => {
+      expect(validateName('A')).toBe(false);
+    });
+
+    it('rejects names too long', () => {
+      expect(validateName('A'.repeat(51))).toBe(false);
+    });
+  });
+
+  describe('createUser', () => {
+    it('creates user with valid data', () => {
+      const user = createUser({
+        name: 'John Doe',
+        email: 'john@example.com'
+      });
+
+      expect(user.id).toBeDefined();
+      expect(user.name).toBe('John Doe');
+      expect(user.email).toBe('john@example.com');
+      expect(user.createdAt).toBeInstanceOf(Date);
+    });
+
+    it('normalizes email to lowercase', () => {
+      const user = createUser({
+        name: 'Test User',
+        email: 'TEST@EXAMPLE.COM'
+      });
+
+      expect(user.email).toBe('test@example.com');
+    });
+
+    it('throws error with invalid email', () => {
+      expect(() => createUser({
+        name: 'Test',
+        email: 'invalid'
+      })).toThrow('Invalid email');
+    });
+
+    it('throws error with invalid name', () => {
+      expect(() => createUser({
+        name: 'A',
+        email: 'test@example.com'
+      })).toThrow('Name must be between 2 and 50 characters');
+    });
+
+    it('throws error if email already exists', () => {
+      createUser({ name: 'User 1', email: 'test@example.com' });
+
+      expect(() => createUser({
+        name: 'User 2',
+        email: 'test@example.com'
+      })).toThrow('Email already exists');
+    });
+  });
+
+  describe('getUser', () => {
+    it('returns existing user', () => {
+      const created = createUser({
+        name: 'Test',
+        email: 'test@example.com'
+      });
+
+      const found = getUser(created.id);
+      expect(found).toEqual(created);
+    });
+
+    it('returns undefined for non-existent user', () => {
+      expect(getUser('nonexistent-id')).toBeUndefined();
+    });
+  });
+
+  describe('getAllUsers', () => {
+    it('returns empty array without users', () => {
+      expect(getAllUsers()).toEqual([]);
+    });
+
+    it('returns all users', () => {
+      createUser({ name: 'User 1', email: 'user1@example.com' });
+      createUser({ name: 'User 2', email: 'user2@example.com' });
+
+      const users = getAllUsers();
+      expect(users).toHaveLength(2);
+    });
+  });
+
+  describe('deleteUser', () => {
+    it('deletes existing user', () => {
+      const user = createUser({
+        name: 'Test',
+        email: 'test@example.com'
+      });
+
+      expect(deleteUser(user.id)).toBe(true);
+      expect(getUser(user.id)).toBeUndefined();
+    });
+
+    it('returns false for non-existent user', () => {
+      expect(deleteUser('nonexistent-id')).toBe(false);
+    });
+  });
+});
+\`\`\`
+
+---
+
+## Step 6: Integration tests with Supertest
+
+\`\`\`bash
+npm install -D supertest @types/supertest
+\`\`\`
+
+\`\`\`typescript
+// src/app.test.ts
+import request from 'supertest';
+import { app } from './app';
+import { clearUsers } from './services/userService';
+
+describe('Users API', () => {
+  beforeEach(() => {
+    clearUsers();
+  });
+
+  describe('GET /health', () => {
+    it('returns ok status', async () => {
+      const res = await request(app).get('/health');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ status: 'ok' });
+    });
+  });
+
+  describe('POST /api/users', () => {
+    it('creates user with valid data', async () => {
+      const res = await request(app)
+        .post('/api/users')
+        .send({ name: 'John Doe', email: 'john@example.com' });
+
+      expect(res.status).toBe(201);
+      expect(res.body).toMatchObject({
+        name: 'John Doe',
+        email: 'john@example.com'
+      });
+      expect(res.body.id).toBeDefined();
+    });
+
+    it('returns 400 with invalid email', async () => {
+      const res = await request(app)
+        .post('/api/users')
+        .send({ name: 'Test', email: 'invalid' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Invalid email');
+    });
+
+    it('returns 400 for duplicate email', async () => {
+      await request(app)
+        .post('/api/users')
+        .send({ name: 'User 1', email: 'test@example.com' });
+
+      const res = await request(app)
+        .post('/api/users')
+        .send({ name: 'User 2', email: 'test@example.com' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Email already exists');
+    });
+  });
+
+  describe('GET /api/users', () => {
+    it('returns empty list initially', async () => {
+      const res = await request(app).get('/api/users');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual([]);
+    });
+
+    it('returns created users', async () => {
+      await request(app)
+        .post('/api/users')
+        .send({ name: 'User 1', email: 'user1@example.com' });
+      await request(app)
+        .post('/api/users')
+        .send({ name: 'User 2', email: 'user2@example.com' });
+
+      const res = await request(app).get('/api/users');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveLength(2);
+    });
+  });
+
+  describe('GET /api/users/:id', () => {
+    it('returns existing user', async () => {
+      const createRes = await request(app)
+        .post('/api/users')
+        .send({ name: 'Test User', email: 'test@example.com' });
+
+      const res = await request(app)
+        .get(\`/api/users/\${createRes.body.id}\`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.name).toBe('Test User');
+    });
+
+    it('returns 404 for non-existent user', async () => {
+      const res = await request(app)
+        .get('/api/users/nonexistent-id');
+
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe('User not found');
+    });
+  });
+
+  describe('DELETE /api/users/:id', () => {
+    it('deletes existing user', async () => {
+      const createRes = await request(app)
+        .post('/api/users')
+        .send({ name: 'Test', email: 'test@example.com' });
+
+      const res = await request(app)
+        .delete(\`/api/users/\${createRes.body.id}\`);
+
+      expect(res.status).toBe(204);
+
+      // Verify it was deleted
+      const getRes = await request(app)
+        .get(\`/api/users/\${createRes.body.id}\`);
+      expect(getRes.status).toBe(404);
+    });
+
+    it('returns 404 for non-existent user', async () => {
+      const res = await request(app)
+        .delete('/api/users/nonexistent-id');
+
+      expect(res.status).toBe(404);
+    });
+  });
+});
+\`\`\`
+
+---
+
+## Step 7: Database tests with Testcontainers
+
+\`\`\`bash
+npm install -D testcontainers @testcontainers/postgresql pg @types/pg
+\`\`\`
+
+\`\`\`typescript
+// src/database/db.integration.test.ts
+import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { Pool } from 'pg';
+
+describe('Database Integration', () => {
+  let container: StartedPostgreSqlContainer;
+  let pool: Pool;
+
+  beforeAll(async () => {
+    // Start a real PostgreSQL container
+    container = await new PostgreSqlContainer()
+      .withDatabase('testdb')
+      .withUsername('testuser')
+      .withPassword('testpass')
+      .start();
+
+    pool = new Pool({
+      connectionString: container.getConnectionUri()
+    });
+
+    // Create table
+    await pool.query(\`
+      CREATE TABLE users (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    \`);
+  }, 60000); // 60s timeout to download image
+
+  afterAll(async () => {
+    await pool.end();
+    await container.stop();
+  });
+
+  beforeEach(async () => {
+    await pool.query('DELETE FROM users');
+  });
+
+  it('inserts and retrieves user', async () => {
+    const insertResult = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      ['John Doe', 'john@example.com']
+    );
+
+    expect(insertResult.rows[0].name).toBe('John Doe');
+    expect(insertResult.rows[0].email).toBe('john@example.com');
+
+    const selectResult = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      ['john@example.com']
+    );
+
+    expect(selectResult.rows).toHaveLength(1);
+  });
+
+  it('rejects duplicate emails', async () => {
+    await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2)',
+      ['User 1', 'test@example.com']
+    );
+
+    await expect(
+      pool.query(
+        'INSERT INTO users (name, email) VALUES ($1, $2)',
+        ['User 2', 'test@example.com']
+      )
+    ).rejects.toThrow(/unique constraint/i);
+  });
+
+  it('generates UUID automatically', async () => {
+    const result = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
+      ['Test', 'test@example.com']
+    );
+
+    expect(result.rows[0].id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+    );
+  });
+});
+\`\`\`
+
+---
+
+## Step 8: Create React component
+
+Create the frontend in a separate folder:
+
+\`\`\`bash
+mkdir -p client/src
+cd client
+npm init -y
+npm install react react-dom
+npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-dom
+\`\`\`
+
+\`\`\`typescript
+// client/src/components/UserForm.tsx
+import { useState } from 'react';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface Props {
+  onUserCreated: (user: User) => void;
+}
+
+export function UserForm({ onUserCreated }: Props) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:3001/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Error creating user');
+      }
+
+      onUserCreated(data);
+      setName('');
+      setEmail('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="user-form">
+      <div>
+        <label htmlFor="name">Name:</label>
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name"
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@email.com"
+          required
+        />
+      </div>
+      {error && <p className="error" role="alert">{error}</p>}
+      <button type="submit" disabled={loading}>
+        {loading ? 'Creating...' : 'Create User'}
+      </button>
+    </form>
+  );
+}
+\`\`\`
+
+---
+
+## Step 9: Component tests with Testing Library
+
+\`\`\`bash
+cd client
+npm install -D vitest jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom
+\`\`\`
+
+\`\`\`typescript
+// client/vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    globals: true
+  }
+});
+\`\`\`
+
+\`\`\`typescript
+// client/src/test/setup.ts
+import '@testing-library/jest-dom';
+\`\`\`
+
+\`\`\`typescript
+// client/src/components/UserForm.test.tsx
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { UserForm } from './UserForm';
+
+describe('UserForm', () => {
+  const mockOnUserCreated = vi.fn();
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+    global.fetch = vi.fn();
+  });
+
+  it('renders the form correctly', () => {
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /create user/i })).toBeInTheDocument();
+  });
+
+  it('allows typing in fields', async () => {
+    const user = userEvent.setup();
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/name/i), 'John Doe');
+    await user.type(screen.getByLabelText(/email/i), 'john@example.com');
+
+    expect(screen.getByLabelText(/name/i)).toHaveValue('John Doe');
+    expect(screen.getByLabelText(/email/i)).toHaveValue('john@example.com');
+  });
+
+  it('submits form and calls callback with created user', async () => {
+    const user = userEvent.setup();
+    const mockUser = { id: '123', name: 'John', email: 'john@example.com' };
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockUser
+    });
+
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/name/i), 'John');
+    await user.type(screen.getByLabelText(/email/i), 'john@example.com');
+    await user.click(screen.getByRole('button', { name: /create user/i }));
+
+    await waitFor(() => {
+      expect(mockOnUserCreated).toHaveBeenCalledWith(mockUser);
+    });
+
+    // Verify fields were cleared
+    expect(screen.getByLabelText(/name/i)).toHaveValue('');
+    expect(screen.getByLabelText(/email/i)).toHaveValue('');
+  });
+
+  it('shows server error', async () => {
+    const user = userEvent.setup();
+
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ error: 'Email already exists' })
+    });
+
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/name/i), 'Test');
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.click(screen.getByRole('button'));
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('Email already exists');
+    });
+
+    expect(mockOnUserCreated).not.toHaveBeenCalled();
+  });
+
+  it('disables button while loading', async () => {
+    const user = userEvent.setup();
+
+    let resolvePromise: any;
+    (global.fetch as any).mockImplementationOnce(
+      () => new Promise((resolve) => { resolvePromise = resolve; })
+    );
+
+    render(<UserForm onUserCreated={mockOnUserCreated} />);
+
+    await user.type(screen.getByLabelText(/name/i), 'Test');
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.getByRole('button')).toHaveTextContent('Creating...');
+
+    // Resolve promise to cleanup
+    resolvePromise({ ok: true, json: async () => ({ id: '1' }) });
+  });
+});
+\`\`\`
+
+---
+
+## Step 10: E2E tests with Playwright
+
+\`\`\`bash
+npm install -D @playwright/test
+npx playwright install
+\`\`\`
+
+\`\`\`typescript
+// e2e/users.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('User Management', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173');
+  });
+
+  test('can create a new user', async ({ page }) => {
+    // Fill form
+    await page.getByLabel(/name/i).fill('John Doe');
+    await page.getByLabel(/email/i).fill('john@example.com');
+
+    // Submit
+    await page.getByRole('button', { name: /create user/i }).click();
+
+    // Verify it appears in the list
+    await expect(page.getByText('John Doe')).toBeVisible();
+    await expect(page.getByText('john@example.com')).toBeVisible();
+  });
+
+  test('shows error with duplicate email', async ({ page }) => {
+    // Create first user
+    await page.getByLabel(/name/i).fill('User 1');
+    await page.getByLabel(/email/i).fill('duplicate@example.com');
+    await page.getByRole('button', { name: /create user/i }).click();
+
+    // Wait for creation
+    await expect(page.getByText('User 1')).toBeVisible();
+
+    // Try to create with same email
+    await page.getByLabel(/name/i).fill('User 2');
+    await page.getByLabel(/email/i).fill('duplicate@example.com');
+    await page.getByRole('button', { name: /create user/i }).click();
+
+    // Verify error
+    await expect(page.getByRole('alert')).toContainText(/already exists/i);
+  });
+
+  test('validates required fields', async ({ page }) => {
+    // Try to submit without data
+    await page.getByRole('button', { name: /create user/i }).click();
+
+    // Verify HTML5 validation
+    const nameInput = page.getByLabel(/name/i);
+    await expect(nameInput).toHaveAttribute('required');
+  });
+
+  test('can delete user', async ({ page }) => {
+    // Create user
+    await page.getByLabel(/name/i).fill('Delete Me');
+    await page.getByLabel(/email/i).fill('delete@example.com');
+    await page.getByRole('button', { name: /create user/i }).click();
+
+    await expect(page.getByText('Delete Me')).toBeVisible();
+
+    // Delete
+    await page.getByRole('button', { name: /delete/i }).first().click();
+
+    // Verify it disappeared
+    await expect(page.getByText('Delete Me')).not.toBeVisible();
+  });
+});
+\`\`\`
+
+\`\`\`typescript
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  retries: 2,
+  reporter: 'html',
+  use: {
+    baseURL: 'http://localhost:5173',
+    trace: 'on-first-retry',
+  },
+  webServer: [
+    {
+      command: 'npm run dev:server',
+      port: 3001,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'npm run dev:client',
+      port: 5173,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
+});
+\`\`\`
+
+---
+
+## Step 11: Configure test scripts
+
+\`\`\`json
+// package.json
+{
+  "scripts": {
+    "dev:server": "nodemon --exec ts-node src/server.ts",
+    "dev:client": "cd client && npm run dev",
+    "build": "tsc",
+
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+
+    "test:integration": "jest --testPathPattern=integration",
+
+    "test:client": "cd client && npm run test",
+
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+
+    "test:all": "npm run test:coverage && npm run test:client && npm run test:e2e"
+  }
+}
+\`\`\`
+
+---
+
+## Step 12: Run and view coverage
+
+\`\`\`bash
+# Unit + integration tests with coverage
+npm run test:coverage
+\`\`\`
+
+You'll see a report like this:
+
+\`\`\`
+--------------------|---------|----------|---------|---------|
+File                | % Stmts | % Branch | % Funcs | % Lines |
+--------------------|---------|----------|---------|---------|
+All files           |   92.45 |    85.71 |   91.67 |   92.16 |
+ services           |         |          |         |         |
+  userService.ts    |   95.24 |    90.00 |   100.0 |   95.00 |
+ app.ts             |   89.47 |    80.00 |   83.33 |   89.19 |
+--------------------|---------|----------|---------|---------|
+
+Test Suites: 3 passed, 3 total
+Tests:       24 passed, 24 total
+\`\`\`
+
+\`\`\`bash
+# E2E tests
+npm run test:e2e
+\`\`\`
+
+\`\`\`
+Running 4 tests using 2 workers
+  4 passed (12.3s)
+
+To open last HTML report run:
+  npx playwright show-report
+\`\`\`
+
+---
+
+## Testing pyramid
+
+| Level | Tool | What it tests | Speed |
+|-------|------|--------------|-------|
+| **Unit** | Jest | Isolated logic | Fast |
+| **Integration** | Supertest | HTTP endpoints | Medium |
+| **Database** | Testcontainers | Real queries | Slow |
+| **Component** | Testing Library | Isolated UI | Fast |
+| **E2E** | Playwright | Complete flows | Slow |
+
+---
+
+## Next step
+
+-> [CI/CD with GitHub Actions](/en/cooking/github-actions) to run your tests on every push
     `,
   },
 

