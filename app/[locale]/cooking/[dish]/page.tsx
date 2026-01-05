@@ -48,6 +48,10 @@ const dishes = [
   { slug: 'payment-stripe', titleEs: 'Pagos con Stripe', titleEn: 'Payments with Stripe', level: 'chef', icon: '💳' },
   { slug: 'email-notifications', titleEs: 'Emails Transaccionales', titleEn: 'Transactional Emails', level: 'chef', icon: '📧' },
   { slug: 'docker-deploy', titleEs: 'Deploy con Docker', titleEn: 'Deploy with Docker', level: 'chef', icon: '🚀' },
+  { slug: 'vps-hardening', titleEs: 'Asegurar VPS: UFW + fail2ban', titleEn: 'Secure VPS: UFW + fail2ban', level: 'chef', icon: '🛡️' },
+  { slug: 'ssl-certbot', titleEs: 'SSL con Let\'s Encrypt', titleEn: 'SSL with Let\'s Encrypt', level: 'chef', icon: '🔒' },
+  { slug: 'docker-network-lab', titleEs: 'Lab de Redes Docker', titleEn: 'Docker Networks Lab', level: 'chef', icon: '🌐' },
+  { slug: 'docker-backup', titleEs: 'Backup de Volúmenes Docker', titleEn: 'Docker Volumes Backup', level: 'chef', icon: '💾' },
   { slug: 'github-actions', titleEs: 'CI/CD con GitHub Actions', titleEn: 'CI/CD with GitHub Actions', level: 'chef', icon: '⚙️' },
   { slug: 'api-testing', titleEs: 'Testing de APIs', titleEn: 'API Testing', level: 'chef', icon: '🧪' },
   { slug: 'mobile-expo', titleEs: 'App Móvil con Expo', titleEn: 'Mobile App with Expo', level: 'chef', icon: '📱' },
@@ -8617,6 +8621,1504 @@ CMD ["node", "server.js"]
 
 \`\`\`bash
 ssh user@server "cd /app && git pull && docker compose up -d --build"
+\`\`\`
+
+---
+
+## Next step
+
+→ [CI/CD with GitHub Actions](/en/cooking/github-actions)
+    `,
+  },
+  'vps-hardening': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['VPS con Ubuntu/Debian', 'Acceso SSH root'],
+    prerequisitesEn: ['VPS with Ubuntu/Debian', 'SSH root access'],
+    contentEs: `
+## Lo que vas a construir
+
+Un VPS seguro con firewall UFW configurado, fail2ban protegiendo SSH de ataques de fuerza bruta, y autenticación solo por llaves SSH.
+
+Después de este tutorial, tu servidor:
+- Bloqueará todo tráfico excepto SSH, HTTP y HTTPS
+- Baneará automáticamente IPs que intenten fuerza bruta
+- Solo aceptará login con llave SSH (no passwords)
+- Tendrá updates de seguridad automáticos
+
+---
+
+## Paso 1: Conecta a tu VPS
+
+\`\`\`bash
+ssh root@TU_IP
+\`\`\`
+
+---
+
+## Paso 2: Actualiza el sistema
+
+\`\`\`bash
+apt update && apt upgrade -y
+\`\`\`
+
+---
+
+## Paso 3: Crea usuario no-root
+
+\`\`\`bash
+# Crear usuario
+adduser tuusuario
+
+# Darle sudo
+usermod -aG sudo tuusuario
+
+# Copiar llaves SSH
+mkdir -p /home/tuusuario/.ssh
+cp ~/.ssh/authorized_keys /home/tuusuario/.ssh/
+chown -R tuusuario:tuusuario /home/tuusuario/.ssh
+chmod 700 /home/tuusuario/.ssh
+chmod 600 /home/tuusuario/.ssh/authorized_keys
+\`\`\`
+
+---
+
+## Paso 4: Configura UFW (Firewall)
+
+\`\`\`bash
+# Instalar UFW
+apt install ufw -y
+
+# Política default: bloquear todo entrante
+ufw default deny incoming
+ufw default allow outgoing
+
+# Permitir SSH (¡IMPORTANTE ANTES DE ACTIVAR!)
+ufw allow ssh
+
+# Permitir HTTP y HTTPS
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# Activar
+ufw enable
+
+# Verificar
+ufw status verbose
+\`\`\`
+
+Deberías ver:
+\`\`\`
+Status: active
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW       Anywhere
+80/tcp                     ALLOW       Anywhere
+443/tcp                    ALLOW       Anywhere
+\`\`\`
+
+---
+
+## Paso 5: Instala fail2ban
+
+\`\`\`bash
+apt install fail2ban -y
+
+# Crear config local
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+\`\`\`
+
+Edita \`/etc/fail2ban/jail.local\`:
+
+\`\`\`ini
+[DEFAULT]
+bantime = 1h
+findtime = 10m
+maxretry = 5
+banaction = ufw
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 24h
+\`\`\`
+
+\`\`\`bash
+# Reiniciar
+systemctl restart fail2ban
+systemctl enable fail2ban
+
+# Verificar
+fail2ban-client status sshd
+\`\`\`
+
+---
+
+## Paso 6: Hardening SSH
+
+Edita \`/etc/ssh/sshd_config\`:
+
+\`\`\`bash
+# Deshabilitar password
+PasswordAuthentication no
+
+# Deshabilitar root login
+PermitRootLogin no
+
+# Solo tu usuario
+AllowUsers tuusuario
+
+# Límites
+MaxAuthTries 3
+\`\`\`
+
+\`\`\`bash
+# Reiniciar SSH
+systemctl restart sshd
+\`\`\`
+
+---
+
+## Paso 7: Updates automáticos
+
+\`\`\`bash
+apt install unattended-upgrades -y
+dpkg-reconfigure -plow unattended-upgrades
+\`\`\`
+
+Selecciona "Yes" para habilitar updates automáticos.
+
+---
+
+## Paso 8: Verifica todo
+
+\`\`\`bash
+# Firewall activo
+ufw status
+
+# fail2ban corriendo
+fail2ban-client status sshd
+
+# SSH configurado
+grep -E "PasswordAuth|PermitRoot" /etc/ssh/sshd_config
+
+# Probar login desde otra terminal ANTES de cerrar esta
+ssh tuusuario@TU_IP
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Problema | Solución |
+|----------|----------|
+| No puedo conectar SSH | Usa consola web del VPS provider |
+| Me baneó fail2ban | \`fail2ban-client set sshd unbanip TU_IP\` |
+| UFW bloqueó todo | Consola web → \`ufw disable\` |
+
+---
+
+## Checklist final
+
+- [ ] UFW activo con solo 22, 80, 443
+- [ ] fail2ban protegiendo SSH
+- [ ] Login solo con llave SSH
+- [ ] Root login deshabilitado
+- [ ] Updates automáticos
+
+---
+
+## Próximo paso
+
+→ [SSL con Let's Encrypt](/es/cooking/ssl-certbot)
+    `,
+    contentEn: `
+## What you'll build
+
+A secure VPS with UFW firewall configured, fail2ban protecting SSH from brute force attacks, and authentication only via SSH keys.
+
+After this tutorial, your server will:
+- Block all traffic except SSH, HTTP and HTTPS
+- Automatically ban IPs attempting brute force
+- Only accept login with SSH key (no passwords)
+- Have automatic security updates
+
+---
+
+## Step 1: Connect to your VPS
+
+\`\`\`bash
+ssh root@YOUR_IP
+\`\`\`
+
+---
+
+## Step 2: Update the system
+
+\`\`\`bash
+apt update && apt upgrade -y
+\`\`\`
+
+---
+
+## Step 3: Create non-root user
+
+\`\`\`bash
+# Create user
+adduser youruser
+
+# Give sudo
+usermod -aG sudo youruser
+
+# Copy SSH keys
+mkdir -p /home/youruser/.ssh
+cp ~/.ssh/authorized_keys /home/youruser/.ssh/
+chown -R youruser:youruser /home/youruser/.ssh
+chmod 700 /home/youruser/.ssh
+chmod 600 /home/youruser/.ssh/authorized_keys
+\`\`\`
+
+---
+
+## Step 4: Configure UFW (Firewall)
+
+\`\`\`bash
+# Install UFW
+apt install ufw -y
+
+# Default policy: block all incoming
+ufw default deny incoming
+ufw default allow outgoing
+
+# Allow SSH (IMPORTANT BEFORE ENABLING!)
+ufw allow ssh
+
+# Allow HTTP and HTTPS
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# Enable
+ufw enable
+
+# Verify
+ufw status verbose
+\`\`\`
+
+You should see:
+\`\`\`
+Status: active
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW       Anywhere
+80/tcp                     ALLOW       Anywhere
+443/tcp                    ALLOW       Anywhere
+\`\`\`
+
+---
+
+## Step 5: Install fail2ban
+
+\`\`\`bash
+apt install fail2ban -y
+
+# Create local config
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+\`\`\`
+
+Edit \`/etc/fail2ban/jail.local\`:
+
+\`\`\`ini
+[DEFAULT]
+bantime = 1h
+findtime = 10m
+maxretry = 5
+banaction = ufw
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 24h
+\`\`\`
+
+\`\`\`bash
+# Restart
+systemctl restart fail2ban
+systemctl enable fail2ban
+
+# Verify
+fail2ban-client status sshd
+\`\`\`
+
+---
+
+## Step 6: SSH Hardening
+
+Edit \`/etc/ssh/sshd_config\`:
+
+\`\`\`bash
+# Disable password
+PasswordAuthentication no
+
+# Disable root login
+PermitRootLogin no
+
+# Only your user
+AllowUsers youruser
+
+# Limits
+MaxAuthTries 3
+\`\`\`
+
+\`\`\`bash
+# Restart SSH
+systemctl restart sshd
+\`\`\`
+
+---
+
+## Step 7: Automatic updates
+
+\`\`\`bash
+apt install unattended-upgrades -y
+dpkg-reconfigure -plow unattended-upgrades
+\`\`\`
+
+Select "Yes" to enable automatic updates.
+
+---
+
+## Step 8: Verify everything
+
+\`\`\`bash
+# Firewall active
+ufw status
+
+# fail2ban running
+fail2ban-client status sshd
+
+# SSH configured
+grep -E "PasswordAuth|PermitRoot" /etc/ssh/sshd_config
+
+# Test login from another terminal BEFORE closing this one
+ssh youruser@YOUR_IP
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Can't connect SSH | Use VPS provider's web console |
+| fail2ban banned me | \`fail2ban-client set sshd unbanip YOUR_IP\` |
+| UFW blocked everything | Web console → \`ufw disable\` |
+
+---
+
+## Final checklist
+
+- [ ] UFW active with only 22, 80, 443
+- [ ] fail2ban protecting SSH
+- [ ] Login only with SSH key
+- [ ] Root login disabled
+- [ ] Automatic updates
+
+---
+
+## Next step
+
+→ [SSL with Let's Encrypt](/en/cooking/ssl-certbot)
+    `,
+  },
+  'ssl-certbot': {
+    timeEs: '20 minutos',
+    timeEn: '20 minutes',
+    prerequisitesEs: ['VPS con dominio apuntando', 'Nginx instalado'],
+    prerequisitesEn: ['VPS with domain pointing', 'Nginx installed'],
+    contentEs: `
+## Lo que vas a construir
+
+Certificado SSL gratuito de Let's Encrypt para tu dominio, con renovación automática cada 90 días.
+
+Tu sitio pasará de http:// a https:// con el candado verde, SEO mejorado, y comunicación encriptada.
+
+---
+
+## Paso 1: Verifica que tu dominio apunta al VPS
+
+\`\`\`bash
+# Debe mostrar la IP de tu VPS
+dig +short tudominio.com
+\`\`\`
+
+---
+
+## Paso 2: Instala Certbot
+
+\`\`\`bash
+apt install certbot python3-certbot-nginx -y
+\`\`\`
+
+---
+
+## Paso 3: Obtén el certificado
+
+\`\`\`bash
+# Con Nginx (recomendado)
+certbot --nginx -d tudominio.com -d www.tudominio.com
+
+# Te preguntará:
+# - Email (para avisos de expiración)
+# - Aceptar términos
+# - Redirigir HTTP a HTTPS (elige 2 = Yes)
+\`\`\`
+
+---
+
+## Paso 4: Verifica
+
+\`\`\`bash
+# Ver certificados instalados
+certbot certificates
+
+# Probar renovación
+certbot renew --dry-run
+\`\`\`
+
+---
+
+## Paso 5: Configurar renovación automática
+
+Certbot ya configura un cron/timer. Verifica:
+
+\`\`\`bash
+# Ver timer de systemd
+systemctl status certbot.timer
+
+# O ver cron
+cat /etc/cron.d/certbot
+\`\`\`
+
+---
+
+## Verificar en navegador
+
+1. Abre https://tudominio.com
+2. Deberías ver el candado verde
+3. Click en candado → "Connection is secure"
+
+---
+
+## Configuración Nginx resultante
+
+Certbot modifica tu config:
+
+\`\`\`nginx
+server {
+    listen 443 ssl;
+    server_name tudominio.com;
+
+    ssl_certificate /etc/letsencrypt/live/tudominio.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/tudominio.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # tu config...
+}
+
+server {
+    listen 80;
+    server_name tudominio.com;
+    return 301 https://$host$request_uri;
+}
+\`\`\`
+
+---
+
+## Agregar más dominios
+
+\`\`\`bash
+certbot --nginx -d nuevodominio.com -d www.nuevodominio.com
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| Challenge failed | Puerto 80 bloqueado | \`ufw allow 80\` |
+| Domain not pointing | DNS no propagado | Espera 5-30 min |
+| Too many requests | Rate limit | Espera 1 hora |
+
+---
+
+## Test de seguridad
+
+Verifica tu config SSL:
+
+\`\`\`
+https://www.ssllabs.com/ssltest/analyze.html?d=tudominio.com
+\`\`\`
+
+Objetivo: A o A+
+
+---
+
+## Próximo paso
+
+→ [Lab de Redes Docker](/es/cooking/docker-network-lab)
+    `,
+    contentEn: `
+## What you'll build
+
+Free SSL certificate from Let's Encrypt for your domain, with automatic renewal every 90 days.
+
+Your site will go from http:// to https:// with the green padlock, improved SEO, and encrypted communication.
+
+---
+
+## Step 1: Verify your domain points to VPS
+
+\`\`\`bash
+# Should show your VPS IP
+dig +short yourdomain.com
+\`\`\`
+
+---
+
+## Step 2: Install Certbot
+
+\`\`\`bash
+apt install certbot python3-certbot-nginx -y
+\`\`\`
+
+---
+
+## Step 3: Get the certificate
+
+\`\`\`bash
+# With Nginx (recommended)
+certbot --nginx -d yourdomain.com -d www.yourdomain.com
+
+# It will ask:
+# - Email (for expiration notices)
+# - Accept terms
+# - Redirect HTTP to HTTPS (choose 2 = Yes)
+\`\`\`
+
+---
+
+## Step 4: Verify
+
+\`\`\`bash
+# See installed certificates
+certbot certificates
+
+# Test renewal
+certbot renew --dry-run
+\`\`\`
+
+---
+
+## Step 5: Configure automatic renewal
+
+Certbot already configures a cron/timer. Verify:
+
+\`\`\`bash
+# See systemd timer
+systemctl status certbot.timer
+
+# Or see cron
+cat /etc/cron.d/certbot
+\`\`\`
+
+---
+
+## Verify in browser
+
+1. Open https://yourdomain.com
+2. You should see the green padlock
+3. Click padlock → "Connection is secure"
+
+---
+
+## Resulting Nginx configuration
+
+Certbot modifies your config:
+
+\`\`\`nginx
+server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # your config...
+}
+
+server {
+    listen 80;
+    server_name yourdomain.com;
+    return 301 https://$host$request_uri;
+}
+\`\`\`
+
+---
+
+## Add more domains
+
+\`\`\`bash
+certbot --nginx -d newdomain.com -d www.newdomain.com
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| Challenge failed | Port 80 blocked | \`ufw allow 80\` |
+| Domain not pointing | DNS not propagated | Wait 5-30 min |
+| Too many requests | Rate limit | Wait 1 hour |
+
+---
+
+## Security test
+
+Verify your SSL config:
+
+\`\`\`
+https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com
+\`\`\`
+
+Goal: A or A+
+
+---
+
+## Next step
+
+→ [Docker Networks Lab](/en/cooking/docker-network-lab)
+    `,
+  },
+  'docker-network-lab': {
+    timeEs: '30 minutos',
+    timeEn: '30 minutes',
+    prerequisitesEs: ['Docker instalado'],
+    prerequisitesEn: ['Docker installed'],
+    contentEs: `
+## Lo que vas a construir
+
+Un lab práctico donde crearás redes Docker y verás cómo los contenedores se comunican entre sí.
+
+Crearás una arquitectura con:
+- Red \`frontend\` para Nginx
+- Red \`backend\` para API y PostgreSQL
+- API conectada a ambas redes
+
+---
+
+## Paso 1: Limpia contenedores existentes
+
+\`\`\`bash
+docker stop $(docker ps -aq) 2>/dev/null
+docker rm $(docker ps -aq) 2>/dev/null
+\`\`\`
+
+---
+
+## Paso 2: Crea las redes
+
+\`\`\`bash
+# Red para el frontend (acceso público)
+docker network create frontend
+
+# Red para el backend (interna, sin internet)
+docker network create --internal backend
+
+# Verificar
+docker network ls
+\`\`\`
+
+---
+
+## Paso 3: Crea PostgreSQL (solo backend)
+
+\`\`\`bash
+docker run -d \\
+  --name db \\
+  --network backend \\
+  -e POSTGRES_PASSWORD=secret \\
+  -e POSTGRES_DB=app \\
+  postgres:16-alpine
+\`\`\`
+
+---
+
+## Paso 4: Crea la API (ambas redes)
+
+\`\`\`bash
+# Primero en backend
+docker run -d \\
+  --name api \\
+  --network backend \\
+  -e DATABASE_URL=postgres://postgres:secret@db:5432/app \\
+  -p 3000:3000 \\
+  node:20-alpine sleep infinity
+
+# Conectar también a frontend
+docker network connect frontend api
+\`\`\`
+
+---
+
+## Paso 5: Prueba la comunicación
+
+\`\`\`bash
+# La API puede ver a db
+docker exec api ping -c 2 db
+# ✓ Funciona
+
+# Instala psql en api para probar conexión
+docker exec api apk add postgresql-client
+docker exec api psql postgres://postgres:secret@db:5432/app -c "SELECT 1"
+# ✓ Funciona
+\`\`\`
+
+---
+
+## Paso 6: Crea Nginx (solo frontend)
+
+\`\`\`bash
+docker run -d \\
+  --name nginx \\
+  --network frontend \\
+  -p 80:80 \\
+  nginx:alpine
+\`\`\`
+
+---
+
+## Paso 7: Verifica aislamiento
+
+\`\`\`bash
+# Nginx NO puede ver a db (redes diferentes)
+docker exec nginx ping -c 2 db
+# ✗ ping: bad address 'db'
+
+# Nginx SÍ puede ver a api (misma red frontend)
+docker exec nginx ping -c 2 api
+# ✓ Funciona
+
+# db NO tiene acceso a internet (red --internal)
+docker exec db ping -c 2 google.com
+# ✗ No funciona (esto es bueno!)
+\`\`\`
+
+---
+
+## Diagrama de la arquitectura
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│                    INTERNET                          │
+└───────────────────────┬─────────────────────────────┘
+                        │ :80
+┌───────────────────────▼─────────────────────────────┐
+│              Red: frontend                           │
+│  ┌─────────┐         ┌─────────┐                    │
+│  │  nginx  │ ──────▶ │   api   │                    │
+│  │  :80    │         │  :3000  │                    │
+│  └─────────┘         └────┬────┘                    │
+└───────────────────────────┼─────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────┐
+│              Red: backend (internal)                 │
+│                      ┌─────────┐                    │
+│  ┌─────────┐ ──────▶ │   db    │                    │
+│  │   api   │         │  :5432  │                    │
+│  └─────────┘         └─────────┘                    │
+│                                                      │
+│  ⛔ Sin acceso a internet                           │
+└─────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Paso 8: Inspecciona las redes
+
+\`\`\`bash
+# Ver contenedores en frontend
+docker network inspect frontend --format '{{range .Containers}}{{.Name}} {{end}}'
+# nginx api
+
+# Ver contenedores en backend
+docker network inspect backend --format '{{range .Containers}}{{.Name}} {{end}}'
+# db api
+
+# Ver IPs
+docker inspect api --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}: {{.IPAddress}}{{println}}{{end}}'
+\`\`\`
+
+---
+
+## Limpieza
+
+\`\`\`bash
+docker stop nginx api db
+docker rm nginx api db
+docker network rm frontend backend
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [Backup de Volúmenes Docker](/es/cooking/docker-backup)
+    `,
+    contentEn: `
+## What you'll build
+
+A practical lab where you'll create Docker networks and see how containers communicate with each other.
+
+You'll create an architecture with:
+- \`frontend\` network for Nginx
+- \`backend\` network for API and PostgreSQL
+- API connected to both networks
+
+---
+
+## Step 1: Clean existing containers
+
+\`\`\`bash
+docker stop $(docker ps -aq) 2>/dev/null
+docker rm $(docker ps -aq) 2>/dev/null
+\`\`\`
+
+---
+
+## Step 2: Create the networks
+
+\`\`\`bash
+# Network for frontend (public access)
+docker network create frontend
+
+# Network for backend (internal, no internet)
+docker network create --internal backend
+
+# Verify
+docker network ls
+\`\`\`
+
+---
+
+## Step 3: Create PostgreSQL (backend only)
+
+\`\`\`bash
+docker run -d \\
+  --name db \\
+  --network backend \\
+  -e POSTGRES_PASSWORD=secret \\
+  -e POSTGRES_DB=app \\
+  postgres:16-alpine
+\`\`\`
+
+---
+
+## Step 4: Create the API (both networks)
+
+\`\`\`bash
+# First on backend
+docker run -d \\
+  --name api \\
+  --network backend \\
+  -e DATABASE_URL=postgres://postgres:secret@db:5432/app \\
+  -p 3000:3000 \\
+  node:20-alpine sleep infinity
+
+# Connect to frontend too
+docker network connect frontend api
+\`\`\`
+
+---
+
+## Step 5: Test communication
+
+\`\`\`bash
+# API can see db
+docker exec api ping -c 2 db
+# ✓ Works
+
+# Install psql on api to test connection
+docker exec api apk add postgresql-client
+docker exec api psql postgres://postgres:secret@db:5432/app -c "SELECT 1"
+# ✓ Works
+\`\`\`
+
+---
+
+## Step 6: Create Nginx (frontend only)
+
+\`\`\`bash
+docker run -d \\
+  --name nginx \\
+  --network frontend \\
+  -p 80:80 \\
+  nginx:alpine
+\`\`\`
+
+---
+
+## Step 7: Verify isolation
+
+\`\`\`bash
+# Nginx CANNOT see db (different networks)
+docker exec nginx ping -c 2 db
+# ✗ ping: bad address 'db'
+
+# Nginx CAN see api (same frontend network)
+docker exec nginx ping -c 2 api
+# ✓ Works
+
+# db has NO internet access (--internal network)
+docker exec db ping -c 2 google.com
+# ✗ Doesn't work (this is good!)
+\`\`\`
+
+---
+
+## Architecture diagram
+
+\`\`\`
+┌─────────────────────────────────────────────────────┐
+│                    INTERNET                          │
+└───────────────────────┬─────────────────────────────┘
+                        │ :80
+┌───────────────────────▼─────────────────────────────┐
+│              Network: frontend                       │
+│  ┌─────────┐         ┌─────────┐                    │
+│  │  nginx  │ ──────▶ │   api   │                    │
+│  │  :80    │         │  :3000  │                    │
+│  └─────────┘         └────┬────┘                    │
+└───────────────────────────┼─────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────┐
+│              Network: backend (internal)             │
+│                      ┌─────────┐                    │
+│  ┌─────────┐ ──────▶ │   db    │                    │
+│  │   api   │         │  :5432  │                    │
+│  └─────────┘         └─────────┘                    │
+│                                                      │
+│  ⛔ No internet access                              │
+└─────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Step 8: Inspect the networks
+
+\`\`\`bash
+# See containers in frontend
+docker network inspect frontend --format '{{range .Containers}}{{.Name}} {{end}}'
+# nginx api
+
+# See containers in backend
+docker network inspect backend --format '{{range .Containers}}{{.Name}} {{end}}'
+# db api
+
+# See IPs
+docker inspect api --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}: {{.IPAddress}}{{println}}{{end}}'
+\`\`\`
+
+---
+
+## Cleanup
+
+\`\`\`bash
+docker stop nginx api db
+docker rm nginx api db
+docker network rm frontend backend
+\`\`\`
+
+---
+
+## Next step
+
+→ [Docker Volumes Backup](/en/cooking/docker-backup)
+    `,
+  },
+  'docker-backup': {
+    timeEs: '25 minutos',
+    timeEn: '25 minutes',
+    prerequisitesEs: ['Docker con volúmenes'],
+    prerequisitesEn: ['Docker with volumes'],
+    contentEs: `
+## Lo que vas a construir
+
+Scripts para hacer backup y restore de volúmenes Docker. Protegerás tus datos de PostgreSQL, Redis, y cualquier otro servicio.
+
+Al terminar tendrás:
+- Script de backup que crea archivos .tar.gz
+- Script de restore para recuperar datos
+- Backup automático con cron
+
+---
+
+## Paso 1: Crea un volumen de prueba
+
+\`\`\`bash
+# Crear volumen
+docker volume create test_data
+
+# Crear contenedor con datos
+docker run --rm -v test_data:/data alpine sh -c "
+  echo 'Datos importantes' > /data/archivo.txt
+  echo 'Más datos' > /data/config.json
+  mkdir /data/subdir
+  echo 'Anidado' > /data/subdir/nested.txt
+"
+
+# Verificar contenido
+docker run --rm -v test_data:/data alpine ls -la /data
+\`\`\`
+
+---
+
+## Paso 2: Backup manual
+
+\`\`\`bash
+# Backup a archivo .tar.gz
+docker run --rm \\
+  -v test_data:/source:ro \\
+  -v $(pwd):/backup \\
+  alpine tar czf /backup/test_data_backup.tar.gz -C /source .
+
+# Verificar
+ls -lh test_data_backup.tar.gz
+tar tzf test_data_backup.tar.gz
+\`\`\`
+
+---
+
+## Paso 3: Script de backup
+
+Crea \`backup-volume.sh\`:
+
+\`\`\`bash
+#!/bin/bash
+# backup-volume.sh - Backup de volumen Docker
+
+VOLUME_NAME=\${1:?Uso: ./backup-volume.sh NOMBRE_VOLUMEN}
+BACKUP_DIR=\${2:-./backups}
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="\${BACKUP_DIR}/\${VOLUME_NAME}_\${TIMESTAMP}.tar.gz"
+
+mkdir -p "\$BACKUP_DIR"
+
+echo "Haciendo backup de '\$VOLUME_NAME' a '\$BACKUP_FILE'..."
+
+docker run --rm \\
+  -v "\$VOLUME_NAME":/source:ro \\
+  -v "\$BACKUP_DIR":/backup \\
+  alpine tar czf "/backup/\${VOLUME_NAME}_\${TIMESTAMP}.tar.gz" -C /source .
+
+if [ \$? -eq 0 ]; then
+  echo "✅ Backup completado: \$BACKUP_FILE"
+  echo "   Tamaño: $(ls -lh "\$BACKUP_FILE" | awk '{print \$5}')"
+else
+  echo "❌ Error en backup"
+  exit 1
+fi
+\`\`\`
+
+\`\`\`bash
+chmod +x backup-volume.sh
+./backup-volume.sh test_data ./backups
+\`\`\`
+
+---
+
+## Paso 4: Script de restore
+
+Crea \`restore-volume.sh\`:
+
+\`\`\`bash
+#!/bin/bash
+# restore-volume.sh - Restaurar volumen Docker
+
+BACKUP_FILE=\${1:?Uso: ./restore-volume.sh ARCHIVO.tar.gz NOMBRE_VOLUMEN}
+VOLUME_NAME=\${2:?Uso: ./restore-volume.sh ARCHIVO.tar.gz NOMBRE_VOLUMEN}
+
+if [ ! -f "\$BACKUP_FILE" ]; then
+  echo "❌ Archivo no encontrado: \$BACKUP_FILE"
+  exit 1
+fi
+
+echo "⚠️  Esto sobrescribirá el volumen '\$VOLUME_NAME'"
+read -p "¿Continuar? (y/N) " confirm
+[ "\$confirm" != "y" ] && exit 0
+
+# Crear volumen si no existe
+docker volume create "\$VOLUME_NAME" 2>/dev/null
+
+echo "Restaurando '\$BACKUP_FILE' a '\$VOLUME_NAME'..."
+
+docker run --rm \\
+  -v "\$VOLUME_NAME":/target \\
+  -v "$(pwd)":/backup \\
+  alpine sh -c "rm -rf /target/* && tar xzf /backup/\$(basename \$BACKUP_FILE) -C /target"
+
+if [ \$? -eq 0 ]; then
+  echo "✅ Restore completado"
+else
+  echo "❌ Error en restore"
+  exit 1
+fi
+\`\`\`
+
+---
+
+## Paso 5: Probar restore
+
+\`\`\`bash
+# Eliminar volumen original
+docker volume rm test_data
+
+# Restaurar desde backup
+./restore-volume.sh backups/test_data_*.tar.gz test_data_restored
+
+# Verificar
+docker run --rm -v test_data_restored:/data alpine cat /data/archivo.txt
+\`\`\`
+
+---
+
+## Paso 6: Backup de PostgreSQL (mejor práctica)
+
+Para bases de datos, usa \`pg_dump\` antes de comprimir:
+
+\`\`\`bash
+#!/bin/bash
+# backup-postgres.sh
+
+CONTAINER=\${1:-postgres}
+BACKUP_DIR=./backups
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+mkdir -p \$BACKUP_DIR
+
+docker exec \$CONTAINER pg_dumpall -U postgres | gzip > "\$BACKUP_DIR/postgres_\$TIMESTAMP.sql.gz"
+
+echo "✅ Backup: \$BACKUP_DIR/postgres_\$TIMESTAMP.sql.gz"
+\`\`\`
+
+Restore:
+\`\`\`bash
+gunzip -c backups/postgres_*.sql.gz | docker exec -i postgres psql -U postgres
+\`\`\`
+
+---
+
+## Paso 7: Backup automático (cron)
+
+\`\`\`bash
+# Editar crontab
+crontab -e
+
+# Backup diario a las 3am
+0 3 * * * /opt/scripts/backup-volume.sh postgres_data /opt/backups >> /var/log/backup.log 2>&1
+
+# Backup cada 6 horas
+0 */6 * * * /opt/scripts/backup-postgres.sh postgres >> /var/log/backup.log 2>&1
+\`\`\`
+
+---
+
+## Paso 8: Rotación de backups
+
+Mantén solo los últimos N backups:
+
+\`\`\`bash
+# Eliminar backups de más de 7 días
+find /opt/backups -name "*.tar.gz" -mtime +7 -delete
+
+# Mantener solo los últimos 5
+ls -t /opt/backups/*.tar.gz | tail -n +6 | xargs rm -f
+\`\`\`
+
+---
+
+## Script completo con rotación
+
+\`\`\`bash
+#!/bin/bash
+# backup-with-rotation.sh
+
+VOLUME=\$1
+BACKUP_DIR=/opt/backups
+KEEP=7
+
+./backup-volume.sh "\$VOLUME" "\$BACKUP_DIR"
+
+# Eliminar viejos
+ls -t "\$BACKUP_DIR/\${VOLUME}_"*.tar.gz 2>/dev/null | tail -n +\$((KEEP+1)) | xargs rm -f
+
+echo "Backups actuales:"
+ls -lh "\$BACKUP_DIR/\${VOLUME}_"*.tar.gz
+\`\`\`
+
+---
+
+## Verificar integridad
+
+\`\`\`bash
+# Verificar que el tar es válido
+tar tzf backup.tar.gz > /dev/null && echo "✅ Archivo válido" || echo "❌ Corrupto"
+
+# Ver contenido sin extraer
+tar tzf backup.tar.gz | head -20
+\`\`\`
+
+---
+
+## Próximo paso
+
+→ [CI/CD con GitHub Actions](/es/cooking/github-actions)
+    `,
+    contentEn: `
+## What you'll build
+
+Scripts to backup and restore Docker volumes. You'll protect your PostgreSQL, Redis, and any other service data.
+
+When finished you'll have:
+- Backup script that creates .tar.gz files
+- Restore script to recover data
+- Automatic backup with cron
+
+---
+
+## Step 1: Create a test volume
+
+\`\`\`bash
+# Create volume
+docker volume create test_data
+
+# Create container with data
+docker run --rm -v test_data:/data alpine sh -c "
+  echo 'Important data' > /data/file.txt
+  echo 'More data' > /data/config.json
+  mkdir /data/subdir
+  echo 'Nested' > /data/subdir/nested.txt
+"
+
+# Verify contents
+docker run --rm -v test_data:/data alpine ls -la /data
+\`\`\`
+
+---
+
+## Step 2: Manual backup
+
+\`\`\`bash
+# Backup to .tar.gz file
+docker run --rm \\
+  -v test_data:/source:ro \\
+  -v $(pwd):/backup \\
+  alpine tar czf /backup/test_data_backup.tar.gz -C /source .
+
+# Verify
+ls -lh test_data_backup.tar.gz
+tar tzf test_data_backup.tar.gz
+\`\`\`
+
+---
+
+## Step 3: Backup script
+
+Create \`backup-volume.sh\`:
+
+\`\`\`bash
+#!/bin/bash
+# backup-volume.sh - Docker volume backup
+
+VOLUME_NAME=\${1:?Usage: ./backup-volume.sh VOLUME_NAME}
+BACKUP_DIR=\${2:-./backups}
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="\${BACKUP_DIR}/\${VOLUME_NAME}_\${TIMESTAMP}.tar.gz"
+
+mkdir -p "\$BACKUP_DIR"
+
+echo "Backing up '\$VOLUME_NAME' to '\$BACKUP_FILE'..."
+
+docker run --rm \\
+  -v "\$VOLUME_NAME":/source:ro \\
+  -v "\$BACKUP_DIR":/backup \\
+  alpine tar czf "/backup/\${VOLUME_NAME}_\${TIMESTAMP}.tar.gz" -C /source .
+
+if [ \$? -eq 0 ]; then
+  echo "✅ Backup completed: \$BACKUP_FILE"
+  echo "   Size: $(ls -lh "\$BACKUP_FILE" | awk '{print \$5}')"
+else
+  echo "❌ Backup error"
+  exit 1
+fi
+\`\`\`
+
+\`\`\`bash
+chmod +x backup-volume.sh
+./backup-volume.sh test_data ./backups
+\`\`\`
+
+---
+
+## Step 4: Restore script
+
+Create \`restore-volume.sh\`:
+
+\`\`\`bash
+#!/bin/bash
+# restore-volume.sh - Restore Docker volume
+
+BACKUP_FILE=\${1:?Usage: ./restore-volume.sh FILE.tar.gz VOLUME_NAME}
+VOLUME_NAME=\${2:?Usage: ./restore-volume.sh FILE.tar.gz VOLUME_NAME}
+
+if [ ! -f "\$BACKUP_FILE" ]; then
+  echo "❌ File not found: \$BACKUP_FILE"
+  exit 1
+fi
+
+echo "⚠️  This will overwrite volume '\$VOLUME_NAME'"
+read -p "Continue? (y/N) " confirm
+[ "\$confirm" != "y" ] && exit 0
+
+# Create volume if it doesn't exist
+docker volume create "\$VOLUME_NAME" 2>/dev/null
+
+echo "Restoring '\$BACKUP_FILE' to '\$VOLUME_NAME'..."
+
+docker run --rm \\
+  -v "\$VOLUME_NAME":/target \\
+  -v "$(pwd)":/backup \\
+  alpine sh -c "rm -rf /target/* && tar xzf /backup/\$(basename \$BACKUP_FILE) -C /target"
+
+if [ \$? -eq 0 ]; then
+  echo "✅ Restore completed"
+else
+  echo "❌ Restore error"
+  exit 1
+fi
+\`\`\`
+
+---
+
+## Step 5: Test restore
+
+\`\`\`bash
+# Delete original volume
+docker volume rm test_data
+
+# Restore from backup
+./restore-volume.sh backups/test_data_*.tar.gz test_data_restored
+
+# Verify
+docker run --rm -v test_data_restored:/data alpine cat /data/file.txt
+\`\`\`
+
+---
+
+## Step 6: PostgreSQL backup (best practice)
+
+For databases, use \`pg_dump\` before compressing:
+
+\`\`\`bash
+#!/bin/bash
+# backup-postgres.sh
+
+CONTAINER=\${1:-postgres}
+BACKUP_DIR=./backups
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+mkdir -p \$BACKUP_DIR
+
+docker exec \$CONTAINER pg_dumpall -U postgres | gzip > "\$BACKUP_DIR/postgres_\$TIMESTAMP.sql.gz"
+
+echo "✅ Backup: \$BACKUP_DIR/postgres_\$TIMESTAMP.sql.gz"
+\`\`\`
+
+Restore:
+\`\`\`bash
+gunzip -c backups/postgres_*.sql.gz | docker exec -i postgres psql -U postgres
+\`\`\`
+
+---
+
+## Step 7: Automatic backup (cron)
+
+\`\`\`bash
+# Edit crontab
+crontab -e
+
+# Daily backup at 3am
+0 3 * * * /opt/scripts/backup-volume.sh postgres_data /opt/backups >> /var/log/backup.log 2>&1
+
+# Backup every 6 hours
+0 */6 * * * /opt/scripts/backup-postgres.sh postgres >> /var/log/backup.log 2>&1
+\`\`\`
+
+---
+
+## Step 8: Backup rotation
+
+Keep only the last N backups:
+
+\`\`\`bash
+# Delete backups older than 7 days
+find /opt/backups -name "*.tar.gz" -mtime +7 -delete
+
+# Keep only last 5
+ls -t /opt/backups/*.tar.gz | tail -n +6 | xargs rm -f
+\`\`\`
+
+---
+
+## Complete script with rotation
+
+\`\`\`bash
+#!/bin/bash
+# backup-with-rotation.sh
+
+VOLUME=\$1
+BACKUP_DIR=/opt/backups
+KEEP=7
+
+./backup-volume.sh "\$VOLUME" "\$BACKUP_DIR"
+
+# Delete old ones
+ls -t "\$BACKUP_DIR/\${VOLUME}_"*.tar.gz 2>/dev/null | tail -n +\$((KEEP+1)) | xargs rm -f
+
+echo "Current backups:"
+ls -lh "\$BACKUP_DIR/\${VOLUME}_"*.tar.gz
+\`\`\`
+
+---
+
+## Verify integrity
+
+\`\`\`bash
+# Verify tar is valid
+tar tzf backup.tar.gz > /dev/null && echo "✅ Valid file" || echo "❌ Corrupt"
+
+# View contents without extracting
+tar tzf backup.tar.gz | head -20
 \`\`\`
 
 ---

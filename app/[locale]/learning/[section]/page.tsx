@@ -7259,6 +7259,1682 @@ const db = new Pool({
 → [Deploy with Docker](/en/cooking/docker-deploy)
     `,
   },
+  'docker-networks': {
+    contentEs: `
+## Redes en Docker
+
+Docker crea redes virtuales para que los contenedores se comuniquen de forma aislada y segura.
+
+---
+
+## Tipos de redes
+
+| Tipo | Descripción | Uso típico |
+|------|-------------|------------|
+| **bridge** | Red privada en el host | Default, desarrollo local |
+| **host** | Comparte red del host | Máximo rendimiento |
+| **overlay** | Red entre múltiples hosts | Docker Swarm, clusters |
+| **none** | Sin red | Contenedores aislados |
+| **macvlan** | IP propia en la red física | Integración con red existente |
+
+---
+
+## Bridge (default)
+
+Cuando creas un contenedor sin especificar red, usa \`bridge\`:
+
+\`\`\`bash
+# Ver redes existentes
+docker network ls
+
+# Crear red personalizada
+docker network create mi-red
+
+# Correr contenedor en esa red
+docker run -d --name app --network mi-red nginx
+\`\`\`
+
+---
+
+## Comunicación entre contenedores
+
+En la misma red, los contenedores se encuentran por **nombre**:
+
+\`\`\`bash
+# Crear red
+docker network create backend
+
+# Postgres en esa red
+docker run -d --name db --network backend postgres:16
+
+# App en la misma red - puede conectar a "db"
+docker run -d --name api --network backend \\
+  -e DATABASE_HOST=db \\
+  mi-api
+\`\`\`
+
+\`\`\`typescript
+// Desde 'api', conectar a 'db' por nombre
+const pool = new Pool({
+  host: 'db',  // Docker resuelve esto automáticamente
+  port: 5432,
+})
+\`\`\`
+
+---
+
+## DNS interno de Docker
+
+Docker tiene un servidor DNS interno que resuelve nombres de contenedores:
+
+\`\`\`
+┌─────────────────────────────────────────┐
+│           Red: backend                  │
+│                                         │
+│  ┌─────────┐         ┌─────────┐       │
+│  │   api   │  ─────▶ │   db    │       │
+│  │         │  "db"   │         │       │
+│  └─────────┘         └─────────┘       │
+│                                         │
+│  DNS interno resuelve "db" → 172.18.0.3│
+└─────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Inspeccionar red
+
+\`\`\`bash
+# Ver detalles de una red
+docker network inspect mi-red
+
+# Ver qué contenedores están en una red
+docker network inspect mi-red --format '{{range .Containers}}{{.Name}} {{end}}'
+
+# Ver IP de un contenedor
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nombre-contenedor
+\`\`\`
+
+---
+
+## Conectar/desconectar contenedores
+
+\`\`\`bash
+# Conectar contenedor existente a otra red
+docker network connect mi-red contenedor
+
+# Desconectar
+docker network disconnect mi-red contenedor
+
+# Un contenedor puede estar en múltiples redes
+docker network connect frontend api
+docker network connect backend api
+\`\`\`
+
+---
+
+## Aislar por ambiente
+
+\`\`\`bash
+# Red para desarrollo
+docker network create dev-net
+
+# Red para producción (más segura)
+docker network create --internal prod-net
+# --internal = sin acceso a internet
+\`\`\`
+
+---
+
+## En Docker Compose
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx
+    networks:
+      - frontend-net
+
+  api:
+    image: node:20
+    networks:
+      - frontend-net
+      - backend-net
+
+  db:
+    image: postgres:16
+    networks:
+      - backend-net  # Solo accesible desde api
+
+networks:
+  frontend-net:
+  backend-net:
+    internal: true  # Sin acceso a internet
+\`\`\`
+
+---
+
+## Seguridad en redes
+
+| Práctica | Por qué |
+|----------|---------|
+| Redes separadas por función | DB solo accesible desde API |
+| \`--internal\` para backends | Sin acceso a internet |
+| No exponer puertos innecesarios | Minimizar superficie de ataque |
+| Usar nombres, no IPs | IPs cambian, nombres persisten |
+
+---
+
+## Troubleshooting
+
+\`\`\`bash
+# Ver si dos contenedores pueden comunicarse
+docker exec api ping db
+
+# Ver resolución DNS
+docker exec api nslookup db
+
+# Ver puertos abiertos
+docker exec api netstat -tlnp
+\`\`\`
+
+---
+
+## Recursos
+
+- 📖 [Docker Networking](https://docs.docker.com/network/)
+- 📖 [Network drivers](https://docs.docker.com/network/drivers/)
+
+---
+
+## Practica
+
+→ [Lab de Redes Docker](/es/cooking/docker-network-lab)
+    `,
+    contentEn: `
+## Docker Networks
+
+Docker creates virtual networks so containers can communicate in an isolated and secure way.
+
+---
+
+## Network types
+
+| Type | Description | Typical use |
+|------|-------------|------------|
+| **bridge** | Private network on host | Default, local development |
+| **host** | Shares host network | Maximum performance |
+| **overlay** | Network across multiple hosts | Docker Swarm, clusters |
+| **none** | No network | Isolated containers |
+| **macvlan** | Own IP on physical network | Integration with existing network |
+
+---
+
+## Bridge (default)
+
+When you create a container without specifying a network, it uses \`bridge\`:
+
+\`\`\`bash
+# View existing networks
+docker network ls
+
+# Create custom network
+docker network create my-network
+
+# Run container on that network
+docker run -d --name app --network my-network nginx
+\`\`\`
+
+---
+
+## Communication between containers
+
+On the same network, containers find each other by **name**:
+
+\`\`\`bash
+# Create network
+docker network create backend
+
+# Postgres on that network
+docker run -d --name db --network backend postgres:16
+
+# App on same network - can connect to "db"
+docker run -d --name api --network backend \\
+  -e DATABASE_HOST=db \\
+  my-api
+\`\`\`
+
+\`\`\`typescript
+// From 'api', connect to 'db' by name
+const pool = new Pool({
+  host: 'db',  // Docker resolves this automatically
+  port: 5432,
+})
+\`\`\`
+
+---
+
+## Docker internal DNS
+
+Docker has an internal DNS server that resolves container names:
+
+\`\`\`
+┌─────────────────────────────────────────┐
+│           Network: backend              │
+│                                         │
+│  ┌─────────┐         ┌─────────┐       │
+│  │   api   │  ─────▶ │   db    │       │
+│  │         │  "db"   │         │       │
+│  └─────────┘         └─────────┘       │
+│                                         │
+│  Internal DNS resolves "db" → 172.18.0.3│
+└─────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Inspect network
+
+\`\`\`bash
+# View network details
+docker network inspect my-network
+
+# See which containers are on a network
+docker network inspect my-network --format '{{range .Containers}}{{.Name}} {{end}}'
+
+# Get container IP
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container-name
+\`\`\`
+
+---
+
+## Connect/disconnect containers
+
+\`\`\`bash
+# Connect existing container to another network
+docker network connect my-network container
+
+# Disconnect
+docker network disconnect my-network container
+
+# A container can be on multiple networks
+docker network connect frontend api
+docker network connect backend api
+\`\`\`
+
+---
+
+## Isolate by environment
+
+\`\`\`bash
+# Network for development
+docker network create dev-net
+
+# Network for production (more secure)
+docker network create --internal prod-net
+# --internal = no internet access
+\`\`\`
+
+---
+
+## In Docker Compose
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx
+    networks:
+      - frontend-net
+
+  api:
+    image: node:20
+    networks:
+      - frontend-net
+      - backend-net
+
+  db:
+    image: postgres:16
+    networks:
+      - backend-net  # Only accessible from api
+
+networks:
+  frontend-net:
+  backend-net:
+    internal: true  # No internet access
+\`\`\`
+
+---
+
+## Network security
+
+| Practice | Why |
+|----------|-----|
+| Separate networks by function | DB only accessible from API |
+| \`--internal\` for backends | No internet access |
+| Don't expose unnecessary ports | Minimize attack surface |
+| Use names, not IPs | IPs change, names persist |
+
+---
+
+## Troubleshooting
+
+\`\`\`bash
+# Check if two containers can communicate
+docker exec api ping db
+
+# Check DNS resolution
+docker exec api nslookup db
+
+# See open ports
+docker exec api netstat -tlnp
+\`\`\`
+
+---
+
+## Resources
+
+- 📖 [Docker Networking](https://docs.docker.com/network/)
+- 📖 [Network drivers](https://docs.docker.com/network/drivers/)
+
+---
+
+## Practice
+
+→ [Docker Networks Lab](/en/cooking/docker-network-lab)
+    `,
+  },
+  'docker-storage': {
+    contentEs: `
+## Storage en Docker
+
+Los contenedores son efímeros: cuando mueren, sus datos desaparecen. Los volúmenes y bind mounts resuelven esto.
+
+---
+
+## El problema
+
+\`\`\`
+SIN VOLUMEN:
+┌──────────────────┐
+│   Contenedor     │
+│  ┌────────────┐  │
+│  │   Datos    │  │  ← Se pierden al eliminar
+│  └────────────┘  │
+└──────────────────┘
+
+CON VOLUMEN:
+┌──────────────────┐     ┌──────────────┐
+│   Contenedor     │     │   Volumen    │
+│  ┌────────────┐  │────▶│   (Host)     │
+│  │   Datos    │  │     │   Persiste   │
+│  └────────────┘  │     └──────────────┘
+└──────────────────┘
+\`\`\`
+
+---
+
+## Tipos de storage
+
+| Tipo | Sintaxis | Uso |
+|------|----------|-----|
+| **Volume** | \`-v nombre:/path\` | Producción, Docker lo gestiona |
+| **Bind mount** | \`-v /host/path:/container/path\` | Desarrollo, acceso directo |
+| **tmpfs** | \`--tmpfs /path\` | Datos temporales en RAM |
+
+---
+
+## Volúmenes (recomendado)
+
+Docker gestiona el almacenamiento:
+
+\`\`\`bash
+# Crear volumen
+docker volume create postgres_data
+
+# Usar en contenedor
+docker run -d \\
+  --name db \\
+  -v postgres_data:/var/lib/postgresql/data \\
+  postgres:16
+
+# Los datos persisten aunque elimines el contenedor
+docker rm -f db
+docker run -d --name db2 -v postgres_data:/var/lib/postgresql/data postgres:16
+# ¡Los datos siguen ahí!
+\`\`\`
+
+---
+
+## Bind mounts (desarrollo)
+
+Montas una carpeta de tu máquina directamente:
+
+\`\`\`bash
+# Código local → contenedor (hot reload)
+docker run -d \\
+  -v $(pwd)/src:/app/src \\
+  -v $(pwd)/package.json:/app/package.json \\
+  node:20 npm run dev
+
+# Cambias código local → se refleja en contenedor
+\`\`\`
+
+---
+
+## Comparación
+
+| Aspecto | Volume | Bind Mount |
+|---------|--------|------------|
+| **Gestión** | Docker | Tú |
+| **Ubicación** | /var/lib/docker/volumes | Cualquiera |
+| **Backup** | \`docker volume\` | \`cp\`, \`rsync\` |
+| **Rendimiento** | Optimizado | Depende del FS |
+| **Portabilidad** | Alta | Baja |
+| **Caso de uso** | Producción, DBs | Desarrollo |
+
+---
+
+## Comandos de volúmenes
+
+\`\`\`bash
+# Listar volúmenes
+docker volume ls
+
+# Inspeccionar (ver ubicación real)
+docker volume inspect postgres_data
+
+# Crear con opciones
+docker volume create --driver local --opt type=none --opt o=bind --opt device=/data/postgres pgdata
+
+# Eliminar volumen
+docker volume rm postgres_data
+
+# Eliminar volúmenes huérfanos
+docker volume prune
+\`\`\`
+
+---
+
+## Backup de volúmenes
+
+\`\`\`bash
+# Backup: crear tar desde contenedor temporal
+docker run --rm \\
+  -v postgres_data:/data \\
+  -v $(pwd):/backup \\
+  alpine tar czf /backup/postgres_backup.tar.gz -C /data .
+
+# Restore: extraer tar a volumen
+docker run --rm \\
+  -v postgres_data:/data \\
+  -v $(pwd):/backup \\
+  alpine tar xzf /backup/postgres_backup.tar.gz -C /data
+\`\`\`
+
+---
+
+## En Docker Compose
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Named volume
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Bind mount
+
+  app:
+    build: .
+    volumes:
+      - ./src:/app/src:ro  # :ro = read-only
+      - node_modules:/app/node_modules  # Named volume para deps
+
+volumes:
+  postgres_data:
+  node_modules:
+\`\`\`
+
+---
+
+## Drivers de storage
+
+| Driver | Uso |
+|--------|-----|
+| **local** | Default, filesystem local |
+| **nfs** | Storage compartido en red |
+| **amazon-ecs** | AWS EBS/EFS |
+| **azure** | Azure File Storage |
+| **convoy** | Snapshots y backup |
+
+\`\`\`bash
+# Volumen con NFS
+docker volume create \\
+  --driver local \\
+  --opt type=nfs \\
+  --opt o=addr=192.168.1.100,rw \\
+  --opt device=:/shared \\
+  nfs_volume
+\`\`\`
+
+---
+
+## Mejores prácticas
+
+| Práctica | Por qué |
+|----------|---------|
+| Volumes para producción | Docker los gestiona, más portable |
+| Bind mounts solo en dev | Hot reload, edición directa |
+| Nombrar volúmenes | \`db_data\` vs hash aleatorio |
+| Backup regular | Los volúmenes son críticos |
+| \`:ro\` cuando sea posible | Read-only = más seguro |
+| No montar \`/\` o \`/etc\` | Riesgo de seguridad |
+
+---
+
+## Recursos
+
+- 📖 [Docker Storage](https://docs.docker.com/storage/)
+- 📖 [Volumes](https://docs.docker.com/storage/volumes/)
+- 📖 [Bind mounts](https://docs.docker.com/storage/bind-mounts/)
+
+---
+
+## Practica
+
+→ [Backup de Volúmenes Docker](/es/cooking/docker-backup)
+    `,
+    contentEn: `
+## Docker Storage
+
+Containers are ephemeral: when they die, their data disappears. Volumes and bind mounts solve this.
+
+---
+
+## The problem
+
+\`\`\`
+WITHOUT VOLUME:
+┌──────────────────┐
+│    Container     │
+│  ┌────────────┐  │
+│  │    Data    │  │  ← Lost when removed
+│  └────────────┘  │
+└──────────────────┘
+
+WITH VOLUME:
+┌──────────────────┐     ┌──────────────┐
+│    Container     │     │    Volume    │
+│  ┌────────────┐  │────▶│    (Host)    │
+│  │    Data    │  │     │   Persists   │
+│  └────────────┘  │     └──────────────┘
+└──────────────────┘
+\`\`\`
+
+---
+
+## Storage types
+
+| Type | Syntax | Use |
+|------|--------|-----|
+| **Volume** | \`-v name:/path\` | Production, Docker manages it |
+| **Bind mount** | \`-v /host/path:/container/path\` | Development, direct access |
+| **tmpfs** | \`--tmpfs /path\` | Temporary data in RAM |
+
+---
+
+## Volumes (recommended)
+
+Docker manages the storage:
+
+\`\`\`bash
+# Create volume
+docker volume create postgres_data
+
+# Use in container
+docker run -d \\
+  --name db \\
+  -v postgres_data:/var/lib/postgresql/data \\
+  postgres:16
+
+# Data persists even if you delete the container
+docker rm -f db
+docker run -d --name db2 -v postgres_data:/var/lib/postgresql/data postgres:16
+# Data is still there!
+\`\`\`
+
+---
+
+## Bind mounts (development)
+
+Mount a folder from your machine directly:
+
+\`\`\`bash
+# Local code → container (hot reload)
+docker run -d \\
+  -v $(pwd)/src:/app/src \\
+  -v $(pwd)/package.json:/app/package.json \\
+  node:20 npm run dev
+
+# Change local code → reflects in container
+\`\`\`
+
+---
+
+## Comparison
+
+| Aspect | Volume | Bind Mount |
+|--------|--------|------------|
+| **Management** | Docker | You |
+| **Location** | /var/lib/docker/volumes | Anywhere |
+| **Backup** | \`docker volume\` | \`cp\`, \`rsync\` |
+| **Performance** | Optimized | Depends on FS |
+| **Portability** | High | Low |
+| **Use case** | Production, DBs | Development |
+
+---
+
+## Volume commands
+
+\`\`\`bash
+# List volumes
+docker volume ls
+
+# Inspect (see real location)
+docker volume inspect postgres_data
+
+# Create with options
+docker volume create --driver local --opt type=none --opt o=bind --opt device=/data/postgres pgdata
+
+# Delete volume
+docker volume rm postgres_data
+
+# Delete orphan volumes
+docker volume prune
+\`\`\`
+
+---
+
+## Backup volumes
+
+\`\`\`bash
+# Backup: create tar from temporary container
+docker run --rm \\
+  -v postgres_data:/data \\
+  -v $(pwd):/backup \\
+  alpine tar czf /backup/postgres_backup.tar.gz -C /data .
+
+# Restore: extract tar to volume
+docker run --rm \\
+  -v postgres_data:/data \\
+  -v $(pwd):/backup \\
+  alpine tar xzf /backup/postgres_backup.tar.gz -C /data
+\`\`\`
+
+---
+
+## In Docker Compose
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Named volume
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Bind mount
+
+  app:
+    build: .
+    volumes:
+      - ./src:/app/src:ro  # :ro = read-only
+      - node_modules:/app/node_modules  # Named volume for deps
+
+volumes:
+  postgres_data:
+  node_modules:
+\`\`\`
+
+---
+
+## Storage drivers
+
+| Driver | Use |
+|--------|-----|
+| **local** | Default, local filesystem |
+| **nfs** | Shared network storage |
+| **amazon-ecs** | AWS EBS/EFS |
+| **azure** | Azure File Storage |
+| **convoy** | Snapshots and backup |
+
+\`\`\`bash
+# Volume with NFS
+docker volume create \\
+  --driver local \\
+  --opt type=nfs \\
+  --opt o=addr=192.168.1.100,rw \\
+  --opt device=:/shared \\
+  nfs_volume
+\`\`\`
+
+---
+
+## Best practices
+
+| Practice | Why |
+|----------|-----|
+| Volumes for production | Docker manages them, more portable |
+| Bind mounts only in dev | Hot reload, direct editing |
+| Name your volumes | \`db_data\` vs random hash |
+| Regular backup | Volumes are critical |
+| \`:ro\` when possible | Read-only = more secure |
+| Don't mount \`/\` or \`/etc\` | Security risk |
+
+---
+
+## Resources
+
+- 📖 [Docker Storage](https://docs.docker.com/storage/)
+- 📖 [Volumes](https://docs.docker.com/storage/volumes/)
+- 📖 [Bind mounts](https://docs.docker.com/storage/bind-mounts/)
+
+---
+
+## Practice
+
+→ [Docker Volumes Backup](/en/cooking/docker-backup)
+    `,
+  },
+  'ssl-certificates': {
+    contentEs: `
+## Certificados SSL/TLS
+
+HTTPS protege la comunicación entre el navegador y tu servidor. Los certificados SSL/TLS son la base de esta seguridad.
+
+---
+
+## ¿Por qué HTTPS?
+
+| Sin HTTPS | Con HTTPS |
+|-----------|-----------|
+| Datos visibles en la red | Datos encriptados |
+| Cualquiera puede interceptar | Solo origen y destino leen |
+| Sin verificación de identidad | Certificado verifica quién eres |
+| SEO penalizado | SEO favorecido |
+| Navegadores muestran "No seguro" | Candado verde |
+
+---
+
+## Cómo funciona
+
+\`\`\`
+1. Cliente → Servidor: "Quiero conexión segura"
+2. Servidor → Cliente: "Aquí está mi certificado"
+3. Cliente verifica:
+   - ¿Lo firmó una CA confiable?
+   - ¿El dominio coincide?
+   - ¿No está expirado?
+4. Intercambian claves de sesión
+5. Comunicación encriptada
+\`\`\`
+
+---
+
+## Anatomía de un certificado
+
+\`\`\`bash
+# Ver certificado de un sitio
+openssl s_client -connect luxia.us:443 -servername luxia.us 2>/dev/null | openssl x509 -text -noout
+\`\`\`
+
+Campos importantes:
+
+| Campo | Descripción |
+|-------|-------------|
+| **Subject** | A quién pertenece (CN=dominio) |
+| **Issuer** | Quién lo firmó (CA) |
+| **Validity** | Fechas de inicio y expiración |
+| **Public Key** | Clave pública del servidor |
+| **SAN** | Subject Alternative Names (dominios adicionales) |
+
+---
+
+## Tipos de certificados
+
+| Tipo | Validación | Tiempo | Precio | Uso |
+|------|------------|--------|--------|-----|
+| **DV** (Domain) | Solo dominio | Minutos | Gratis-$50 | Blogs, apps personales |
+| **OV** (Organization) | Empresa verificada | Días | $50-200 | Empresas |
+| **EV** (Extended) | Verificación exhaustiva | Semanas | $200-500 | Bancos, e-commerce |
+| **Wildcard** | *.dominio.com | Variable | Variable | Múltiples subdominios |
+
+---
+
+## Cadena de confianza
+
+\`\`\`
+┌─────────────────────────────┐
+│     Root CA (Raíz)          │  ← Preinstalada en navegadores/OS
+│   (DigiCert, Let's Encrypt) │
+└──────────────┬──────────────┘
+               │ firma
+               ▼
+┌─────────────────────────────┐
+│   Intermediate CA           │  ← CA intermedia
+│   (Let's Encrypt R3)        │
+└──────────────┬──────────────┘
+               │ firma
+               ▼
+┌─────────────────────────────┐
+│   Tu certificado            │  ← El que usas en tu servidor
+│   (luxia.us)                │
+└─────────────────────────────┘
+\`\`\`
+
+---
+
+## Let's Encrypt (gratis)
+
+Certificados DV gratuitos y automáticos:
+
+\`\`\`bash
+# Instalar Certbot
+apt install certbot
+
+# Obtener certificado (standalone)
+certbot certonly --standalone -d tudominio.com -d www.tudominio.com
+
+# Con Nginx
+certbot --nginx -d tudominio.com
+
+# Renovar automáticamente
+certbot renew --dry-run
+\`\`\`
+
+---
+
+## Archivos del certificado
+
+| Archivo | Contenido |
+|---------|-----------|
+| \`fullchain.pem\` | Certificado + intermedios |
+| \`privkey.pem\` | Clave privada (¡SECRETA!) |
+| \`cert.pem\` | Solo tu certificado |
+| \`chain.pem\` | Solo intermedios |
+
+\`\`\`bash
+# Ubicación típica (Let's Encrypt)
+ls /etc/letsencrypt/live/tudominio.com/
+\`\`\`
+
+---
+
+## Configurar Nginx
+
+\`\`\`nginx
+server {
+    listen 443 ssl http2;
+    server_name tudominio.com;
+
+    ssl_certificate /etc/letsencrypt/live/tudominio.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/tudominio.com/privkey.pem;
+
+    # Configuración moderna
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
+
+    # HSTS (forzar HTTPS)
+    add_header Strict-Transport-Security "max-age=31536000" always;
+}
+
+# Redireccionar HTTP → HTTPS
+server {
+    listen 80;
+    server_name tudominio.com;
+    return 301 https://$host$request_uri;
+}
+\`\`\`
+
+---
+
+## Renovación automática
+
+Let's Encrypt expira cada 90 días. Automatiza:
+
+\`\`\`bash
+# Agregar cron
+crontab -e
+
+# Renovar cada día a las 3am
+0 3 * * * certbot renew --quiet --post-hook "systemctl reload nginx"
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| ERR_CERT_DATE_INVALID | Expirado | \`certbot renew\` |
+| ERR_CERT_AUTHORITY_INVALID | CA no confiable | Verifica cadena completa |
+| ERR_CERT_COMMON_NAME_INVALID | Dominio no coincide | Regenerar con SAN correcto |
+| Mixed content | HTTP en página HTTPS | Cambiar todos los recursos a HTTPS |
+
+\`\`\`bash
+# Verificar certificado
+openssl x509 -in cert.pem -text -noout
+
+# Verificar conexión
+openssl s_client -connect tudominio.com:443
+
+# Verificar expiración
+echo | openssl s_client -connect tudominio.com:443 2>/dev/null | openssl x509 -noout -dates
+\`\`\`
+
+---
+
+## Recursos
+
+- 📖 [Let's Encrypt Docs](https://letsencrypt.org/docs/)
+- 📖 [SSL Labs Test](https://www.ssllabs.com/ssltest/)
+- 📖 [Mozilla SSL Config Generator](https://ssl-config.mozilla.org/)
+
+---
+
+## Practica
+
+→ [SSL con Let's Encrypt](/es/cooking/ssl-certbot)
+    `,
+    contentEn: `
+## SSL/TLS Certificates
+
+HTTPS protects communication between the browser and your server. SSL/TLS certificates are the foundation of this security.
+
+---
+
+## Why HTTPS?
+
+| Without HTTPS | With HTTPS |
+|---------------|------------|
+| Data visible on network | Encrypted data |
+| Anyone can intercept | Only origin and destination read |
+| No identity verification | Certificate verifies who you are |
+| SEO penalized | SEO favored |
+| Browsers show "Not secure" | Green padlock |
+
+---
+
+## How it works
+
+\`\`\`
+1. Client → Server: "I want a secure connection"
+2. Server → Client: "Here's my certificate"
+3. Client verifies:
+   - Did a trusted CA sign it?
+   - Does the domain match?
+   - Is it not expired?
+4. Exchange session keys
+5. Encrypted communication
+\`\`\`
+
+---
+
+## Anatomy of a certificate
+
+\`\`\`bash
+# View a site's certificate
+openssl s_client -connect luxia.us:443 -servername luxia.us 2>/dev/null | openssl x509 -text -noout
+\`\`\`
+
+Important fields:
+
+| Field | Description |
+|-------|-------------|
+| **Subject** | Who it belongs to (CN=domain) |
+| **Issuer** | Who signed it (CA) |
+| **Validity** | Start and expiration dates |
+| **Public Key** | Server's public key |
+| **SAN** | Subject Alternative Names (additional domains) |
+
+---
+
+## Certificate types
+
+| Type | Validation | Time | Price | Use |
+|------|------------|------|-------|-----|
+| **DV** (Domain) | Domain only | Minutes | Free-$50 | Blogs, personal apps |
+| **OV** (Organization) | Verified company | Days | $50-200 | Companies |
+| **EV** (Extended) | Exhaustive verification | Weeks | $200-500 | Banks, e-commerce |
+| **Wildcard** | *.domain.com | Variable | Variable | Multiple subdomains |
+
+---
+
+## Chain of trust
+
+\`\`\`
+┌─────────────────────────────┐
+│     Root CA                 │  ← Pre-installed in browsers/OS
+│   (DigiCert, Let's Encrypt) │
+└──────────────┬──────────────┘
+               │ signs
+               ▼
+┌─────────────────────────────┐
+│   Intermediate CA           │  ← Intermediate CA
+│   (Let's Encrypt R3)        │
+└──────────────┬──────────────┘
+               │ signs
+               ▼
+┌─────────────────────────────┐
+│   Your certificate          │  ← The one you use on your server
+│   (luxia.us)                │
+└─────────────────────────────┘
+\`\`\`
+
+---
+
+## Let's Encrypt (free)
+
+Free and automatic DV certificates:
+
+\`\`\`bash
+# Install Certbot
+apt install certbot
+
+# Get certificate (standalone)
+certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
+
+# With Nginx
+certbot --nginx -d yourdomain.com
+
+# Renew automatically
+certbot renew --dry-run
+\`\`\`
+
+---
+
+## Certificate files
+
+| File | Content |
+|------|---------|
+| \`fullchain.pem\` | Certificate + intermediates |
+| \`privkey.pem\` | Private key (SECRET!) |
+| \`cert.pem\` | Just your certificate |
+| \`chain.pem\` | Just intermediates |
+
+\`\`\`bash
+# Typical location (Let's Encrypt)
+ls /etc/letsencrypt/live/yourdomain.com/
+\`\`\`
+
+---
+
+## Configure Nginx
+
+\`\`\`nginx
+server {
+    listen 443 ssl http2;
+    server_name yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+
+    # Modern configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
+
+    # HSTS (force HTTPS)
+    add_header Strict-Transport-Security "max-age=31536000" always;
+}
+
+# Redirect HTTP → HTTPS
+server {
+    listen 80;
+    server_name yourdomain.com;
+    return 301 https://$host$request_uri;
+}
+\`\`\`
+
+---
+
+## Automatic renewal
+
+Let's Encrypt expires every 90 days. Automate:
+
+\`\`\`bash
+# Add cron
+crontab -e
+
+# Renew every day at 3am
+0 3 * * * certbot renew --quiet --post-hook "systemctl reload nginx"
+\`\`\`
+
+---
+
+## Troubleshooting
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| ERR_CERT_DATE_INVALID | Expired | \`certbot renew\` |
+| ERR_CERT_AUTHORITY_INVALID | Untrusted CA | Verify full chain |
+| ERR_CERT_COMMON_NAME_INVALID | Domain doesn't match | Regenerate with correct SAN |
+| Mixed content | HTTP on HTTPS page | Change all resources to HTTPS |
+
+\`\`\`bash
+# Verify certificate
+openssl x509 -in cert.pem -text -noout
+
+# Verify connection
+openssl s_client -connect yourdomain.com:443
+
+# Check expiration
+echo | openssl s_client -connect yourdomain.com:443 2>/dev/null | openssl x509 -noout -dates
+\`\`\`
+
+---
+
+## Resources
+
+- 📖 [Let's Encrypt Docs](https://letsencrypt.org/docs/)
+- 📖 [SSL Labs Test](https://www.ssllabs.com/ssltest/)
+- 📖 [Mozilla SSL Config Generator](https://ssl-config.mozilla.org/)
+
+---
+
+## Practice
+
+→ [SSL with Let's Encrypt](/en/cooking/ssl-certbot)
+    `,
+  },
+  'server-security': {
+    contentEs: `
+## Seguridad de Servidor
+
+Un VPS expuesto a internet recibe ataques constantemente. UFW, fail2ban y buenas prácticas de SSH son tu primera línea de defensa.
+
+---
+
+## La realidad
+
+\`\`\`bash
+# Después de 1 hora de tener un VPS nuevo
+cat /var/log/auth.log | grep "Failed password" | wc -l
+# → 847 intentos de login fallidos
+\`\`\`
+
+Bots escanean constantemente buscando:
+- SSH con contraseñas débiles
+- Puertos abiertos innecesarios
+- Servicios vulnerables
+
+---
+
+## UFW (Firewall)
+
+UFW = Uncomplicated Firewall. Controla qué tráfico entra y sale.
+
+\`\`\`bash
+# Instalar
+apt install ufw
+
+# Política por defecto: bloquear todo
+ufw default deny incoming
+ufw default allow outgoing
+
+# Permitir SSH (¡IMPORTANTE! Si no, te quedas fuera)
+ufw allow ssh
+# o específico: ufw allow 22/tcp
+
+# Permitir HTTP/HTTPS
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# Activar
+ufw enable
+
+# Ver estado
+ufw status verbose
+\`\`\`
+
+---
+
+## Reglas comunes UFW
+
+\`\`\`bash
+# Permitir puerto específico
+ufw allow 3000/tcp
+
+# Permitir rango de puertos
+ufw allow 6000:6007/tcp
+
+# Permitir desde IP específica
+ufw allow from 192.168.1.100
+
+# Permitir desde IP a puerto específico
+ufw allow from 192.168.1.100 to any port 22
+
+# Denegar IP (bloquear atacante)
+ufw deny from 203.0.113.5
+
+# Eliminar regla
+ufw delete allow 3000/tcp
+
+# Ver reglas numeradas (para eliminar)
+ufw status numbered
+ufw delete 3
+\`\`\`
+
+---
+
+## fail2ban
+
+Detecta ataques de fuerza bruta y banea IPs automáticamente.
+
+\`\`\`bash
+# Instalar
+apt install fail2ban
+
+# Copiar config (no editar el original)
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+# Editar
+nano /etc/fail2ban/jail.local
+\`\`\`
+
+---
+
+## Configuración fail2ban
+
+\`\`\`ini
+# /etc/fail2ban/jail.local
+
+[DEFAULT]
+bantime = 1h          # Tiempo de baneo
+findtime = 10m        # Ventana de tiempo para contar intentos
+maxretry = 5          # Intentos antes de banear
+banaction = ufw       # Usar UFW para banear
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3          # Más estricto para SSH
+bantime = 24h
+\`\`\`
+
+\`\`\`bash
+# Reiniciar
+systemctl restart fail2ban
+
+# Ver estado
+fail2ban-client status sshd
+
+# Ver IPs baneadas
+fail2ban-client status sshd | grep "Banned IP"
+
+# Desbanear IP
+fail2ban-client set sshd unbanip 192.168.1.100
+\`\`\`
+
+---
+
+## SSH Hardening
+
+\`\`\`bash
+# /etc/ssh/sshd_config
+
+# Deshabilitar login con password
+PasswordAuthentication no
+
+# Solo SSH keys
+PubkeyAuthentication yes
+
+# No permitir root login
+PermitRootLogin no
+
+# Cambiar puerto (opcional, security through obscurity)
+Port 2222
+
+# Limitar intentos
+MaxAuthTries 3
+
+# Timeout de conexión
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# Solo usuarios específicos
+AllowUsers tuusuario
+
+# Reiniciar SSH
+systemctl restart sshd
+\`\`\`
+
+---
+
+## SSH Keys (obligatorio)
+
+\`\`\`bash
+# En tu máquina local
+ssh-keygen -t ed25519 -C "tu@email.com"
+
+# Copiar al servidor
+ssh-copy-id -i ~/.ssh/id_ed25519.pub usuario@servidor
+
+# O manual
+cat ~/.ssh/id_ed25519.pub | ssh usuario@servidor "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+# Permisos correctos (servidor)
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+\`\`\`
+
+---
+
+## Checklist de seguridad
+
+| Tarea | Comando | Verificar |
+|-------|---------|-----------|
+| UFW activo | \`ufw status\` | Status: active |
+| Solo puertos necesarios | \`ufw status\` | 22, 80, 443 |
+| fail2ban corriendo | \`systemctl status fail2ban\` | active (running) |
+| SSH solo con keys | \`grep PasswordAuth /etc/ssh/sshd_config\` | no |
+| Root login deshabilitado | \`grep PermitRoot /etc/ssh/sshd_config\` | no |
+| Updates automáticos | \`apt install unattended-upgrades\` | |
+
+---
+
+## Monitoreo básico
+
+\`\`\`bash
+# Ver intentos de login fallidos
+grep "Failed password" /var/log/auth.log | tail -20
+
+# Ver IPs baneadas por fail2ban
+fail2ban-client status sshd
+
+# Ver conexiones activas
+ss -tunap
+
+# Ver procesos escuchando
+netstat -tlnp
+\`\`\`
+
+---
+
+## Updates de seguridad
+
+\`\`\`bash
+# Updates automáticos
+apt install unattended-upgrades
+dpkg-reconfigure unattended-upgrades
+
+# O manual periódico
+apt update && apt upgrade -y
+\`\`\`
+
+---
+
+## Recursos
+
+- 📖 [UFW Essentials](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands)
+- 📖 [fail2ban Documentation](https://www.fail2ban.org/wiki/index.php/Main_Page)
+- 📖 [SSH Hardening Guide](https://www.ssh.com/academy/ssh/sshd_config)
+
+---
+
+## Practica
+
+→ [Asegurar VPS: UFW + fail2ban](/es/cooking/vps-hardening)
+    `,
+    contentEn: `
+## Server Security
+
+A VPS exposed to the internet receives attacks constantly. UFW, fail2ban and good SSH practices are your first line of defense.
+
+---
+
+## The reality
+
+\`\`\`bash
+# After 1 hour of having a new VPS
+cat /var/log/auth.log | grep "Failed password" | wc -l
+# → 847 failed login attempts
+\`\`\`
+
+Bots constantly scan looking for:
+- SSH with weak passwords
+- Unnecessary open ports
+- Vulnerable services
+
+---
+
+## UFW (Firewall)
+
+UFW = Uncomplicated Firewall. Controls what traffic goes in and out.
+
+\`\`\`bash
+# Install
+apt install ufw
+
+# Default policy: block everything
+ufw default deny incoming
+ufw default allow outgoing
+
+# Allow SSH (IMPORTANT! Otherwise you're locked out)
+ufw allow ssh
+# or specific: ufw allow 22/tcp
+
+# Allow HTTP/HTTPS
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# Enable
+ufw enable
+
+# Check status
+ufw status verbose
+\`\`\`
+
+---
+
+## Common UFW rules
+
+\`\`\`bash
+# Allow specific port
+ufw allow 3000/tcp
+
+# Allow port range
+ufw allow 6000:6007/tcp
+
+# Allow from specific IP
+ufw allow from 192.168.1.100
+
+# Allow from IP to specific port
+ufw allow from 192.168.1.100 to any port 22
+
+# Deny IP (block attacker)
+ufw deny from 203.0.113.5
+
+# Delete rule
+ufw delete allow 3000/tcp
+
+# See numbered rules (to delete)
+ufw status numbered
+ufw delete 3
+\`\`\`
+
+---
+
+## fail2ban
+
+Detects brute force attacks and bans IPs automatically.
+
+\`\`\`bash
+# Install
+apt install fail2ban
+
+# Copy config (don't edit the original)
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+# Edit
+nano /etc/fail2ban/jail.local
+\`\`\`
+
+---
+
+## fail2ban configuration
+
+\`\`\`ini
+# /etc/fail2ban/jail.local
+
+[DEFAULT]
+bantime = 1h          # Ban duration
+findtime = 10m        # Time window to count attempts
+maxretry = 5          # Attempts before ban
+banaction = ufw       # Use UFW to ban
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3          # Stricter for SSH
+bantime = 24h
+\`\`\`
+
+\`\`\`bash
+# Restart
+systemctl restart fail2ban
+
+# Check status
+fail2ban-client status sshd
+
+# See banned IPs
+fail2ban-client status sshd | grep "Banned IP"
+
+# Unban IP
+fail2ban-client set sshd unbanip 192.168.1.100
+\`\`\`
+
+---
+
+## SSH Hardening
+
+\`\`\`bash
+# /etc/ssh/sshd_config
+
+# Disable password login
+PasswordAuthentication no
+
+# Only SSH keys
+PubkeyAuthentication yes
+
+# Don't allow root login
+PermitRootLogin no
+
+# Change port (optional, security through obscurity)
+Port 2222
+
+# Limit attempts
+MaxAuthTries 3
+
+# Connection timeout
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# Only specific users
+AllowUsers youruser
+
+# Restart SSH
+systemctl restart sshd
+\`\`\`
+
+---
+
+## SSH Keys (mandatory)
+
+\`\`\`bash
+# On your local machine
+ssh-keygen -t ed25519 -C "your@email.com"
+
+# Copy to server
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@server
+
+# Or manually
+cat ~/.ssh/id_ed25519.pub | ssh user@server "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+# Correct permissions (server)
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+\`\`\`
+
+---
+
+## Security checklist
+
+| Task | Command | Verify |
+|------|---------|--------|
+| UFW active | \`ufw status\` | Status: active |
+| Only necessary ports | \`ufw status\` | 22, 80, 443 |
+| fail2ban running | \`systemctl status fail2ban\` | active (running) |
+| SSH only with keys | \`grep PasswordAuth /etc/ssh/sshd_config\` | no |
+| Root login disabled | \`grep PermitRoot /etc/ssh/sshd_config\` | no |
+| Automatic updates | \`apt install unattended-upgrades\` | |
+
+---
+
+## Basic monitoring
+
+\`\`\`bash
+# See failed login attempts
+grep "Failed password" /var/log/auth.log | tail -20
+
+# See IPs banned by fail2ban
+fail2ban-client status sshd
+
+# See active connections
+ss -tunap
+
+# See listening processes
+netstat -tlnp
+\`\`\`
+
+---
+
+## Security updates
+
+\`\`\`bash
+# Automatic updates
+apt install unattended-upgrades
+dpkg-reconfigure unattended-upgrades
+
+# Or periodic manual
+apt update && apt upgrade -y
+\`\`\`
+
+---
+
+## Resources
+
+- 📖 [UFW Essentials](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands)
+- 📖 [fail2ban Documentation](https://www.fail2ban.org/wiki/index.php/Main_Page)
+- 📖 [SSH Hardening Guide](https://www.ssh.com/academy/ssh/sshd_config)
+
+---
+
+## Practice
+
+→ [Secure VPS: UFW + fail2ban](/en/cooking/vps-hardening)
+    `,
+  },
   cicd: {
     contentEs: `
 ## Automatización de deploys
