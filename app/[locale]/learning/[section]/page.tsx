@@ -19,6 +19,9 @@ const sections = [
   { slug: 'react', titleEs: 'React', titleEn: 'React', level: 'cocinero', icon: '⚛️' },
   { slug: 'apis', titleEs: 'APIs REST', titleEn: 'REST APIs', level: 'cocinero', icon: '🔗' },
   { slug: 'embeddings', titleEs: 'Embeddings', titleEn: 'Embeddings', level: 'cocinero', icon: '🧮' },
+  { slug: 'system-design', titleEs: 'Diseño de Sistemas', titleEn: 'System Design', level: 'chef', icon: '🏗️' },
+  { slug: 'performance', titleEs: 'Performance & Optimización', titleEn: 'Performance & Optimization', level: 'chef', icon: '⚡' },
+  { slug: 'networking', titleEs: 'Redes & Protocolos', titleEn: 'Networking & Protocols', level: 'chef', icon: '🌐' },
   { slug: 'git-advanced', titleEs: 'Git Avanzado & Colaboración', titleEn: 'Advanced Git & Collaboration', level: 'chef', icon: '🔀' },
   { slug: 'nextjs', titleEs: 'Next.js', titleEn: 'Next.js', level: 'chef', icon: '▲' },
   { slug: 'auth', titleEs: 'Autenticación', titleEn: 'Authentication', level: 'chef', icon: '🔐' },
@@ -13945,6 +13948,1976 @@ jobs:
 - [Test Driven Development - Kent Beck](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530)
     `,
   },
+  'system-design': {
+    contentEs: `
+## El arte de diseñar sistemas que escalan
+
+Imagina que eres el arquitecto de un restaurante. No solo decides donde van las mesas, sino como fluye la cocina, cuantos cocineros necesitas, donde almacenas los ingredientes, y que pasa cuando llegan 500 clientes en vez de 50.
+
+El diseño de sistemas es exactamente eso: planificar como construir software que funcione bien hoy y pueda crecer mañana.
+
+> **Un buen diseño de sistema no es el mas complejo, sino el que resuelve el problema actual con espacio para crecer.**
+
+---
+
+## Monolito vs Microservicios
+
+La primera decision arquitectonica que enfrentaras.
+
+### Monolito: Todo en uno
+
+\`\`\`
+┌─────────────────────────────────────┐
+│           APLICACION                │
+│  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐   │
+│  │Auth │ │Users│ │Orders│ │Pay  │   │
+│  └─────┘ └─────┘ └─────┘ └─────┘   │
+│         Una base de datos           │
+│              ┌───┐                  │
+│              │ DB│                  │
+│              └───┘                  │
+└─────────────────────────────────────┘
+\`\`\`
+
+**Ventajas:**
+- Simple de desarrollar y desplegar
+- Facil de debuggear (todo en un lugar)
+- Una sola base de datos = consistencia
+- Ideal para equipos pequenos (<10 devs)
+
+**Desventajas:**
+- Escala todo o nada
+- Un bug puede tumbar todo
+- Deployments arriesgados
+- Dificil de mantener cuando crece
+
+### Microservicios: Divide y conquista
+
+\`\`\`
+┌─────────┐  ┌─────────┐  ┌─────────┐
+│  Auth   │  │  Users  │  │ Orders  │
+│ Service │  │ Service │  │ Service │
+└────┬────┘  └────┬────┘  └────┬────┘
+     │            │            │
+┌────┴────┐  ┌────┴────┐  ┌────┴────┐
+│Auth DB  │  │Users DB │  │Orders DB│
+└─────────┘  └─────────┘  └─────────┘
+\`\`\`
+
+**Ventajas:**
+- Escala solo lo que necesitas
+- Equipos independientes
+- Falla un servicio, no todo
+- Tecnologias diferentes por servicio
+
+**Desventajas:**
+- Complejidad operacional alta
+- Debugging distribuido es dificil
+- Consistencia eventual (no inmediata)
+- Requiere DevOps maduros
+
+### Cuando usar cada uno
+
+| Escenario | Recomendacion |
+|-----------|---------------|
+| Startup, MVP, < 5 devs | Monolito |
+| Producto probado, > 20 devs | Microservicios |
+| Partes con cargas muy diferentes | Hibrido |
+| No sabes cual elegir | Monolito |
+
+> **Regla de oro:** Empieza con monolito. Extrae microservicios cuando el dolor sea real, no imaginado.
+
+---
+
+## El Teorema CAP
+
+En sistemas distribuidos, solo puedes tener 2 de 3:
+
+\`\`\`
+        Consistency
+           /\\
+          /  \\
+         /    \\
+        /      \\
+       /   ??   \\
+      /          \\
+     /____________\\
+Availability    Partition
+                Tolerance
+\`\`\`
+
+- **Consistency (C):** Todos ven los mismos datos al mismo tiempo
+- **Availability (A):** El sistema siempre responde
+- **Partition Tolerance (P):** Funciona aunque haya fallas de red
+
+### En la practica
+
+Las particiones de red SIEMPRE pueden ocurrir. Entonces realmente eliges entre:
+
+| Sistema | Elige | Sacrifica | Ejemplo |
+|---------|-------|-----------|---------|
+| **CP** | Consistencia | Disponibilidad | Bancos, inventarios |
+| **AP** | Disponibilidad | Consistencia | Redes sociales, cache |
+
+> **Ejemplo real:** En un banco, si hay falla de red, prefieres que el cajero diga "No disponible" (CP) a que te deje retirar dinero que no tienes (AP).
+
+---
+
+## Escalamiento: Vertical vs Horizontal
+
+### Vertical: Maquina mas grande
+
+\`\`\`
+Antes:          Despues:
+┌─────┐         ┌─────────┐
+│ 4GB │   →     │  64GB   │
+│ 2CPU│         │  32CPU  │
+└─────┘         └─────────┘
+\`\`\`
+
+- Simple: solo cambias el servidor
+- Tiene limite fisico
+- Un solo punto de falla
+
+### Horizontal: Mas maquinas
+
+\`\`\`
+Antes:          Despues:
+┌─────┐         ┌─────┐ ┌─────┐ ┌─────┐
+│ 4GB │   →     │ 4GB │ │ 4GB │ │ 4GB │
+└─────┘         └─────┘ └─────┘ └─────┘
+\`\`\`
+
+- Teoricamente infinito
+- Requiere Load Balancer
+- Tu app debe ser stateless
+
+---
+
+## Load Balancers
+
+Distribuyen trafico entre multiples servidores.
+
+\`\`\`
+                    ┌─────────┐
+                    │  Load   │
+        Usuarios →  │Balancer │
+                    └────┬────┘
+                         │
+           ┌─────────────┼─────────────┐
+           ▼             ▼             ▼
+      ┌─────────┐   ┌─────────┐   ┌─────────┐
+      │Server 1 │   │Server 2 │   │Server 3 │
+      └─────────┘   └─────────┘   └─────────┘
+\`\`\`
+
+### Algoritmos de distribucion
+
+| Algoritmo | Como funciona | Cuando usarlo |
+|-----------|---------------|---------------|
+| **Round Robin** | 1, 2, 3, 1, 2, 3... | Servidores iguales |
+| **Least Connections** | Al que tenga menos | Conexiones largas |
+| **IP Hash** | Mismo cliente → mismo server | Sesiones sticky |
+| **Weighted** | Mas al mas potente | Servidores diferentes |
+
+---
+
+## Escalando Bases de Datos
+
+### Replicacion: Copias de lectura
+
+\`\`\`
+     Writes
+        │
+        ▼
+   ┌─────────┐
+   │ Primary │──────────────┐
+   │  (RW)   │              │ Replicacion
+   └─────────┘              │
+        │                   │
+        ▼                   ▼
+   ┌─────────┐         ┌─────────┐
+   │ Replica │         │ Replica │
+   │  (RO)   │         │  (RO)   │
+   └─────────┘         └─────────┘
+        ▲                   ▲
+        │                   │
+      Reads              Reads
+\`\`\`
+
+- Escala lecturas, no escrituras
+- Consistencia eventual (retraso de replicacion)
+
+### Sharding: Divide los datos
+
+\`\`\`
+user_id 1-1000      user_id 1001-2000    user_id 2001-3000
+       │                   │                    │
+       ▼                   ▼                    ▼
+  ┌─────────┐         ┌─────────┐         ┌─────────┐
+  │ Shard 1 │         │ Shard 2 │         │ Shard 3 │
+  └─────────┘         └─────────┘         └─────────┘
+\`\`\`
+
+- Escala tanto lecturas como escrituras
+- Complejidad: JOINs entre shards son costosos
+- Elegir buena shard key es critico
+
+---
+
+## Caching: La clave del performance
+
+### Estrategias de cache
+
+**Cache-Aside (Lazy Loading)**
+\`\`\`
+1. App pide dato
+2. Cache miss? → Lee de DB → Guarda en cache
+3. Cache hit? → Retorna de cache
+
+┌─────┐  miss   ┌─────┐        ┌────┐
+│ App │ ──────→ │Cache│        │ DB │
+│     │ ←────── │     │        │    │
+└─────┘  hit    └─────┘        └────┘
+    │                              ▲
+    └──────────────────────────────┘
+         miss: lee y guarda
+\`\`\`
+
+**Write-Through**
+\`\`\`
+Escribe en cache Y en DB al mismo tiempo
+- Datos siempre consistentes
+- Escrituras mas lentas
+\`\`\`
+
+**Write-Behind (Write-Back)**
+\`\`\`
+Escribe en cache, luego async a DB
+- Escrituras rapidas
+- Riesgo de perder datos si cache falla
+\`\`\`
+
+### Que cachear
+
+| Candidato | Prioridad |
+|-----------|-----------|
+| Datos que no cambian (config) | Alta |
+| Datos leidos frecuentemente | Alta |
+| Resultados de calculos costosos | Alta |
+| Datos de usuario activo | Media |
+| Datos que cambian cada segundo | Baja |
+
+---
+
+## Message Queues
+
+Para comunicacion asincrona entre servicios.
+
+\`\`\`
+┌─────────┐     ┌─────────────┐     ┌─────────────┐
+│Producer │ ──→ │    Queue    │ ──→ │  Consumer   │
+│ (API)   │     │ (RabbitMQ)  │     │  (Worker)   │
+└─────────┘     └─────────────┘     └─────────────┘
+\`\`\`
+
+### Casos de uso
+
+- **Envio de emails:** API encola, worker envia
+- **Procesamiento de imagenes:** Upload encola, worker procesa
+- **Notificaciones:** Evento encola, multiples consumers notifican
+
+### Herramientas populares
+
+| Tool | Mejor para |
+|------|------------|
+| **RabbitMQ** | Mensajeria tradicional, routing complejo |
+| **Redis Streams** | Simple, ya tienes Redis |
+| **Kafka** | Alto volumen, event sourcing |
+| **SQS** | AWS nativo, simple |
+
+---
+
+## Caso practico: Disenando un URL Shortener
+
+### Requisitos
+
+**Funcionales:**
+- Acortar URL larga → codigo corto
+- Redirigir codigo → URL original
+- URLs expiran (opcional)
+
+**No funcionales:**
+- 100M URLs nuevas/mes
+- 10:1 ratio lectura:escritura
+- Latencia < 100ms
+
+### Estimaciones
+
+\`\`\`
+URLs/mes: 100M
+URLs/seg: 100M / (30 * 24 * 3600) ≈ 40 URLs/seg escritura
+Lecturas: 40 * 10 = 400 URLs/seg lectura
+
+Storage (5 años):
+100M * 12 * 5 = 6B URLs
+6B * 500 bytes = 3TB
+\`\`\`
+
+### Diseno del codigo corto
+
+Base62: [a-zA-Z0-9] = 62 caracteres
+
+\`\`\`
+7 caracteres = 62^7 = 3.5 trillones de combinaciones
+Suficiente para 100M/mes por siglos
+\`\`\`
+
+### Arquitectura final
+
+\`\`\`
+                    ┌───────────┐
+     Usuarios  ───→ │    LB     │
+                    └─────┬─────┘
+                          │
+              ┌───────────┴───────────┐
+              ▼                       ▼
+         ┌─────────┐             ┌─────────┐
+         │ API 1   │             │ API 2   │
+         └────┬────┘             └────┬────┘
+              │                       │
+              └───────────┬───────────┘
+                          │
+                    ┌─────┴─────┐
+                    │   Redis   │ (Cache hot URLs)
+                    └─────┬─────┘
+                          │
+                    ┌─────┴─────┐
+                    │ Postgres  │ (Sharded by hash)
+                    └───────────┘
+\`\`\`
+
+---
+
+## Recursos recomendados
+
+- **Libro:** "Designing Data-Intensive Applications" - Martin Kleppmann
+- **Libro:** "System Design Interview" - Alex Xu
+- **Web:** [system-design-primer](https://github.com/donnemartin/system-design-primer)
+- **Practica:** [Exercism System Design](https://exercism.org/)
+
+---
+
+## Practica
+
+-> [Workshop de Arquitectura](/es/cooking/architecture-workshop) - Disena un sistema real paso a paso
+    `,
+    contentEn: `
+## The art of designing systems that scale
+
+Imagine you're the architect of a restaurant. You don't just decide where tables go, but how the kitchen flows, how many cooks you need, where you store ingredients, and what happens when 500 customers arrive instead of 50.
+
+System design is exactly that: planning how to build software that works well today and can grow tomorrow.
+
+> **Good system design isn't the most complex one, but the one that solves the current problem with room to grow.**
+
+---
+
+## Monolith vs Microservices
+
+The first architectural decision you'll face.
+
+### Monolith: All in one
+
+\`\`\`
+┌─────────────────────────────────────┐
+│           APPLICATION               │
+│  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐   │
+│  │Auth │ │Users│ │Orders│ │Pay  │   │
+│  └─────┘ └─────┘ └─────┘ └─────┘   │
+│         Single database             │
+│              ┌───┐                  │
+│              │ DB│                  │
+│              └───┘                  │
+└─────────────────────────────────────┘
+\`\`\`
+
+**Advantages:**
+- Simple to develop and deploy
+- Easy to debug (everything in one place)
+- Single database = consistency
+- Ideal for small teams (<10 devs)
+
+**Disadvantages:**
+- Scale all or nothing
+- One bug can bring everything down
+- Risky deployments
+- Hard to maintain as it grows
+
+### Microservices: Divide and conquer
+
+\`\`\`
+┌─────────┐  ┌─────────┐  ┌─────────┐
+│  Auth   │  │  Users  │  │ Orders  │
+│ Service │  │ Service │  │ Service │
+└────┬────┘  └────┬────┘  └────┬────┘
+     │            │            │
+┌────┴────┐  ┌────┴────┐  ┌────┴────┐
+│Auth DB  │  │Users DB │  │Orders DB│
+└─────────┘  └─────────┘  └─────────┘
+\`\`\`
+
+**Advantages:**
+- Scale only what you need
+- Independent teams
+- One service fails, not all
+- Different technologies per service
+
+**Disadvantages:**
+- High operational complexity
+- Distributed debugging is hard
+- Eventual consistency (not immediate)
+- Requires mature DevOps
+
+### When to use each
+
+| Scenario | Recommendation |
+|----------|----------------|
+| Startup, MVP, < 5 devs | Monolith |
+| Proven product, > 20 devs | Microservices |
+| Parts with very different loads | Hybrid |
+| Don't know which to choose | Monolith |
+
+> **Golden rule:** Start with monolith. Extract microservices when the pain is real, not imagined.
+
+---
+
+## The CAP Theorem
+
+In distributed systems, you can only have 2 of 3:
+
+\`\`\`
+        Consistency
+           /\\
+          /  \\
+         /    \\
+        /      \\
+       /   ??   \\
+      /          \\
+     /____________\\
+Availability    Partition
+                Tolerance
+\`\`\`
+
+- **Consistency (C):** Everyone sees the same data at the same time
+- **Availability (A):** The system always responds
+- **Partition Tolerance (P):** Works even with network failures
+
+### In practice
+
+Network partitions CAN ALWAYS happen. So you really choose between:
+
+| System | Chooses | Sacrifices | Example |
+|--------|---------|------------|---------|
+| **CP** | Consistency | Availability | Banks, inventory |
+| **AP** | Availability | Consistency | Social networks, cache |
+
+> **Real example:** In a bank, if there's a network failure, you prefer the ATM to say "Not available" (CP) rather than let you withdraw money you don't have (AP).
+
+---
+
+## Scaling: Vertical vs Horizontal
+
+### Vertical: Bigger machine
+
+\`\`\`
+Before:         After:
+┌─────┐         ┌─────────┐
+│ 4GB │   →     │  64GB   │
+│ 2CPU│         │  32CPU  │
+└─────┘         └─────────┘
+\`\`\`
+
+- Simple: just upgrade the server
+- Has physical limits
+- Single point of failure
+
+### Horizontal: More machines
+
+\`\`\`
+Before:         After:
+┌─────┐         ┌─────┐ ┌─────┐ ┌─────┐
+│ 4GB │   →     │ 4GB │ │ 4GB │ │ 4GB │
+└─────┘         └─────┘ └─────┘ └─────┘
+\`\`\`
+
+- Theoretically infinite
+- Requires Load Balancer
+- Your app must be stateless
+
+---
+
+## Load Balancers
+
+Distribute traffic among multiple servers.
+
+\`\`\`
+                    ┌─────────┐
+                    │  Load   │
+        Users   →   │Balancer │
+                    └────┬────┘
+                         │
+           ┌─────────────┼─────────────┐
+           ▼             ▼             ▼
+      ┌─────────┐   ┌─────────┐   ┌─────────┐
+      │Server 1 │   │Server 2 │   │Server 3 │
+      └─────────┘   └─────────┘   └─────────┘
+\`\`\`
+
+### Distribution algorithms
+
+| Algorithm | How it works | When to use |
+|-----------|--------------|-------------|
+| **Round Robin** | 1, 2, 3, 1, 2, 3... | Equal servers |
+| **Least Connections** | To the one with fewer | Long connections |
+| **IP Hash** | Same client → same server | Sticky sessions |
+| **Weighted** | More to the powerful one | Different servers |
+
+---
+
+## Scaling Databases
+
+### Replication: Read copies
+
+\`\`\`
+     Writes
+        │
+        ▼
+   ┌─────────┐
+   │ Primary │──────────────┐
+   │  (RW)   │              │ Replication
+   └─────────┘              │
+        │                   │
+        ▼                   ▼
+   ┌─────────┐         ┌─────────┐
+   │ Replica │         │ Replica │
+   │  (RO)   │         │  (RO)   │
+   └─────────┘         └─────────┘
+        ▲                   ▲
+        │                   │
+      Reads              Reads
+\`\`\`
+
+- Scales reads, not writes
+- Eventual consistency (replication lag)
+
+### Sharding: Split the data
+
+\`\`\`
+user_id 1-1000      user_id 1001-2000    user_id 2001-3000
+       │                   │                    │
+       ▼                   ▼                    ▼
+  ┌─────────┐         ┌─────────┐         ┌─────────┐
+  │ Shard 1 │         │ Shard 2 │         │ Shard 3 │
+  └─────────┘         └─────────┘         └─────────┘
+\`\`\`
+
+- Scales both reads and writes
+- Complexity: JOINs between shards are expensive
+- Choosing a good shard key is critical
+
+---
+
+## Caching: The key to performance
+
+### Cache strategies
+
+**Cache-Aside (Lazy Loading)**
+\`\`\`
+1. App requests data
+2. Cache miss? → Read from DB → Store in cache
+3. Cache hit? → Return from cache
+
+┌─────┐  miss   ┌─────┐        ┌────┐
+│ App │ ──────→ │Cache│        │ DB │
+│     │ ←────── │     │        │    │
+└─────┘  hit    └─────┘        └────┘
+    │                              ▲
+    └──────────────────────────────┘
+         miss: read and store
+\`\`\`
+
+**Write-Through**
+\`\`\`
+Write to cache AND DB at the same time
+- Data always consistent
+- Slower writes
+\`\`\`
+
+**Write-Behind (Write-Back)**
+\`\`\`
+Write to cache, then async to DB
+- Fast writes
+- Risk of data loss if cache fails
+\`\`\`
+
+### What to cache
+
+| Candidate | Priority |
+|-----------|----------|
+| Data that doesn't change (config) | High |
+| Frequently read data | High |
+| Expensive calculation results | High |
+| Active user data | Medium |
+| Data that changes every second | Low |
+
+---
+
+## Message Queues
+
+For asynchronous communication between services.
+
+\`\`\`
+┌─────────┐     ┌─────────────┐     ┌─────────────┐
+│Producer │ ──→ │    Queue    │ ──→ │  Consumer   │
+│ (API)   │     │ (RabbitMQ)  │     │  (Worker)   │
+└─────────┘     └─────────────┘     └─────────────┘
+\`\`\`
+
+### Use cases
+
+- **Email sending:** API enqueues, worker sends
+- **Image processing:** Upload enqueues, worker processes
+- **Notifications:** Event enqueues, multiple consumers notify
+
+### Popular tools
+
+| Tool | Best for |
+|------|----------|
+| **RabbitMQ** | Traditional messaging, complex routing |
+| **Redis Streams** | Simple, you already have Redis |
+| **Kafka** | High volume, event sourcing |
+| **SQS** | AWS native, simple |
+
+---
+
+## Practical case: Designing a URL Shortener
+
+### Requirements
+
+**Functional:**
+- Shorten long URL → short code
+- Redirect code → original URL
+- URLs expire (optional)
+
+**Non-functional:**
+- 100M new URLs/month
+- 10:1 read:write ratio
+- Latency < 100ms
+
+### Estimations
+
+\`\`\`
+URLs/month: 100M
+URLs/sec: 100M / (30 * 24 * 3600) ≈ 40 URLs/sec writes
+Reads: 40 * 10 = 400 URLs/sec reads
+
+Storage (5 years):
+100M * 12 * 5 = 6B URLs
+6B * 500 bytes = 3TB
+\`\`\`
+
+### Short code design
+
+Base62: [a-zA-Z0-9] = 62 characters
+
+\`\`\`
+7 characters = 62^7 = 3.5 trillion combinations
+Enough for 100M/month for centuries
+\`\`\`
+
+### Final architecture
+
+\`\`\`
+                    ┌───────────┐
+     Users     ───→ │    LB     │
+                    └─────┬─────┘
+                          │
+              ┌───────────┴───────────┐
+              ▼                       ▼
+         ┌─────────┐             ┌─────────┐
+         │ API 1   │             │ API 2   │
+         └────┬────┘             └────┬────┘
+              │                       │
+              └───────────┬───────────┘
+                          │
+                    ┌─────┴─────┐
+                    │   Redis   │ (Cache hot URLs)
+                    └─────┬─────┘
+                          │
+                    ┌─────┴─────┐
+                    │ Postgres  │ (Sharded by hash)
+                    └───────────┘
+\`\`\`
+
+---
+
+## Recommended resources
+
+- **Book:** "Designing Data-Intensive Applications" - Martin Kleppmann
+- **Book:** "System Design Interview" - Alex Xu
+- **Web:** [system-design-primer](https://github.com/donnemartin/system-design-primer)
+- **Practice:** [Exercism System Design](https://exercism.org/)
+
+---
+
+## Practice
+
+-> [Architecture Workshop](/en/cooking/architecture-workshop) - Design a real system step by step
+    `,
+  },
+  'performance': {
+    contentEs: `
+## Un restaurante lento pierde clientes
+
+Imagina un restaurante con la mejor comida del mundo, pero donde cada platillo tarda 45 minutos. No importa que tan bueno sea, los clientes se van.
+
+Las aplicaciones web son igual. Cada segundo de carga puede costar hasta 7% de conversiones.
+
+> **Performance no es optimizacion prematura. Es respeto por el tiempo del usuario.**
+
+---
+
+## Core Web Vitals: Las metricas que importan
+
+Google mide 3 metricas principales que afectan SEO y experiencia:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                   CORE WEB VITALS                       │
+├─────────────────┬─────────────────┬─────────────────────┤
+│      LCP        │      INP        │       CLS           │
+│   < 2.5s        │    < 200ms      │      < 0.1          │
+│                 │                 │                     │
+│  Largest        │  Interaction    │  Cumulative         │
+│  Contentful     │  to Next        │  Layout             │
+│  Paint          │  Paint          │  Shift              │
+│                 │                 │                     │
+│  "Carga rapida" │ "Responde bien" │ "Estable visualmente│
+└─────────────────┴─────────────────┴─────────────────────┘
+\`\`\`
+
+| Metrica | Que mide | Bueno | Malo |
+|---------|----------|-------|------|
+| **LCP** | Cuanto tarda el contenido principal | < 2.5s | > 4s |
+| **INP** | Respuesta a interacciones | < 200ms | > 500ms |
+| **CLS** | Cuanto salta el layout | < 0.1 | > 0.25 |
+
+---
+
+## El pipeline del navegador
+
+Entender como renderiza el navegador te ayuda a optimizar.
+
+\`\`\`
+HTML ──→ DOM
+          │
+CSS  ──→ CSSOM ──→ Render Tree ──→ Layout ──→ Paint ──→ Composite
+\`\`\`
+
+### Que bloquea el renderizado
+
+- **JavaScript sincrono:** Bloquea parsing del HTML
+- **CSS en el <head>:** Bloquea render (pero necesario)
+- **Fonts externas:** Pueden causar FOIT/FOUT
+
+---
+
+## JavaScript: El cuello de botella
+
+### El Event Loop
+
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│                  CALL STACK                      │
+│    (Ejecuta codigo sincrono, uno a la vez)      │
+└─────────────────────────────────────────────────┘
+         ▲                         │
+         │                         ▼
+┌────────┴────────┐    ┌─────────────────────────┐
+│   TASK QUEUE    │    │    MICROTASK QUEUE      │
+│  (setTimeout,   │    │  (Promises, async/await)│
+│   eventos)      │    │  (Mayor prioridad)      │
+└─────────────────┘    └─────────────────────────┘
+\`\`\`
+
+### Problema: Bloqueo del main thread
+
+\`\`\`javascript
+// MAL: Bloquea el UI por 500ms
+function processData(items) {
+  items.forEach(item => heavyCalculation(item));
+}
+
+// BIEN: Divide en chunks
+async function processDataAsync(items) {
+  const chunkSize = 100;
+  for (let i = 0; i < items.length; i += chunkSize) {
+    const chunk = items.slice(i, i + chunkSize);
+    chunk.forEach(item => heavyCalculation(item));
+    await new Promise(r => setTimeout(r, 0)); // Yield al browser
+  }
+}
+\`\`\`
+
+---
+
+## Optimizacion de bundles
+
+### Code Splitting
+
+\`\`\`javascript
+// Sin splitting: todo carga al inicio
+import { Dashboard } from './Dashboard';
+import { Admin } from './Admin';
+import { Reports } from './Reports';
+
+// Con splitting: carga bajo demanda
+const Dashboard = lazy(() => import('./Dashboard'));
+const Admin = lazy(() => import('./Admin'));
+const Reports = lazy(() => import('./Reports'));
+\`\`\`
+
+### Tree Shaking
+
+\`\`\`javascript
+// MAL: Importa toda la libreria (100KB)
+import _ from 'lodash';
+_.debounce(fn, 300);
+
+// BIEN: Solo lo que necesitas (2KB)
+import debounce from 'lodash/debounce';
+debounce(fn, 300);
+\`\`\`
+
+---
+
+## Optimizacion de imagenes
+
+### Formatos modernos
+
+| Formato | Uso | Ahorro vs JPEG |
+|---------|-----|----------------|
+| **WebP** | General, soporte amplio | 25-35% |
+| **AVIF** | Mejor compresion, menos soporte | 50%+ |
+
+### Responsive images
+
+\`\`\`html
+<picture>
+  <source srcset="hero.avif" type="image/avif">
+  <source srcset="hero.webp" type="image/webp">
+  <img
+    src="hero.jpg"
+    alt="Hero"
+    loading="lazy"
+    width="1200"
+    height="600"
+  >
+</picture>
+\`\`\`
+
+### Next.js Image
+
+\`\`\`jsx
+import Image from 'next/image';
+
+<Image
+  src="/hero.jpg"
+  alt="Hero"
+  width={1200}
+  height={600}
+  priority // Para imagenes above the fold
+  placeholder="blur" // Efecto de carga
+/>
+\`\`\`
+
+---
+
+## Caching estrategico
+
+### Niveles de cache
+
+\`\`\`
+Usuario ──→ Browser Cache ──→ CDN Cache ──→ Server ──→ DB
+           (localStorage,     (Edge)        (Redis)
+            sessionStorage)
+\`\`\`
+
+### HTTP Cache Headers
+
+\`\`\`
+Cache-Control: public, max-age=31536000, immutable
+                │       │                 │
+                │       │                 └─ No revalidar
+                │       └─ 1 año en segundos
+                └─ CDN puede cachear
+\`\`\`
+
+### Estrategia por tipo de recurso
+
+| Recurso | Cache-Control | Porque |
+|---------|---------------|--------|
+| JS/CSS con hash | max-age=31536000, immutable | Hash cambia si archivo cambia |
+| HTML | no-cache | Siempre validar con server |
+| API dinamica | private, max-age=0 | Datos frescos |
+| Imagenes estaticas | max-age=86400 | 1 dia, CDN |
+
+---
+
+## Database performance
+
+### Indices: La clave
+
+\`\`\`sql
+-- Sin indice: Full table scan (lento)
+SELECT * FROM users WHERE email = 'test@example.com';
+-- Tiempo: 500ms en 1M rows
+
+-- Con indice: Index lookup (rapido)
+CREATE INDEX idx_users_email ON users(email);
+-- Tiempo: 2ms
+\`\`\`
+
+### EXPLAIN: Entiende tus queries
+
+\`\`\`sql
+EXPLAIN ANALYZE SELECT * FROM orders
+WHERE user_id = 123 AND created_at > '2024-01-01';
+
+-- Busca:
+-- - Seq Scan (malo en tablas grandes)
+-- - Index Scan (bueno)
+-- - Rows estimados vs reales
+\`\`\`
+
+### El problema N+1
+
+\`\`\`javascript
+// MAL: N+1 queries
+const users = await User.findAll();
+for (const user of users) {
+  user.orders = await Order.findByUser(user.id); // 1 query por user
+}
+// 1 + N queries
+
+// BIEN: Eager loading
+const users = await User.findAll({
+  include: [{ model: Order }]
+});
+// 1 query con JOIN
+\`\`\`
+
+---
+
+## Herramientas de profiling
+
+### Chrome DevTools
+
+1. **Performance tab:** Graba timeline de carga
+2. **Network tab:** Waterfall de requests
+3. **Lighthouse:** Auditoria completa
+
+### Que buscar en Performance tab
+
+\`\`\`
+Timeline:
+├── Loading (azul): Parsing HTML
+├── Scripting (amarillo): JavaScript
+├── Rendering (morado): Layout, style
+└── Painting (verde): Dibujando pixeles
+
+Si amarillo domina → Optimiza JS
+Si morado domina → Reduce reflows
+\`\`\`
+
+---
+
+## Checklist de performance
+
+### Antes del deploy
+
+- [ ] Lighthouse score > 90
+- [ ] LCP < 2.5s
+- [ ] Bundle size < 200KB (inicial)
+- [ ] Imagenes en WebP/AVIF
+- [ ] Lazy loading en imagenes below fold
+- [ ] Code splitting activo
+- [ ] Cache headers configurados
+
+### En produccion
+
+- [ ] CDN configurado
+- [ ] Gzip/Brotli activo
+- [ ] HTTP/2 habilitado
+- [ ] Indices en queries lentas
+- [ ] Monitoring de Core Web Vitals
+
+---
+
+## Recursos
+
+- [web.dev/performance](https://web.dev/performance/)
+- [Chrome DevTools Docs](https://developer.chrome.com/docs/devtools/)
+- [PageSpeed Insights](https://pagespeed.web.dev/)
+
+---
+
+## Practica
+
+-> [Auditoria de Performance](/es/cooking/performance-audit) - Optimiza una app lenta paso a paso
+    `,
+    contentEn: `
+## A slow restaurant loses customers
+
+Imagine a restaurant with the best food in the world, but where every dish takes 45 minutes. No matter how good it is, customers leave.
+
+Web applications are the same. Every second of load time can cost up to 7% in conversions.
+
+> **Performance isn't premature optimization. It's respect for the user's time.**
+
+---
+
+## Core Web Vitals: The metrics that matter
+
+Google measures 3 main metrics that affect SEO and experience:
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                   CORE WEB VITALS                       │
+├─────────────────┬─────────────────┬─────────────────────┤
+│      LCP        │      INP        │       CLS           │
+│   < 2.5s        │    < 200ms      │      < 0.1          │
+│                 │                 │                     │
+│  Largest        │  Interaction    │  Cumulative         │
+│  Contentful     │  to Next        │  Layout             │
+│  Paint          │  Paint          │  Shift              │
+│                 │                 │                     │
+│  "Fast load"    │ "Responsive"    │ "Visually stable"   │
+└─────────────────┴─────────────────┴─────────────────────┘
+\`\`\`
+
+| Metric | What it measures | Good | Bad |
+|--------|------------------|------|-----|
+| **LCP** | How long main content takes | < 2.5s | > 4s |
+| **INP** | Response to interactions | < 200ms | > 500ms |
+| **CLS** | How much layout shifts | < 0.1 | > 0.25 |
+
+---
+
+## The browser pipeline
+
+Understanding how the browser renders helps you optimize.
+
+\`\`\`
+HTML ──→ DOM
+          │
+CSS  ──→ CSSOM ──→ Render Tree ──→ Layout ──→ Paint ──→ Composite
+\`\`\`
+
+### What blocks rendering
+
+- **Synchronous JavaScript:** Blocks HTML parsing
+- **CSS in <head>:** Blocks render (but necessary)
+- **External fonts:** Can cause FOIT/FOUT
+
+---
+
+## JavaScript: The bottleneck
+
+### The Event Loop
+
+\`\`\`
+┌─────────────────────────────────────────────────┐
+│                  CALL STACK                      │
+│    (Executes synchronous code, one at a time)   │
+└─────────────────────────────────────────────────┘
+         ▲                         │
+         │                         ▼
+┌────────┴────────┐    ┌─────────────────────────┐
+│   TASK QUEUE    │    │    MICROTASK QUEUE      │
+│  (setTimeout,   │    │  (Promises, async/await)│
+│   events)       │    │  (Higher priority)      │
+└─────────────────┘    └─────────────────────────┘
+\`\`\`
+
+### Problem: Main thread blocking
+
+\`\`\`javascript
+// BAD: Blocks UI for 500ms
+function processData(items) {
+  items.forEach(item => heavyCalculation(item));
+}
+
+// GOOD: Divide into chunks
+async function processDataAsync(items) {
+  const chunkSize = 100;
+  for (let i = 0; i < items.length; i += chunkSize) {
+    const chunk = items.slice(i, i + chunkSize);
+    chunk.forEach(item => heavyCalculation(item));
+    await new Promise(r => setTimeout(r, 0)); // Yield to browser
+  }
+}
+\`\`\`
+
+---
+
+## Bundle optimization
+
+### Code Splitting
+
+\`\`\`javascript
+// Without splitting: everything loads at start
+import { Dashboard } from './Dashboard';
+import { Admin } from './Admin';
+import { Reports } from './Reports';
+
+// With splitting: loads on demand
+const Dashboard = lazy(() => import('./Dashboard'));
+const Admin = lazy(() => import('./Admin'));
+const Reports = lazy(() => import('./Reports'));
+\`\`\`
+
+### Tree Shaking
+
+\`\`\`javascript
+// BAD: Imports entire library (100KB)
+import _ from 'lodash';
+_.debounce(fn, 300);
+
+// GOOD: Only what you need (2KB)
+import debounce from 'lodash/debounce';
+debounce(fn, 300);
+\`\`\`
+
+---
+
+## Image optimization
+
+### Modern formats
+
+| Format | Use | Savings vs JPEG |
+|--------|-----|-----------------|
+| **WebP** | General, wide support | 25-35% |
+| **AVIF** | Best compression, less support | 50%+ |
+
+### Responsive images
+
+\`\`\`html
+<picture>
+  <source srcset="hero.avif" type="image/avif">
+  <source srcset="hero.webp" type="image/webp">
+  <img
+    src="hero.jpg"
+    alt="Hero"
+    loading="lazy"
+    width="1200"
+    height="600"
+  >
+</picture>
+\`\`\`
+
+### Next.js Image
+
+\`\`\`jsx
+import Image from 'next/image';
+
+<Image
+  src="/hero.jpg"
+  alt="Hero"
+  width={1200}
+  height={600}
+  priority // For above the fold images
+  placeholder="blur" // Loading effect
+/>
+\`\`\`
+
+---
+
+## Strategic caching
+
+### Cache levels
+
+\`\`\`
+User ──→ Browser Cache ──→ CDN Cache ──→ Server ──→ DB
+         (localStorage,     (Edge)        (Redis)
+          sessionStorage)
+\`\`\`
+
+### HTTP Cache Headers
+
+\`\`\`
+Cache-Control: public, max-age=31536000, immutable
+                │       │                 │
+                │       │                 └─ Don't revalidate
+                │       └─ 1 year in seconds
+                └─ CDN can cache
+\`\`\`
+
+### Strategy by resource type
+
+| Resource | Cache-Control | Why |
+|----------|---------------|-----|
+| JS/CSS with hash | max-age=31536000, immutable | Hash changes if file changes |
+| HTML | no-cache | Always validate with server |
+| Dynamic API | private, max-age=0 | Fresh data |
+| Static images | max-age=86400 | 1 day, CDN |
+
+---
+
+## Database performance
+
+### Indexes: The key
+
+\`\`\`sql
+-- Without index: Full table scan (slow)
+SELECT * FROM users WHERE email = 'test@example.com';
+-- Time: 500ms on 1M rows
+
+-- With index: Index lookup (fast)
+CREATE INDEX idx_users_email ON users(email);
+-- Time: 2ms
+\`\`\`
+
+### EXPLAIN: Understand your queries
+
+\`\`\`sql
+EXPLAIN ANALYZE SELECT * FROM orders
+WHERE user_id = 123 AND created_at > '2024-01-01';
+
+-- Look for:
+-- - Seq Scan (bad on large tables)
+-- - Index Scan (good)
+-- - Estimated vs actual rows
+\`\`\`
+
+### The N+1 problem
+
+\`\`\`javascript
+// BAD: N+1 queries
+const users = await User.findAll();
+for (const user of users) {
+  user.orders = await Order.findByUser(user.id); // 1 query per user
+}
+// 1 + N queries
+
+// GOOD: Eager loading
+const users = await User.findAll({
+  include: [{ model: Order }]
+});
+// 1 query with JOIN
+\`\`\`
+
+---
+
+## Profiling tools
+
+### Chrome DevTools
+
+1. **Performance tab:** Record load timeline
+2. **Network tab:** Request waterfall
+3. **Lighthouse:** Complete audit
+
+### What to look for in Performance tab
+
+\`\`\`
+Timeline:
+├── Loading (blue): Parsing HTML
+├── Scripting (yellow): JavaScript
+├── Rendering (purple): Layout, style
+└── Painting (green): Drawing pixels
+
+If yellow dominates → Optimize JS
+If purple dominates → Reduce reflows
+\`\`\`
+
+---
+
+## Performance checklist
+
+### Before deploy
+
+- [ ] Lighthouse score > 90
+- [ ] LCP < 2.5s
+- [ ] Bundle size < 200KB (initial)
+- [ ] Images in WebP/AVIF
+- [ ] Lazy loading on below fold images
+- [ ] Code splitting active
+- [ ] Cache headers configured
+
+### In production
+
+- [ ] CDN configured
+- [ ] Gzip/Brotli active
+- [ ] HTTP/2 enabled
+- [ ] Indexes on slow queries
+- [ ] Core Web Vitals monitoring
+
+---
+
+## Resources
+
+- [web.dev/performance](https://web.dev/performance/)
+- [Chrome DevTools Docs](https://developer.chrome.com/docs/devtools/)
+- [PageSpeed Insights](https://pagespeed.web.dev/)
+
+---
+
+## Practice
+
+-> [Performance Audit](/en/cooking/performance-audit) - Optimize a slow app step by step
+    `,
+  },
+  'networking': {
+    contentEs: `
+## Como viaja un mensaje por internet
+
+Imagina enviar una carta. No la tiras al aire esperando que llegue. La pones en un sobre con direccion, la llevas al correo, pasa por centros de distribucion, y finalmente llega.
+
+Internet funciona igual, pero en milisegundos.
+
+---
+
+## El modelo OSI simplificado
+
+7 capas es mucho. Piensa en 4:
+
+\`\`\`
+┌─────────────────────────────────────┐
+│  APLICACION  (HTTP, DNS, SMTP)      │ ← Tu codigo vive aqui
+├─────────────────────────────────────┤
+│  TRANSPORTE  (TCP, UDP)             │ ← Entrega confiable o rapida
+├─────────────────────────────────────┤
+│  RED         (IP, ICMP)             │ ← Direcciones y rutas
+├─────────────────────────────────────┤
+│  ENLACE      (Ethernet, WiFi)       │ ← Cables y ondas
+└─────────────────────────────────────┘
+\`\`\`
+
+---
+
+## TCP vs UDP
+
+### TCP: El cartero confiable
+
+\`\`\`
+Cliente                           Servidor
+   │                                 │
+   │──── SYN ─────────────────────→│
+   │←─── SYN-ACK ──────────────────│
+   │──── ACK ─────────────────────→│
+   │                                 │
+   │  (Conexion establecida)         │
+   │                                 │
+   │──── Datos ───────────────────→│
+   │←─── ACK ──────────────────────│
+\`\`\`
+
+- **Garantiza entrega:** Reintenta si se pierde
+- **Ordenado:** Llega en orden correcto
+- **Mas lento:** Por el handshake y confirmaciones
+
+**Usa TCP para:** HTTP, Email, archivos, cualquier cosa que no puede perder datos.
+
+### UDP: El mensajero rapido
+
+\`\`\`
+Cliente                           Servidor
+   │                                 │
+   │──── Datos ───────────────────→│
+   │──── Datos ───────────────────→│
+   │──── Datos ───────────────────→│
+   │                                 │
+   │  (Sin confirmacion)             │
+\`\`\`
+
+- **No garantiza:** Puede perder paquetes
+- **Sin orden:** Llegan como pueden
+- **Rapido:** Sin overhead de conexion
+
+**Usa UDP para:** Video streaming, juegos, DNS, VoIP.
+
+---
+
+## HTTP a fondo
+
+### Metodos y su semantica
+
+| Metodo | Uso | Idempotente | Body |
+|--------|-----|-------------|------|
+| **GET** | Obtener datos | Si | No |
+| **POST** | Crear recurso | No | Si |
+| **PUT** | Reemplazar completo | Si | Si |
+| **PATCH** | Modificar parcial | No | Si |
+| **DELETE** | Eliminar | Si | No |
+
+### Status codes que debes conocer
+
+\`\`\`
+2xx Exito
+├── 200 OK - Todo bien
+├── 201 Created - Recurso creado
+└── 204 No Content - Exito sin body
+
+3xx Redireccion
+├── 301 Moved Permanently - URL cambio para siempre
+├── 302 Found - Redireccion temporal
+└── 304 Not Modified - Usa tu cache
+
+4xx Error del cliente
+├── 400 Bad Request - Request mal formada
+├── 401 Unauthorized - Necesita autenticacion
+├── 403 Forbidden - Autenticado pero sin permiso
+├── 404 Not Found - Recurso no existe
+└── 429 Too Many Requests - Rate limited
+
+5xx Error del servidor
+├── 500 Internal Server Error - Bug en el server
+├── 502 Bad Gateway - Proxy no pudo conectar
+├── 503 Service Unavailable - Server sobrecargado
+└── 504 Gateway Timeout - Proxy timeout
+\`\`\`
+
+---
+
+## HTTPS y TLS
+
+### El handshake TLS
+
+\`\`\`
+Cliente                           Servidor
+   │                                 │
+   │──── ClientHello ─────────────→│ (versiones TLS, ciphers)
+   │←─── ServerHello ──────────────│ (certificado, cipher elegido)
+   │                                 │
+   │     (Verifica certificado)      │
+   │                                 │
+   │──── Key Exchange ────────────→│ (genera clave de sesion)
+   │←─── Finished ─────────────────│
+   │                                 │
+   │  === Conexion encriptada ===    │
+\`\`\`
+
+### Verificar un certificado
+
+\`\`\`bash
+# Ver certificado de un sitio
+openssl s_client -connect google.com:443 -servername google.com 2>/dev/null | openssl x509 -text -noout
+
+# Ver fechas de expiracion
+echo | openssl s_client -connect luxia.us:443 2>/dev/null | openssl x509 -dates -noout
+\`\`\`
+
+---
+
+## DNS: El directorio telefonico
+
+\`\`\`
+Tu navegador pide: luxia.us
+
+1. Cache local (tu maquina)
+2. Router cache
+3. ISP DNS resolver
+4. Root DNS (.us)
+5. TLD DNS (luxia.us)
+6. Authoritative DNS → IP: 123.45.67.89
+\`\`\`
+
+### Comandos utiles
+
+\`\`\`bash
+# Resolver dominio
+nslookup luxia.us
+
+# Mas detalle
+dig luxia.us
+
+# Ver todos los registros
+dig luxia.us ANY
+
+# Trazar la resolucion
+dig +trace luxia.us
+\`\`\`
+
+---
+
+## WebSockets: Comunicacion bidireccional
+
+HTTP es request-response. WebSocket es un canal abierto.
+
+\`\`\`
+HTTP tradicional:
+Cliente ──request──→ Servidor
+Cliente ←─response─ Servidor
+Cliente ──request──→ Servidor
+Cliente ←─response─ Servidor
+
+WebSocket:
+Cliente ←──────────→ Servidor
+         Canal abierto, ambos
+         pueden enviar cuando quieran
+\`\`\`
+
+### Cuando usar WebSocket
+
+- Chat en tiempo real
+- Notificaciones push
+- Juegos multiplayer
+- Colaboracion en vivo (Google Docs)
+- Actualizaciones de precio (trading)
+
+---
+
+## CORS: Por que existe
+
+Los navegadores bloquean requests de un origen a otro por seguridad.
+
+\`\`\`
+https://mi-app.com       https://api.otro.com
+       │                         │
+       │──── fetch() ──────────→│
+       │                         │
+       │  BLOQUEADO por CORS     │
+       │  (a menos que api.otro  │
+       │   lo permita)           │
+\`\`\`
+
+### Headers CORS
+
+\`\`\`javascript
+// En tu servidor Express
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://mi-app.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+\`\`\`
+
+---
+
+## Herramientas de debugging
+
+### curl: Navaja suiza de HTTP
+
+\`\`\`bash
+# GET basico
+curl https://api.example.com/users
+
+# Con headers
+curl -H "Authorization: Bearer TOKEN" https://api.example.com/me
+
+# POST con JSON
+curl -X POST -H "Content-Type: application/json" \\
+  -d '{"name":"John"}' https://api.example.com/users
+
+# Ver headers de respuesta
+curl -I https://example.com
+
+# Ver todo el intercambio
+curl -v https://example.com
+
+# Medir tiempos
+curl -w "@curl-format.txt" -o /dev/null -s https://example.com
+\`\`\`
+
+### ping y traceroute
+
+\`\`\`bash
+# Verificar conectividad
+ping google.com
+
+# Ver ruta de paquetes
+traceroute google.com  # Linux/Mac
+tracert google.com     # Windows
+\`\`\`
+
+### netstat/ss: Conexiones activas
+
+\`\`\`bash
+# Ver puertos escuchando
+ss -tlnp   # Linux
+netstat -an | grep LISTEN  # Mac
+
+# Ver conexiones establecidas
+ss -tn
+\`\`\`
+
+---
+
+## Puertos comunes
+
+| Puerto | Servicio | Notas |
+|--------|----------|-------|
+| 22 | SSH | Acceso remoto seguro |
+| 80 | HTTP | Web sin encriptar |
+| 443 | HTTPS | Web encriptada |
+| 3000 | Dev servers | Node, Rails, etc. |
+| 5432 | PostgreSQL | Base de datos |
+| 6379 | Redis | Cache |
+| 27017 | MongoDB | Base de datos |
+
+---
+
+## CDN: Contenido cerca del usuario
+
+\`\`\`
+Sin CDN:
+Usuario (Mexico) ──────────────→ Servidor (USA)
+                   200ms
+
+Con CDN:
+Usuario (Mexico) ──→ Edge (Mexico)
+                   20ms
+
+El contenido estatico se replica en edges
+alrededor del mundo.
+\`\`\`
+
+---
+
+## Recursos
+
+- [MDN HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
+- [High Performance Browser Networking](https://hpbn.co/)
+- [Cloudflare Learning Center](https://www.cloudflare.com/learning/)
+
+---
+
+## Practica
+
+-> [Network Debugging](/es/cooking/network-debugging) - Diagnostica problemas de red reales
+    `,
+    contentEn: `
+## How a message travels through the internet
+
+Imagine sending a letter. You don't throw it in the air hoping it arrives. You put it in an envelope with an address, take it to the post office, it goes through distribution centers, and finally arrives.
+
+The internet works the same, but in milliseconds.
+
+---
+
+## The simplified OSI model
+
+7 layers is too much. Think of 4:
+
+\`\`\`
+┌─────────────────────────────────────┐
+│  APPLICATION (HTTP, DNS, SMTP)      │ ← Your code lives here
+├─────────────────────────────────────┤
+│  TRANSPORT   (TCP, UDP)             │ ← Reliable or fast delivery
+├─────────────────────────────────────┤
+│  NETWORK     (IP, ICMP)             │ ← Addresses and routes
+├─────────────────────────────────────┤
+│  LINK        (Ethernet, WiFi)       │ ← Cables and waves
+└─────────────────────────────────────┘
+\`\`\`
+
+---
+
+## TCP vs UDP
+
+### TCP: The reliable postman
+
+\`\`\`
+Client                              Server
+   │                                 │
+   │──── SYN ─────────────────────→│
+   │←─── SYN-ACK ──────────────────│
+   │──── ACK ─────────────────────→│
+   │                                 │
+   │  (Connection established)       │
+   │                                 │
+   │──── Data ────────────────────→│
+   │←─── ACK ──────────────────────│
+\`\`\`
+
+- **Guarantees delivery:** Retries if lost
+- **Ordered:** Arrives in correct order
+- **Slower:** Due to handshake and confirmations
+
+**Use TCP for:** HTTP, Email, files, anything that can't lose data.
+
+### UDP: The fast messenger
+
+\`\`\`
+Client                              Server
+   │                                 │
+   │──── Data ────────────────────→│
+   │──── Data ────────────────────→│
+   │──── Data ────────────────────→│
+   │                                 │
+   │  (No confirmation)              │
+\`\`\`
+
+- **No guarantees:** Can lose packets
+- **Unordered:** Arrive as they can
+- **Fast:** No connection overhead
+
+**Use UDP for:** Video streaming, games, DNS, VoIP.
+
+---
+
+## HTTP deep dive
+
+### Methods and their semantics
+
+| Method | Use | Idempotent | Body |
+|--------|-----|------------|------|
+| **GET** | Get data | Yes | No |
+| **POST** | Create resource | No | Yes |
+| **PUT** | Replace complete | Yes | Yes |
+| **PATCH** | Modify partial | No | Yes |
+| **DELETE** | Delete | Yes | No |
+
+### Status codes you should know
+
+\`\`\`
+2xx Success
+├── 200 OK - All good
+├── 201 Created - Resource created
+└── 204 No Content - Success without body
+
+3xx Redirection
+├── 301 Moved Permanently - URL changed forever
+├── 302 Found - Temporary redirect
+└── 304 Not Modified - Use your cache
+
+4xx Client Error
+├── 400 Bad Request - Malformed request
+├── 401 Unauthorized - Needs authentication
+├── 403 Forbidden - Authenticated but no permission
+├── 404 Not Found - Resource doesn't exist
+└── 429 Too Many Requests - Rate limited
+
+5xx Server Error
+├── 500 Internal Server Error - Bug in server
+├── 502 Bad Gateway - Proxy couldn't connect
+├── 503 Service Unavailable - Server overloaded
+└── 504 Gateway Timeout - Proxy timeout
+\`\`\`
+
+---
+
+## HTTPS and TLS
+
+### The TLS handshake
+
+\`\`\`
+Client                              Server
+   │                                 │
+   │──── ClientHello ─────────────→│ (TLS versions, ciphers)
+   │←─── ServerHello ──────────────│ (certificate, chosen cipher)
+   │                                 │
+   │     (Verify certificate)        │
+   │                                 │
+   │──── Key Exchange ────────────→│ (generate session key)
+   │←─── Finished ─────────────────│
+   │                                 │
+   │  === Encrypted connection ===   │
+\`\`\`
+
+### Verify a certificate
+
+\`\`\`bash
+# See site certificate
+openssl s_client -connect google.com:443 -servername google.com 2>/dev/null | openssl x509 -text -noout
+
+# See expiration dates
+echo | openssl s_client -connect luxia.us:443 2>/dev/null | openssl x509 -dates -noout
+\`\`\`
+
+---
+
+## DNS: The phone book
+
+\`\`\`
+Your browser asks for: luxia.us
+
+1. Local cache (your machine)
+2. Router cache
+3. ISP DNS resolver
+4. Root DNS (.us)
+5. TLD DNS (luxia.us)
+6. Authoritative DNS → IP: 123.45.67.89
+\`\`\`
+
+### Useful commands
+
+\`\`\`bash
+# Resolve domain
+nslookup luxia.us
+
+# More detail
+dig luxia.us
+
+# See all records
+dig luxia.us ANY
+
+# Trace resolution
+dig +trace luxia.us
+\`\`\`
+
+---
+
+## WebSockets: Bidirectional communication
+
+HTTP is request-response. WebSocket is an open channel.
+
+\`\`\`
+Traditional HTTP:
+Client ──request──→ Server
+Client ←─response─ Server
+Client ──request──→ Server
+Client ←─response─ Server
+
+WebSocket:
+Client ←──────────→ Server
+         Open channel, both
+         can send whenever they want
+\`\`\`
+
+### When to use WebSocket
+
+- Real-time chat
+- Push notifications
+- Multiplayer games
+- Live collaboration (Google Docs)
+- Price updates (trading)
+
+---
+
+## CORS: Why it exists
+
+Browsers block requests from one origin to another for security.
+
+\`\`\`
+https://my-app.com       https://api.other.com
+       │                         │
+       │──── fetch() ──────────→│
+       │                         │
+       │  BLOCKED by CORS        │
+       │  (unless api.other      │
+       │   allows it)            │
+\`\`\`
+
+### CORS Headers
+
+\`\`\`javascript
+// In your Express server
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://my-app.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+\`\`\`
+
+---
+
+## Debugging tools
+
+### curl: HTTP Swiss army knife
+
+\`\`\`bash
+# Basic GET
+curl https://api.example.com/users
+
+# With headers
+curl -H "Authorization: Bearer TOKEN" https://api.example.com/me
+
+# POST with JSON
+curl -X POST -H "Content-Type: application/json" \\
+  -d '{"name":"John"}' https://api.example.com/users
+
+# See response headers
+curl -I https://example.com
+
+# See full exchange
+curl -v https://example.com
+
+# Measure times
+curl -w "@curl-format.txt" -o /dev/null -s https://example.com
+\`\`\`
+
+### ping and traceroute
+
+\`\`\`bash
+# Check connectivity
+ping google.com
+
+# See packet route
+traceroute google.com  # Linux/Mac
+tracert google.com     # Windows
+\`\`\`
+
+### netstat/ss: Active connections
+
+\`\`\`bash
+# See listening ports
+ss -tlnp   # Linux
+netstat -an | grep LISTEN  # Mac
+
+# See established connections
+ss -tn
+\`\`\`
+
+---
+
+## Common ports
+
+| Port | Service | Notes |
+|------|---------|-------|
+| 22 | SSH | Secure remote access |
+| 80 | HTTP | Unencrypted web |
+| 443 | HTTPS | Encrypted web |
+| 3000 | Dev servers | Node, Rails, etc. |
+| 5432 | PostgreSQL | Database |
+| 6379 | Redis | Cache |
+| 27017 | MongoDB | Database |
+
+---
+
+## CDN: Content close to the user
+
+\`\`\`
+Without CDN:
+User (Mexico) ────────────────→ Server (USA)
+                   200ms
+
+With CDN:
+User (Mexico) ──→ Edge (Mexico)
+                   20ms
+
+Static content is replicated to edges
+around the world.
+\`\`\`
+
+---
+
+## Resources
+
+- [MDN HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
+- [High Performance Browser Networking](https://hpbn.co/)
+- [Cloudflare Learning Center](https://www.cloudflare.com/learning/)
+
+---
+
+## Practice
+
+-> [Network Debugging](/en/cooking/network-debugging) - Diagnose real network problems
+    `,
+  },
 }
 
 // Mapear slugs alternativos
@@ -13989,6 +15962,9 @@ const sectionDescriptions: Record<string, { es: string; en: string }> = {
   agents: { es: 'Agentes IA autónomos: LangChain, AutoGen, CrewAI. Crea agentes que ejecutan tareas.', en: 'Autonomous AI agents: LangChain, AutoGen, CrewAI. Create agents that execute tasks.' },
   vision: { es: 'Vision y Multimodal: procesamiento de imágenes y video con IA. OCR, clasificación, detección.', en: 'Vision and Multimodal: image and video processing with AI. OCR, classification, detection.' },
   security: { es: 'Seguridad de aplicaciones web: OWASP Top 10, SQL Injection, XSS, CSRF, autenticación segura y headers de seguridad.', en: 'Web application security: OWASP Top 10, SQL Injection, XSS, CSRF, secure authentication and security headers.' },
+  'system-design': { es: 'Diseño de sistemas: monolitos vs microservicios, CAP theorem, escalabilidad, load balancers, caching y message queues.', en: 'System design: monoliths vs microservices, CAP theorem, scalability, load balancers, caching and message queues.' },
+  'performance': { es: 'Performance web: Core Web Vitals, optimización de bundles, caching, imágenes, database queries y profiling.', en: 'Web performance: Core Web Vitals, bundle optimization, caching, images, database queries and profiling.' },
+  'networking': { es: 'Redes y protocolos: TCP/UDP, HTTP/HTTPS, DNS, WebSockets, CORS, debugging de red y herramientas CLI.', en: 'Networking and protocols: TCP/UDP, HTTP/HTTPS, DNS, WebSockets, CORS, network debugging and CLI tools.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; section: string }> }): Promise<Metadata> {

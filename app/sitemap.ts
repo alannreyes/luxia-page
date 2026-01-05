@@ -1,34 +1,61 @@
 import { MetadataRoute } from 'next'
 
-// Learning sections (30 temas)
+// Learning sections (38 temas)
 const learningSections = [
+  // Aprendiz
   'terminal', 'git', 'editors', 'homebrew', 'docker-intro', 'llms-intro', 'llms-models',
+  // Cocinero
   'javascript', 'nodejs', 'python', 'html-css', 'react', 'apis', 'embeddings',
-  'git-advanced', 'nextjs', 'auth', 'webhooks', 'nestjs', 'postgresql', 'redis', 'docker-compose', 'cicd', 'mobile', 'iot',
+  // Chef
+  'system-design', 'performance', 'networking', 'git-advanced', 'nextjs', 'auth', 'webhooks',
+  'nestjs', 'postgresql', 'redis', 'docker-compose', 'docker-networks', 'docker-storage',
+  'ssl-certificates', 'server-security', 'security', 'testing', 'observability', 'cicd', 'mobile', 'iot',
+  // Master Chef
   'vector-db', 'rag', 'mcp', 'agents', 'vision'
 ]
 
-// Cooking dishes (57 platillos)
+// Cooking dishes (60 platillos)
 const cookingDishes = [
+  // Chatbots
   'chatbot-gemini', 'chatbot-claude', 'chatbot-openai', 'chatbot-ollama',
+  // APIs
   'api-rest-node', 'api-rest-python', 'api-graphql',
+  // Landing & Portfolio
   'landing-react', 'landing-nextjs', 'portfolio-dev',
+  // Scraping & Extraction
   'scraper-basic', 'scraper-puppeteer', 'pdf-extractor',
+  // Auth
   'auth-firebase', 'auth-nextauth', 'auth-jwt',
+  // Deploy
   'deploy-vercel', 'deploy-docker', 'deploy-vps',
+  // Databases
   'db-postgres', 'db-mongodb', 'db-redis',
+  // Webhooks
   'webhook-stripe', 'webhook-github', 'webhook-whatsapp',
+  // N8N
   'n8n-intro', 'n8n-openai', 'n8n-sheets',
+  // RAG
   'rag-basic', 'rag-qdrant', 'rag-pinecone',
+  // Agents
   'agent-langchain', 'agent-autogen', 'agent-crewai',
+  // Vision
   'vision-ocr', 'vision-classify', 'vision-detect',
+  // Voice
   'voice-whisper', 'voice-tts', 'voice-assistant',
+  // Embeddings
   'embeddings-basic', 'embeddings-search', 'embeddings-recommendations',
+  // Mobile
   'mobile-expo', 'mobile-react-native', 'mobile-pwa',
+  // IoT
   'iot-arduino', 'iot-raspberry', 'iot-esp32',
+  // MCP
   'mcp-server', 'mcp-tools', 'mcp-integration',
+  // AI Tools
   'claude-code-intro', 'cursor-intro', 'copilot-intro',
-  'testing-jest', 'testing-playwright', 'cicd-github-actions'
+  // Testing & CI/CD
+  'testing-jest', 'testing-playwright', 'cicd-github-actions',
+  // Ola 2: Architecture, Performance, Networking
+  'architecture-workshop', 'performance-audit', 'network-debugging'
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {

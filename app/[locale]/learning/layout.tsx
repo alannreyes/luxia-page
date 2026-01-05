@@ -22,6 +22,9 @@ const sections = [
   { slug: 'embeddings', titleEs: 'Embeddings', titleEn: 'Embeddings', level: 'cocinero', icon: '🧮' },
 
   // CHEF (Fullstack)
+  { slug: 'system-design', titleEs: 'Diseño de Sistemas', titleEn: 'System Design', level: 'chef', icon: '🏗️' },
+  { slug: 'performance', titleEs: 'Performance & Optimización', titleEn: 'Performance & Optimization', level: 'chef', icon: '⚡' },
+  { slug: 'networking', titleEs: 'Redes & Protocolos', titleEn: 'Networking & Protocols', level: 'chef', icon: '🌐' },
   { slug: 'git-advanced', titleEs: 'Git Avanzado & Colaboración', titleEn: 'Advanced Git & Collaboration', level: 'chef', icon: '🔀' },
   { slug: 'nextjs', titleEs: 'Next.js', titleEn: 'Next.js', level: 'chef', icon: '▲' },
   { slug: 'auth', titleEs: 'Autenticación', titleEn: 'Authentication', level: 'chef', icon: '🔐' },

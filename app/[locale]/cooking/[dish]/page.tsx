@@ -63,6 +63,9 @@ const dishes = [
   { slug: 'monitoring-stack', titleEs: 'Stack de Monitoreo', titleEn: 'Monitoring Stack', level: 'chef', icon: '📈' },
   { slug: 'testing-fullstack', titleEs: 'Testing Fullstack', titleEn: 'Fullstack Testing', level: 'chef', icon: '🧪' },
   { slug: 'security-hardening', titleEs: 'Hardening de Seguridad', titleEn: 'Security Hardening', level: 'chef', icon: '🔐' },
+  { slug: 'architecture-workshop', titleEs: 'Workshop de Arquitectura', titleEn: 'Architecture Workshop', level: 'chef', icon: '🏗️' },
+  { slug: 'performance-audit', titleEs: 'Auditoría de Performance', titleEn: 'Performance Audit', level: 'chef', icon: '⚡' },
+  { slug: 'network-debugging', titleEs: 'Debugging de Redes', titleEn: 'Network Debugging', level: 'chef', icon: '🌐' },
   // ===== MASTER CHEF: IA avanzada y arquitectura =====
   { slug: 'rag-documents', titleEs: 'RAG con Documentos PDF', titleEn: 'RAG with PDF Documents', level: 'master', icon: '📚' },
   { slug: 'vector-search', titleEs: 'Búsqueda Vectorial', titleEn: 'Vector Search', level: 'master', icon: '🔍' },
@@ -18384,6 +18387,4214 @@ You've completed all levels of luxIA Cooking.
 You now have the skills to build real products with AI.
 
 → [Back to start](/en/cooking)
+    `,
+  },
+  'architecture-workshop': {
+    timeEs: '90 minutos',
+    timeEn: '90 minutes',
+    prerequisitesEs: ['Conocimientos básicos de backend', 'Entender APIs REST', 'Familiaridad con bases de datos'],
+    prerequisitesEn: ['Basic backend knowledge', 'Understanding of REST APIs', 'Familiarity with databases'],
+    contentEs: `
+# Taller de Arquitectura: Diseña un Acortador de URLs
+
+Bienvenido a este taller práctico donde diseñarás la arquitectura de un sistema real.
+
+No vamos a solo leer teoría. Vamos a **pensar**, **decidir** y **construir**.
+
+---
+
+## El Problema
+
+Tu cliente quiere un servicio como **bit.ly**:
+
+- Usuarios ingresan una URL larga
+- Reciben una URL corta (ej: \`luxia.us/abc123\`)
+- Al visitar la URL corta, redirige a la original
+
+Suena simple, ¿verdad? Veamos qué tan profundo llega el agujero del conejo.
+
+---
+
+## Paso 1: Requerimientos
+
+Antes de escribir código, necesitamos entender qué estamos construyendo.
+
+### Requerimientos Funcionales
+
+**Piensa primero**: ¿Qué debería poder hacer el usuario?
+
+<details>
+<summary>Ver respuesta</summary>
+
+1. Crear una URL corta a partir de una larga
+2. Redirigir automáticamente al visitar la URL corta
+3. (Opcional) Ver estadísticas de clics
+4. (Opcional) URLs personalizadas (ej: \`luxia.us/mi-link\`)
+5. (Opcional) Expiración de URLs
+
+</details>
+
+### Requerimientos No Funcionales
+
+**Piensa primero**: ¿Qué características de rendimiento necesitamos?
+
+<details>
+<summary>Ver respuesta</summary>
+
+1. **Alta disponibilidad**: El servicio debe estar siempre activo
+2. **Baja latencia**: Redirecciones en < 100ms
+3. **Escalable**: Millones de URLs sin degradación
+4. **Durabilidad**: Las URLs no deben perderse
+
+</details>
+
+---
+
+## Paso 2: Estimación de Capacidad
+
+Esta es la parte que separa a los ingenieros junior de los senior.
+
+### Supongamos:
+- 100 millones de URLs creadas por mes
+- Ratio lectura:escritura de 100:1 (100 lecturas por cada URL creada)
+
+### Cálculos
+
+**URLs por segundo (escritura)**:
+\`\`\`
+100M / 30 días / 24 horas / 3600 segundos ≈ 40 URLs/segundo
+\`\`\`
+
+**Lecturas por segundo**:
+\`\`\`
+40 × 100 = 4,000 lecturas/segundo
+\`\`\`
+
+### Almacenamiento (5 años)
+
+**Piensa primero**: ¿Cuánto espacio necesitamos?
+
+<details>
+<summary>Ver cálculo</summary>
+
+- URLs por mes: 100M
+- URLs en 5 años: 100M × 12 × 5 = 6 mil millones
+- Tamaño promedio por registro: ~500 bytes (URL + metadata)
+- **Total: 6B × 500B = 3TB**
+
+No es tanto. Un disco moderno lo maneja.
+
+</details>
+
+---
+
+## Paso 3: Diseño de la API
+
+Mantengámoslo simple con REST.
+
+### Endpoints
+
+\`\`\`
+POST /api/shorten
+Body: { "url": "https://ejemplo.com/pagina-muy-larga" }
+Response: { "shortUrl": "https://luxia.us/abc123", "code": "abc123" }
+
+GET /:code
+Response: 301 Redirect to original URL
+\`\`\`
+
+### ¿Por qué 301 y no 302?
+
+**Piensa primero**: ¿Cuál es la diferencia?
+
+<details>
+<summary>Ver respuesta</summary>
+
+- **301 (Moved Permanently)**: El navegador cachea la redirección
+- **302 (Found)**: Cada visita pasa por nuestro servidor
+
+Para un acortador de URLs, **302 es mejor** si queremos:
+- Contar cada visita
+- Poder cambiar la URL destino
+- Agregar expiración
+
+Para máximo rendimiento (menos carga): **301**
+
+</details>
+
+---
+
+## Paso 4: Esquema de Base de Datos
+
+### Opción 1: SQL (PostgreSQL)
+
+\`\`\`sql
+CREATE TABLE urls (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(10) UNIQUE NOT NULL,
+    original_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    expires_at TIMESTAMP,
+    click_count BIGINT DEFAULT 0
+);
+
+CREATE INDEX idx_urls_code ON urls(code);
+\`\`\`
+
+### Opción 2: NoSQL (MongoDB)
+
+\`\`\`javascript
+{
+    _id: ObjectId,
+    code: "abc123",
+    originalUrl: "https://...",
+    createdAt: ISODate,
+    expiresAt: ISODate,
+    clicks: 0
+}
+\`\`\`
+
+### ¿Cuál elegirías?
+
+**Piensa primero**: ¿Qué factores considerarías?
+
+<details>
+<summary>Ver análisis</summary>
+
+**Para este caso, SQL es probablemente mejor:**
+
+1. Esquema simple y fijo
+2. Necesitamos transacciones para evitar colisiones
+3. Las consultas son simples (solo por código)
+4. PostgreSQL escala muy bien hasta millones de registros
+
+**NoSQL sería mejor si:**
+- Esquema variable por URL
+- Necesitas sharding horizontal desde el inicio
+- Tienes experiencia con MongoDB
+
+</details>
+
+---
+
+## Paso 5: Algoritmo de Codificación
+
+El corazón del sistema: ¿cómo generamos el código corto?
+
+### Opción A: Base62 con ID
+
+\`\`\`javascript
+const CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+function toBase62(num) {
+    if (num === 0) return CHARS[0]
+    let result = ''
+    while (num > 0) {
+        result = CHARS[num % 62] + result
+        num = Math.floor(num / 62)
+    }
+    return result
+}
+
+// Ejemplo:
+// toBase62(1) = "1"
+// toBase62(62) = "10"
+// toBase62(1000000) = "4c92"
+\`\`\`
+
+**Con 6 caracteres**: 62^6 = 56 mil millones de URLs posibles
+
+### Opción B: Hash + Truncado
+
+\`\`\`javascript
+const crypto = require('crypto')
+
+function generateCode(url) {
+    const hash = crypto.createHash('md5').update(url).digest('base64')
+    return hash.substring(0, 7).replace(/[+/=]/g, 'x')
+}
+\`\`\`
+
+### ¿Cuál tiene menos colisiones?
+
+**Piensa primero**: ¿Cuál elegirías y por qué?
+
+<details>
+<summary>Ver análisis</summary>
+
+**Base62 con ID auto-incremental:**
+- ✅ Cero colisiones (cada ID es único)
+- ✅ Predecible y eficiente
+- ❌ Revela cuántas URLs existen (ID 1000 = mil URLs)
+- ❌ Fácil de enumerar URLs
+
+**Hash truncado:**
+- ✅ No revela información del sistema
+- ✅ Mismo input = mismo output (útil para deduplicación)
+- ❌ Posibles colisiones (hay que verificar)
+- ❌ Más procesamiento
+
+**Solución híbrida**: Base62 con ID + offset aleatorio
+
+\`\`\`javascript
+const OFFSET = 100000000 // Número aleatorio grande
+const code = toBase62(id + OFFSET)
+\`\`\`
+
+</details>
+
+---
+
+## Paso 6: Manejo de Colisiones
+
+Si usamos hash, necesitamos manejar colisiones.
+
+\`\`\`javascript
+async function createShortUrl(originalUrl) {
+    let code = generateCode(originalUrl)
+    let attempts = 0
+
+    while (attempts < 5) {
+        const existing = await db.findByCode(code)
+
+        if (!existing) {
+            // Código disponible
+            await db.insert({ code, originalUrl })
+            return code
+        }
+
+        if (existing.originalUrl === originalUrl) {
+            // Misma URL, reutilizar código
+            return code
+        }
+
+        // Colisión: agregar sufijo y reintentar
+        code = generateCode(originalUrl + Date.now() + attempts)
+        attempts++
+    }
+
+    throw new Error('No se pudo generar código único')
+}
+\`\`\`
+
+---
+
+## Paso 7: Estrategia de Caché
+
+Con 4,000 lecturas/segundo, necesitamos caché.
+
+### Redis al Rescate
+
+\`\`\`javascript
+const Redis = require('ioredis')
+const redis = new Redis()
+
+async function getOriginalUrl(code) {
+    // Primero buscar en caché
+    const cached = await redis.get(\`url:\${code}\`)
+    if (cached) {
+        return cached
+    }
+
+    // Si no está, buscar en DB
+    const url = await db.findByCode(code)
+    if (url) {
+        // Guardar en caché por 1 hora
+        await redis.setex(\`url:\${code}\`, 3600, url.originalUrl)
+        return url.originalUrl
+    }
+
+    return null
+}
+\`\`\`
+
+### ¿Qué URLs cachear?
+
+**Piensa primero**: ¿Cacheamos todo?
+
+<details>
+<summary>Ver estrategia</summary>
+
+**No todo merece caché:**
+
+1. **URLs populares** (> 10 clics/hora): Caché largo (1 hora)
+2. **URLs nuevas**: Caché corto (5 minutos)
+3. **URLs expiradas**: No cachear
+
+**Implementación con LRU:**
+
+\`\`\`javascript
+// Redis con límite de memoria
+// maxmemory 1gb
+// maxmemory-policy allkeys-lru
+\`\`\`
+
+Esto mantiene las URLs más accedidas en caché automáticamente.
+
+</details>
+
+---
+
+## Paso 8: Rate Limiting
+
+Protégete de abusos.
+
+\`\`\`javascript
+const rateLimit = require('express-rate-limit')
+
+// Limitar creación de URLs
+const createLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100, // 100 URLs por ventana
+    message: { error: 'Demasiadas URLs creadas. Intenta más tarde.' }
+})
+
+// Limitar redirecciones (anti-bot)
+const redirectLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minuto
+    max: 1000, // 1000 redirecciones
+    message: 'Rate limit exceeded'
+})
+
+app.post('/api/shorten', createLimiter, shortenHandler)
+app.get('/:code', redirectLimiter, redirectHandler)
+\`\`\`
+
+---
+
+## Paso 9: Discusión de Escalabilidad
+
+### Escenario: 1,000 requests/día
+
+**¿Qué necesitas?**
+
+- Un servidor básico (1 CPU, 1GB RAM)
+- PostgreSQL local
+- Sin caché necesario
+
+### Escenario: 100,000 requests/día
+
+**¿Qué cambia?**
+
+<details>
+<summary>Ver respuesta</summary>
+
+- Agregar Redis para caché
+- Servidor con más recursos (2 CPU, 4GB RAM)
+- Considerar réplica de lectura para DB
+
+</details>
+
+### Escenario: 1,000,000 requests/día
+
+**¿Qué cambia?**
+
+<details>
+<summary>Ver respuesta</summary>
+
+- **Load Balancer** (Nginx o AWS ALB)
+- **Múltiples servidores** de aplicación
+- **Redis Cluster** para caché distribuido
+- **Réplicas de lectura** para PostgreSQL
+- Considerar **CDN** para redirecciones estáticas
+
+</details>
+
+### Escenario: 100,000,000 requests/día
+
+**Arquitectura empresarial:**
+
+<details>
+<summary>Ver respuesta</summary>
+
+- **Sharding de base de datos** por rango de código
+- **Múltiples regiones** geográficas
+- **CDN edge workers** para redirecciones
+- **Kafka/RabbitMQ** para analytics async
+- **Kubernetes** para orquestación
+
+</details>
+
+---
+
+## Diagrama de Arquitectura
+
+\`\`\`
+                                    ┌─────────────────┐
+                                    │      CDN        │
+                                    │   (CloudFlare)  │
+                                    └────────┬────────┘
+                                             │
+                                    ┌────────▼────────┐
+                                    │  Load Balancer  │
+                                    │     (Nginx)     │
+                                    └────────┬────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+           ┌────────▼────────┐      ┌────────▼────────┐      ┌────────▼────────┐
+           │   App Server    │      │   App Server    │      │   App Server    │
+           │   (Node.js)     │      │   (Node.js)     │      │   (Node.js)     │
+           └────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+                    │                        │                        │
+                    └────────────────────────┼────────────────────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+           ┌────────▼────────┐      ┌────────▼────────┐      ┌────────▼────────┐
+           │     Redis       │      │   PostgreSQL    │      │   PostgreSQL    │
+           │    (Caché)      │      │    (Primary)    │      │   (Replica)     │
+           └─────────────────┘      └─────────────────┘      └─────────────────┘
+\`\`\`
+
+---
+
+## Implementación: Código Inicial
+
+### Estructura del Proyecto
+
+\`\`\`
+url-shortener/
+├── docker-compose.yml
+├── package.json
+├── src/
+│   ├── index.js
+│   ├── routes/
+│   │   └── urls.js
+│   ├── services/
+│   │   ├── urlService.js
+│   │   └── cacheService.js
+│   └── db/
+│       └── postgres.js
+└── .env.example
+\`\`\`
+
+### docker-compose.yml
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/urlshortener
+      - REDIS_URL=redis://cache:6379
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: urlshortener
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  cache:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+\`\`\`
+
+### src/index.js
+
+\`\`\`javascript
+const express = require('express')
+const { Pool } = require('pg')
+const Redis = require('ioredis')
+
+const app = express()
+app.use(express.json())
+
+// Conexiones
+const db = new Pool({ connectionString: process.env.DATABASE_URL })
+const redis = new Redis(process.env.REDIS_URL)
+
+// Base62 encoding
+const CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const toBase62 = (num) => {
+    if (num === 0) return CHARS[0]
+    let result = ''
+    while (num > 0) {
+        result = CHARS[num % 62] + result
+        num = Math.floor(num / 62)
+    }
+    return result
+}
+
+// POST /api/shorten - Crear URL corta
+app.post('/api/shorten', async (req, res) => {
+    try {
+        const { url } = req.body
+
+        if (!url || !url.startsWith('http')) {
+            return res.status(400).json({ error: 'URL inválida' })
+        }
+
+        // Insertar y obtener ID
+        const result = await db.query(
+            'INSERT INTO urls (original_url) VALUES ($1) RETURNING id',
+            [url]
+        )
+
+        const code = toBase62(result.rows[0].id + 10000000)
+
+        // Actualizar con el código
+        await db.query('UPDATE urls SET code = $1 WHERE id = $2', [code, result.rows[0].id])
+
+        // Cachear
+        await redis.setex(\`url:\${code}\`, 3600, url)
+
+        res.json({
+            shortUrl: \`\${process.env.BASE_URL || 'http://localhost:3000'}/\${code}\`,
+            code
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Error interno' })
+    }
+})
+
+// GET /:code - Redireccionar
+app.get('/:code', async (req, res) => {
+    try {
+        const { code } = req.params
+
+        // Buscar en caché
+        let originalUrl = await redis.get(\`url:\${code}\`)
+
+        if (!originalUrl) {
+            // Buscar en DB
+            const result = await db.query(
+                'SELECT original_url FROM urls WHERE code = $1',
+                [code]
+            )
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'URL no encontrada' })
+            }
+
+            originalUrl = result.rows[0].original_url
+
+            // Cachear para próximas visitas
+            await redis.setex(\`url:\${code}\`, 3600, originalUrl)
+        }
+
+        // Incrementar contador (async, no bloquea)
+        db.query('UPDATE urls SET click_count = click_count + 1 WHERE code = $1', [code])
+
+        res.redirect(302, originalUrl)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Error interno' })
+    }
+})
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+    console.log(\`Servidor corriendo en puerto \${PORT}\`)
+})
+\`\`\`
+
+### Inicializar Base de Datos
+
+\`\`\`sql
+-- init.sql
+CREATE TABLE IF NOT EXISTS urls (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(10) UNIQUE,
+    original_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    click_count BIGINT DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_urls_code ON urls(code);
+\`\`\`
+
+---
+
+## Ejercicios para Ti
+
+1. **Agrega expiración**: Modifica el esquema y código para que las URLs expiren
+2. **Analytics**: Guarda información del visitante (IP, User-Agent, referrer)
+3. **URLs personalizadas**: Permite que el usuario elija su propio código
+4. **API Key**: Implementa autenticación para crear URLs
+5. **Dashboard**: Crea una interfaz para ver estadísticas
+
+---
+
+## Reflexión Final
+
+Diseñar arquitectura es sobre **trade-offs**:
+
+- **Simplicidad vs Escalabilidad**: Empieza simple, escala cuando necesites
+- **Consistencia vs Disponibilidad**: Para URLs, disponibilidad importa más
+- **Costo vs Rendimiento**: Redis cuesta, pero ahorra en servidores
+
+La mejor arquitectura es la que **resuelve el problema de hoy** sin bloquear las soluciones del mañana.
+
+---
+
+**¿Listo para construir el tuyo?**
+
+Clona este código, modifícalo, y despliégalo. La mejor forma de aprender arquitectura es haciéndola.
+    `,
+    contentEn: `
+# Architecture Workshop: Design a URL Shortener
+
+Welcome to this hands-on workshop where you'll design the architecture of a real system.
+
+We're not just reading theory. We're going to **think**, **decide**, and **build**.
+
+---
+
+## The Problem
+
+Your client wants a service like **bit.ly**:
+
+- Users input a long URL
+- They receive a short URL (e.g., \`luxia.us/abc123\`)
+- Visiting the short URL redirects to the original
+
+Sounds simple, right? Let's see how deep the rabbit hole goes.
+
+---
+
+## Step 1: Requirements
+
+Before writing code, we need to understand what we're building.
+
+### Functional Requirements
+
+**Think first**: What should the user be able to do?
+
+<details>
+<summary>See answer</summary>
+
+1. Create a short URL from a long one
+2. Automatically redirect when visiting the short URL
+3. (Optional) View click statistics
+4. (Optional) Custom URLs (e.g., \`luxia.us/my-link\`)
+5. (Optional) URL expiration
+
+</details>
+
+### Non-Functional Requirements
+
+**Think first**: What performance characteristics do we need?
+
+<details>
+<summary>See answer</summary>
+
+1. **High availability**: The service must always be up
+2. **Low latency**: Redirects in < 100ms
+3. **Scalable**: Millions of URLs without degradation
+4. **Durability**: URLs must not be lost
+
+</details>
+
+---
+
+## Step 2: Capacity Estimation
+
+This is the part that separates junior from senior engineers.
+
+### Assumptions:
+- 100 million URLs created per month
+- Read:write ratio of 100:1 (100 reads per URL created)
+
+### Calculations
+
+**URLs per second (writes)**:
+\`\`\`
+100M / 30 days / 24 hours / 3600 seconds ≈ 40 URLs/second
+\`\`\`
+
+**Reads per second**:
+\`\`\`
+40 × 100 = 4,000 reads/second
+\`\`\`
+
+### Storage (5 years)
+
+**Think first**: How much space do we need?
+
+<details>
+<summary>See calculation</summary>
+
+- URLs per month: 100M
+- URLs in 5 years: 100M × 12 × 5 = 6 billion
+- Average size per record: ~500 bytes (URL + metadata)
+- **Total: 6B × 500B = 3TB**
+
+Not that much. A modern disk handles it.
+
+</details>
+
+---
+
+## Step 3: API Design
+
+Let's keep it simple with REST.
+
+### Endpoints
+
+\`\`\`
+POST /api/shorten
+Body: { "url": "https://example.com/very-long-page" }
+Response: { "shortUrl": "https://luxia.us/abc123", "code": "abc123" }
+
+GET /:code
+Response: 301 Redirect to original URL
+\`\`\`
+
+### Why 301 and not 302?
+
+**Think first**: What's the difference?
+
+<details>
+<summary>See answer</summary>
+
+- **301 (Moved Permanently)**: Browser caches the redirect
+- **302 (Found)**: Every visit goes through our server
+
+For a URL shortener, **302 is better** if we want to:
+- Count every visit
+- Be able to change the destination URL
+- Add expiration
+
+For maximum performance (less load): **301**
+
+</details>
+
+---
+
+## Step 4: Database Schema
+
+### Option 1: SQL (PostgreSQL)
+
+\`\`\`sql
+CREATE TABLE urls (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(10) UNIQUE NOT NULL,
+    original_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    expires_at TIMESTAMP,
+    click_count BIGINT DEFAULT 0
+);
+
+CREATE INDEX idx_urls_code ON urls(code);
+\`\`\`
+
+### Option 2: NoSQL (MongoDB)
+
+\`\`\`javascript
+{
+    _id: ObjectId,
+    code: "abc123",
+    originalUrl: "https://...",
+    createdAt: ISODate,
+    expiresAt: ISODate,
+    clicks: 0
+}
+\`\`\`
+
+### Which would you choose?
+
+**Think first**: What factors would you consider?
+
+<details>
+<summary>See analysis</summary>
+
+**For this case, SQL is probably better:**
+
+1. Simple and fixed schema
+2. We need transactions to avoid collisions
+3. Queries are simple (only by code)
+4. PostgreSQL scales very well up to millions of records
+
+**NoSQL would be better if:**
+- Variable schema per URL
+- You need horizontal sharding from the start
+- You have experience with MongoDB
+
+</details>
+
+---
+
+## Step 5: Encoding Algorithm
+
+The heart of the system: how do we generate the short code?
+
+### Option A: Base62 with ID
+
+\`\`\`javascript
+const CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+function toBase62(num) {
+    if (num === 0) return CHARS[0]
+    let result = ''
+    while (num > 0) {
+        result = CHARS[num % 62] + result
+        num = Math.floor(num / 62)
+    }
+    return result
+}
+
+// Example:
+// toBase62(1) = "1"
+// toBase62(62) = "10"
+// toBase62(1000000) = "4c92"
+\`\`\`
+
+**With 6 characters**: 62^6 = 56 billion possible URLs
+
+### Option B: Hash + Truncation
+
+\`\`\`javascript
+const crypto = require('crypto')
+
+function generateCode(url) {
+    const hash = crypto.createHash('md5').update(url).digest('base64')
+    return hash.substring(0, 7).replace(/[+/=]/g, 'x')
+}
+\`\`\`
+
+### Which has fewer collisions?
+
+**Think first**: Which would you choose and why?
+
+<details>
+<summary>See analysis</summary>
+
+**Base62 with auto-incremental ID:**
+- ✅ Zero collisions (each ID is unique)
+- ✅ Predictable and efficient
+- ❌ Reveals how many URLs exist (ID 1000 = thousand URLs)
+- ❌ Easy to enumerate URLs
+
+**Truncated hash:**
+- ✅ Doesn't reveal system information
+- ✅ Same input = same output (useful for deduplication)
+- ❌ Possible collisions (must verify)
+- ❌ More processing
+
+**Hybrid solution**: Base62 with ID + random offset
+
+\`\`\`javascript
+const OFFSET = 100000000 // Large random number
+const code = toBase62(id + OFFSET)
+\`\`\`
+
+</details>
+
+---
+
+## Step 6: Handling Collisions
+
+If we use hashing, we need to handle collisions.
+
+\`\`\`javascript
+async function createShortUrl(originalUrl) {
+    let code = generateCode(originalUrl)
+    let attempts = 0
+
+    while (attempts < 5) {
+        const existing = await db.findByCode(code)
+
+        if (!existing) {
+            // Code available
+            await db.insert({ code, originalUrl })
+            return code
+        }
+
+        if (existing.originalUrl === originalUrl) {
+            // Same URL, reuse code
+            return code
+        }
+
+        // Collision: add suffix and retry
+        code = generateCode(originalUrl + Date.now() + attempts)
+        attempts++
+    }
+
+    throw new Error('Could not generate unique code')
+}
+\`\`\`
+
+---
+
+## Step 7: Caching Strategy
+
+With 4,000 reads/second, we need caching.
+
+### Redis to the Rescue
+
+\`\`\`javascript
+const Redis = require('ioredis')
+const redis = new Redis()
+
+async function getOriginalUrl(code) {
+    // First look in cache
+    const cached = await redis.get(\`url:\${code}\`)
+    if (cached) {
+        return cached
+    }
+
+    // If not there, look in DB
+    const url = await db.findByCode(code)
+    if (url) {
+        // Cache for 1 hour
+        await redis.setex(\`url:\${code}\`, 3600, url.originalUrl)
+        return url.originalUrl
+    }
+
+    return null
+}
+\`\`\`
+
+### Which URLs to cache?
+
+**Think first**: Do we cache everything?
+
+<details>
+<summary>See strategy</summary>
+
+**Not everything deserves caching:**
+
+1. **Popular URLs** (> 10 clicks/hour): Long cache (1 hour)
+2. **New URLs**: Short cache (5 minutes)
+3. **Expired URLs**: Don't cache
+
+**Implementation with LRU:**
+
+\`\`\`javascript
+// Redis with memory limit
+// maxmemory 1gb
+// maxmemory-policy allkeys-lru
+\`\`\`
+
+This automatically keeps the most accessed URLs in cache.
+
+</details>
+
+---
+
+## Step 8: Rate Limiting
+
+Protect yourself from abuse.
+
+\`\`\`javascript
+const rateLimit = require('express-rate-limit')
+
+// Limit URL creation
+const createLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // 100 URLs per window
+    message: { error: 'Too many URLs created. Try again later.' }
+})
+
+// Limit redirects (anti-bot)
+const redirectLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 1000, // 1000 redirects
+    message: 'Rate limit exceeded'
+})
+
+app.post('/api/shorten', createLimiter, shortenHandler)
+app.get('/:code', redirectLimiter, redirectHandler)
+\`\`\`
+
+---
+
+## Step 9: Scalability Discussion
+
+### Scenario: 1,000 requests/day
+
+**What do you need?**
+
+- A basic server (1 CPU, 1GB RAM)
+- Local PostgreSQL
+- No cache necessary
+
+### Scenario: 100,000 requests/day
+
+**What changes?**
+
+<details>
+<summary>See answer</summary>
+
+- Add Redis for caching
+- Server with more resources (2 CPU, 4GB RAM)
+- Consider read replica for DB
+
+</details>
+
+### Scenario: 1,000,000 requests/day
+
+**What changes?**
+
+<details>
+<summary>See answer</summary>
+
+- **Load Balancer** (Nginx or AWS ALB)
+- **Multiple application servers**
+- **Redis Cluster** for distributed cache
+- **Read replicas** for PostgreSQL
+- Consider **CDN** for static redirects
+
+</details>
+
+### Scenario: 100,000,000 requests/day
+
+**Enterprise architecture:**
+
+<details>
+<summary>See answer</summary>
+
+- **Database sharding** by code range
+- **Multiple geographic regions**
+- **CDN edge workers** for redirects
+- **Kafka/RabbitMQ** for async analytics
+- **Kubernetes** for orchestration
+
+</details>
+
+---
+
+## Architecture Diagram
+
+\`\`\`
+                                    ┌─────────────────┐
+                                    │      CDN        │
+                                    │   (CloudFlare)  │
+                                    └────────┬────────┘
+                                             │
+                                    ┌────────▼────────┐
+                                    │  Load Balancer  │
+                                    │     (Nginx)     │
+                                    └────────┬────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+           ┌────────▼────────┐      ┌────────▼────────┐      ┌────────▼────────┐
+           │   App Server    │      │   App Server    │      │   App Server    │
+           │   (Node.js)     │      │   (Node.js)     │      │   (Node.js)     │
+           └────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+                    │                        │                        │
+                    └────────────────────────┼────────────────────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+           ┌────────▼────────┐      ┌────────▼────────┐      ┌────────▼────────┐
+           │     Redis       │      │   PostgreSQL    │      │   PostgreSQL    │
+           │    (Cache)      │      │    (Primary)    │      │   (Replica)     │
+           └─────────────────┘      └─────────────────┘      └─────────────────┘
+\`\`\`
+
+---
+
+## Implementation: Starter Code
+
+### Project Structure
+
+\`\`\`
+url-shortener/
+├── docker-compose.yml
+├── package.json
+├── src/
+│   ├── index.js
+│   ├── routes/
+│   │   └── urls.js
+│   ├── services/
+│   │   ├── urlService.js
+│   │   └── cacheService.js
+│   └── db/
+│       └── postgres.js
+└── .env.example
+\`\`\`
+
+### docker-compose.yml
+
+\`\`\`yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/urlshortener
+      - REDIS_URL=redis://cache:6379
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: urlshortener
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  cache:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+\`\`\`
+
+### src/index.js
+
+\`\`\`javascript
+const express = require('express')
+const { Pool } = require('pg')
+const Redis = require('ioredis')
+
+const app = express()
+app.use(express.json())
+
+// Connections
+const db = new Pool({ connectionString: process.env.DATABASE_URL })
+const redis = new Redis(process.env.REDIS_URL)
+
+// Base62 encoding
+const CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const toBase62 = (num) => {
+    if (num === 0) return CHARS[0]
+    let result = ''
+    while (num > 0) {
+        result = CHARS[num % 62] + result
+        num = Math.floor(num / 62)
+    }
+    return result
+}
+
+// POST /api/shorten - Create short URL
+app.post('/api/shorten', async (req, res) => {
+    try {
+        const { url } = req.body
+
+        if (!url || !url.startsWith('http')) {
+            return res.status(400).json({ error: 'Invalid URL' })
+        }
+
+        // Insert and get ID
+        const result = await db.query(
+            'INSERT INTO urls (original_url) VALUES ($1) RETURNING id',
+            [url]
+        )
+
+        const code = toBase62(result.rows[0].id + 10000000)
+
+        // Update with the code
+        await db.query('UPDATE urls SET code = $1 WHERE id = $2', [code, result.rows[0].id])
+
+        // Cache
+        await redis.setex(\`url:\${code}\`, 3600, url)
+
+        res.json({
+            shortUrl: \`\${process.env.BASE_URL || 'http://localhost:3000'}/\${code}\`,
+            code
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal error' })
+    }
+})
+
+// GET /:code - Redirect
+app.get('/:code', async (req, res) => {
+    try {
+        const { code } = req.params
+
+        // Look in cache
+        let originalUrl = await redis.get(\`url:\${code}\`)
+
+        if (!originalUrl) {
+            // Look in DB
+            const result = await db.query(
+                'SELECT original_url FROM urls WHERE code = $1',
+                [code]
+            )
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'URL not found' })
+            }
+
+            originalUrl = result.rows[0].original_url
+
+            // Cache for next visits
+            await redis.setex(\`url:\${code}\`, 3600, originalUrl)
+        }
+
+        // Increment counter (async, non-blocking)
+        db.query('UPDATE urls SET click_count = click_count + 1 WHERE code = $1', [code])
+
+        res.redirect(302, originalUrl)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal error' })
+    }
+})
+
+// Start server
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+    console.log(\`Server running on port \${PORT}\`)
+})
+\`\`\`
+
+### Initialize Database
+
+\`\`\`sql
+-- init.sql
+CREATE TABLE IF NOT EXISTS urls (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(10) UNIQUE,
+    original_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    click_count BIGINT DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_urls_code ON urls(code);
+\`\`\`
+
+---
+
+## Exercises for You
+
+1. **Add expiration**: Modify the schema and code so URLs expire
+2. **Analytics**: Store visitor information (IP, User-Agent, referrer)
+3. **Custom URLs**: Allow users to choose their own code
+4. **API Key**: Implement authentication for creating URLs
+5. **Dashboard**: Create an interface to view statistics
+
+---
+
+## Final Reflection
+
+Designing architecture is about **trade-offs**:
+
+- **Simplicity vs Scalability**: Start simple, scale when you need to
+- **Consistency vs Availability**: For URLs, availability matters more
+- **Cost vs Performance**: Redis costs, but saves on servers
+
+The best architecture is one that **solves today's problem** without blocking tomorrow's solutions.
+
+---
+
+**Ready to build yours?**
+
+Clone this code, modify it, and deploy it. The best way to learn architecture is by doing it.
+    `,
+  },
+  'performance-audit': {
+    timeEs: '60 minutos',
+    timeEn: '60 minutes',
+    prerequisitesEs: ['Una aplicacion web funcionando', 'Chrome DevTools basico'],
+    prerequisitesEn: ['A working web application', 'Basic Chrome DevTools'],
+    contentEs: `
+# Auditoria de Performance: De Lento a Veloz
+
+En este taller practico vas a tomar una aplicacion lenta y la vas a optimizar paso a paso. No es teoria: vas a medir, identificar problemas, y ver mejoras reales en los numeros.
+
+Al terminar, tendras un checklist que podras usar en cualquier proyecto futuro.
+
+---
+
+## La Aplicacion Problema
+
+Primero, vamos a crear una aplicacion con todos los problemas de performance tipicos. Asi aprenderas a identificarlos y arreglarlos.
+
+### Estructura del Proyecto
+
+\`\`\`
+slow-app/
+├── package.json
+├── src/
+│   ├── App.tsx
+│   ├── components/
+│   │   ├── HeavyComponent.tsx
+│   │   ├── ProductList.tsx
+│   │   ├── ImageGallery.tsx
+│   │   └── SearchBox.tsx
+│   ├── utils/
+│   │   └── slowOperations.ts
+│   └── index.tsx
+└── public/
+    └── images/
+        └── (imagenes grandes sin optimizar)
+\`\`\`
+
+### package.json
+
+\`\`\`json
+{
+  "name": "slow-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+\`\`\`
+
+### App.tsx - El Componente Principal (con problemas)
+
+\`\`\`tsx
+// ANTES: App con multiples problemas de performance
+import React, { useState, useEffect } from 'react'
+import moment from 'moment' // Libreria pesada completa
+import _ from 'lodash' // Todo lodash importado
+import HeavyComponent from './components/HeavyComponent'
+import ProductList from './components/ProductList'
+import ImageGallery from './components/ImageGallery'
+import SearchBox from './components/SearchBox'
+
+function App() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  // Problema 1: Fetch sin cache
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data)
+        setLoading(false)
+      })
+  }, [])
+
+  // Problema 2: Filtrado en cada render
+  const filteredProducts = products.filter(p =>
+    p.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // Problema 3: Formateo de fecha ineficiente
+  const formatDate = (date) => {
+    return moment(date).format('MMMM Do YYYY, h:mm:ss a')
+  }
+
+  // Problema 4: Calculo pesado sin memoizacion
+  const expensiveCalculation = () => {
+    let result = 0
+    for (let i = 0; i < 10000000; i++) {
+      result += Math.sqrt(i) * Math.random()
+    }
+    return result
+  }
+
+  const calculatedValue = expensiveCalculation()
+
+  return (
+    <div className="app">
+      <header>
+        <h1>Tienda Demo</h1>
+        <p>Actualizado: {formatDate(new Date())}</p>
+        <p>Valor calculado: {calculatedValue.toFixed(2)}</p>
+      </header>
+
+      <SearchBox
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <HeavyComponent />
+
+      <ImageGallery />
+
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <ProductList products={filteredProducts} />
+      )}
+    </div>
+  )
+}
+
+export default App
+\`\`\`
+
+### HeavyComponent.tsx - Componente Pesado
+
+\`\`\`tsx
+// ANTES: Componente que carga sincronicamente
+import React from 'react'
+// Importaciones pesadas innecesarias
+import Chart from 'chart.js/auto' // 200KB+
+import * as THREE from 'three' // 500KB+
+
+function HeavyComponent() {
+  // Inicializacion pesada en cada render
+  const initializeChart = () => {
+    // Configuracion compleja...
+    return null
+  }
+
+  return (
+    <div className="heavy-component">
+      <h2>Componente con Graficos</h2>
+      <div id="chart-container"></div>
+    </div>
+  )
+}
+
+export default HeavyComponent
+\`\`\`
+
+### ProductList.tsx - Lista Sin Virtualizacion
+
+\`\`\`tsx
+// ANTES: Renderiza todos los items a la vez
+import React from 'react'
+
+interface Product {
+  id: number
+  title: string
+  price: number
+  image: string
+  description: string
+}
+
+function ProductList({ products }: { products: Product[] }) {
+  return (
+    <div className="product-list">
+      {products.map(product => (
+        <div key={product.id} className="product-card">
+          {/* Imagen sin optimizar */}
+          <img
+            src={product.image}
+            alt={product.title}
+            style={{ width: '200px', height: '200px' }}
+          />
+          <h3>{product.title}</h3>
+          <p>{product.description}</p>
+          <p className="price">\${product.price}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default ProductList
+\`\`\`
+
+### SearchBox.tsx - Busqueda Sin Debounce
+
+\`\`\`tsx
+// ANTES: Cada keystroke dispara re-render
+import React from 'react'
+
+function SearchBox({ value, onChange }) {
+  return (
+    <div className="search-box">
+      <input
+        type="text"
+        placeholder="Buscar productos..."
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  )
+}
+
+export default SearchBox
+\`\`\`
+
+---
+
+## Paso 1: Auditoria Inicial con Lighthouse
+
+### Ejecutar Lighthouse
+
+1. Abre Chrome DevTools (F12)
+2. Ve a la pestana **Lighthouse**
+3. Selecciona:
+   - Mode: Navigation
+   - Device: Mobile
+   - Categories: Performance, Best Practices, SEO
+4. Click en **Analyze page load**
+
+### Interpretar Resultados
+
+\`\`\`
+RESULTADOS INICIALES (ejemplo):
+================================
+Performance Score: 35/100
+
+Core Web Vitals:
+- LCP (Largest Contentful Paint): 4.2s (MALO - debe ser < 2.5s)
+- FID (First Input Delay): 320ms (MALO - debe ser < 100ms)
+- CLS (Cumulative Layout Shift): 0.25 (MEJORABLE - debe ser < 0.1)
+
+Metricas adicionales:
+- First Contentful Paint: 2.1s
+- Speed Index: 4.8s
+- Time to Interactive: 6.3s
+- Total Blocking Time: 890ms
+
+Oportunidades identificadas:
+- Reduce unused JavaScript: 450KB potential savings
+- Properly size images: 320KB potential savings
+- Serve images in modern formats: 180KB potential savings
+- Eliminate render-blocking resources: 1.2s potential savings
+\`\`\`
+
+### Diagnosticos Clave
+
+| Problema | Causa | Impacto |
+|----------|-------|---------|
+| Alto TBT | Calculo expensivo bloqueando main thread | FID malo |
+| Alto LCP | Imagenes grandes, JS bloqueante | UX lenta |
+| Alto CLS | Imagenes sin dimensiones | Saltos visuales |
+
+---
+
+## Paso 2: Performance Tab de DevTools
+
+### Grabar una Sesion
+
+1. Abre DevTools > Performance
+2. Click en el boton de grabar (circulo)
+3. Interactua con la app (scroll, buscar, etc.)
+4. Click en stop
+5. Analiza el flamegraph
+
+### Que Buscar
+
+\`\`\`
+Timeline de problemas:
+======================
+
+[====SCRIPTING (amarillo)====]  <- JavaScript ejecutando
+     [===RENDERING (morado)===] <- Layout y paint
+          [=PAINTING (verde)=]  <- Pintando pixeles
+
+Problemas comunes:
+- Long Tasks (barras rojas): Tareas > 50ms que bloquean
+- Forced Reflow: Layout sincronico forzado
+- Excessive Painting: Repintado innecesario
+\`\`\`
+
+### Identificar Long Tasks
+
+Busca barras rojas en la linea "Main". Cada una es una tarea que bloquea el thread principal por mas de 50ms.
+
+En nuestra app problematica, veras:
+
+1. **expensiveCalculation()** - 200ms+ de bloqueo
+2. **Moment.js parsing** - 50ms+ en cada render
+3. **Product filtering** - Crece con mas productos
+
+---
+
+## Paso 3: Network Waterfall
+
+### Analizar Carga de Recursos
+
+1. DevTools > Network
+2. Recarga la pagina (Ctrl+Shift+R para cache limpio)
+3. Observa el waterfall
+
+\`\`\`
+Waterfall problematico:
+========================
+
+|--document.html (100ms)
+   |--bundle.js (800KB, 2s) <-- BLOQUEA TODO
+      |--chunk-lodash.js (70KB)
+      |--chunk-moment.js (200KB)
+      |--chunk-three.js (500KB)
+         |--products-api (200ms)
+            |--image1.jpg (500KB, 1s)
+            |--image2.jpg (450KB, 0.9s)
+            |--image3.jpg (600KB, 1.2s)
+
+Tiempo total: ~5.3s
+\`\`\`
+
+### Problemas Identificados
+
+1. **Bundle enorme**: 800KB de JS en un solo archivo
+2. **Carga secuencial**: Imagenes esperan al JS
+3. **Sin compresion**: Imagenes en formato original
+4. **Sin cache headers**: Cada visita descarga todo
+
+---
+
+## Paso 4: Arreglar Imports Pesados
+
+### Antes: Importar Todo
+
+\`\`\`tsx
+// MALO: Importa toda la libreria
+import moment from 'moment' // 300KB
+import _ from 'lodash' // 70KB
+\`\`\`
+
+### Despues: Imports Selectivos
+
+\`\`\`tsx
+// BUENO: Solo lo que necesitas
+import { format } from 'date-fns' // 2KB vs 300KB
+import debounce from 'lodash/debounce' // 1KB vs 70KB
+
+// O mejor aun, funciones nativas:
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('es', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date)
+}
+\`\`\`
+
+### Impacto
+
+\`\`\`
+Ahorro en bundle:
+- moment.js: -300KB
+- lodash completo: -70KB
+- Total: -370KB (46% del bundle original)
+\`\`\`
+
+---
+
+## Paso 5: Lazy Loading de Componentes
+
+### Antes: Todo Carga al Inicio
+
+\`\`\`tsx
+// MALO: HeavyComponent carga aunque no se vea
+import HeavyComponent from './components/HeavyComponent'
+
+function App() {
+  return (
+    <div>
+      <Hero />
+      <HeavyComponent /> {/* Carga 500KB aunque usuario no scrollee */}
+    </div>
+  )
+}
+\`\`\`
+
+### Despues: Lazy Loading con Suspense
+
+\`\`\`tsx
+// BUENO: Carga solo cuando se necesita
+import React, { lazy, Suspense } from 'react'
+
+const HeavyComponent = lazy(() => import('./components/HeavyComponent'))
+
+function App() {
+  return (
+    <div>
+      <Hero />
+      <Suspense fallback={<div className="skeleton">Cargando graficos...</div>}>
+        <HeavyComponent />
+      </Suspense>
+    </div>
+  )
+}
+\`\`\`
+
+### Con Intersection Observer (cargar al scroll)
+
+\`\`\`tsx
+import React, { lazy, Suspense, useState, useEffect, useRef } from 'react'
+
+const HeavyComponent = lazy(() => import('./components/HeavyComponent'))
+
+function LazySection() {
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '100px' } // Carga 100px antes de ser visible
+    )
+
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref}>
+      {isVisible ? (
+        <Suspense fallback={<div className="skeleton">Cargando...</div>}>
+          <HeavyComponent />
+        </Suspense>
+      ) : (
+        <div className="placeholder" style={{ height: '400px' }} />
+      )}
+    </div>
+  )
+}
+\`\`\`
+
+---
+
+## Paso 6: Optimizacion de Imagenes
+
+### Antes: Imagenes Sin Optimizar
+
+\`\`\`tsx
+// MALO: Imagen original de 2MB
+<img
+  src="/images/hero.jpg"
+  alt="Hero"
+/>
+\`\`\`
+
+### Despues: Con next/image (Next.js)
+
+\`\`\`tsx
+import Image from 'next/image'
+
+// BUENO: Optimizacion automatica
+<Image
+  src="/images/hero.jpg"
+  alt="Hero"
+  width={1200}
+  height={600}
+  priority // Para imagenes above-the-fold
+  placeholder="blur"
+  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+/>
+\`\`\`
+
+### Sin Next.js: Optimizacion Manual
+
+\`\`\`tsx
+// Componente de imagen optimizada
+function OptimizedImage({
+  src,
+  alt,
+  width,
+  height
+}: {
+  src: string
+  alt: string
+  width: number
+  height: number
+}) {
+  const webpSrc = src.replace(/\\.(jpg|png)$/, '.webp')
+
+  return (
+    <picture>
+      {/* WebP para navegadores modernos */}
+      <source srcSet={webpSrc} type="image/webp" />
+      {/* Fallback para navegadores viejos */}
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        style={{
+          aspectRatio: \`\${width}/\${height}\`,
+          objectFit: 'cover'
+        }}
+      />
+    </picture>
+  )
+}
+\`\`\`
+
+### Responsive Images
+
+\`\`\`tsx
+<img
+  src="/images/product-400.jpg"
+  srcSet="
+    /images/product-400.jpg 400w,
+    /images/product-800.jpg 800w,
+    /images/product-1200.jpg 1200w
+  "
+  sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+  alt="Producto"
+  loading="lazy"
+  width={800}
+  height={600}
+/>
+\`\`\`
+
+### Script para Convertir Imagenes
+
+\`\`\`bash
+# Instalar sharp-cli
+npm install -g sharp-cli
+
+# Convertir a WebP con calidad 80%
+sharp -i input.jpg -o output.webp -f webp -q 80
+
+# Redimensionar y convertir
+sharp -i input.jpg -o output-400.webp -f webp -q 80 --width 400
+sharp -i input.jpg -o output-800.webp -f webp -q 80 --width 800
+\`\`\`
+
+---
+
+## Paso 7: Memoizacion de Calculos
+
+### Antes: Calculo en Cada Render
+
+\`\`\`tsx
+function App() {
+  const [count, setCount] = useState(0)
+
+  // MALO: Se ejecuta en CADA render
+  const expensiveValue = heavyCalculation(data)
+
+  return (
+    <div>
+      <p>Resultado: {expensiveValue}</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  )
+}
+\`\`\`
+
+### Despues: useMemo para Valores
+
+\`\`\`tsx
+import { useMemo } from 'react'
+
+function App() {
+  const [count, setCount] = useState(0)
+  const [data, setData] = useState(initialData)
+
+  // BUENO: Solo recalcula cuando data cambia
+  const expensiveValue = useMemo(() => {
+    return heavyCalculation(data)
+  }, [data])
+
+  return (
+    <div>
+      <p>Resultado: {expensiveValue}</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  )
+}
+\`\`\`
+
+### useCallback para Funciones
+
+\`\`\`tsx
+import { useCallback, memo } from 'react'
+
+// Componente hijo memoizado
+const ExpensiveChild = memo(function ExpensiveChild({
+  onClick,
+  data
+}: {
+  onClick: () => void
+  data: any[]
+}) {
+  console.log('ExpensiveChild renderizado')
+  return <div onClick={onClick}>{/* ... */}</div>
+})
+
+function Parent() {
+  const [count, setCount] = useState(0)
+
+  // BUENO: Funcion estable entre renders
+  const handleClick = useCallback(() => {
+    console.log('clicked')
+  }, [])
+
+  return (
+    <div>
+      <button onClick={() => setCount(c => c + 1)}>Count: {count}</button>
+      <ExpensiveChild onClick={handleClick} data={stableData} />
+    </div>
+  )
+}
+\`\`\`
+
+---
+
+## Paso 8: Debouncing de Busqueda
+
+### Antes: Busqueda en Cada Keystroke
+
+\`\`\`tsx
+function SearchBox({ onSearch }) {
+  const [term, setTerm] = useState('')
+
+  // MALO: Dispara busqueda en cada tecla
+  const handleChange = (e) => {
+    setTerm(e.target.value)
+    onSearch(e.target.value) // API call en cada keystroke!
+  }
+
+  return <input value={term} onChange={handleChange} />
+}
+\`\`\`
+
+### Despues: Con Debounce
+
+\`\`\`tsx
+import { useState, useCallback, useEffect } from 'react'
+
+// Hook personalizado para debounce
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => clearTimeout(timer)
+  }, [value, delay])
+
+  return debouncedValue
+}
+
+// Uso en componente
+function SearchBox({ onSearch }) {
+  const [term, setTerm] = useState('')
+  const debouncedTerm = useDebounce(term, 300)
+
+  // Solo busca cuando el valor debounced cambia
+  useEffect(() => {
+    if (debouncedTerm) {
+      onSearch(debouncedTerm)
+    }
+  }, [debouncedTerm, onSearch])
+
+  return (
+    <input
+      value={term}
+      onChange={(e) => setTerm(e.target.value)}
+      placeholder="Buscar..."
+    />
+  )
+}
+\`\`\`
+
+### Con lodash/debounce
+
+\`\`\`tsx
+import debounce from 'lodash/debounce'
+import { useMemo } from 'react'
+
+function SearchBox({ onSearch }) {
+  const [term, setTerm] = useState('')
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => onSearch(value), 300),
+    [onSearch]
+  )
+
+  const handleChange = (e) => {
+    setTerm(e.target.value)
+    debouncedSearch(e.target.value)
+  }
+
+  return <input value={term} onChange={handleChange} />
+}
+\`\`\`
+
+---
+
+## Paso 9: Virtualizacion de Listas
+
+### Antes: Renderizar Todo
+
+\`\`\`tsx
+// MALO: 10,000 items = 10,000 nodos DOM
+function ProductList({ products }) {
+  return (
+    <div className="list">
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )
+}
+\`\`\`
+
+### Despues: Con react-window
+
+\`\`\`bash
+npm install react-window
+\`\`\`
+
+\`\`\`tsx
+import { FixedSizeList as List } from 'react-window'
+
+function VirtualizedProductList({ products }) {
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      <ProductCard product={products[index]} />
+    </div>
+  )
+
+  return (
+    <List
+      height={600}
+      itemCount={products.length}
+      itemSize={120} // Altura de cada item
+      width="100%"
+    >
+      {Row}
+    </List>
+  )
+}
+\`\`\`
+
+### Para Listas de Altura Variable
+
+\`\`\`tsx
+import { VariableSizeList as List } from 'react-window'
+
+function VariableProductList({ products }) {
+  const getItemSize = (index) => {
+    // Calcular altura basada en contenido
+    return products[index].description.length > 100 ? 180 : 120
+  }
+
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      <ProductCard product={products[index]} />
+    </div>
+  )
+
+  return (
+    <List
+      height={600}
+      itemCount={products.length}
+      itemSize={getItemSize}
+      width="100%"
+    >
+      {Row}
+    </List>
+  )
+}
+\`\`\`
+
+### Impacto
+
+\`\`\`
+Lista de 10,000 productos:
+
+SIN virtualizacion:
+- Nodos DOM: 10,000
+- Memoria: ~50MB
+- Scroll: Laggy (15 FPS)
+- Tiempo de render inicial: 2-3s
+
+CON virtualizacion:
+- Nodos DOM: ~20 (los visibles + buffer)
+- Memoria: ~2MB
+- Scroll: Suave (60 FPS)
+- Tiempo de render inicial: <100ms
+\`\`\`
+
+---
+
+## Paso 10: Cache de API
+
+### Antes: Fetch en Cada Mount
+
+\`\`\`tsx
+function ProductList() {
+  const [products, setProducts] = useState([])
+
+  // MALO: Fetch cada vez que el componente monta
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(setProducts)
+  }, [])
+
+  return <div>{/* ... */}</div>
+}
+\`\`\`
+
+### Despues: Con React Query/TanStack Query
+
+\`\`\`bash
+npm install @tanstack/react-query
+\`\`\`
+
+\`\`\`tsx
+import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutos
+      cacheTime: 30 * 60 * 1000, // 30 minutos
+    },
+  },
+})
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ProductList />
+    </QueryClientProvider>
+  )
+}
+
+function ProductList() {
+  const { data: products, isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: () => fetch('/api/products').then(res => res.json()),
+  })
+
+  if (isLoading) return <Skeleton />
+  if (error) return <Error message={error.message} />
+
+  return <div>{/* productos cacheados */}</div>
+}
+\`\`\`
+
+### Cache Manual con SWR Pattern
+
+\`\`\`tsx
+// Cache simple en memoria
+const cache = new Map()
+
+async function fetchWithCache(url: string, ttl = 300000) {
+  const cached = cache.get(url)
+
+  if (cached && Date.now() - cached.timestamp < ttl) {
+    return cached.data
+  }
+
+  const response = await fetch(url)
+  const data = await response.json()
+
+  cache.set(url, { data, timestamp: Date.now() })
+
+  return data
+}
+
+// Uso
+function ProductList() {
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    fetchWithCache('/api/products', 5 * 60 * 1000)
+      .then(setProducts)
+  }, [])
+
+  return <div>{/* ... */}</div>
+}
+\`\`\`
+
+---
+
+## Resultados: Antes vs Despues
+
+### Lighthouse Scores
+
+\`\`\`
+ANTES:
+======
+Performance: 35
+LCP: 4.2s
+FID: 320ms
+CLS: 0.25
+Bundle: 1.2MB
+
+DESPUES:
+========
+Performance: 92
+LCP: 1.4s
+FID: 45ms
+CLS: 0.02
+Bundle: 180KB
+
+MEJORAS:
+========
+Performance: +163% (35 -> 92)
+LCP: -67% (4.2s -> 1.4s)
+FID: -86% (320ms -> 45ms)
+CLS: -92% (0.25 -> 0.02)
+Bundle: -85% (1.2MB -> 180KB)
+\`\`\`
+
+### Metricas de Usuario Real
+
+\`\`\`
+Tiempo de carga percibido:
+- Antes: 5+ segundos
+- Despues: <2 segundos
+
+Interactividad:
+- Antes: App se siente "trabada"
+- Despues: Respuesta instantanea
+
+Scroll en listas:
+- Antes: 15 FPS, laggy
+- Despues: 60 FPS, suave
+\`\`\`
+
+---
+
+## Performance Budgets
+
+### Configurar Presupuestos
+
+Crea un archivo \`budget.json\`:
+
+\`\`\`json
+{
+  "budgets": [
+    {
+      "resourceType": "script",
+      "budget": 200
+    },
+    {
+      "resourceType": "total",
+      "budget": 500
+    },
+    {
+      "metric": "first-contentful-paint",
+      "budget": 1500
+    },
+    {
+      "metric": "interactive",
+      "budget": 3000
+    },
+    {
+      "metric": "largest-contentful-paint",
+      "budget": 2500
+    }
+  ]
+}
+\`\`\`
+
+### Lighthouse CI en GitHub Actions
+
+\`\`\`yaml
+# .github/workflows/lighthouse.yml
+name: Lighthouse CI
+
+on: [push, pull_request]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+\`\`\`
+
+### lighthouserc.json
+
+\`\`\`json
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist"
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", {"minScore": 0.9}],
+        "first-contentful-paint": ["warn", {"maxNumericValue": 1500}],
+        "largest-contentful-paint": ["error", {"maxNumericValue": 2500}],
+        "total-blocking-time": ["warn", {"maxNumericValue": 300}],
+        "cumulative-layout-shift": ["warn", {"maxNumericValue": 0.1}]
+      }
+    }
+  }
+}
+\`\`\`
+
+---
+
+## Checklist de Auditoria
+
+Usa este checklist para futuras auditorias:
+
+### Bundle y Codigo
+
+- [ ] Imports: ¿Estoy importando librerias completas innecesariamente?
+- [ ] Code splitting: ¿Los componentes pesados usan lazy loading?
+- [ ] Tree shaking: ¿El bundler elimina codigo no usado?
+- [ ] Minificacion: ¿JS y CSS estan minificados en produccion?
+
+### Imagenes
+
+- [ ] Formato: ¿Uso WebP/AVIF con fallbacks?
+- [ ] Tamano: ¿Las imagenes estan dimensionadas correctamente?
+- [ ] Lazy loading: ¿Imagenes below-the-fold tienen loading="lazy"?
+- [ ] Dimensiones: ¿Todas las imagenes tienen width/height para evitar CLS?
+
+### Renderizado
+
+- [ ] Memoizacion: ¿Calculos pesados usan useMemo?
+- [ ] Callbacks: ¿Funciones pasadas a hijos usan useCallback?
+- [ ] Virtualizacion: ¿Listas largas estan virtualizadas?
+- [ ] Debouncing: ¿Inputs de busqueda tienen debounce?
+
+### Network
+
+- [ ] Cache: ¿API responses tienen cache apropiado?
+- [ ] Prefetch: ¿Recursos criticos usan preload/prefetch?
+- [ ] Compresion: ¿Servidor usa gzip/brotli?
+- [ ] CDN: ¿Assets estaticos estan en CDN?
+
+### Core Web Vitals
+
+- [ ] LCP < 2.5s: ¿El elemento mas grande carga rapido?
+- [ ] FID < 100ms: ¿La pagina responde rapido a interacciones?
+- [ ] CLS < 0.1: ¿No hay saltos de layout?
+
+---
+
+## Herramientas Recomendadas
+
+| Herramienta | Uso |
+|-------------|-----|
+| Lighthouse | Auditoria general |
+| WebPageTest | Analisis detallado desde multiples ubicaciones |
+| Bundle Analyzer | Ver que ocupa espacio en el bundle |
+| Chrome DevTools Performance | Profiling detallado |
+| React DevTools Profiler | Performance especifica de React |
+
+---
+
+## Proximo Paso
+
+Aplica este proceso a tu propia aplicacion:
+
+1. Corre Lighthouse y anota el score inicial
+2. Identifica los 3 problemas mas grandes
+3. Aplica las correcciones una por una
+4. Mide despues de cada cambio
+5. Configura performance budgets para mantener las mejoras
+
+Recuerda: **medir primero, optimizar despues**. No optimices a ciegas.
+    `,
+    contentEn: `
+# Performance Audit: From Slow to Fast
+
+In this hands-on workshop you'll take a slow application and optimize it step by step. This isn't theory: you'll measure, identify problems, and see real improvements in the numbers.
+
+When finished, you'll have a checklist you can use on any future project.
+
+---
+
+## The Problem Application
+
+First, we'll create an application with all the typical performance problems. This way you'll learn to identify and fix them.
+
+### Project Structure
+
+\`\`\`
+slow-app/
+├── package.json
+├── src/
+│   ├── App.tsx
+│   ├── components/
+│   │   ├── HeavyComponent.tsx
+│   │   ├── ProductList.tsx
+│   │   ├── ImageGallery.tsx
+│   │   └── SearchBox.tsx
+│   ├── utils/
+│   │   └── slowOperations.ts
+│   └── index.tsx
+└── public/
+    └── images/
+        └── (large unoptimized images)
+\`\`\`
+
+### package.json
+
+\`\`\`json
+{
+  "name": "slow-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+\`\`\`
+
+### App.tsx - The Main Component (with problems)
+
+\`\`\`tsx
+// BEFORE: App with multiple performance problems
+import React, { useState, useEffect } from 'react'
+import moment from 'moment' // Heavy library fully imported
+import _ from 'lodash' // All of lodash imported
+import HeavyComponent from './components/HeavyComponent'
+import ProductList from './components/ProductList'
+import ImageGallery from './components/ImageGallery'
+import SearchBox from './components/SearchBox'
+
+function App() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  // Problem 1: Fetch without cache
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data)
+        setLoading(false)
+      })
+  }, [])
+
+  // Problem 2: Filtering on every render
+  const filteredProducts = products.filter(p =>
+    p.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // Problem 3: Inefficient date formatting
+  const formatDate = (date) => {
+    return moment(date).format('MMMM Do YYYY, h:mm:ss a')
+  }
+
+  // Problem 4: Heavy calculation without memoization
+  const expensiveCalculation = () => {
+    let result = 0
+    for (let i = 0; i < 10000000; i++) {
+      result += Math.sqrt(i) * Math.random()
+    }
+    return result
+  }
+
+  const calculatedValue = expensiveCalculation()
+
+  return (
+    <div className="app">
+      <header>
+        <h1>Demo Store</h1>
+        <p>Updated: {formatDate(new Date())}</p>
+        <p>Calculated value: {calculatedValue.toFixed(2)}</p>
+      </header>
+
+      <SearchBox
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <HeavyComponent />
+
+      <ImageGallery />
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ProductList products={filteredProducts} />
+      )}
+    </div>
+  )
+}
+
+export default App
+\`\`\`
+
+### HeavyComponent.tsx - Heavy Component
+
+\`\`\`tsx
+// BEFORE: Component that loads synchronously
+import React from 'react'
+// Unnecessary heavy imports
+import Chart from 'chart.js/auto' // 200KB+
+import * as THREE from 'three' // 500KB+
+
+function HeavyComponent() {
+  // Heavy initialization on every render
+  const initializeChart = () => {
+    // Complex configuration...
+    return null
+  }
+
+  return (
+    <div className="heavy-component">
+      <h2>Component with Charts</h2>
+      <div id="chart-container"></div>
+    </div>
+  )
+}
+
+export default HeavyComponent
+\`\`\`
+
+### ProductList.tsx - List Without Virtualization
+
+\`\`\`tsx
+// BEFORE: Renders all items at once
+import React from 'react'
+
+interface Product {
+  id: number
+  title: string
+  price: number
+  image: string
+  description: string
+}
+
+function ProductList({ products }: { products: Product[] }) {
+  return (
+    <div className="product-list">
+      {products.map(product => (
+        <div key={product.id} className="product-card">
+          {/* Unoptimized image */}
+          <img
+            src={product.image}
+            alt={product.title}
+            style={{ width: '200px', height: '200px' }}
+          />
+          <h3>{product.title}</h3>
+          <p>{product.description}</p>
+          <p className="price">\${product.price}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default ProductList
+\`\`\`
+
+### SearchBox.tsx - Search Without Debounce
+
+\`\`\`tsx
+// BEFORE: Every keystroke triggers re-render
+import React from 'react'
+
+function SearchBox({ value, onChange }) {
+  return (
+    <div className="search-box">
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  )
+}
+
+export default SearchBox
+\`\`\`
+
+---
+
+## Step 1: Initial Audit with Lighthouse
+
+### Running Lighthouse
+
+1. Open Chrome DevTools (F12)
+2. Go to the **Lighthouse** tab
+3. Select:
+   - Mode: Navigation
+   - Device: Mobile
+   - Categories: Performance, Best Practices, SEO
+4. Click **Analyze page load**
+
+### Interpreting Results
+
+\`\`\`
+INITIAL RESULTS (example):
+==========================
+Performance Score: 35/100
+
+Core Web Vitals:
+- LCP (Largest Contentful Paint): 4.2s (BAD - should be < 2.5s)
+- FID (First Input Delay): 320ms (BAD - should be < 100ms)
+- CLS (Cumulative Layout Shift): 0.25 (NEEDS IMPROVEMENT - should be < 0.1)
+
+Additional metrics:
+- First Contentful Paint: 2.1s
+- Speed Index: 4.8s
+- Time to Interactive: 6.3s
+- Total Blocking Time: 890ms
+
+Identified opportunities:
+- Reduce unused JavaScript: 450KB potential savings
+- Properly size images: 320KB potential savings
+- Serve images in modern formats: 180KB potential savings
+- Eliminate render-blocking resources: 1.2s potential savings
+\`\`\`
+
+### Key Diagnostics
+
+| Problem | Cause | Impact |
+|---------|-------|--------|
+| High TBT | Expensive calculation blocking main thread | Bad FID |
+| High LCP | Large images, blocking JS | Slow UX |
+| High CLS | Images without dimensions | Visual jumps |
+
+---
+
+## Step 2: DevTools Performance Tab
+
+### Recording a Session
+
+1. Open DevTools > Performance
+2. Click the record button (circle)
+3. Interact with the app (scroll, search, etc.)
+4. Click stop
+5. Analyze the flamegraph
+
+### What to Look For
+
+\`\`\`
+Problem timeline:
+=================
+
+[====SCRIPTING (yellow)====]  <- JavaScript executing
+     [===RENDERING (purple)===] <- Layout and paint
+          [=PAINTING (green)=]  <- Painting pixels
+
+Common problems:
+- Long Tasks (red bars): Tasks > 50ms that block
+- Forced Reflow: Forced synchronous layout
+- Excessive Painting: Unnecessary repainting
+\`\`\`
+
+### Identifying Long Tasks
+
+Look for red bars in the "Main" line. Each one is a task that blocks the main thread for more than 50ms.
+
+In our problematic app, you'll see:
+
+1. **expensiveCalculation()** - 200ms+ blocking
+2. **Moment.js parsing** - 50ms+ on each render
+3. **Product filtering** - Grows with more products
+
+---
+
+## Step 3: Network Waterfall
+
+### Analyzing Resource Loading
+
+1. DevTools > Network
+2. Reload the page (Ctrl+Shift+R for clean cache)
+3. Observe the waterfall
+
+\`\`\`
+Problematic waterfall:
+======================
+
+|--document.html (100ms)
+   |--bundle.js (800KB, 2s) <-- BLOCKS EVERYTHING
+      |--chunk-lodash.js (70KB)
+      |--chunk-moment.js (200KB)
+      |--chunk-three.js (500KB)
+         |--products-api (200ms)
+            |--image1.jpg (500KB, 1s)
+            |--image2.jpg (450KB, 0.9s)
+            |--image3.jpg (600KB, 1.2s)
+
+Total time: ~5.3s
+\`\`\`
+
+### Identified Problems
+
+1. **Huge bundle**: 800KB of JS in a single file
+2. **Sequential loading**: Images wait for JS
+3. **No compression**: Images in original format
+4. **No cache headers**: Every visit downloads everything
+
+---
+
+## Step 4: Fix Heavy Imports
+
+### Before: Import Everything
+
+\`\`\`tsx
+// BAD: Imports the entire library
+import moment from 'moment' // 300KB
+import _ from 'lodash' // 70KB
+\`\`\`
+
+### After: Selective Imports
+
+\`\`\`tsx
+// GOOD: Only what you need
+import { format } from 'date-fns' // 2KB vs 300KB
+import debounce from 'lodash/debounce' // 1KB vs 70KB
+
+// Or even better, native functions:
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date)
+}
+\`\`\`
+
+### Impact
+
+\`\`\`
+Bundle savings:
+- moment.js: -300KB
+- full lodash: -70KB
+- Total: -370KB (46% of original bundle)
+\`\`\`
+
+---
+
+## Step 5: Lazy Loading Components
+
+### Before: Everything Loads at Start
+
+\`\`\`tsx
+// BAD: HeavyComponent loads even if not visible
+import HeavyComponent from './components/HeavyComponent'
+
+function App() {
+  return (
+    <div>
+      <Hero />
+      <HeavyComponent /> {/* Loads 500KB even if user doesn't scroll */}
+    </div>
+  )
+}
+\`\`\`
+
+### After: Lazy Loading with Suspense
+
+\`\`\`tsx
+// GOOD: Loads only when needed
+import React, { lazy, Suspense } from 'react'
+
+const HeavyComponent = lazy(() => import('./components/HeavyComponent'))
+
+function App() {
+  return (
+    <div>
+      <Hero />
+      <Suspense fallback={<div className="skeleton">Loading charts...</div>}>
+        <HeavyComponent />
+      </Suspense>
+    </div>
+  )
+}
+\`\`\`
+
+### With Intersection Observer (load on scroll)
+
+\`\`\`tsx
+import React, { lazy, Suspense, useState, useEffect, useRef } from 'react'
+
+const HeavyComponent = lazy(() => import('./components/HeavyComponent'))
+
+function LazySection() {
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '100px' } // Load 100px before visible
+    )
+
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref}>
+      {isVisible ? (
+        <Suspense fallback={<div className="skeleton">Loading...</div>}>
+          <HeavyComponent />
+        </Suspense>
+      ) : (
+        <div className="placeholder" style={{ height: '400px' }} />
+      )}
+    </div>
+  )
+}
+\`\`\`
+
+---
+
+## Step 6: Image Optimization
+
+### Before: Unoptimized Images
+
+\`\`\`tsx
+// BAD: Original 2MB image
+<img
+  src="/images/hero.jpg"
+  alt="Hero"
+/>
+\`\`\`
+
+### After: With next/image (Next.js)
+
+\`\`\`tsx
+import Image from 'next/image'
+
+// GOOD: Automatic optimization
+<Image
+  src="/images/hero.jpg"
+  alt="Hero"
+  width={1200}
+  height={600}
+  priority // For above-the-fold images
+  placeholder="blur"
+  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+/>
+\`\`\`
+
+### Without Next.js: Manual Optimization
+
+\`\`\`tsx
+// Optimized image component
+function OptimizedImage({
+  src,
+  alt,
+  width,
+  height
+}: {
+  src: string
+  alt: string
+  width: number
+  height: number
+}) {
+  const webpSrc = src.replace(/\\.(jpg|png)$/, '.webp')
+
+  return (
+    <picture>
+      {/* WebP for modern browsers */}
+      <source srcSet={webpSrc} type="image/webp" />
+      {/* Fallback for old browsers */}
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        style={{
+          aspectRatio: \`\${width}/\${height}\`,
+          objectFit: 'cover'
+        }}
+      />
+    </picture>
+  )
+}
+\`\`\`
+
+### Responsive Images
+
+\`\`\`tsx
+<img
+  src="/images/product-400.jpg"
+  srcSet="
+    /images/product-400.jpg 400w,
+    /images/product-800.jpg 800w,
+    /images/product-1200.jpg 1200w
+  "
+  sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+  alt="Product"
+  loading="lazy"
+  width={800}
+  height={600}
+/>
+\`\`\`
+
+### Script to Convert Images
+
+\`\`\`bash
+# Install sharp-cli
+npm install -g sharp-cli
+
+# Convert to WebP with 80% quality
+sharp -i input.jpg -o output.webp -f webp -q 80
+
+# Resize and convert
+sharp -i input.jpg -o output-400.webp -f webp -q 80 --width 400
+sharp -i input.jpg -o output-800.webp -f webp -q 80 --width 800
+\`\`\`
+
+---
+
+## Step 7: Memoization of Calculations
+
+### Before: Calculation on Every Render
+
+\`\`\`tsx
+function App() {
+  const [count, setCount] = useState(0)
+
+  // BAD: Runs on EVERY render
+  const expensiveValue = heavyCalculation(data)
+
+  return (
+    <div>
+      <p>Result: {expensiveValue}</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  )
+}
+\`\`\`
+
+### After: useMemo for Values
+
+\`\`\`tsx
+import { useMemo } from 'react'
+
+function App() {
+  const [count, setCount] = useState(0)
+  const [data, setData] = useState(initialData)
+
+  // GOOD: Only recalculates when data changes
+  const expensiveValue = useMemo(() => {
+    return heavyCalculation(data)
+  }, [data])
+
+  return (
+    <div>
+      <p>Result: {expensiveValue}</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  )
+}
+\`\`\`
+
+### useCallback for Functions
+
+\`\`\`tsx
+import { useCallback, memo } from 'react'
+
+// Memoized child component
+const ExpensiveChild = memo(function ExpensiveChild({
+  onClick,
+  data
+}: {
+  onClick: () => void
+  data: any[]
+}) {
+  console.log('ExpensiveChild rendered')
+  return <div onClick={onClick}>{/* ... */}</div>
+})
+
+function Parent() {
+  const [count, setCount] = useState(0)
+
+  // GOOD: Stable function between renders
+  const handleClick = useCallback(() => {
+    console.log('clicked')
+  }, [])
+
+  return (
+    <div>
+      <button onClick={() => setCount(c => c + 1)}>Count: {count}</button>
+      <ExpensiveChild onClick={handleClick} data={stableData} />
+    </div>
+  )
+}
+\`\`\`
+
+---
+
+## Step 8: Search Debouncing
+
+### Before: Search on Every Keystroke
+
+\`\`\`tsx
+function SearchBox({ onSearch }) {
+  const [term, setTerm] = useState('')
+
+  // BAD: Fires search on every key
+  const handleChange = (e) => {
+    setTerm(e.target.value)
+    onSearch(e.target.value) // API call on every keystroke!
+  }
+
+  return <input value={term} onChange={handleChange} />
+}
+\`\`\`
+
+### After: With Debounce
+
+\`\`\`tsx
+import { useState, useCallback, useEffect } from 'react'
+
+// Custom hook for debounce
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => clearTimeout(timer)
+  }, [value, delay])
+
+  return debouncedValue
+}
+
+// Usage in component
+function SearchBox({ onSearch }) {
+  const [term, setTerm] = useState('')
+  const debouncedTerm = useDebounce(term, 300)
+
+  // Only searches when debounced value changes
+  useEffect(() => {
+    if (debouncedTerm) {
+      onSearch(debouncedTerm)
+    }
+  }, [debouncedTerm, onSearch])
+
+  return (
+    <input
+      value={term}
+      onChange={(e) => setTerm(e.target.value)}
+      placeholder="Search..."
+    />
+  )
+}
+\`\`\`
+
+### With lodash/debounce
+
+\`\`\`tsx
+import debounce from 'lodash/debounce'
+import { useMemo } from 'react'
+
+function SearchBox({ onSearch }) {
+  const [term, setTerm] = useState('')
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => onSearch(value), 300),
+    [onSearch]
+  )
+
+  const handleChange = (e) => {
+    setTerm(e.target.value)
+    debouncedSearch(e.target.value)
+  }
+
+  return <input value={term} onChange={handleChange} />
+}
+\`\`\`
+
+---
+
+## Step 9: List Virtualization
+
+### Before: Render Everything
+
+\`\`\`tsx
+// BAD: 10,000 items = 10,000 DOM nodes
+function ProductList({ products }) {
+  return (
+    <div className="list">
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )
+}
+\`\`\`
+
+### After: With react-window
+
+\`\`\`bash
+npm install react-window
+\`\`\`
+
+\`\`\`tsx
+import { FixedSizeList as List } from 'react-window'
+
+function VirtualizedProductList({ products }) {
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      <ProductCard product={products[index]} />
+    </div>
+  )
+
+  return (
+    <List
+      height={600}
+      itemCount={products.length}
+      itemSize={120} // Height of each item
+      width="100%"
+    >
+      {Row}
+    </List>
+  )
+}
+\`\`\`
+
+### For Variable Height Lists
+
+\`\`\`tsx
+import { VariableSizeList as List } from 'react-window'
+
+function VariableProductList({ products }) {
+  const getItemSize = (index) => {
+    // Calculate height based on content
+    return products[index].description.length > 100 ? 180 : 120
+  }
+
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      <ProductCard product={products[index]} />
+    </div>
+  )
+
+  return (
+    <List
+      height={600}
+      itemCount={products.length}
+      itemSize={getItemSize}
+      width="100%"
+    >
+      {Row}
+    </List>
+  )
+}
+\`\`\`
+
+### Impact
+
+\`\`\`
+List of 10,000 products:
+
+WITHOUT virtualization:
+- DOM nodes: 10,000
+- Memory: ~50MB
+- Scroll: Laggy (15 FPS)
+- Initial render time: 2-3s
+
+WITH virtualization:
+- DOM nodes: ~20 (visible + buffer)
+- Memory: ~2MB
+- Scroll: Smooth (60 FPS)
+- Initial render time: <100ms
+\`\`\`
+
+---
+
+## Step 10: API Caching
+
+### Before: Fetch on Every Mount
+
+\`\`\`tsx
+function ProductList() {
+  const [products, setProducts] = useState([])
+
+  // BAD: Fetch every time the component mounts
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(setProducts)
+  }, [])
+
+  return <div>{/* ... */}</div>
+}
+\`\`\`
+
+### After: With React Query/TanStack Query
+
+\`\`\`bash
+npm install @tanstack/react-query
+\`\`\`
+
+\`\`\`tsx
+import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 30 * 60 * 1000, // 30 minutes
+    },
+  },
+})
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ProductList />
+    </QueryClientProvider>
+  )
+}
+
+function ProductList() {
+  const { data: products, isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: () => fetch('/api/products').then(res => res.json()),
+  })
+
+  if (isLoading) return <Skeleton />
+  if (error) return <Error message={error.message} />
+
+  return <div>{/* cached products */}</div>
+}
+\`\`\`
+
+### Manual Cache with SWR Pattern
+
+\`\`\`tsx
+// Simple in-memory cache
+const cache = new Map()
+
+async function fetchWithCache(url: string, ttl = 300000) {
+  const cached = cache.get(url)
+
+  if (cached && Date.now() - cached.timestamp < ttl) {
+    return cached.data
+  }
+
+  const response = await fetch(url)
+  const data = await response.json()
+
+  cache.set(url, { data, timestamp: Date.now() })
+
+  return data
+}
+
+// Usage
+function ProductList() {
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    fetchWithCache('/api/products', 5 * 60 * 1000)
+      .then(setProducts)
+  }, [])
+
+  return <div>{/* ... */}</div>
+}
+\`\`\`
+
+---
+
+## Results: Before vs After
+
+### Lighthouse Scores
+
+\`\`\`
+BEFORE:
+=======
+Performance: 35
+LCP: 4.2s
+FID: 320ms
+CLS: 0.25
+Bundle: 1.2MB
+
+AFTER:
+======
+Performance: 92
+LCP: 1.4s
+FID: 45ms
+CLS: 0.02
+Bundle: 180KB
+
+IMPROVEMENTS:
+=============
+Performance: +163% (35 -> 92)
+LCP: -67% (4.2s -> 1.4s)
+FID: -86% (320ms -> 45ms)
+CLS: -92% (0.25 -> 0.02)
+Bundle: -85% (1.2MB -> 180KB)
+\`\`\`
+
+### Real User Metrics
+
+\`\`\`
+Perceived load time:
+- Before: 5+ seconds
+- After: <2 seconds
+
+Interactivity:
+- Before: App feels "stuck"
+- After: Instant response
+
+Scrolling lists:
+- Before: 15 FPS, laggy
+- After: 60 FPS, smooth
+\`\`\`
+
+---
+
+## Performance Budgets
+
+### Setting Up Budgets
+
+Create a \`budget.json\` file:
+
+\`\`\`json
+{
+  "budgets": [
+    {
+      "resourceType": "script",
+      "budget": 200
+    },
+    {
+      "resourceType": "total",
+      "budget": 500
+    },
+    {
+      "metric": "first-contentful-paint",
+      "budget": 1500
+    },
+    {
+      "metric": "interactive",
+      "budget": 3000
+    },
+    {
+      "metric": "largest-contentful-paint",
+      "budget": 2500
+    }
+  ]
+}
+\`\`\`
+
+### Lighthouse CI in GitHub Actions
+
+\`\`\`yaml
+# .github/workflows/lighthouse.yml
+name: Lighthouse CI
+
+on: [push, pull_request]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+\`\`\`
+
+### lighthouserc.json
+
+\`\`\`json
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist"
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", {"minScore": 0.9}],
+        "first-contentful-paint": ["warn", {"maxNumericValue": 1500}],
+        "largest-contentful-paint": ["error", {"maxNumericValue": 2500}],
+        "total-blocking-time": ["warn", {"maxNumericValue": 300}],
+        "cumulative-layout-shift": ["warn", {"maxNumericValue": 0.1}]
+      }
+    }
+  }
+}
+\`\`\`
+
+---
+
+## Audit Checklist
+
+Use this checklist for future audits:
+
+### Bundle and Code
+
+- [ ] Imports: Am I importing full libraries unnecessarily?
+- [ ] Code splitting: Do heavy components use lazy loading?
+- [ ] Tree shaking: Does the bundler remove unused code?
+- [ ] Minification: Are JS and CSS minified in production?
+
+### Images
+
+- [ ] Format: Am I using WebP/AVIF with fallbacks?
+- [ ] Size: Are images properly sized?
+- [ ] Lazy loading: Do below-the-fold images have loading="lazy"?
+- [ ] Dimensions: Do all images have width/height to avoid CLS?
+
+### Rendering
+
+- [ ] Memoization: Do heavy calculations use useMemo?
+- [ ] Callbacks: Do functions passed to children use useCallback?
+- [ ] Virtualization: Are long lists virtualized?
+- [ ] Debouncing: Do search inputs have debounce?
+
+### Network
+
+- [ ] Cache: Do API responses have appropriate cache?
+- [ ] Prefetch: Do critical resources use preload/prefetch?
+- [ ] Compression: Does the server use gzip/brotli?
+- [ ] CDN: Are static assets on a CDN?
+
+### Core Web Vitals
+
+- [ ] LCP < 2.5s: Does the largest element load quickly?
+- [ ] FID < 100ms: Does the page respond quickly to interactions?
+- [ ] CLS < 0.1: Are there no layout jumps?
+
+---
+
+## Recommended Tools
+
+| Tool | Use |
+|------|-----|
+| Lighthouse | General audit |
+| WebPageTest | Detailed analysis from multiple locations |
+| Bundle Analyzer | See what takes up space in the bundle |
+| Chrome DevTools Performance | Detailed profiling |
+| React DevTools Profiler | React-specific performance |
+
+---
+
+## Next Step
+
+Apply this process to your own application:
+
+1. Run Lighthouse and note the initial score
+2. Identify the 3 biggest problems
+3. Apply fixes one by one
+4. Measure after each change
+5. Set up performance budgets to maintain improvements
+
+Remember: **measure first, optimize later**. Don't optimize blindly.
+    `,
+  },
+  'network-debugging': {
+    timeEs: '45 minutos',
+    timeEn: '45 minutes',
+    prerequisitesEs: ['Terminal basico', 'Conocimientos de HTTP'],
+    prerequisitesEn: ['Basic terminal', 'HTTP knowledge'],
+    contentEs: `
+## Lo que vas a aprender
+
+A diagnosticar problemas de red como un profesional. Cuando tu API devuelve 502, cuando CORS te bloquea, o cuando "funciona en mi maquina pero no en produccion", sabras exactamente donde buscar.
+
+Al terminar tendras un toolkit mental y practico para resolver los problemas de red mas comunes.
+
+---
+
+## Tu kit de herramientas
+
+### curl: La navaja suiza
+
+\`\`\`bash
+# GET basico
+curl https://api.example.com/health
+
+# Ver headers de respuesta
+curl -I https://api.example.com/health
+
+# Ver todo el intercambio (request + response)
+curl -v https://api.example.com/health
+
+# POST con JSON
+curl -X POST \\
+  -H "Content-Type: application/json" \\
+  -d '{"name":"test"}' \\
+  https://api.example.com/users
+
+# Con autenticacion
+curl -H "Authorization: Bearer TOKEN" https://api.example.com/me
+
+# Medir tiempos
+curl -w "DNS: %{time_namelookup}s\\nConnect: %{time_connect}s\\nTTFB: %{time_starttransfer}s\\nTotal: %{time_total}s\\n" \\
+  -o /dev/null -s https://api.example.com
+\`\`\`
+
+### ping: Verificar conectividad
+
+\`\`\`bash
+# Basico
+ping google.com
+
+# Solo 4 paquetes
+ping -c 4 google.com
+
+# Si falla: problema de red o DNS
+# Si funciona: el servidor responde a ICMP
+\`\`\`
+
+### nslookup / dig: DNS
+
+\`\`\`bash
+# Resolver dominio
+nslookup api.example.com
+
+# Mas detalle con dig
+dig api.example.com
+
+# Ver registros especificos
+dig api.example.com A      # IPv4
+dig api.example.com AAAA   # IPv6
+dig api.example.com CNAME  # Alias
+dig api.example.com MX     # Mail servers
+\`\`\`
+
+### netstat / ss: Conexiones activas
+
+\`\`\`bash
+# Ver puertos escuchando (Linux)
+ss -tlnp
+
+# Ver puertos escuchando (Mac)
+netstat -an | grep LISTEN
+
+# Ver conexiones establecidas
+ss -tn
+netstat -an | grep ESTABLISHED
+\`\`\`
+
+---
+
+## Escenario 1: "Mi API devuelve 502"
+
+### Paso 1: Verificar que el servidor responde
+
+\`\`\`bash
+# Primero, verificar DNS
+nslookup api.example.com
+# Si falla: problema de DNS
+
+# Luego, verificar conectividad
+ping api.example.com
+# Si falla: servidor caido o firewall
+
+# Finalmente, verificar HTTP
+curl -I https://api.example.com/health
+\`\`\`
+
+### Paso 2: Si usas reverse proxy (Nginx)
+
+\`\`\`bash
+# Ver logs de Nginx
+sudo tail -f /var/log/nginx/error.log
+
+# Errores comunes:
+# "upstream timed out" - backend muy lento
+# "connection refused" - backend no esta corriendo
+# "no live upstreams" - todos los backends caidos
+\`\`\`
+
+### Paso 3: Verificar el backend
+
+\`\`\`bash
+# Ver si el proceso esta corriendo
+ps aux | grep node  # o python, java, etc.
+
+# Ver si escucha en el puerto correcto
+ss -tlnp | grep 3000
+
+# Ver logs del backend
+docker logs mi-app --tail 100
+
+# O si es systemd
+journalctl -u mi-app -f
+\`\`\`
+
+### Causa mas comun
+
+\`\`\`
+502 Bad Gateway casi siempre significa:
+1. El backend no esta corriendo
+2. El backend escucha en puerto diferente
+3. El backend tarda mas del timeout de Nginx
+\`\`\`
+
+---
+
+## Escenario 2: "CORS me bloquea"
+
+### Entendiendo CORS
+
+\`\`\`
+Tu frontend:     https://app.example.com
+Tu API:          https://api.example.com
+
+Navegador: "Oye API, mi origen es app.example.com"
+API:       "No te conozco, bloqueado"
+Navegador: "CORS error!"
+\`\`\`
+
+### Paso 1: Verificar el error exacto
+
+\`\`\`
+Abre DevTools > Console
+
+Errores comunes:
+- "No 'Access-Control-Allow-Origin' header" → Falta header
+- "not in the Access-Control-Allow-Origin list" → Origen no permitido
+- "Method PUT is not allowed" → Metodo no permitido
+\`\`\`
+
+### Paso 2: Verificar headers con curl
+
+\`\`\`bash
+# Simular preflight OPTIONS
+curl -X OPTIONS \\
+  -H "Origin: https://app.example.com" \\
+  -H "Access-Control-Request-Method: POST" \\
+  -I https://api.example.com/endpoint
+
+# Buscar estos headers en la respuesta:
+# Access-Control-Allow-Origin: https://app.example.com
+# Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+# Access-Control-Allow-Headers: Content-Type, Authorization
+\`\`\`
+
+### Paso 3: Configurar el servidor
+
+\`\`\`javascript
+// Express.js
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'https://app.example.com', // O array de origenes
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Si usas cookies
+}));
+\`\`\`
+
+---
+
+## Escenario 3: "El certificado SSL falla"
+
+### Paso 1: Verificar el certificado
+
+\`\`\`bash
+# Ver detalles del certificado
+echo | openssl s_client -connect api.example.com:443 -servername api.example.com 2>/dev/null | openssl x509 -text -noout
+
+# Ver solo fechas
+echo | openssl s_client -connect api.example.com:443 2>/dev/null | openssl x509 -dates -noout
+
+# Output esperado:
+# notBefore=Jan  1 00:00:00 2024 GMT
+# notAfter=Apr  1 00:00:00 2024 GMT
+\`\`\`
+
+### Errores comunes
+
+| Error | Causa | Solucion |
+|-------|-------|----------|
+| certificate has expired | Certificado vencido | Renovar con certbot |
+| unable to verify | Cadena incompleta | Incluir certificado intermedio |
+| hostname mismatch | Dominio no coincide | Verificar CN/SAN del cert |
+| self-signed | Cert auto-firmado | Usar Let's Encrypt |
+
+### Renovar con Certbot
+
+\`\`\`bash
+# Ver estado de certificados
+sudo certbot certificates
+
+# Renovar manualmente
+sudo certbot renew
+
+# Renovar un dominio especifico
+sudo certbot certonly -d api.example.com
+\`\`\`
+
+---
+
+## Escenario 4: "Las respuestas son muy lentas"
+
+### Paso 1: Medir donde esta la latencia
+
+\`\`\`bash
+curl -w "\\n\\
+DNS:        %{time_namelookup}s\\n\\
+Connect:    %{time_connect}s\\n\\
+TLS:        %{time_appconnect}s\\n\\
+TTFB:       %{time_starttransfer}s\\n\\
+Total:      %{time_total}s\\n" \\
+  -o /dev/null -s https://api.example.com/slow-endpoint
+
+# Output ejemplo:
+# DNS:        0.023s      <- Resolucion DNS
+# Connect:    0.045s      <- Conexion TCP
+# TLS:        0.120s      <- Handshake TLS
+# TTFB:       2.500s      <- Tiempo hasta primer byte (PROBLEMA!)
+# Total:      2.550s
+\`\`\`
+
+### Interpretacion
+
+\`\`\`
+Si DNS es alto:     Problema de DNS resolver
+Si Connect es alto: Latencia de red o servidor lejos
+Si TLS es alto:     Problema de certificados/crypto
+Si TTFB es alto:    El servidor tarda en procesar
+Si Total >> TTFB:   Respuesta muy grande
+\`\`\`
+
+### Paso 2: Diagnosticar el backend
+
+\`\`\`bash
+# Ver queries lentas en PostgreSQL
+SELECT query, calls, mean_time
+FROM pg_stat_statements
+ORDER BY mean_time DESC
+LIMIT 10;
+
+# Ver procesos activos
+SELECT pid, query, state, wait_event_type
+FROM pg_stat_activity
+WHERE state = 'active';
+\`\`\`
+
+---
+
+## Cheat Sheet
+
+### Comandos esenciales
+
+| Comando | Uso |
+|---------|-----|
+| \`curl -I URL\` | Ver headers de respuesta |
+| \`curl -v URL\` | Ver intercambio completo |
+| \`ping HOST\` | Verificar conectividad |
+| \`nslookup DOMAIN\` | Resolver DNS |
+| \`dig DOMAIN\` | DNS detallado |
+| \`ss -tlnp\` | Puertos escuchando (Linux) |
+| \`netstat -an\` | Conexiones (Mac/Linux) |
+| \`traceroute HOST\` | Ruta de paquetes |
+
+### Status codes
+
+| Codigo | Significado | Donde buscar |
+|--------|-------------|--------------|
+| 400 | Bad Request | Request mal formada |
+| 401 | Unauthorized | Token/API key |
+| 403 | Forbidden | Permisos |
+| 404 | Not Found | URL correcta? |
+| 429 | Rate Limited | Demasiadas requests |
+| 500 | Internal Error | Logs del backend |
+| 502 | Bad Gateway | Backend + proxy logs |
+| 503 | Unavailable | Servidor sobrecargado |
+| 504 | Gateway Timeout | Timeout de proxy |
+
+---
+
+## Proximo paso
+
+Practica estos comandos con tus propios servicios. Cuando algo falle, tendras las herramientas para diagnosticarlo.
+    `,
+    contentEn: `
+## What you'll learn
+
+To diagnose network problems like a professional. When your API returns 502, when CORS blocks you, or when "it works on my machine but not in production", you'll know exactly where to look.
+
+By the end you'll have a mental and practical toolkit to solve the most common network problems.
+
+---
+
+## Your toolkit
+
+### curl: The Swiss army knife
+
+\`\`\`bash
+# Basic GET
+curl https://api.example.com/health
+
+# See response headers
+curl -I https://api.example.com/health
+
+# See full exchange (request + response)
+curl -v https://api.example.com/health
+
+# POST with JSON
+curl -X POST \\
+  -H "Content-Type: application/json" \\
+  -d '{"name":"test"}' \\
+  https://api.example.com/users
+
+# With authentication
+curl -H "Authorization: Bearer TOKEN" https://api.example.com/me
+
+# Measure times
+curl -w "DNS: %{time_namelookup}s\\nConnect: %{time_connect}s\\nTTFB: %{time_starttransfer}s\\nTotal: %{time_total}s\\n" \\
+  -o /dev/null -s https://api.example.com
+\`\`\`
+
+### ping: Check connectivity
+
+\`\`\`bash
+# Basic
+ping google.com
+
+# Only 4 packets
+ping -c 4 google.com
+
+# If fails: network or DNS problem
+# If works: server responds to ICMP
+\`\`\`
+
+### nslookup / dig: DNS
+
+\`\`\`bash
+# Resolve domain
+nslookup api.example.com
+
+# More detail with dig
+dig api.example.com
+
+# See specific records
+dig api.example.com A      # IPv4
+dig api.example.com AAAA   # IPv6
+dig api.example.com CNAME  # Alias
+dig api.example.com MX     # Mail servers
+\`\`\`
+
+### netstat / ss: Active connections
+
+\`\`\`bash
+# See listening ports (Linux)
+ss -tlnp
+
+# See listening ports (Mac)
+netstat -an | grep LISTEN
+
+# See established connections
+ss -tn
+netstat -an | grep ESTABLISHED
+\`\`\`
+
+---
+
+## Scenario 1: "My API returns 502"
+
+### Step 1: Verify the server responds
+
+\`\`\`bash
+# First, verify DNS
+nslookup api.example.com
+# If fails: DNS problem
+
+# Then, verify connectivity
+ping api.example.com
+# If fails: server down or firewall
+
+# Finally, verify HTTP
+curl -I https://api.example.com/health
+\`\`\`
+
+### Step 2: If using reverse proxy (Nginx)
+
+\`\`\`bash
+# See Nginx logs
+sudo tail -f /var/log/nginx/error.log
+
+# Common errors:
+# "upstream timed out" - backend too slow
+# "connection refused" - backend not running
+# "no live upstreams" - all backends down
+\`\`\`
+
+### Step 3: Verify the backend
+
+\`\`\`bash
+# See if process is running
+ps aux | grep node  # or python, java, etc.
+
+# See if listening on correct port
+ss -tlnp | grep 3000
+
+# See backend logs
+docker logs my-app --tail 100
+
+# Or if systemd
+journalctl -u my-app -f
+\`\`\`
+
+### Most common cause
+
+\`\`\`
+502 Bad Gateway almost always means:
+1. Backend is not running
+2. Backend listens on different port
+3. Backend takes longer than Nginx timeout
+\`\`\`
+
+---
+
+## Scenario 2: "CORS blocks me"
+
+### Understanding CORS
+
+\`\`\`
+Your frontend:   https://app.example.com
+Your API:        https://api.example.com
+
+Browser: "Hey API, my origin is app.example.com"
+API:     "I don't know you, blocked"
+Browser: "CORS error!"
+\`\`\`
+
+### Step 1: Check the exact error
+
+\`\`\`
+Open DevTools > Console
+
+Common errors:
+- "No 'Access-Control-Allow-Origin' header" → Missing header
+- "not in the Access-Control-Allow-Origin list" → Origin not allowed
+- "Method PUT is not allowed" → Method not allowed
+\`\`\`
+
+### Step 2: Verify headers with curl
+
+\`\`\`bash
+# Simulate preflight OPTIONS
+curl -X OPTIONS \\
+  -H "Origin: https://app.example.com" \\
+  -H "Access-Control-Request-Method: POST" \\
+  -I https://api.example.com/endpoint
+
+# Look for these headers in response:
+# Access-Control-Allow-Origin: https://app.example.com
+# Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+# Access-Control-Allow-Headers: Content-Type, Authorization
+\`\`\`
+
+### Step 3: Configure the server
+
+\`\`\`javascript
+// Express.js
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'https://app.example.com', // Or array of origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // If using cookies
+}));
+\`\`\`
+
+---
+
+## Scenario 3: "SSL certificate fails"
+
+### Step 1: Verify the certificate
+
+\`\`\`bash
+# See certificate details
+echo | openssl s_client -connect api.example.com:443 -servername api.example.com 2>/dev/null | openssl x509 -text -noout
+
+# See only dates
+echo | openssl s_client -connect api.example.com:443 2>/dev/null | openssl x509 -dates -noout
+
+# Expected output:
+# notBefore=Jan  1 00:00:00 2024 GMT
+# notAfter=Apr  1 00:00:00 2024 GMT
+\`\`\`
+
+### Common errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| certificate has expired | Expired cert | Renew with certbot |
+| unable to verify | Incomplete chain | Include intermediate cert |
+| hostname mismatch | Domain doesn't match | Check CN/SAN of cert |
+| self-signed | Self-signed cert | Use Let's Encrypt |
+
+### Renew with Certbot
+
+\`\`\`bash
+# See certificate status
+sudo certbot certificates
+
+# Renew manually
+sudo certbot renew
+
+# Renew specific domain
+sudo certbot certonly -d api.example.com
+\`\`\`
+
+---
+
+## Scenario 4: "Responses are very slow"
+
+### Step 1: Measure where latency is
+
+\`\`\`bash
+curl -w "\\n\\
+DNS:        %{time_namelookup}s\\n\\
+Connect:    %{time_connect}s\\n\\
+TLS:        %{time_appconnect}s\\n\\
+TTFB:       %{time_starttransfer}s\\n\\
+Total:      %{time_total}s\\n" \\
+  -o /dev/null -s https://api.example.com/slow-endpoint
+
+# Example output:
+# DNS:        0.023s      <- DNS resolution
+# Connect:    0.045s      <- TCP connection
+# TLS:        0.120s      <- TLS handshake
+# TTFB:       2.500s      <- Time to first byte (PROBLEM!)
+# Total:      2.550s
+\`\`\`
+
+### Interpretation
+
+\`\`\`
+If DNS is high:     DNS resolver problem
+If Connect is high: Network latency or server far away
+If TLS is high:     Certificate/crypto problem
+If TTFB is high:    Server takes long to process
+If Total >> TTFB:   Response too large
+\`\`\`
+
+### Step 2: Diagnose the backend
+
+\`\`\`bash
+# See slow queries in PostgreSQL
+SELECT query, calls, mean_time
+FROM pg_stat_statements
+ORDER BY mean_time DESC
+LIMIT 10;
+
+# See active processes
+SELECT pid, query, state, wait_event_type
+FROM pg_stat_activity
+WHERE state = 'active';
+\`\`\`
+
+---
+
+## Cheat Sheet
+
+### Essential commands
+
+| Command | Use |
+|---------|-----|
+| \`curl -I URL\` | See response headers |
+| \`curl -v URL\` | See full exchange |
+| \`ping HOST\` | Verify connectivity |
+| \`nslookup DOMAIN\` | Resolve DNS |
+| \`dig DOMAIN\` | Detailed DNS |
+| \`ss -tlnp\` | Listening ports (Linux) |
+| \`netstat -an\` | Connections (Mac/Linux) |
+| \`traceroute HOST\` | Packet route |
+
+### Status codes
+
+| Code | Meaning | Where to look |
+|------|---------|---------------|
+| 400 | Bad Request | Malformed request |
+| 401 | Unauthorized | Token/API key |
+| 403 | Forbidden | Permissions |
+| 404 | Not Found | Correct URL? |
+| 429 | Rate Limited | Too many requests |
+| 500 | Internal Error | Backend logs |
+| 502 | Bad Gateway | Backend + proxy logs |
+| 503 | Unavailable | Server overloaded |
+| 504 | Gateway Timeout | Proxy timeout |
+
+---
+
+## Next step
+
+Practice these commands with your own services. When something fails, you'll have the tools to diagnose it.
     `,
   },
 }
