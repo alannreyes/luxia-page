@@ -12,6 +12,7 @@ const sections = [
   { slug: 'docker-intro', titleEs: 'Docker Básico', titleEn: 'Docker Basics', level: 'aprendiz', icon: '🐳' },
   { slug: 'llms-intro', titleEs: 'Intro a LLMs', titleEn: 'Intro to LLMs', level: 'aprendiz', icon: '🤖' },
   { slug: 'llms-models', titleEs: 'Modelos LLM: Guía 2026', titleEn: 'LLM Models: 2026 Guide', level: 'aprendiz', icon: '🧠' },
+  { slug: 'generative-ai', titleEs: '¿Qué es la IA Generativa?', titleEn: 'What is Generative AI?', level: 'aprendiz', icon: '✨' },
   { slug: 'javascript', titleEs: 'JavaScript & TypeScript', titleEn: 'JavaScript & TypeScript', level: 'cocinero', icon: '📗' },
   { slug: 'nodejs', titleEs: 'Node.js & npm/pnpm', titleEn: 'Node.js & npm/pnpm', level: 'cocinero', icon: '📦' },
   { slug: 'python', titleEs: 'Python & uv', titleEn: 'Python & uv', level: 'cocinero', icon: '🐍' },
@@ -19,6 +20,7 @@ const sections = [
   { slug: 'react', titleEs: 'React', titleEn: 'React', level: 'cocinero', icon: '⚛️' },
   { slug: 'apis', titleEs: 'APIs REST', titleEn: 'REST APIs', level: 'cocinero', icon: '🔗' },
   { slug: 'embeddings', titleEs: 'Embeddings', titleEn: 'Embeddings', level: 'cocinero', icon: '🧮' },
+  { slug: 'prompt-engineering', titleEs: 'Prompt Engineering', titleEn: 'Prompt Engineering', level: 'cocinero', icon: '📝' },
   { slug: 'system-design', titleEs: 'Diseño de Sistemas', titleEn: 'System Design', level: 'chef', icon: '🏗️' },
   { slug: 'performance', titleEs: 'Performance & Optimización', titleEn: 'Performance & Optimization', level: 'chef', icon: '⚡' },
   { slug: 'networking', titleEs: 'Redes & Protocolos', titleEn: 'Networking & Protocols', level: 'chef', icon: '🌐' },
@@ -36,6 +38,8 @@ const sections = [
   { slug: 'observability', titleEs: 'Observabilidad', titleEn: 'Observability', level: 'chef', icon: '📊' },
   { slug: 'mobile', titleEs: 'React Native & Expo', titleEn: 'React Native & Expo', level: 'chef', icon: '📱' },
   { slug: 'iot', titleEs: 'IoT & Arduino', titleEn: 'IoT & Arduino', level: 'chef', icon: '🔌' },
+  { slug: 'agentic-ai', titleEs: 'IA Agéntica', titleEn: 'Agentic AI', level: 'chef', icon: '🤖' },
+  { slug: 'geo', titleEs: 'GEO: Generative Engine Optimization', titleEn: 'GEO: Generative Engine Optimization', level: 'chef', icon: '🔍' },
   { slug: 'vector-db', titleEs: 'Bases de Datos Vectoriales', titleEn: 'Vector Databases', level: 'master', icon: '🗄️' },
   { slug: 'rag', titleEs: 'RAG', titleEn: 'RAG', level: 'master', icon: '📚' },
   { slug: 'mcp', titleEs: 'MCP (Model Context Protocol)', titleEn: 'MCP (Model Context Protocol)', level: 'master', icon: '🔧' },
@@ -15756,6 +15760,835 @@ around the world.
 -> [Network Debugging](/en/cooking/network-debugging) - Diagnose real network problems
     `,
   },
+
+  'generative-ai': {
+    contentEs: `
+## La magia que ya usas sin saberlo
+
+Cada vez que le pides a ChatGPT que te explique un concepto, cuando Spotify te sugiere esa canción que termina siendo tu favorita, o cuando Google Photos agrupa las fotos de tu familia... estás usando IA Generativa.
+
+> **"La IA Generativa es la tecnología más transformadora desde el internet."** — Sundar Pichai, CEO de Google, 2023
+
+---
+
+## ¿Qué es exactamente la IA Generativa?
+
+La **IA Generativa** es un tipo de inteligencia artificial que puede **crear contenido nuevo** que nunca existió: texto, imágenes, código, música, video.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    TIPOS DE IA                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  IA Tradicional (Analítica)     IA Generativa               │
+│  ───────────────────────────    ─────────────────────────   │
+│                                                             │
+│  • Clasifica: "¿Es spam o no?"  • Crea: "Escribe un email"  │
+│  • Predice: "¿Lloverá mañana?"  • Genera: "Dibuja un gato"  │
+│  • Detecta: "¿Es un gato?"      • Produce: "Compón música"  │
+│                                                             │
+│  INPUT → CATEGORÍA              INPUT → CONTENIDO NUEVO     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+La diferencia clave: la IA tradicional **analiza**, la IA generativa **crea**.
+
+---
+
+## El momento que cambió todo: 30 de noviembre de 2022
+
+Ese día, OpenAI lanzó ChatGPT. En **5 días** alcanzó 1 millón de usuarios. En **2 meses**, 100 millones.
+
+\`\`\`
+┌────────────────────────────────────────────────────────────┐
+│           ADOPCIÓN MÁS RÁPIDA DE LA HISTORIA               │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│  ChatGPT ████████████████████████████████████ 2 meses      │
+│  TikTok  ███████████████████████             9 meses       │
+│  Instagram █████████████████                 2.5 años      │
+│  Netflix ██████████                          10 años       │
+│                                                            │
+│              Tiempo para llegar a 100M usuarios            │
+└────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## ¿Cómo funciona? (Sin matemáticas)
+
+Imagina un amigo que ha leído **todo internet**: Wikipedia, libros, foros, código. No "recuerda" todo textualmente, pero **aprendió patrones**.
+
+Cuando le preguntas algo, **genera** la respuesta más probable basándose en todo lo que aprendió.
+
+> **Dato curioso**: GPT-4 fue entrenado con ~13 billones de tokens. Si imprimieras todo en hojas A4, la pila tendría 8,000 km de altura.
+
+---
+
+## Los protagonistas: ¿Quién hace qué?
+
+| Empresa | Modelos | Característica |
+|---------|---------|----------------|
+| **OpenAI** | GPT-4o, o1, o3 | El más popular |
+| **Anthropic** | Claude 3.5, 4 | Seguridad y razonamiento |
+| **Google** | Gemini 2.0 | Integración con servicios |
+| **Meta** | Llama 3 | Open source |
+| **Mistral** | Mistral Large | Alternativa europea |
+
+---
+
+## Lo que la IA Generativa NO es
+
+| Mito | Realidad |
+|------|----------|
+| "Es inteligente como un humano" | No tiene consciencia ni comprensión real |
+| "Siempre dice la verdad" | Puede inventar hechos (alucinaciones) |
+| "Reemplazará todos los trabajos" | Transforma trabajos, no los elimina |
+| "Entiende lo que escribo" | Predice patrones estadísticos |
+
+---
+
+## Por dónde seguir
+
+**Siguiente paso**: Aprende [Prompt Engineering](/es/learning/prompt-engineering) — el arte de comunicarte efectivamente con IAs.
+
+---
+
+## Recursos
+
+- [State of AI Report](https://www.stateof.ai/)
+- [3Blue1Brown: Neural Networks](https://www.youtube.com/watch?v=aircAruvnKk)
+- [Anthropic's Core Views on AI Safety](https://www.anthropic.com/core-views-on-ai-safety)
+    `,
+    contentEn: `
+## The magic you're already using without knowing it
+
+Every time you ask ChatGPT to explain a concept, when Spotify suggests that song that becomes your favorite, or when Google Photos groups your family photos... you're using Generative AI.
+
+> **"Generative AI is the most transformative technology since the internet."** — Sundar Pichai, CEO of Google, 2023
+
+---
+
+## What exactly is Generative AI?
+
+**Generative AI** is a type of artificial intelligence that can **create new content** that never existed: text, images, code, music, video.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    TYPES OF AI                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Traditional AI (Analytical)    Generative AI               │
+│  ───────────────────────────    ─────────────────────────   │
+│                                                             │
+│  • Classifies: "Spam or not?"   • Creates: "Write an email" │
+│  • Predicts: "Will it rain?"    • Generates: "Draw a cat"   │
+│  • Detects: "Is this a cat?"    • Produces: "Compose music" │
+│                                                             │
+│  INPUT → CATEGORY               INPUT → NEW CONTENT         │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+The key difference: traditional AI **analyzes**, generative AI **creates**.
+
+---
+
+## The moment that changed everything: November 30, 2022
+
+That day, OpenAI launched ChatGPT. In **5 days** it reached 1 million users. In **2 months**, 100 million.
+
+\`\`\`
+┌────────────────────────────────────────────────────────────┐
+│           FASTEST ADOPTION IN HISTORY                      │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│  ChatGPT ████████████████████████████████████ 2 months     │
+│  TikTok  ███████████████████████             9 months      │
+│  Instagram █████████████████                 2.5 years     │
+│  Netflix ██████████                          10 years      │
+│                                                            │
+│              Time to reach 100M users                      │
+└────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## How does it work? (No math)
+
+Imagine a friend who has read **all of the internet**: Wikipedia, books, forums, code. They don't "remember" everything verbatim, but **learned patterns**.
+
+When you ask something, they **generate** the most likely answer based on everything they learned.
+
+> **Fun fact**: GPT-4 was trained with ~13 trillion tokens. If you printed everything on A4 sheets, the stack would be 8,000 km tall.
+
+---
+
+## The main players: Who does what?
+
+| Company | Models | Characteristic |
+|---------|--------|----------------|
+| **OpenAI** | GPT-4o, o1, o3 | Most popular |
+| **Anthropic** | Claude 3.5, 4 | Safety and reasoning |
+| **Google** | Gemini 2.0 | Service integration |
+| **Meta** | Llama 3 | Open source |
+| **Mistral** | Mistral Large | European alternative |
+
+---
+
+## What Generative AI is NOT
+
+| Myth | Reality |
+|------|---------|
+| "It's intelligent like a human" | It has no consciousness or real understanding |
+| "It always tells the truth" | It can invent facts (hallucinations) |
+| "It will replace all jobs" | It transforms jobs, doesn't eliminate them |
+| "It understands what I write" | It predicts statistical patterns |
+
+---
+
+## Where to go next
+
+**Next step**: Learn [Prompt Engineering](/en/learning/prompt-engineering) — the art of effectively communicating with AIs.
+
+---
+
+## Resources
+
+- [State of AI Report](https://www.stateof.ai/)
+- [3Blue1Brown: Neural Networks](https://www.youtube.com/watch?v=aircAruvnKk)
+- [Anthropic's Core Views on AI Safety](https://www.anthropic.com/core-views-on-ai-safety)
+    `,
+  },
+
+  'prompt-engineering': {
+    contentEs: `
+## El superpoder más subestimado de 2026
+
+Hay una habilidad que separa a quienes usan ChatGPT para "jugar" de quienes lo usan para generar valor real.
+
+Es **saber pedir**.
+
+> **"El prompt engineering es la diferencia entre obtener una respuesta mediocre y una que te ahorra 10 horas de trabajo."** — Riley Goodside, Scale AI
+
+---
+
+## ¿Por qué importa tanto?
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              EL MISMO MODELO, RESULTADOS MUY DIFERENTES     │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  PROMPT BÁSICO                  PROMPT PROFESIONAL          │
+│  ─────────────                  ────────────────────        │
+│                                                             │
+│  "Escríbeme un email"           "Actúa como un CEO.         │
+│                                  Escribe un email de 3      │
+│                                  párrafos a mi equipo       │
+│                                  anunciando que logramos    │
+│                                  el objetivo de ventas.     │
+│                                  Tono: celebratorio pero    │
+│                                  profesional."              │
+│                                                             │
+│  RESULTADO: Genérico            RESULTADO: Listo para       │
+│                                  enviar                     │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## La analogía del restaurante
+
+Imagina que entras a un restaurante. Si le dices al chef **"Quiero comer algo"**, te traerá lo que él decida.
+
+Pero si dices: **"Quiero un filete término medio, con salsa de champiñones, sin cebolla porque soy alérgico, listo en 20 minutos porque tengo una reunión."**
+
+El chef tiene toda la información para darte exactamente lo que necesitas.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              DEL RESTAURANTE AL PROMPT                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  RESTAURANTE                    PROMPT ENGINEERING          │
+│  ─────────────                  ──────────────────          │
+│                                                             │
+│  Qué quieres comer      →      Qué tarea necesitas          │
+│  Cómo lo quieres        →      Formato de salida            │
+│  Restricciones          →      Lo que NO debe incluir       │
+│  Contexto (la reunión)  →      Para qué lo necesitas        │
+│  El chef                →      El modelo de IA              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Los 5 elementos de un prompt profesional
+
+### 1. ROL (Quién debe ser la IA)
+"Eres un senior developer con 10 años de experiencia..."
+
+### 2. TAREA (Qué debe hacer)
+"Revisa este código y encuentra bugs..."
+
+### 3. CONTEXTO (Información relevante)
+"Nuestro servicio estuvo caído 3 horas ayer..."
+
+### 4. FORMATO (Cómo quieres la respuesta)
+"Dame 5 ideas. Para cada una incluye: nombre, descripción, costo..."
+
+### 5. RESTRICCIONES (Lo que NO debe hacer)
+"No uses jerga técnica. Máximo 300 palabras..."
+
+---
+
+## El framework CERO
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    FRAMEWORK CERO                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  C - Contexto    │ ¿Cuál es la situación?                   │
+│  E - Expectativa │ ¿Qué resultado quieres?                  │
+│  R - Rol         │ ¿Quién debe ser la IA?                   │
+│  O - Output      │ ¿En qué formato lo necesitas?            │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## El prompt perfecto no existe (y está bien)
+
+> **"El mejor prompt es el que iteras."** — Simon Willison
+
+1. Escribe tu primer prompt
+2. Evalúa el resultado
+3. Identifica qué falta o sobra
+4. Ajusta y repite
+
+---
+
+## Recursos
+
+- [Prompt Engineering Guide](https://www.promptingguide.ai/)
+- [Anthropic's Prompt Library](https://docs.anthropic.com/en/prompt-library/library)
+- [Learn Prompting](https://learnprompting.org/)
+    `,
+    contentEn: `
+## The most underestimated superpower of 2026
+
+There's a skill that separates those who use ChatGPT to "play around" from those who use it to generate real value.
+
+It's **knowing how to ask**.
+
+> **"Prompt engineering is the difference between getting a mediocre answer and one that saves you 10 hours of work."** — Riley Goodside, Scale AI
+
+---
+
+## Why does it matter so much?
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              SAME MODEL, VERY DIFFERENT RESULTS             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  BASIC PROMPT                   PROFESSIONAL PROMPT         │
+│  ─────────────                  ───────────────────         │
+│                                                             │
+│  "Write me an email"            "Act as a CEO. Write a      │
+│                                  3-paragraph email to my    │
+│                                  team announcing we hit     │
+│                                  our sales target.          │
+│                                  Tone: celebratory but      │
+│                                  professional."             │
+│                                                             │
+│  RESULT: Generic                RESULT: Ready to send       │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## The restaurant analogy
+
+Imagine you walk into a restaurant. If you tell the chef **"I want to eat something"**, they'll bring whatever they decide.
+
+But if you say: **"I want a medium-rare steak with mushroom sauce, no onions because I'm allergic, ready in 20 minutes because I have a meeting."**
+
+The chef has all the information to give you exactly what you need.
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              FROM RESTAURANT TO PROMPT                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  RESTAURANT                     PROMPT ENGINEERING          │
+│  ──────────                     ──────────────────          │
+│                                                             │
+│  What you want to eat   →      What task you need           │
+│  How you want it        →      Output format                │
+│  Restrictions           →      What NOT to include          │
+│  Context (the meeting)  →      Why you need it              │
+│  The chef               →      The AI model                 │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## The 5 elements of a professional prompt
+
+### 1. ROLE (Who the AI should be)
+"You are a senior developer with 10 years of experience..."
+
+### 2. TASK (What it should do)
+"Review this code and find bugs..."
+
+### 3. CONTEXT (Relevant information)
+"Our service was down for 3 hours yesterday..."
+
+### 4. FORMAT (How you want the response)
+"Give me 5 ideas. For each include: name, description, cost..."
+
+### 5. CONSTRAINTS (What it should NOT do)
+"Don't use technical jargon. Maximum 300 words..."
+
+---
+
+## The CERO framework
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    CERO FRAMEWORK                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  C - Context     │ What's the situation?                    │
+│  E - Expectation │ What result do you want?                 │
+│  R - Role        │ Who should the AI be?                    │
+│  O - Output      │ In what format do you need it?           │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## The perfect prompt doesn't exist (and that's OK)
+
+> **"The best prompt is the one you iterate."** — Simon Willison
+
+1. Write your first prompt
+2. Evaluate the result
+3. Identify what's missing or extra
+4. Adjust and repeat
+
+---
+
+## Resources
+
+- [Prompt Engineering Guide](https://www.promptingguide.ai/)
+- [Anthropic's Prompt Library](https://docs.anthropic.com/en/prompt-library/library)
+- [Learn Prompting](https://learnprompting.org/)
+    `,
+  },
+
+  'agentic-ai': {
+    contentEs: `
+## De chatbot a agente: la evolución que cambia las reglas
+
+En 2023, le preguntabas a ChatGPT "¿cómo reservo un vuelo?" y te daba instrucciones.
+
+En 2026, le dices "reserva un vuelo a Madrid la próxima semana" y **lo hace**.
+
+> **"Los agentes de IA representan la próxima frontera de la productividad."** — Satya Nadella, CEO de Microsoft
+
+---
+
+## ¿Qué es la IA Agéntica?
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│           IA GENERATIVA vs IA AGÉNTICA                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  IA GENERATIVA                  IA AGÉNTICA                 │
+│  ─────────────                  ─────────────               │
+│                                                             │
+│  Responde preguntas             Ejecuta tareas              │
+│  Un turno de conversación       Múltiples pasos             │
+│  Necesita supervisión           Semi-autónoma               │
+│  Produce texto/imágenes         Produce ACCIONES            │
+│                                                             │
+│  "¿Cómo hago X?"         →      "Haz X"                     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+Un **agente de IA** puede:
+- Planificar una secuencia de acciones
+- Usar herramientas (APIs, navegador, código)
+- Tomar decisiones basadas en resultados
+- Iterar hasta completar el objetivo
+
+---
+
+## La anatomía de un agente
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                   ESTRUCTURA DE UN AGENTE                   │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│                    ┌─────────────┐                          │
+│                    │   CEREBRO   │                          │
+│                    │    (LLM)    │                          │
+│                    └──────┬──────┘                          │
+│                           │                                 │
+│            ┌──────────────┼──────────────┐                  │
+│            │              │              │                  │
+│       ┌────▼────┐    ┌────▼────┐    ┌────▼────┐            │
+│       │ MEMORIA │    │PLANIFICA│    │HERRAMIEN│            │
+│       │         │    │  CIÓN   │    │   TAS   │            │
+│       └─────────┘    └─────────┘    └─────────┘            │
+│                                                             │
+│       Recuerda         Decide         Ejecuta              │
+│       contexto         qué hacer      acciones             │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Los agentes ya están entre nosotros
+
+| Producto | Qué hace | Empresa |
+|----------|----------|---------|
+| **Claude Computer Use** | Controla tu computadora | Anthropic |
+| **Operator** | Navega y ejecuta en web | OpenAI |
+| **Devin** | Programa de forma autónoma | Cognition AI |
+| **Cursor Agent** | Desarrolla código end-to-end | Cursor |
+
+---
+
+## Cuándo usar cada tipo
+
+| Tarea | IA Generativa | IA Agéntica |
+|-------|---------------|-------------|
+| Escribir un email | Ideal | Innecesaria |
+| Investigar + escribir informe | Posible | Mejor |
+| Reservar + coordinar + confirmar | No puede | Necesaria |
+| Refactorizar 50 archivos | Difícil | Mejor |
+
+---
+
+## Recursos
+
+- [Anthropic Computer Use](https://docs.anthropic.com/en/docs/build-with-claude/computer-use)
+- [OpenAI Operator](https://openai.com/operator/)
+- [LangChain Agents](https://python.langchain.com/docs/concepts/agents/)
+    `,
+    contentEn: `
+## From chatbot to agent: the evolution that changes the rules
+
+In 2023, you asked ChatGPT "how do I book a flight?" and it gave you instructions.
+
+In 2026, you tell it "book a flight to Madrid next week" and **it does it**.
+
+> **"AI agents represent the next frontier of productivity."** — Satya Nadella, CEO of Microsoft
+
+---
+
+## What is Agentic AI?
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│           GENERATIVE AI vs AGENTIC AI                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  GENERATIVE AI                  AGENTIC AI                  │
+│  ─────────────                  ──────────                  │
+│                                                             │
+│  Answers questions              Executes tasks              │
+│  One conversation turn          Multiple steps              │
+│  Needs supervision              Semi-autonomous             │
+│  Produces text/images           Produces ACTIONS            │
+│                                                             │
+│  "How do I do X?"        →      "Do X"                      │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+An **AI agent** can:
+- Plan a sequence of actions
+- Use tools (APIs, browser, code)
+- Make decisions based on results
+- Iterate until completing the objective
+
+---
+
+## The anatomy of an agent
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                   AGENT STRUCTURE                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│                    ┌─────────────┐                          │
+│                    │   BRAIN     │                          │
+│                    │   (LLM)     │                          │
+│                    └──────┬──────┘                          │
+│                           │                                 │
+│            ┌──────────────┼──────────────┐                  │
+│            │              │              │                  │
+│       ┌────▼────┐    ┌────▼────┐    ┌────▼────┐            │
+│       │ MEMORY  │    │PLANNING │    │  TOOLS  │            │
+│       │         │    │         │    │         │            │
+│       └─────────┘    └─────────┘    └─────────┘            │
+│                                                             │
+│       Remembers       Decides        Executes              │
+│       context         what to do     actions               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Agents are already among us
+
+| Product | What it does | Company |
+|---------|--------------|---------|
+| **Claude Computer Use** | Controls your computer | Anthropic |
+| **Operator** | Navigates and executes on web | OpenAI |
+| **Devin** | Programs autonomously | Cognition AI |
+| **Cursor Agent** | Develops code end-to-end | Cursor |
+
+---
+
+## When to use each type
+
+| Task | Generative AI | Agentic AI |
+|------|---------------|------------|
+| Write an email | Ideal | Unnecessary |
+| Research + write report | Possible | Better |
+| Book + coordinate + confirm | Cannot | Necessary |
+| Refactor 50 files | Difficult | Better |
+
+---
+
+## Resources
+
+- [Anthropic Computer Use](https://docs.anthropic.com/en/docs/build-with-claude/computer-use)
+- [OpenAI Operator](https://openai.com/operator/)
+- [LangChain Agents](https://python.langchain.com/docs/concepts/agents/)
+    `,
+  },
+
+  'geo': {
+    contentEs: `
+## El SEO murió. Larga vida al GEO.
+
+Durante 25 años, si querías aparecer en internet, optimizabas para Google.
+
+Pero algo cambió. Cada vez más personas buscan en **ChatGPT, Perplexity, Claude**. No en Google.
+
+> **"Para 2028, el 50% de las búsquedas serán en motores generativos."** — Gartner, 2024
+
+Bienvenido a **GEO: Generative Engine Optimization**.
+
+---
+
+## ¿Qué es GEO?
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              SEO vs GEO                                     │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  SEO                            GEO                         │
+│  ───                            ───                         │
+│                                                             │
+│  • Objetivo: Aparecer en Google • Aparecer EN LA RESPUESTA  │
+│  • Métrica: Ranking página 1    • Citas en respuestas IA    │
+│  • Formato: Links azules        • Texto integrado           │
+│  • Usuario: Click → Página      • Lee respuesta directa     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+**La diferencia clave**: En SEO compites por un click. En GEO compites por ser **la fuente citada**.
+
+---
+
+## Los nuevos motores de búsqueda
+
+| Motor | Usuarios | Cómo funciona |
+|-------|----------|---------------|
+| **Perplexity** | 100M+ mensuales | Busca → Sintetiza → Cita |
+| **ChatGPT Search** | 250M+ usuarios | Integrado en conversación |
+| **Google AI Overview** | En cada búsqueda | Resumen generativo arriba |
+
+---
+
+## El estándar llms.txt
+
+Así como robots.txt le dice a Google qué indexar, **llms.txt** le dice a las IAs quién eres.
+
+Ejemplo: luxia.us/llms.txt contiene información estructurada sobre servicios, tecnologías y contacto.
+
+---
+
+## Las 7 estrategias de GEO
+
+1. **Crea contenido citable** — Frases claras, datos específicos
+2. **Responde preguntas directamente** — Estructura Q&A
+3. **Incluye datos y estadísticas** — Los LLMs aman números
+4. **Usa schema markup** — Datos estructurados
+5. **Implementa llms.txt** — Información para IAs
+6. **Crea contenido de autoridad** — Autor, fecha, fuentes
+7. **Optimiza para fragmentos** — Bloques independientes
+
+---
+
+## GEO + SEO = Estrategia completa
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              ESTRATEGIA HÍBRIDA 2026                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  SEO: Keywords, backlinks, velocidad                        │
+│       Para usuarios que buscan en Google                    │
+│                                                             │
+│  GEO: llms.txt, contenido citable, datos                    │
+│       Para usuarios que preguntan a IAs                     │
+│                                                             │
+│  AMBOS: Contenido de calidad, autoridad, actualizado        │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Acción inmediata
+
+1. Crea tu /llms.txt (15 minutos)
+2. Revisa tu contenido — ¿es citable?
+3. Agrega datos y estadísticas
+4. Busca tu marca en Perplexity
+
+---
+
+## Recursos
+
+- [llms.txt Standard](https://llmstxt.org/)
+- [GEO Research Paper](https://arxiv.org/abs/2311.09735) — Princeton
+- [Perplexity](https://perplexity.ai/)
+    `,
+    contentEn: `
+## SEO is dead. Long live GEO.
+
+For 25 years, if you wanted to appear on the internet, you optimized for Google.
+
+But something changed. More people are searching on **ChatGPT, Perplexity, Claude**. Not on Google.
+
+> **"By 2028, 50% of searches will be on generative engines."** — Gartner, 2024
+
+Welcome to **GEO: Generative Engine Optimization**.
+
+---
+
+## What is GEO?
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              SEO vs GEO                                     │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  SEO                            GEO                         │
+│  ───                            ───                         │
+│                                                             │
+│  • Goal: Appear on Google       • Appear IN THE RESPONSE    │
+│  • Metric: Page 1 ranking       • Citations in AI responses │
+│  • Format: Blue links           • Integrated text           │
+│  • User: Click → Page           • Reads direct answer       │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+**The key difference**: In SEO you compete for a click. In GEO you compete to be **the cited source**.
+
+---
+
+## The new search engines
+
+| Engine | Users | How it works |
+|--------|-------|--------------|
+| **Perplexity** | 100M+ monthly | Searches → Synthesizes → Cites |
+| **ChatGPT Search** | 250M+ users | Integrated in conversation |
+| **Google AI Overview** | Every search | Generative summary above |
+
+---
+
+## The llms.txt standard
+
+Just as robots.txt tells Google what to index, **llms.txt** tells AIs who you are.
+
+Example: luxia.us/llms.txt contains structured information about services, technologies and contact.
+
+---
+
+## The 7 GEO strategies
+
+1. **Create citable content** — Clear phrases, specific data
+2. **Answer questions directly** — Q&A structure
+3. **Include data and statistics** — LLMs love numbers
+4. **Use schema markup** — Structured data
+5. **Implement llms.txt** — Information for AIs
+6. **Create authority content** — Author, date, sources
+7. **Optimize for fragments** — Independent blocks
+
+---
+
+## GEO + SEO = Complete strategy
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│              HYBRID STRATEGY 2026                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  SEO: Keywords, backlinks, speed                            │
+│       For users searching on Google                         │
+│                                                             │
+│  GEO: llms.txt, citable content, data                       │
+│       For users asking AIs                                  │
+│                                                             │
+│  BOTH: Quality content, authority, updated                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## Immediate action
+
+1. Create your /llms.txt (15 minutes)
+2. Review your content — is it citable?
+3. Add data and statistics
+4. Search your brand on Perplexity
+
+---
+
+## Resources
+
+- [llms.txt Standard](https://llmstxt.org/)
+- [GEO Research Paper](https://arxiv.org/abs/2311.09735) — Princeton
+- [Perplexity](https://perplexity.ai/)
+    `,
+  },
 }
 
 // Mapear slugs alternativos
@@ -15803,6 +16636,10 @@ const sectionDescriptions: Record<string, { es: string; en: string }> = {
   'system-design': { es: 'Diseño de sistemas: monolitos vs microservicios, CAP theorem, escalabilidad, load balancers, caching y message queues.', en: 'System design: monoliths vs microservices, CAP theorem, scalability, load balancers, caching and message queues.' },
   'performance': { es: 'Performance web: Core Web Vitals, optimización de bundles, caching, imágenes, database queries y profiling.', en: 'Web performance: Core Web Vitals, bundle optimization, caching, images, database queries and profiling.' },
   'networking': { es: 'Redes y protocolos: TCP/UDP, HTTP/HTTPS, DNS, WebSockets, CORS, debugging de red y herramientas CLI.', en: 'Networking and protocols: TCP/UDP, HTTP/HTTPS, DNS, WebSockets, CORS, network debugging and CLI tools.' },
+  'generative-ai': { es: 'Qué es la IA Generativa: de la ciencia ficción a tu día a día. Fundamentos, historia y aplicaciones reales.', en: 'What is Generative AI: from science fiction to your daily life. Fundamentals, history and real applications.' },
+  'prompt-engineering': { es: 'Prompt Engineering: el arte de comunicarte con IAs. Técnicas, frameworks y ejemplos prácticos.', en: 'Prompt Engineering: the art of communicating with AIs. Techniques, frameworks and practical examples.' },
+  'agentic-ai': { es: 'IA Agéntica: IAs que actúan por sí solas. Del chatbot al agente autónomo que ejecuta tareas.', en: 'Agentic AI: AIs that act on their own. From chatbot to autonomous agent that executes tasks.' },
+  'geo': { es: 'GEO (Generative Engine Optimization): SEO para la era de la IA. Cómo aparecer en respuestas de ChatGPT, Perplexity y Claude.', en: 'GEO (Generative Engine Optimization): SEO for the AI era. How to appear in ChatGPT, Perplexity and Claude responses.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; section: string }> }): Promise<Metadata> {

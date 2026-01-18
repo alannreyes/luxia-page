@@ -134,7 +134,7 @@ function CookingAnalogy({ isSpanish }: { isSpanish: boolean }) {
   )
 }
 
-// 30 temas organizados por nivel (sincronizado con layout.tsx)
+// 34 temas organizados por nivel (sincronizado con layout.tsx)
 const sections = [
   // APRENDIZ (Fundamentos)
   { slug: 'terminal', titleEs: 'Terminal & Shell', titleEn: 'Terminal & Shell', level: 'aprendiz', icon: '🖥️', descEs: 'Tu centro de comando para desarrollo', descEn: 'Your command center for development' },
@@ -144,6 +144,7 @@ const sections = [
   { slug: 'docker-intro', titleEs: 'Docker Básico', titleEn: 'Docker Basics', level: 'aprendiz', icon: '🐳', descEs: 'Contenedores para principiantes', descEn: 'Containers for beginners' },
   { slug: 'llms-intro', titleEs: 'Intro a LLMs', titleEn: 'Intro to LLMs', level: 'aprendiz', icon: '🤖', descEs: 'Chatbots y modelos de lenguaje', descEn: 'Chatbots and language models' },
   { slug: 'llms-models', titleEs: 'Modelos LLM: Guía 2026', titleEn: 'LLM Models: 2026 Guide', level: 'aprendiz', icon: '🧠', descEs: 'Elige el modelo correcto para cada caso', descEn: 'Choose the right model for each use case' },
+  { slug: 'generative-ai', titleEs: '¿Qué es la IA Generativa?', titleEn: 'What is Generative AI?', level: 'aprendiz', icon: '✨', descEs: 'De la ciencia ficción a tu día a día', descEn: 'From science fiction to your daily life' },
 
   // COCINERO (Lenguajes y Web)
   { slug: 'javascript', titleEs: 'JavaScript & TypeScript', titleEn: 'JavaScript & TypeScript', level: 'cocinero', icon: '📗', descEs: 'El lenguaje de la web', descEn: 'The language of the web' },
@@ -153,6 +154,7 @@ const sections = [
   { slug: 'react', titleEs: 'React', titleEn: 'React', level: 'cocinero', icon: '⚛️', descEs: 'Componentes y estado', descEn: 'Components and state' },
   { slug: 'apis', titleEs: 'APIs REST', titleEn: 'REST APIs', level: 'cocinero', icon: '🔗', descEs: 'Comunicación entre servicios', descEn: 'Service communication' },
   { slug: 'embeddings', titleEs: 'Embeddings', titleEn: 'Embeddings', level: 'cocinero', icon: '🧮', descEs: 'Vectores y similitud semántica', descEn: 'Vectors and semantic similarity' },
+  { slug: 'prompt-engineering', titleEs: 'Prompt Engineering', titleEn: 'Prompt Engineering', level: 'cocinero', icon: '📝', descEs: 'El arte de hablar con IAs', descEn: 'The art of talking to AIs' },
 
   // CHEF (Fullstack)
   { slug: 'git-advanced', titleEs: 'Git Avanzado & Colaboración', titleEn: 'Advanced Git & Collaboration', level: 'chef', icon: '🔀', descEs: 'PRs, merge conflicts, rebases, equipos', descEn: 'PRs, merge conflicts, rebases, teams' },
@@ -166,6 +168,8 @@ const sections = [
   { slug: 'cicd', titleEs: 'CI/CD', titleEn: 'CI/CD', level: 'chef', icon: '🚀', descEs: 'GitHub Actions y deploy', descEn: 'GitHub Actions and deploy' },
   { slug: 'mobile', titleEs: 'React Native & Expo', titleEn: 'React Native & Expo', level: 'chef', icon: '📱', descEs: 'Apps móviles multiplataforma', descEn: 'Cross-platform mobile apps' },
   { slug: 'iot', titleEs: 'IoT & Arduino', titleEn: 'IoT & Arduino', level: 'chef', icon: '🔌', descEs: 'Hardware y sensores', descEn: 'Hardware and sensors' },
+  { slug: 'agentic-ai', titleEs: 'IA Agéntica', titleEn: 'Agentic AI', level: 'chef', icon: '🤖', descEs: 'IAs que actúan por sí solas', descEn: 'AIs that act on their own' },
+  { slug: 'geo', titleEs: 'GEO: Generative Engine Optimization', titleEn: 'GEO: Generative Engine Optimization', level: 'chef', icon: '🔍', descEs: 'SEO para la era de la IA', descEn: 'SEO for the AI era' },
 
   // MASTER CHEF (IA Avanzada)
   { slug: 'vector-db', titleEs: 'Bases de Datos Vectoriales', titleEn: 'Vector Databases', level: 'master', icon: '🗄️', descEs: 'Qdrant, pgvector, Pinecone', descEn: 'Qdrant, pgvector, Pinecone' },
@@ -229,7 +233,7 @@ export default async function LearningPage({ params }: PageProps) {
         <div className="flex flex-wrap gap-4 text-sm text-slate-500">
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-            {isSpanish ? '30 temas' : '30 topics'}
+            {isSpanish ? '34 temas' : '34 topics'}
           </span>
           <span>•</span>
           <span>{isSpanish ? '4 niveles de dificultad' : '4 difficulty levels'}</span>
