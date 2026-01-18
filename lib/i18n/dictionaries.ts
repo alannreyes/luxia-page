@@ -10,7 +10,7 @@ const es = {
     contact: 'Contacto',
     learning: 'Learning',
     cooking: 'Cooking',
-    schedule: 'Agendar Consulta'
+    schedule: 'Contactar'
   },
 
   // Hero Section
@@ -20,7 +20,7 @@ const es = {
     mainTitleHighlight: 'producción',
     subtitle: 'No entregamos demos. Entregamos sistemas que funcionan 24/7 con seguridad, alta disponibilidad y soporte.',
     primaryCTA: 'Ver Servicios',
-    secondaryCTA: 'Agendar Consulta',
+    secondaryCTA: 'Contactar',
     stats: [
       { value: '30+', label: 'Años de experiencia' },
       { value: 'IBM', label: 'BankBoston, Citibank, BCI' },
@@ -163,8 +163,8 @@ const es = {
   // CTA Final
   cta: {
     title: '¿Listo para implementar IA en tu organización?',
-    subtitle: 'Agenda una consulta gratuita de 30 minutos. Sin compromisos, solo ideas concretas.',
-    primary: 'Agendar Consulta',
+    subtitle: 'Envíanos un mensaje. Sin compromisos, solo ideas concretas.',
+    primary: 'Enviar Mensaje',
     secondary: 'Enviar mensaje',
     form: {
       name: 'Nombre',
@@ -211,7 +211,7 @@ const en = {
     contact: 'Contact',
     learning: 'Learning',
     cooking: 'Cooking',
-    schedule: 'Schedule Call'
+    schedule: 'Contact'
   },
 
   // Hero Section
@@ -221,7 +221,7 @@ const en = {
     mainTitleHighlight: 'production',
     subtitle: 'We don\'t deliver demos. We deliver systems that work 24/7 with security, high availability and support.',
     primaryCTA: 'See Services',
-    secondaryCTA: 'Schedule Call',
+    secondaryCTA: 'Contact',
     stats: [
       { value: '30+', label: 'Years of experience' },
       { value: 'IBM', label: 'BankBoston, Citibank, BCI' },
@@ -364,8 +364,8 @@ const en = {
   // Final CTA
   cta: {
     title: 'Ready to implement AI in your organization?',
-    subtitle: 'Schedule a free 30-minute consultation. No commitments, just concrete ideas.',
-    primary: 'Schedule Call',
+    subtitle: 'Send us a message. No commitments, just concrete ideas.',
+    primary: 'Send Message',
     secondary: 'Send message',
     form: {
       name: 'Name',

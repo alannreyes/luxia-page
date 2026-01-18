@@ -64,7 +64,7 @@ export default function EnterpriseLayout({ children, locale, section }: Enterpri
               href={`/${locale}#contacto`}
               className="px-4 py-2.5 min-h-[44px] flex items-center bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition"
             >
-              {isSpanish ? 'Agendar Consulta' : 'Schedule Call'}
+              {isSpanish ? 'Contactar' : 'Contact'}
             </Link>
           </nav>
         </div>
@@ -95,7 +95,7 @@ export default function EnterpriseLayout({ children, locale, section }: Enterpri
                 className="mt-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 rounded-lg text-center font-medium transition"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {isSpanish ? 'Agendar Consulta' : 'Schedule Call'}
+                {isSpanish ? 'Contactar' : 'Contact'}
               </Link>
             </nav>
           </div>

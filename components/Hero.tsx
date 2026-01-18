@@ -2,12 +2,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import AppointmentModal from './AppointmentModal'
 import { Award, Building, Shield, Landmark } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
 export default function Hero({ locale, dictionary }: BaseComponentProps) {
-  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const router = useRouter()
 
@@ -25,8 +23,11 @@ export default function Hero({ locale, dictionary }: BaseComponentProps) {
     }
   }
 
-  const handleAppointmentClick = () => {
-    setIsAppointmentModalOpen(true)
+  const handleContactClick = () => {
+    const contactSection = document.getElementById('contacto')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' })
+    }
 
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'hero_cta_click', {
@@ -92,7 +93,7 @@ export default function Hero({ locale, dictionary }: BaseComponentProps) {
               {dictionary.hero.primaryCTA}
             </motion.button>
             <motion.button
-              onClick={handleAppointmentClick}
+              onClick={handleContactClick}
               className="w-full sm:w-auto border-2 border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl hover:bg-white/10 transition-all duration-300 text-base sm:text-lg font-semibold"
               whileTap={{ scale: 0.95 }}
             >
@@ -152,13 +153,6 @@ export default function Hero({ locale, dictionary }: BaseComponentProps) {
           </motion.div>
         </motion.div>
       </section>
-
-      {isAppointmentModalOpen && (
-        <AppointmentModal
-          isOpen={isAppointmentModalOpen}
-          onClose={() => setIsAppointmentModalOpen(false)}
-        />
-      )}
     </>
   )
 }

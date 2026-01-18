@@ -322,7 +322,7 @@ export default async function CasesPage({ params }: PageProps) {
               href={`/${locale}#contacto`}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 rounded-lg font-medium text-lg hover:bg-blue-50 transition w-full sm:w-auto"
             >
-              {isSpanish ? 'Agendar Consulta' : 'Schedule Call'}
+              {isSpanish ? 'Contactar' : 'Contact Us'}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link

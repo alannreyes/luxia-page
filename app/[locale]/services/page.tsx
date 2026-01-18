@@ -237,7 +237,7 @@ export default async function ServicesPage({ params }: PageProps) {
             href={`/${locale}#contacto`}
             className="inline-flex items-center gap-2 px-6 md:px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium text-lg transition w-full sm:w-auto justify-center"
           >
-            {isSpanish ? 'Agendar Consulta Gratuita' : 'Schedule Free Consultation'}
+            {isSpanish ? 'Solicitar Información' : 'Request Information'}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -404,15 +404,15 @@ export default async function ServicesPage({ params }: PageProps) {
           </h2>
           <p className="text-lg md:text-xl text-blue-100 mb-8">
             {isSpanish
-              ? 'Agenda una consulta gratuita de 30 minutos. Sin compromisos, solo ideas concretas para tu caso.'
-              : 'Schedule a free 30-minute consultation. No commitments, just concrete ideas for your case.'}
+              ? 'Cuéntanos tu desafío. Sin compromisos, solo ideas concretas para tu caso.'
+              : 'Tell us your challenge. No commitments, just concrete ideas for your case.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={`/${locale}#contacto`}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 rounded-lg font-medium text-lg hover:bg-blue-50 transition w-full sm:w-auto"
             >
-              {isSpanish ? 'Agendar Consulta' : 'Schedule Call'}
+              {isSpanish ? 'Contactar' : 'Contact Us'}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
