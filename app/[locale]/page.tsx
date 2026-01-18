@@ -4,14 +4,14 @@ import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
 
 // Lazy load components below the fold for better performance
-const Services = dynamic(() => import('@/components/Services'), {
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+const TargetAudience = dynamic(() => import('@/components/TargetAudience'), {
+  loading: () => <div className="h-64 bg-slate-900 animate-pulse" />
+})
+const ServicesSummary = dynamic(() => import('@/components/ServicesSummary'), {
+  loading: () => <div className="h-96 bg-white animate-pulse" />
 })
 const Founder = dynamic(() => import('@/components/Founder'), {
   loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
-})
-const Industries = dynamic(() => import('@/components/Industries'), {
-  loading: () => <div className="h-96 bg-slate-900 animate-pulse" />
 })
 const CTA = dynamic(() => import('@/components/CTA'), {
   loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
@@ -35,14 +35,14 @@ export default async function Home({ params }: HomeProps) {
         <section id="hero">
           <Hero locale={resolvedParams.locale} dictionary={dictionary} />
         </section>
+        <section id="audiencia">
+          <TargetAudience locale={resolvedParams.locale} dictionary={dictionary} />
+        </section>
         <section id="servicios">
-          <Services locale={resolvedParams.locale} dictionary={dictionary} />
+          <ServicesSummary locale={resolvedParams.locale} dictionary={dictionary} />
         </section>
         <section id="fundador">
           <Founder locale={resolvedParams.locale} dictionary={dictionary} />
-        </section>
-        <section id="industrias">
-          <Industries locale={resolvedParams.locale} dictionary={dictionary} />
         </section>
         <section id="contacto">
           <CTA locale={resolvedParams.locale} dictionary={dictionary} />

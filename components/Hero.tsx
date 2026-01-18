@@ -1,23 +1,22 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import AppointmentModal from './AppointmentModal'
 import { Award, Building, Shield, Landmark } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
-export default function Hero({ dictionary }: BaseComponentProps) {
+export default function Hero({ locale, dictionary }: BaseComponentProps) {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
   const handleSolutionsClick = () => {
-    const servicesSection = document.getElementById('servicios')
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' })
-    }
+    router.push(`/${locale}/services`)
 
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'hero_cta_click', {

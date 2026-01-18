@@ -4,9 +4,9 @@ import type { Locale } from '@/middleware'
 const es = {
   // Navegación
   nav: {
-    services: 'Soluciones',
+    services: 'Servicios',
     about: 'Fundador',
-    cases: 'Industrias',
+    cases: 'Casos',
     contact: 'Contacto',
     learning: 'Learning',
     cooking: 'Cooking',
@@ -15,11 +15,11 @@ const es = {
 
   // Hero Section
   hero: {
-    badge: 'Boutique de IA para industrias reguladas',
-    mainTitle: 'IA que entiende',
-    mainTitleHighlight: 'tu industria',
-    subtitle: 'Soluciones de Inteligencia Artificial para Fintech, Insurtech y operaciones industriales. 30 años de experiencia en banca y tecnología.',
-    primaryCTA: 'Ver Soluciones',
+    badge: 'Boutique de IA Generativa',
+    mainTitle: 'IA que funciona en',
+    mainTitleHighlight: 'producción',
+    subtitle: 'No entregamos demos. Entregamos sistemas que funcionan 24/7 con seguridad, alta disponibilidad y soporte.',
+    primaryCTA: 'Ver Servicios',
     secondaryCTA: 'Agendar Consulta',
     stats: [
       { value: '30+', label: 'Años de experiencia' },
@@ -27,6 +27,28 @@ const es = {
       { value: 'ISO 27001', label: 'Lead Auditor' },
       { value: 'Google Cloud', label: 'Gen AI Leader' }
     ]
+  },
+
+  // Target Audience
+  targetAudience: {
+    title: '¿Para quién es luxIA?',
+    items: [
+      { title: 'CTOs', description: 'Que necesitan IA segura y lista para producción' },
+      { title: 'Gerentes Generales', description: 'Que buscan automatizar procesos críticos' },
+      { title: 'Dueños de empresa', description: 'En industrias reguladas que requieren compliance' }
+    ]
+  },
+
+  // Services Summary (landing)
+  servicesSummary: {
+    title: 'Lo que hacemos',
+    subtitle: 'Soluciones de IA Generativa con infraestructura enterprise-grade',
+    items: [
+      { title: 'Documentos + IA', description: 'Análisis automatizado de documentos complejos. Extracción inteligente y evaluación de riesgos.' },
+      { title: 'Geolocalización + IA', description: 'Plataformas que combinan datos de ubicación con inteligencia artificial para decisiones en tiempo real.' },
+      { title: 'Alertas + IA', description: 'Sistemas de alerta que funcionan 24/7, con celular bloqueado y app cerrada.' }
+    ],
+    cta: 'Ver todos los servicios'
   },
 
   // Soluciones/Servicios
@@ -183,9 +205,9 @@ const es = {
 const en = {
   // Navigation
   nav: {
-    services: 'Solutions',
+    services: 'Services',
     about: 'Founder',
-    cases: 'Industries',
+    cases: 'Cases',
     contact: 'Contact',
     learning: 'Learning',
     cooking: 'Cooking',
@@ -194,11 +216,11 @@ const en = {
 
   // Hero Section
   hero: {
-    badge: 'AI boutique for regulated industries',
-    mainTitle: 'AI that understands',
-    mainTitleHighlight: 'your industry',
-    subtitle: 'Artificial Intelligence solutions for Fintech, Insurtech and industrial operations. 30 years of experience in banking and technology.',
-    primaryCTA: 'See Solutions',
+    badge: 'Generative AI Boutique',
+    mainTitle: 'AI that works in',
+    mainTitleHighlight: 'production',
+    subtitle: 'We don\'t deliver demos. We deliver systems that work 24/7 with security, high availability and support.',
+    primaryCTA: 'See Services',
     secondaryCTA: 'Schedule Call',
     stats: [
       { value: '30+', label: 'Years of experience' },
@@ -206,6 +228,28 @@ const en = {
       { value: 'ISO 27001', label: 'Lead Auditor' },
       { value: 'Google Cloud', label: 'Gen AI Leader' }
     ]
+  },
+
+  // Target Audience
+  targetAudience: {
+    title: 'Who is luxIA for?',
+    items: [
+      { title: 'CTOs', description: 'Who need secure, production-ready AI' },
+      { title: 'General Managers', description: 'Looking to automate critical processes' },
+      { title: 'Business Owners', description: 'In regulated industries requiring compliance' }
+    ]
+  },
+
+  // Services Summary (landing)
+  servicesSummary: {
+    title: 'What we do',
+    subtitle: 'Generative AI solutions with enterprise-grade infrastructure',
+    items: [
+      { title: 'Documents + AI', description: 'Automated analysis of complex documents. Intelligent extraction and risk assessment.' },
+      { title: 'Geolocation + AI', description: 'Platforms combining location data with artificial intelligence for real-time decisions.' },
+      { title: 'Alerts + AI', description: 'Alert systems that work 24/7, with phone locked and app closed.' }
+    ],
+    cta: 'See all services'
   },
 
   // Solutions/Services
