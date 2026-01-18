@@ -15765,7 +15765,7 @@ around the world.
     contentEs: `
 ## La magia que ya usas sin saberlo
 
-Cada vez que le pides a ChatGPT que te explique un concepto, cuando Spotify te sugiere esa canción que termina siendo tu favorita, o cuando Google Photos agrupa las fotos de tu familia... estás usando IA Generativa.
+Cada vez que le pides a ChatGPT que te explique un concepto, cuando usas DALL-E para crear una imagen desde cero, o cuando GitHub Copilot te escribe código... estás usando IA Generativa. Es IA que **crea** contenido nuevo, no solo clasifica o reconoce (eso es IA tradicional).
 
 > **"La IA Generativa es la tecnología más transformadora desde el internet."** — Sundar Pichai, CEO de Google, 2023
 
@@ -15864,7 +15864,7 @@ Cuando le preguntas algo, **genera** la respuesta más probable basándose en to
     contentEn: `
 ## The magic you're already using without knowing it
 
-Every time you ask ChatGPT to explain a concept, when Spotify suggests that song that becomes your favorite, or when Google Photos groups your family photos... you're using Generative AI.
+Every time you ask ChatGPT to explain a concept, when you use DALL-E to create an image from scratch, or when GitHub Copilot writes code for you... you're using Generative AI. It's AI that **creates** new content, not just classifies or recognizes (that's traditional AI).
 
 > **"Generative AI is the most transformative technology since the internet."** — Sundar Pichai, CEO of Google, 2023
 
