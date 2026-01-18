@@ -2,9 +2,8 @@
 export const siteConfig = {
   // Información de contacto y redes sociales
   contact: {
-    email: 'info@luxia.us',
-    phone: '+51 993131883', // Tu número de teléfono
-    calcomUrl: 'https://cal.luxia.us/alann/30min', // URL de Cal.com validada
+    email: 'alann@luxia.us',
+    phone: '+51 993131883',
     linkedinUrl: 'https://www.linkedin.com/in/alannreyes/',
   },
 
@@ -15,7 +14,7 @@ export const siteConfig = {
     description: '', // Eliminado como solicitado
     callToAction: '', // Eliminado como solicitado
     primaryCTA: 'Ver Demo en Vivo',
-    secondaryCTA: 'Agenda 30 min gratis',
+    secondaryCTA: 'Solicitar Consulta',
     // Métricas animadas basadas en estudios reales - Rotación dinámica
     metrics: [
       { 

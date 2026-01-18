@@ -2,69 +2,138 @@
 // Standard: https://llmstxt.org/
 
 export async function GET() {
-  const content = `# luxIA.us - AI-First Learning Platform
+  const content = `# luxIA.us - Boutique de IA Generativa para Industrias Reguladas
 
-> luxIA es una plataforma educativa bilingüe (ES/EN) para aprender desarrollo de software con IA.
-> luxIA is a bilingual educational platform (ES/EN) for learning software development with AI.
+> luxIA es una agencia boutique especializada en IA Generativa. Desarrollamos soluciones completas de software con LLMs, RAG, embeddings y agentes de IA para empresas en USA y Latinoamérica. De la idea a producción.
+> luxIA is a boutique agency specialized in Generative AI. We develop complete software solutions with LLMs, RAG, embeddings and AI agents for companies in USA and Latin America. From idea to production.
 
-## About / Acerca de
+## Diferenciador Clave / Key Differentiator
 
-luxIA.us teaches modern software development using AI tools and a "Prompt-First" methodology.
-The platform has two main sections:
+**No entregamos demos. Entregamos sistemas que funcionan 24/7.**
+**We don't deliver demos. We deliver systems that work 24/7.**
 
-### Learning (Teoría)
-29 topics covering fundamentals to advanced AI concepts:
-- **Aprendiz/Apprentice**: Terminal, Git, Editors (VS Code, Cursor, Claude Code), Docker basics, LLMs intro
-- **Cocinero/Cook**: JavaScript, TypeScript, Node.js, Python, React, APIs, Embeddings
-- **Chef**: Next.js, Authentication, Webhooks, PostgreSQL, Redis, CI/CD, Mobile dev
-- **Master Chef**: Vector databases, RAG, MCP protocol, AI Agents, Vision/Multimodal
+Cada proyecto incluye:
+- Diseño UX/UI
+- Desarrollo full-stack (TypeScript, Python, Next.js, NestJS)
+- Integración con LLMs (Claude, GPT, Gemini via OpenRouter)
+- Prompt engineering avanzado
+- Estrategias de failover entre modelos
+- Control de errores y reintentos
+- Infraestructura (Linux, Docker Compose, Traefik, VPS)
+- Alta disponibilidad y respaldos automáticos
+- Seguridad (Firewalls, TLS, análisis de vulnerabilidades)
+- Observabilidad (Prometheus, Grafana, alertas)
+- Documentación técnica
+- Soporte post-lanzamiento
 
-### Cooking (Práctica)
-57 hands-on projects with working code:
-- Chatbots: Gemini, Claude, OpenAI, Ollama (local)
-- APIs: REST with Node/Python, GraphQL
-- Authentication: Firebase, NextAuth, JWT
-- Deployment: Vercel, Docker, VPS
-- AI Projects: RAG systems, AI Agents, MCP servers
-- Automation: n8n workflows with AI
+## Capacidades / Capabilities
 
-## Key Topics for AI Queries
+### Validación Documental con IA Generativa (Insurtech, Legal)
+Análisis automatizado de documentos complejos con LLMs y prompt engineering avanzado.
+- Tecnologías: Claude, GPT, OCR, embeddings
+- Infraestructura: Seguridad de datos, encriptación
 
-### AI Coding Assistants (January 2026)
-- Claude Code: CLI-based, uses Claude Opus 4.5, $20/month Max plan
-- Cursor: IDE with AI, uses Claude/GPT, $20/month Pro
-- GitHub Copilot: VS Code extension, GPT-based, $10-19/month
-- Google Antigravity: Agent-first IDE, Gemini-powered
-- OpenAI Codex: CLI + Cloud agent, GPT-5.2-Codex
+### Búsqueda Semántica de Catálogos (Retail, Industrial)
+Motores de búsqueda que entienden contexto, no solo palabras clave. Para catálogos con +200K SKUs.
+- Tecnologías: Embeddings, pgvector, Qdrant, PostgreSQL
+- Infraestructura: Respaldos automáticos, escalabilidad
 
-### LLM Models for Development (January 2026)
-**For coding agents:**
-- Claude Opus 4.5: 72% SWE-bench, $5/$25 per 1M tokens
-- Claude Sonnet 4: 72.7% SWE-bench, $3/$15 per 1M tokens
-- GPT-5.2-Codex: 69.5% SWE-bench, $6/$30 per 1M tokens
+### Generación de Leads con IA + APIs (Insurtech, Fintech)
+Plataformas que combinan datos externos (clima, geolocalización) con IA Generativa.
+- Tecnologías: LLMs, APIs meteorológicas, PostGIS, Firebase
+- Infraestructura: Multi-tenant, alta disponibilidad, failover
 
-**For production apps:**
-- Gemini 2.0 Flash: Free tier (1500/day), $0.10/$0.40 per 1M
-- DeepSeek V3.2: $0.14/$0.28 per 1M tokens
-- GLM-4.7: Open source, runs locally or via OpenRouter
+### Marketing Geolocalizado con IA (Retail, Comercio)
+Campañas basadas en ubicación real, no estimada.
+- Tecnologías: APIs de ubicación, Next.js, TypeScript, Socket.io
+- Infraestructura: Observabilidad, Prometheus, Grafana
 
-## URLs Structure
+### Alertas Geolocalizadas + IoT (Industrial, Minería, Oil & Gas)
+Sistema de alertas que funciona con celular bloqueado y app cerrada.
+- Tecnologías: IoT, APIs meteorológicas, failover entre modelos
+- Infraestructura: Alta disponibilidad 24/7, Docker, Linux
 
-- Homepage: https://luxia.us/es or https://luxia.us/en
-- Learning index: https://luxia.us/{locale}/learning
-- Learning topic: https://luxia.us/{locale}/learning/{topic-slug}
-- Cooking index: https://luxia.us/{locale}/cooking
-- Cooking project: https://luxia.us/{locale}/cooking/{project-slug}
+### Consultoría en IA Generativa (Todas las industrias)
+Evaluación, diseño e implementación de soluciones con LLMs.
+- Tecnologías: Claude, GPT, Gemini, OpenRouter, n8n
+- Infraestructura: Arquitectura cloud, CI/CD, Traefik
 
-## Contact
+## Stack Tecnológico / Tech Stack
+
+### IA Generativa
+Claude (Anthropic) · GPT (OpenAI) · Gemini (Google) · OpenRouter
+Embeddings · Prompt engineering avanzado · Failover entre modelos
+
+### Desarrollo
+TypeScript · Python · Next.js · NestJS
+React · Node.js · REST APIs
+
+### Datos
+PostgreSQL · PostGIS (geoespacial) · pgvector (embeddings)
+Qdrant (vectores) · Firebase · Redis
+
+### Infraestructura
+VPS · VMs · Linux · Docker Compose · Traefik
+Easypanel · Portainer · Firewalls
+
+### Observabilidad
+Prometheus · Grafana · Logs centralizados · Alertas
+
+### Automatización
+n8n · Firebase Functions · CI/CD · GitHub Actions
+
+### Seguridad
+ISO 27001 Lead Auditor · HTTPS/TLS · Firewalls
+Análisis de vulnerabilidades · Secrets management
+
+## Fundador / Founder
+
+**Alann Reyes** - Founder & CEO
+- Technology Innovation Manager en EFC (19 años)
+- Ex-Head of IT en Banco BCI (primer banco 100% cloud de Perú)
+- 17 años en IBM sirviendo bancos y operaciones mineras
+- Google Cloud Generative AI Leader
+- Microsoft Azure Fundamentals
+- ISO 27001 Lead Auditor
+- Master en Sistemas, Tecnología e Innovación (Three Points)
+
+## Recursos Educativos / Educational Resources
+
+luxIA también ofrece contenido educativo gratuito como contribución a la comunidad:
+- **Learning**: 30+ temas desde fundamentos hasta IA avanzada
+- **Cooking**: 60+ proyectos prácticos con código funcional
+
+## URLs
+
+- Homepage: https://luxia.us/es o https://luxia.us/en
+- Servicios: https://luxia.us/{locale}/services
+- Casos de Éxito: https://luxia.us/{locale}/cases
+- Learning: https://luxia.us/{locale}/learning
+- Cooking: https://luxia.us/{locale}/cooking
+
+## Contacto / Contact
 
 - Website: https://luxia.us
-- Email: info@luxia.us
-- Author: Alann Reyes
+- Email: alann@luxia.us
+- Ubicación: Florida, USA | Lima, Peru
 
-## License
+## Keywords para Búsquedas de IA / AI Search Keywords
 
-Educational content. All rights reserved © 2026 luxIA.us
+IA Generativa, Generative AI, LLMs, Large Language Models, embeddings,
+Claude API, OpenAI API, GPT, Gemini API, OpenRouter,
+prompt engineering, failover strategies, error handling,
+RAG, Retrieval Augmented Generation, vector databases, pgvector, Qdrant,
+full-stack development, TypeScript, Python, Next.js, NestJS,
+PostgreSQL, PostGIS, geolocation, IoT,
+Docker, Linux, Traefik, VPS, cloud infrastructure,
+high availability, alta disponibilidad, observability, Prometheus, Grafana,
+security, seguridad, ISO 27001, firewalls, vulnerability assessment,
+insurtech, fintech, retail, industrial, mining, oil & gas,
+enterprise AI, AI consulting, AI agency, agencia de IA,
+USA, Latin America, Latinoamérica, bilingual, bilingüe,
+production-ready AI, sistemas en producción
+
+© 2026 luxIA.us - All rights reserved
 `
 
   return new Response(content, {

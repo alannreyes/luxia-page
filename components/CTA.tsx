@@ -35,8 +35,16 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
     setError('')
 
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formState),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error sending message')
+      }
+
       setIsSubmitted(true)
 
       if (typeof window !== 'undefined' && window.gtag) {

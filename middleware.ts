@@ -11,6 +11,11 @@ export function middleware(request: NextRequest) {
   // Verificar si hay un idioma en la URL
   const { pathname } = request.nextUrl
 
+  // CAL routes - no redirect, serve directly (legacy Cal.com URLs)
+  if (pathname === '/cal' || pathname.startsWith('/cal/')) {
+    return NextResponse.next()
+  }
+
   // LEARNING routes
   if (pathname === '/aprendiendo' || pathname.startsWith('/aprendiendo/')) {
     const newPath = pathname.replace('/aprendiendo', '/es/learning')

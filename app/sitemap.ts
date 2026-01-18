@@ -83,6 +83,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
 
+    // ===== SERVICES PAGE =====
+    {
+      url: `${baseUrl}/es/services`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/en/services`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+
+    // ===== CASES INDEX =====
+    {
+      url: `${baseUrl}/es/cases`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/en/cases`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+
     // ===== LEARNING INDEX =====
     {
       url: `${baseUrl}/es/learning`,
