@@ -3,7 +3,7 @@ import Logo from './Logo'
 import { Linkedin, Mail, MapPin } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
-export default function Footer({ dictionary }: BaseComponentProps) {
+export default function Footer({ locale, dictionary }: BaseComponentProps) {
   return (
     <footer className="bg-slate-900 text-white pt-16 pb-8 px-6">
       <div className="max-w-7xl mx-auto">
@@ -25,17 +25,23 @@ export default function Footer({ dictionary }: BaseComponentProps) {
           <div>
             <h4 className="font-semibold text-white mb-4">{dictionary.footer.quickLinks}</h4>
             <nav className="space-y-3">
-              <a href="#servicios" className="block text-gray-400 hover:text-white transition-colors text-sm">
+              <a href={`/${locale}/services`} className="block text-gray-400 hover:text-white transition-colors text-sm">
                 {dictionary.nav.services}
               </a>
-              <a href="#fundador" className="block text-gray-400 hover:text-white transition-colors text-sm">
-                {dictionary.nav.about}
-              </a>
-              <a href="#industrias" className="block text-gray-400 hover:text-white transition-colors text-sm">
+              <a href={`/${locale}/cases`} className="block text-gray-400 hover:text-white transition-colors text-sm">
                 {dictionary.nav.cases}
               </a>
-              <a href="#contacto" className="block text-gray-400 hover:text-white transition-colors text-sm">
+              <a href={`/${locale}#fundador`} className="block text-gray-400 hover:text-white transition-colors text-sm">
+                {dictionary.nav.about}
+              </a>
+              <a href={`/${locale}#contacto`} className="block text-gray-400 hover:text-white transition-colors text-sm">
                 {dictionary.footer.contact}
+              </a>
+              <a href={`/${locale}/learning`} className="block text-gray-400 hover:text-white transition-colors text-sm">
+                Learning
+              </a>
+              <a href={`/${locale}/cooking`} className="block text-gray-400 hover:text-white transition-colors text-sm">
+                Cooking
               </a>
             </nav>
           </div>

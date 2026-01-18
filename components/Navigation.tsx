@@ -32,9 +32,9 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
   }
 
   const navLinks = [
-    { href: '#servicios', label: dictionary.nav.services },
+    { href: `/${locale}/services`, label: dictionary.nav.services },
+    { href: `/${locale}/cases`, label: dictionary.nav.cases },
     { href: '#fundador', label: dictionary.nav.about },
-    { href: '#industrias', label: dictionary.nav.cases },
     { href: '#contacto', label: dictionary.nav.contact }
   ]
 
