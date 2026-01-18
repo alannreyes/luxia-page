@@ -15,9 +15,9 @@ export default function EnterpriseLayout({ children, locale, section }: Enterpri
   const isSpanish = locale === 'es'
 
   const navLinks = [
-    { href: `/${locale}#servicios`, label: isSpanish ? 'Soluciones' : 'Solutions' },
+    { href: `/${locale}`, label: isSpanish ? 'Inicio' : 'Home' },
     { href: `/${locale}/services`, label: isSpanish ? 'Servicios' : 'Services' },
-    { href: `/${locale}/cases`, label: isSpanish ? 'Casos de Éxito' : 'Case Studies' },
+    { href: `/${locale}/cases`, label: isSpanish ? 'Casos' : 'Cases' },
     { href: `/${locale}#fundador`, label: isSpanish ? 'Fundador' : 'Founder' },
   ]
 
@@ -120,18 +120,17 @@ export default function EnterpriseLayout({ children, locale, section }: Enterpri
               </p>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-3">{isSpanish ? 'Soluciones' : 'Solutions'}</h4>
+              <h4 className="text-white font-semibold mb-3">{isSpanish ? 'Navegación' : 'Navigation'}</h4>
               <ul className="space-y-1 text-sm">
-                <li><Link href={`/${locale}/services#uwia`} className="hover:text-white transition py-2 block">UWIA</Link></li>
-                <li><Link href={`/${locale}/services#semantic`} className="hover:text-white transition py-2 block">{isSpanish ? 'Búsqueda Semántica' : 'Semantic Search'}</Link></li>
-                <li><Link href={`/${locale}/services#alerts`} className="hover:text-white transition py-2 block">{isSpanish ? 'Alertas Móviles' : 'Mobile Alerts'}</Link></li>
-                <li><Link href={`/${locale}/services#consulting`} className="hover:text-white transition py-2 block">{isSpanish ? 'Consultoría' : 'Consulting'}</Link></li>
+                <li><Link href={`/${locale}`} className="hover:text-white transition py-2 block">{isSpanish ? 'Inicio' : 'Home'}</Link></li>
+                <li><Link href={`/${locale}/services`} className="hover:text-white transition py-2 block">{isSpanish ? 'Servicios' : 'Services'}</Link></li>
+                <li><Link href={`/${locale}/cases`} className="hover:text-white transition py-2 block">{isSpanish ? 'Casos de Éxito' : 'Case Studies'}</Link></li>
+                <li><Link href={`/${locale}#fundador`} className="hover:text-white transition py-2 block">{isSpanish ? 'Fundador' : 'Founder'}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-3">{isSpanish ? 'Recursos' : 'Resources'}</h4>
+              <h4 className="text-white font-semibold mb-3">{isSpanish ? 'Comunidad' : 'Community'}</h4>
               <ul className="space-y-1 text-sm">
-                <li><Link href={`/${locale}/cases`} className="hover:text-white transition py-2 block">{isSpanish ? 'Casos de Éxito' : 'Case Studies'}</Link></li>
                 <li><Link href={`/${locale}/learning`} className="hover:text-white transition py-2 block">Learning</Link></li>
                 <li><Link href={`/${locale}/cooking`} className="hover:text-white transition py-2 block">Cooking</Link></li>
               </ul>

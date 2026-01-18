@@ -34,8 +34,8 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
   const navLinks = [
     { href: `/${locale}/services`, label: dictionary.nav.services },
     { href: `/${locale}/cases`, label: dictionary.nav.cases },
-    { href: '#fundador', label: dictionary.nav.about },
-    { href: '#contacto', label: dictionary.nav.contact }
+    { href: `/${locale}#fundador`, label: dictionary.nav.about },
+    { href: `/${locale}#contacto`, label: dictionary.nav.contact }
   ]
 
   const eduLinks = [
