@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, CheckCircle, Mail, MapPin } from 'lucide-react'
+import { Send, CheckCircle, MapPin } from 'lucide-react'
 import { siteConfig } from '@/lib/config'
 import type { BaseComponentProps } from '@/types'
 
@@ -156,18 +156,14 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
           )}
         </motion.div>
 
-        {/* Contact Info */}
+        {/* Location Info */}
         <motion.div
-          className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500"
+          className="mt-8 flex justify-center text-sm text-gray-500"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <a href="mailto:alann@luxia.us" className="flex items-center hover:text-blue-600 transition-colors">
-            <Mail className="w-4 h-4 mr-2" />
-            alann@luxia.us
-          </a>
           <span className="flex items-center">
             <MapPin className="w-4 h-4 mr-2" />
             Florida, USA | Lima, Peru

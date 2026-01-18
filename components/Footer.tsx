@@ -51,11 +51,11 @@ export default function Footer({ locale, dictionary }: BaseComponentProps) {
             <h4 className="font-semibold text-white mb-4">{dictionary.footer.contact}</h4>
             <div className="space-y-3">
               <a
-                href={`mailto:${dictionary.footer.email}`}
+                href={`/${locale}#contacto`}
                 className="flex items-center text-gray-400 hover:text-white transition-colors text-sm"
               >
                 <Mail className="w-4 h-4 mr-2" />
-                {dictionary.footer.email}
+                {dictionary.footer.contactForm}
               </a>
               <a
                 href={siteConfig.contact.linkedinUrl}

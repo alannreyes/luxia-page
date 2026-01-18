@@ -114,7 +114,7 @@ luxIA también ofrece contenido educativo gratuito como contribución a la comun
 ## Contacto / Contact
 
 - Website: https://luxia.us
-- Email: alann@luxia.us
+- Formulario: https://luxia.us/es#contacto
 - Ubicación: Florida, USA | Lima, Peru
 
 ## Keywords para Búsquedas de IA / AI Search Keywords

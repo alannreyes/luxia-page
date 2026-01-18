@@ -190,7 +190,7 @@ const es = {
     terms: 'Términos',
     rights: 'Todos los derechos reservados',
     linkedin: 'LinkedIn',
-    email: 'alann@luxia.us'
+    contactForm: 'Enviar mensaje'
   },
 
   // Meta
@@ -391,7 +391,7 @@ const en = {
     terms: 'Terms',
     rights: 'All rights reserved',
     linkedin: 'LinkedIn',
-    email: 'alann@luxia.us'
+    contactForm: 'Send message'
   },
 
   // Meta

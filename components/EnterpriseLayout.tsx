@@ -138,8 +138,7 @@ export default function EnterpriseLayout({ children, locale, section }: Enterpri
             <div>
               <h4 className="text-white font-semibold mb-3">{isSpanish ? 'Contacto' : 'Contact'}</h4>
               <ul className="space-y-1 text-sm">
-                <li className="py-2">alann@luxia.us</li>
-                <li className="py-2">Florida, USA | Lima, Peru</li>
+                                <li className="py-2">Florida, USA | Lima, Peru</li>
               </ul>
             </div>
           </div>
