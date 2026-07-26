@@ -15,28 +15,37 @@ const es = {
 
   // Hero Section
   hero: {
-    badge: 'Boutique de IA Generativa',
-    mainTitle: 'IA que funciona en',
-    mainTitleHighlight: 'producción',
-    subtitle: 'No entregamos demos. Entregamos sistemas que funcionan 24/7 con seguridad, alta disponibilidad y soporte.',
+    badge: 'Estudio de software · AI-native',
+    mainTitle: 'Tu software en producción,',
+    mainTitleHighlight: 'en días',
+    subtitle: 'Rápido, documentado y flexible: construimos e iteramos contigo, sin fricción. Somos un estudio AI-native — así entregamos en días y absorbemos todos los cambios que necesites. No demos: software que funciona 24/7.',
     primaryCTA: 'Ver Servicios',
     secondaryCTA: 'Contactar',
     stats: [
       { value: '30+', label: 'Años de experiencia' },
-      { value: 'IBM', label: 'BankBoston, Citibank, BCI' },
+      { value: 'CCA-P', label: 'Claude Certified Architect' },
       { value: 'ISO 27001', label: 'Lead Auditor' },
-      { value: 'Google Cloud', label: 'Gen AI Leader' }
+      { value: 'IBM', label: '17 años · banca y minería' }
     ]
   },
 
   // Target Audience
   targetAudience: {
-    title: '¿Para quién es luxIA?',
-    items: [
-      { title: 'CTOs', description: 'Que necesitan IA segura y lista para producción' },
-      { title: 'Gerentes Generales', description: 'Que buscan automatizar procesos críticos' },
-      { title: 'Dueños de empresa', description: 'En industrias reguladas que requieren compliance' }
-    ]
+    eyebrow: 'Dos formas de trabajar juntos',
+    title: '¿Qué necesitas?',
+    doorA: {
+      tag: 'Lo más pedido',
+      title: 'Construye o acelera tu software',
+      description: 'Una POC sólida en horas; la escalamos en días; en pocas semanas está en producción —con seguridad, autenticación y pasarela de pagos.',
+      points: ['POC sólida en horas', 'Escala en días', 'Producción en semanas', 'Seguridad, auth y pagos, todo'],
+      cta: 'Empecemos tu piloto'
+    },
+    doorB: {
+      title: '¿Necesitas IA para una tarea?',
+      description: 'Si ya sabes que quieres IA para algo concreto:',
+      tasks: ['Análisis de documentos', 'Traducción', 'Underwriting', 'Reconocimiento de imágenes', 'Búsqueda semántica'],
+      cta: 'Ver soluciones de IA'
+    }
   },
 
   // Services Summary (landing)
@@ -45,7 +54,7 @@ const es = {
     subtitle: 'Soluciones de IA Generativa con infraestructura enterprise-grade',
     items: [
       { title: 'Documentos + IA', description: 'Análisis automatizado de documentos complejos. Extracción inteligente y evaluación de riesgos.' },
-      { title: 'Geolocalización + IA', description: 'Plataformas que combinan datos de ubicación con inteligencia artificial para decisiones en tiempo real.' },
+      { title: 'Geolocalización + IA', description: 'Plataformas geoespaciales que cruzan datos de viento, tormenta y clima con propiedades y activos para decidir en tiempo real.' },
       { title: 'Alertas + IA', description: 'Sistemas de alerta que funcionan 24/7, con celular bloqueado y app cerrada.' }
     ],
     cta: 'Ver todos los servicios'
@@ -110,12 +119,12 @@ const es = {
     title: 'Respaldado por experiencia real',
     subtitle: 'No solo teoría. Décadas construyendo y liderando tecnología en las instituciones más exigentes.',
     name: 'Alann Reyes',
-    role: 'Fundador & CEO',
-    bio: 'Technology Innovation Manager en EFC. Ex-Head of IT en Banco BCI donde lideré el lanzamiento del primer banco 100% cloud de Perú. 17 años en IBM sirviendo a los principales bancos y operaciones mineras del país.',
+    role: 'Fundador',
+    bio: 'Gerente de Innovación Tecnológica en EFC y fundador de LuxIA. Llevo IA a producción y desarrollo tecnología que anticipa el riesgo del clima en minería, industria y agro. Ex-Head of IT en Banco BCI (primer banco 100% en la nube del Perú), Auditor Líder ISO 27001 y 17 años en IBM.',
     credentials: [
       { icon: 'Award', title: 'Google Cloud', subtitle: 'Generative AI Leader' },
       { icon: 'Shield', title: 'ISO 27001', subtitle: 'Lead Auditor' },
-      { icon: 'Building', title: 'IBM', subtitle: '17 años' },
+      { icon: 'Building', title: 'IBM', subtitle: '17 años · banca y minería' },
       { icon: 'Landmark', title: 'Banco BCI', subtitle: 'Head of IT' }
     ],
     experience: [
@@ -216,28 +225,37 @@ const en = {
 
   // Hero Section
   hero: {
-    badge: 'Generative AI Boutique',
-    mainTitle: 'AI that works in',
-    mainTitleHighlight: 'production',
-    subtitle: 'We don\'t deliver demos. We deliver systems that work 24/7 with security, high availability and support.',
+    badge: 'Software studio · AI-native',
+    mainTitle: 'Your software in production,',
+    mainTitleHighlight: 'in days',
+    subtitle: 'Fast, documented and flexible: we build and iterate with you, without friction. An AI-native studio — so we ship in days and absorb every change you need. Not demos: software that runs 24/7.',
     primaryCTA: 'See Services',
     secondaryCTA: 'Contact',
     stats: [
       { value: '30+', label: 'Years of experience' },
-      { value: 'IBM', label: 'BankBoston, Citibank, BCI' },
+      { value: 'CCA-P', label: 'Claude Certified Architect' },
       { value: 'ISO 27001', label: 'Lead Auditor' },
-      { value: 'Google Cloud', label: 'Gen AI Leader' }
+      { value: 'IBM', label: '17 years · banking & mining' }
     ]
   },
 
   // Target Audience
   targetAudience: {
-    title: 'Who is luxIA for?',
-    items: [
-      { title: 'CTOs', description: 'Who need secure, production-ready AI' },
-      { title: 'General Managers', description: 'Looking to automate critical processes' },
-      { title: 'Business Owners', description: 'In regulated industries requiring compliance' }
-    ]
+    eyebrow: 'Two ways to work together',
+    title: 'What do you need?',
+    doorA: {
+      tag: 'Most requested',
+      title: 'Build or accelerate your software',
+      description: "A solid POC in hours; we scale it in days; in a few weeks it's in production —with security, authentication and payments.",
+      points: ['Solid POC in hours', 'Scales in days', 'Production in weeks', 'Security, auth & payments'],
+      cta: "Let's start your pilot"
+    },
+    doorB: {
+      title: 'Need AI for a specific task?',
+      description: 'If you already know you want AI for something concrete:',
+      tasks: ['Document analysis', 'Translation', 'Underwriting', 'Image recognition', 'Semantic search'],
+      cta: 'See AI solutions'
+    }
   },
 
   // Services Summary (landing)
@@ -246,7 +264,7 @@ const en = {
     subtitle: 'Generative AI solutions with enterprise-grade infrastructure',
     items: [
       { title: 'Documents + AI', description: 'Automated analysis of complex documents. Intelligent extraction and risk assessment.' },
-      { title: 'Geolocation + AI', description: 'Platforms combining location data with artificial intelligence for real-time decisions.' },
+      { title: 'Geolocation + AI', description: 'Geospatial platforms that cross wind, storm and climate data with properties and assets for real-time decisions.' },
       { title: 'Alerts + AI', description: 'Alert systems that work 24/7, with phone locked and app closed.' }
     ],
     cta: 'See all services'
@@ -311,12 +329,12 @@ const en = {
     title: 'Backed by real experience',
     subtitle: 'Not just theory. Decades building and leading technology at the most demanding institutions.',
     name: 'Alann Reyes',
-    role: 'Founder & CEO',
-    bio: 'Technology Innovation Manager at EFC. Former Head of IT at Banco BCI where I led the launch of Peru\'s first 100% cloud-native bank. 17 years at IBM serving the country\'s top banks and mining operations.',
+    role: 'Founder',
+    bio: 'Technology Innovation Manager at EFC and founder of LuxIA. I ship production AI and build technology that anticipates climate risk across mining, industry and agriculture. Former Head of IT at Banco BCI (Peru\'s first 100% cloud-native bank), ISO 27001 Lead Auditor and 17 years at IBM.',
     credentials: [
       { icon: 'Award', title: 'Google Cloud', subtitle: 'Generative AI Leader' },
       { icon: 'Shield', title: 'ISO 27001', subtitle: 'Lead Auditor' },
-      { icon: 'Building', title: 'IBM', subtitle: '17 years' },
+      { icon: 'Building', title: 'IBM', subtitle: '17 years · banking & mining' },
       { icon: 'Landmark', title: 'Banco BCI', subtitle: 'Head of IT' }
     ],
     experience: [

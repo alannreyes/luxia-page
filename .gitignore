@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 analisis/
+
+# infra local (el VPS tiene el suyo)
+docker-compose.yml

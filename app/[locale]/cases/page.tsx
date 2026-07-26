@@ -169,15 +169,6 @@ const cases = {
   ]
 }
 
-const colorClasses = {
-  blue: { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'bg-blue-100 text-blue-600', tag: 'bg-blue-100 text-blue-700' },
-  green: { bg: 'bg-green-50', border: 'border-green-200', icon: 'bg-green-100 text-green-600', tag: 'bg-green-100 text-green-700' },
-  orange: { bg: 'bg-orange-50', border: 'border-orange-200', icon: 'bg-orange-100 text-orange-600', tag: 'bg-orange-100 text-orange-700' },
-  red: { bg: 'bg-red-50', border: 'border-red-200', icon: 'bg-red-100 text-red-600', tag: 'bg-red-100 text-red-700' },
-  purple: { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'bg-purple-100 text-purple-600', tag: 'bg-purple-100 text-purple-700' },
-  cyan: { bg: 'bg-cyan-50', border: 'border-cyan-200', icon: 'bg-cyan-100 text-cyan-600', tag: 'bg-cyan-100 text-cyan-700' },
-}
-
 interface PageProps {
   params: Promise<{ locale: string }>
 }
@@ -189,98 +180,88 @@ export default async function CasesPage({ params }: PageProps) {
   const casesList = cases[locale]
 
   return (
-    <div>
+    <div style={{ backgroundColor: 'var(--ed-paper)' }}>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-12 md:py-20 px-4 md:px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-block px-4 py-1.5 bg-blue-500/20 border border-blue-400/30 rounded-full text-blue-300 text-sm font-medium mb-6">
-            {isSpanish ? 'Soluciones en producción, no demos' : 'Production solutions, not demos'}
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold mb-6">
+      <section className="px-5 sm:px-8 pt-16 pb-16 md:pt-24 md:pb-20" style={{ backgroundColor: 'var(--ed-paper)' }}>
+        <div className="max-w-5xl mx-auto">
+          <p className="font-data text-xs tracking-[0.2em] uppercase mb-5" style={{ color: 'var(--ed-accent)' }}>
+            {isSpanish ? 'Casos · en producción, no demos' : 'Cases · in production, not demos'}
+          </p>
+          <h1 className="font-editorial font-extrabold tracking-[-0.03em] leading-[0.98] text-4xl md:text-6xl mb-6" style={{ color: 'var(--ed-ink)' }}>
             {isSpanish ? (
-              <>Casos de <span className="text-blue-400">Éxito</span></>
+              <>Trabajo <span style={{ color: 'var(--ed-accent)' }}>real</span>, en operación</>
             ) : (
-              <>Case <span className="text-blue-400">Studies</span></>
+              <><span style={{ color: 'var(--ed-accent)' }}>Real</span> work, in operation</>
             )}
           </h1>
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl max-w-3xl" style={{ color: 'var(--ed-gray)' }}>
             {isSpanish
-              ? 'Proyectos reales entregados en producción con IA Generativa, infraestructura enterprise y soporte continuo.'
-              : 'Real projects delivered to production with Generative AI, enterprise infrastructure and ongoing support.'}
+              ? 'Proyectos entregados en producción, con infraestructura, seguridad y soporte continuo.'
+              : 'Projects delivered to production, with infrastructure, security and ongoing support.'}
           </p>
         </div>
       </section>
 
       {/* Cases Grid */}
-      <section className="py-12 md:py-20 px-4 md:px-6 bg-slate-50">
+      <section className="py-16 md:py-24 px-5 sm:px-8" style={{ backgroundColor: 'var(--ed-paper-2)', borderTop: '1px solid var(--ed-line)' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {casesList.map((caseStudy) => {
-              const colors = colorClasses[caseStudy.color as keyof typeof colorClasses]
-              return (
-                <div
-                  key={caseStudy.slug}
-                  className={`bg-white rounded-2xl border ${colors.border} p-4 md:p-6 hover:shadow-lg transition-all`}
-                >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className={`p-3 rounded-xl ${colors.icon} flex-shrink-0`}>
-                      <caseStudy.icon className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mb-1">
-                        <h3 className="text-lg md:text-xl font-bold text-slate-900">
-                          {caseStudy.title}
-                        </h3>
-                      </div>
-                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${colors.tag}`}>
-                        {caseStudy.industry}
-                      </span>
-                      <p className="text-slate-600 text-sm mt-2">{caseStudy.tagline}</p>
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            {casesList.map((caseStudy) => (
+              <div
+                key={caseStudy.slug}
+                className="bg-white rounded-2xl p-5 md:p-7 hover:-translate-y-0.5 transition-transform flex flex-col"
+                style={{ border: '1px solid var(--ed-line)' }}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(37,64,255,0.08)' }}>
+                    <caseStudy.icon className="w-6 h-6" style={{ color: 'var(--ed-accent)' }} />
                   </div>
-
-                  <div className="space-y-3 mb-4">
-                    <div>
-                      <span className="text-xs text-slate-500 uppercase tracking-wider">{isSpanish ? 'Problema' : 'Problem'}</span>
-                      <p className="text-sm text-slate-600 mt-1">{caseStudy.problem}</p>
-                    </div>
-                    <div className={`p-3 rounded-lg ${colors.bg}`}>
-                      <span className="text-xs text-slate-500 uppercase tracking-wider">{isSpanish ? 'Resultado' : 'Result'}</span>
-                      <p className="text-sm font-medium text-slate-800 mt-1">{caseStudy.result}</p>
-                    </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg md:text-xl font-editorial font-bold tracking-[-0.01em] mb-1.5" style={{ color: 'var(--ed-ink)' }}>
+                      {caseStudy.title}
+                    </h3>
+                    <span className="inline-block font-data text-[11px] tracking-wide px-2.5 py-0.5 rounded-full" style={{ backgroundColor: 'var(--ed-paper-2)', color: 'var(--ed-gray)', border: '1px solid var(--ed-line)' }}>
+                      {caseStudy.industry}
+                    </span>
+                    <p className="text-sm mt-2" style={{ color: 'var(--ed-gray)' }}>{caseStudy.tagline}</p>
                   </div>
-
-                  {/* Tech & Infra Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {caseStudy.techTerms.map((tech, idx) => (
-                      <span key={idx} className="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-md">
-                        {tech}
-                      </span>
-                    ))}
-                    {caseStudy.infraTerms.map((infra, idx) => (
-                      <span key={idx} className="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-md">
-                        {infra}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Recurring phrase */}
-                  <p className="text-xs text-slate-500 italic border-t border-slate-100 pt-3">
-                    {isSpanish
-                      ? 'Solución entregada en producción con documentación y soporte.'
-                      : 'Solution delivered to production with documentation and support.'}
-                  </p>
                 </div>
-              )
-            })}
+
+                <div className="space-y-3 mb-4">
+                  <div>
+                    <span className="font-data text-[11px] uppercase tracking-[0.15em]" style={{ color: 'var(--ed-gray)' }}>{isSpanish ? 'Problema' : 'Problem'}</span>
+                    <p className="text-sm mt-1" style={{ color: 'var(--ed-gray)' }}>{caseStudy.problem}</p>
+                  </div>
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--ed-paper)', borderLeft: '2px solid var(--ed-accent)' }}>
+                    <span className="font-data text-[11px] uppercase tracking-[0.15em]" style={{ color: 'var(--ed-accent)' }}>{isSpanish ? 'Resultado' : 'Result'}</span>
+                    <p className="text-sm font-medium mt-1" style={{ color: 'var(--ed-ink)' }}>{caseStudy.result}</p>
+                  </div>
+                </div>
+
+                {/* Tech & Infra tags · sistema único */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {[...caseStudy.techTerms, ...caseStudy.infraTerms].map((term, idx) => (
+                    <span key={idx} className="font-data px-2.5 py-0.5 text-xs rounded-md" style={{ backgroundColor: 'var(--ed-paper-2)', color: 'var(--ed-gray)', border: '1px solid var(--ed-line)' }}>
+                      {term}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="text-xs mt-auto pt-3" style={{ color: 'var(--ed-gray)', borderTop: '1px solid var(--ed-line)' }}>
+                  {isSpanish
+                    ? 'Entregado en producción, con documentación y soporte.'
+                    : 'Delivered to production, with documentation and support.'}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* What's Included Section */}
-      <section className="py-12 md:py-16 px-4 md:px-6 bg-white border-t border-slate-200">
+      <section className="py-16 md:py-20 px-5 sm:px-8" style={{ backgroundColor: 'var(--ed-paper)' }}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900 text-center mb-6">
+          <h2 className="font-editorial text-2xl md:text-3xl font-bold tracking-[-0.02em] mb-8" style={{ color: 'var(--ed-ink)' }}>
             {isSpanish ? 'Cada proyecto incluye' : 'Every project includes'}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
@@ -295,8 +276,8 @@ export default async function CasesPage({ params }: PageProps) {
               isSpanish ? 'Monitoreo y alertas' : 'Monitoring & alerts',
               isSpanish ? 'Soporte post-lanzamiento' : 'Post-launch support',
             ].map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+              <div key={idx} className="flex items-center gap-2 text-sm" style={{ color: 'var(--ed-gray)' }}>
+                <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--ed-accent)' }} />
                 <span>{item}</span>
               </div>
             ))}
@@ -304,30 +285,31 @@ export default async function CasesPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-12 md:py-20 px-4 md:px-6 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+      {/* CTA Section · cierre de tinta */}
+      <section className="py-16 md:py-24 px-5 sm:px-8 text-white" style={{ backgroundColor: 'var(--ed-ink)' }}>
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-6">
+          <h2 className="font-editorial text-3xl md:text-5xl font-bold tracking-[-0.02em] mb-6">
             {isSpanish
               ? '¿Tienes un desafío similar?'
               : 'Have a similar challenge?'}
           </h2>
-          <p className="text-lg md:text-xl text-blue-100 mb-8">
+          <p className="text-lg md:text-xl text-white/60 mb-10 max-w-xl mx-auto">
             {isSpanish
-              ? 'Cuéntanos tu problema. Te diremos cómo la IA puede ayudarte a resolverlo.'
-              : 'Tell us your problem. We\'ll tell you how AI can help solve it.'}
+              ? 'Cuéntanos tu problema. Te diremos cómo resolverlo — y cuánto toma.'
+              : "Tell us your problem. We'll tell you how to solve it — and how long it takes."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={`/${locale}#contacto`}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-blue-700 rounded-lg font-medium text-lg hover:bg-blue-50 transition w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 min-h-[52px] px-8 rounded-full bg-white font-medium hover:-translate-y-0.5 transition-transform w-full sm:w-auto"
+              style={{ color: 'var(--ed-ink)' }}
             >
               {isSpanish ? 'Contactar' : 'Contact Us'}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href={`/${locale}/services`}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-blue-700 text-white rounded-lg font-medium text-lg hover:bg-blue-600 transition border border-blue-500 w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 min-h-[52px] px-8 rounded-full font-medium transition-colors w-full sm:w-auto border border-white/20 text-white hover:bg-white/10"
             >
               {isSpanish ? 'Ver Servicios' : 'View Services'}
             </Link>

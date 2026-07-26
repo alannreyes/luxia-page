@@ -6,6 +6,25 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
+
+    /* luxIA · sistema "sala de operaciones para un clima volátil" */
+    --lux-noche: #0A1424;   /* azul-noche atmosférico (base oscura) */
+    --lux-noche-2: #0d1b30;
+    --lux-senal: #3B82F6;   /* azul luxIA · el dato/la señal */
+    --lux-senal-soft: #60a5fa;
+    --lux-alba: #F5A524;    /* ámbar de amanecer/alerta · eje climático */
+    --lux-alba-soft: #fbbf6b;
+    --lux-niebla: #E8EEF6;  /* blanco-niebla frío (secciones claras) */
+    --lux-tinta: #0F1B2D;   /* grafito para texto */
+    --lux-ok: #10B981;      /* uptime/operativo */
+
+    /* luxIA · sistema editorial "estudio de autor, en luz" (2026) */
+    --ed-paper: #F7F8FA;    /* papel frío (fondo) */
+    --ed-paper-2: #EEF0F4;  /* banda alterna */
+    --ed-ink: #0E1116;      /* tinta (texto/negros) */
+    --ed-gray: #5B6270;     /* texto secundario */
+    --ed-accent: #2540FF;   /* azul eléctrico (chispa) */
+    --ed-line: #E4E7EC;     /* hairline */
   }
   
   /* Prevenir overflow horizontal en móviles */
@@ -71,13 +90,70 @@
   }
   
   @keyframes fadeIn {
-    from { 
-      opacity: 0; 
-      transform: translateY(20px); 
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-    to { 
-      opacity: 1; 
-      transform: translateY(0); 
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
+
+  /* ── luxIA type roles ── */
+  .font-display { font-family: var(--font-display), 'Inter', system-ui, sans-serif; }
+  .font-data { font-family: var(--font-mono), ui-monospace, 'SFMono-Regular', monospace; }
+  .font-editorial { font-family: var(--font-editorial), 'Inter', system-ui, sans-serif; }
+
+  /* ── Signature: horizonte al amanecer + barrido de señal ── */
+  .dawn-glow {
+    background:
+      radial-gradient(120% 90% at 50% 118%, rgba(245,165,36,0.55) 0%, rgba(245,165,36,0.16) 26%, rgba(245,165,36,0) 52%),
+      radial-gradient(100% 80% at 50% 128%, rgba(96,165,250,0.28) 0%, rgba(96,165,250,0) 55%);
+  }
+  @keyframes dawnBreath {
+    0%, 100% { opacity: 0.85; transform: translateY(0); }
+    50%      { opacity: 1;    transform: translateY(-6px); }
+  }
+  .dawn-breath { animation: dawnBreath 9s ease-in-out infinite; }
+
+  @keyframes sweep {
+    0%   { transform: translateX(-60%); opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { transform: translateX(160%); opacity: 0; }
+  }
+  .signal-sweep { animation: sweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+
+  @keyframes gridDrift {
+    from { background-position: 0 0; }
+    to   { background-position: 44px 0; }
+  }
+  .telemetry-grid {
+    background-image:
+      linear-gradient(rgba(96,165,250,0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96,165,250,0.10) 1px, transparent 1px);
+    background-size: 44px 44px;
+    animation: gridDrift 24s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dawn-breath, .signal-sweep, .telemetry-grid { animation: none; }
+  }
+
+  /* ── Mapbox · marcador pulsante (datos en vivo) ── */
+  .lux-marker {
+    width: 12px; height: 12px; border-radius: 9999px;
+    background: var(--ed-accent);
+    box-shadow: 0 0 0 0 rgba(37, 64, 255, 0.5);
+    animation: luxPulse 2.4s ease-out infinite;
+  }
+  @keyframes luxPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(37, 64, 255, 0.45); }
+    70%  { box-shadow: 0 0 0 16px rgba(37, 64, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 64, 255, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lux-marker { animation: none; }
   }
 }

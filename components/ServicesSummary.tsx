@@ -1,51 +1,60 @@
 'use client'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { FileSearch, MapPin, Bell, ArrowRight } from 'lucide-react'
+import { FileSearch, Wind, Bell, ArrowRight } from 'lucide-react'
 import type { BaseComponentProps } from '@/types'
 
-const icons = [FileSearch, MapPin, Bell]
+const icons = [FileSearch, Wind, Bell]
 
 export default function ServicesSummary({ locale, dictionary }: BaseComponentProps) {
+  const isSpanish = locale === 'es'
+
   return (
-    <section className="py-20 px-6 bg-white">
+    <section className="py-20 md:py-28 px-5 sm:px-8" style={{ backgroundColor: 'var(--ed-paper)' }}>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          className="mb-12 md:mb-14"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.55 }}
         >
-          <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
+          <p className="font-data text-xs tracking-[0.2em] uppercase mb-3" style={{ color: 'var(--ed-accent)' }}>
+            {isSpanish ? 'Capacidades' : 'Capabilities'}
+          </p>
+          <h2 className="font-editorial text-3xl md:text-5xl font-bold tracking-[-0.02em] mb-4 max-w-[18ch]" style={{ color: 'var(--ed-ink)' }}>
             {dictionary.servicesSummary.title}
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl" style={{ color: 'var(--ed-gray)' }}>
             {dictionary.servicesSummary.subtitle}
           </p>
         </motion.div>
 
         {/* 3 Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
+        <div className="grid md:grid-cols-3 gap-5 mb-12">
           {dictionary.servicesSummary.items.map((item: { title: string; description: string }, index: number) => {
             const Icon = icons[index]
             return (
               <motion.div
                 key={index}
-                className="bg-slate-50 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
+                className="group relative rounded-2xl p-6 md:p-7 bg-white hover:-translate-y-1 transition-all duration-300"
+                style={{ border: '1px solid var(--ed-line)' }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-blue-600" />
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                  style={{ backgroundColor: 'rgba(37,64,255,0.08)' }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: 'var(--ed-accent)' }} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="font-editorial text-xl font-bold tracking-[-0.01em] mb-2" style={{ color: 'var(--ed-ink)' }}>
                   {item.title}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--ed-gray)' }}>
                   {item.description}
                 </p>
               </motion.div>
@@ -55,7 +64,6 @@ export default function ServicesSummary({ locale, dictionary }: BaseComponentPro
 
         {/* CTA Link */}
         <motion.div
-          className="text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -63,10 +71,11 @@ export default function ServicesSummary({ locale, dictionary }: BaseComponentPro
         >
           <Link
             href={`/${locale}/services`}
-            className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 font-medium transition-all hover:gap-3"
+            style={{ color: 'var(--ed-accent)' }}
           >
             {dictionary.servicesSummary.cta}
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>
       </div>

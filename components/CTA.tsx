@@ -6,12 +6,8 @@ import { siteConfig } from '@/lib/config'
 import type { BaseComponentProps } from '@/types'
 
 export default function CTA({ locale, dictionary }: BaseComponentProps) {
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    company: '',
-    message: ''
-  })
+  const isSpanish = locale === 'es'
+  const [formState, setFormState] = useState({ name: '', email: '', company: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -20,24 +16,16 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
     e.preventDefault()
     setIsSubmitting(true)
     setError('')
-
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formState),
       })
-
-      if (!response.ok) {
-        throw new Error('Error sending message')
-      }
-
+      if (!response.ok) throw new Error('Error sending message')
       setIsSubmitted(true)
-
       if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', siteConfig.tracking.events.contactFormSubmit, {
-          source: 'cta_section'
-        })
+        window.gtag('event', siteConfig.tracking.events.contactFormSubmit, { source: 'cta_section' })
       }
     } catch {
       setError(dictionary.cta.form.error)
@@ -46,129 +34,84 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
     }
   }
 
+  const inputClass = 'w-full px-4 py-3 rounded-lg outline-none transition-all bg-white border border-[var(--ed-line)] focus:border-[#2540FF] focus:ring-2 focus:ring-[#2540FF]/15'
+
   return (
-    <section id="contacto" className="py-20 px-6 bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+    <section id="contacto" className="relative py-20 md:py-28 px-5 sm:px-8" style={{ backgroundColor: 'var(--ed-paper)', borderTop: '1px solid var(--ed-line)' }}>
+      <div className="max-w-3xl mx-auto relative z-10">
         <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          className="mb-10"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
+          <p className="font-data text-xs tracking-[0.2em] uppercase mb-3" style={{ color: 'var(--ed-accent)' }}>
+            {isSpanish ? 'Hablemos' : "Let's talk"}
+          </p>
+          <h2 className="font-editorial text-3xl md:text-5xl font-bold tracking-[-0.02em] mb-4 max-w-[16ch]" style={{ color: 'var(--ed-ink)' }}>
             {dictionary.cta.title}
           </h2>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+          <p className="text-lg max-w-xl" style={{ color: 'var(--ed-gray)' }}>
             {dictionary.cta.subtitle}
           </p>
         </motion.div>
 
-        {/* Contact Form */}
         <motion.div
-          className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100"
-          initial={{ opacity: 0, y: 20 }}
+          className="bg-white rounded-2xl p-8"
+          style={{ border: '1px solid var(--ed-line)', boxShadow: '0 30px 60px -30px rgba(15,27,45,0.18)' }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
           {isSubmitted ? (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-green-600" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(37,64,255,0.1)' }}>
+                <CheckCircle className="w-8 h-8" style={{ color: 'var(--ed-accent)' }} />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="font-editorial text-xl font-bold" style={{ color: 'var(--ed-ink)' }}>
                 {dictionary.cta.form.success}
               </h3>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {dictionary.cta.form.name} *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formState.name}
-                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-                  />
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.form.name} *</label>
+                  <input type="text" required value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className={inputClass} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {dictionary.cta.form.email} *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formState.email}
-                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-                  />
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.form.email} *</label>
+                  <input type="email" required value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className={inputClass} />
                 </div>
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {dictionary.cta.form.company}
-                </label>
-                <input
-                  type="text"
-                  value={formState.company}
-                  onChange={(e) => setFormState({ ...formState, company: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
-                />
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.form.company}</label>
+                <input type="text" value={formState.company} onChange={(e) => setFormState({ ...formState, company: e.target.value })} className={inputClass} />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {dictionary.cta.form.message}
-                </label>
-                <textarea
-                  rows={4}
-                  value={formState.message}
-                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all resize-none"
-                />
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.form.message}</label>
+                <textarea rows={4} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className={`${inputClass} resize-none`} />
               </div>
-
-              {error && (
-                <p className="text-red-600 text-sm">{error}</p>
-              )}
-
+              {error && <p className="text-red-600 text-sm">{error}</p>}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl flex items-center justify-center disabled:opacity-70"
+                className="w-full min-h-[52px] text-white px-8 rounded-full font-medium hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center disabled:opacity-70"
+                style={{ backgroundColor: 'var(--ed-ink)' }}
               >
-                {isSubmitting ? (
-                  dictionary.cta.form.sending
-                ) : (
-                  <>
-                    <Send className="w-5 h-5 mr-2" />
-                    {dictionary.cta.form.submit}
-                  </>
-                )}
+                {isSubmitting ? dictionary.cta.form.sending : (<><Send className="w-5 h-5 mr-2" />{dictionary.cta.form.submit}</>)}
               </button>
             </form>
           )}
         </motion.div>
 
-        {/* Location Info */}
-        <motion.div
-          className="mt-8 flex justify-center text-sm text-gray-500"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-        >
-          <span className="flex items-center">
+        <div className="mt-8 flex justify-center">
+          <span className="flex items-center font-data text-xs tracking-wide" style={{ color: 'var(--ed-gray)' }}>
             <MapPin className="w-4 h-4 mr-2" />
-            Florida, USA | Lima, Peru
+            Lima, Perú · EE. UU.
           </span>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

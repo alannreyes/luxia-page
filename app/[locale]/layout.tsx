@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import '../globals.css'
 import AnalyticsProvider from '@/components/AnalyticsProvider'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
 import { getServerDictionary, generateLocalizedMetadata, type PageParams } from '@/lib/i18n'
 import { locales } from '@/middleware'
 import { notFound } from 'next/navigation'
@@ -85,8 +87,10 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
       {/* Solo devolvemos el contenido, sin html/body */}
       <AnalyticsProvider locale={locale}>
         <ErrorBoundary>
-          <div className="viewport-safe">
-            {children}
+          <div className="viewport-safe" style={{ backgroundColor: 'var(--ed-paper)' }}>
+            <Navigation locale={locale} dictionary={dictionary} />
+            <main>{children}</main>
+            <Footer locale={locale} dictionary={dictionary} />
           </div>
         </ErrorBoundary>
       </AnalyticsProvider>
