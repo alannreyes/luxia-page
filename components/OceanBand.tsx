@@ -402,7 +402,7 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
 
     {nino?.rankPeru?.length ? (
       <div className="w-full px-5 sm:px-8 py-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {[{ h: es ? 'Mar frente a Perú · dónde cae hoy' : 'Sea off Peru · where today ranks', r: nino.rankPeru }, { h: es ? 'Índice global · dónde cae hoy' : 'Global index · where today ranks', r: nino.rankGlobal }].map((col, ci) => (
+        {[{ h: es ? 'Mar frente a Perú · récord, top 5' : 'Sea off Peru · record, top 5', r: nino.rankPeru }, { h: es ? 'Índice global · récord, top 5' : 'Global index · record, top 5', r: nino.rankGlobal }].map((col, ci) => (
           <div key={ci} className="rounded-xl border p-3" style={{ borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}>
             <div className="font-data text-[11px] uppercase tracking-wide mb-2" style={{ color: '#7d94a4' }}>{col.h}</div>
             <ol className="flex flex-col gap-1 font-data text-sm">
