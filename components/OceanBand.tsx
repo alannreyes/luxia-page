@@ -94,7 +94,7 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
   const [coast, setCoast] = useState<number | null>(null)
   const [fi, setFi] = useState(0)
   const [sound, setSound] = useState(false)
-  const [nino, setNino] = useState<{ rankPeru?: { v: number; label: string; isNow: boolean }[]; rankGlobal?: { v: number; label: string; isNow: boolean }[] } | null>(null)
+  const [nino, setNino] = useState<{ rankPeru?: { v: number; label: string; isNow: boolean }[]; rankGlobal?: { v: number; label: string; isNow: boolean }[]; icen?: { v: number; cat: string; tri: string } | null } | null>(null)
   const playingRef = useRef(true)      // pausa manual
   const holdUntilRef = useRef(0)       // retención automática en "hoy" (timestamp fin)
   const [playing, setPlaying] = useState(true)
@@ -360,6 +360,12 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
           <div className="lux-monitor-alert" style={{ marginTop: 6 }}>
             <span className="lux-monitor-sev" style={{ backgroundColor: ph.c }}>{es ? 'FASE' : 'PHASE'}</span>
             <span className="lux-monitor-title" style={{ fontSize: 14 }}>{ph.t}</span>
+          </div>
+        )}
+        {nino?.icen && (
+          <div className="lux-monitor-alert" style={{ marginTop: 6 }}>
+            <span className="lux-monitor-sev" style={{ backgroundColor: '#7dd3fc', color: '#08131c' }}>ICEN</span>
+            <span className="lux-monitor-title" style={{ fontSize: 13 }}>{es ? 'Oficial' : 'Official'}: +{nino.icen.v} · {nino.icen.cat}</span>
           </div>
         )}
         <div className="lux-monitor-readings" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
