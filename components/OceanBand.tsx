@@ -347,7 +347,7 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
       <div className="lux-monitor absolute bottom-5 left-5 sm:left-8 z-10">
         <div className="lux-monitor-live">
           <span className="lux-live-dot" />
-          <span className="lux-live-label">{es ? 'EN VIVO' : 'LIVE'}</span>
+          <span className="lux-live-label">{fi === total - 1 ? (es ? 'ÚLTIMO REPORTE' : 'LATEST REPORT') : (es ? 'EVOLUCIÓN' : 'EVOLUTION')}</span>
           {date && <span className="lux-monitor-ago" style={{ fontVariantNumeric: 'tabular-nums' }}>{fmtDate(date, locale)} · {fi + 1}/{total}</span>}
         </div>
         <div className="lux-monitor-alert">
