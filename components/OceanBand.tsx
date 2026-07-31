@@ -24,8 +24,8 @@ function rgba(a: number): [number, number, number, number] {
 }
 function phase(a: number | null, es: boolean) {
   if (a == null) return null
-  if (a >= 1.7) return { t: es ? 'Aguas muy cálidas · alerta El Niño Costero' : 'Very warm waters · Coastal El Niño alert', c: '#ef4444' }
-  if (a >= 1.0) return { t: es ? 'Aguas cálidas · vigilancia El Niño' : 'Warm waters · El Niño watch', c: '#f97316' }
+  if (a >= 1.7) return { t: es ? 'Alerta El Niño Costero' : 'Coastal El Niño alert', c: '#ef4444' }
+  if (a >= 1.0) return { t: es ? 'Vigilancia El Niño' : 'El Niño watch', c: '#f97316' }
   if (a >= 0.4) return { t: es ? 'Ligeramente cálido' : 'Slightly warm', c: '#f59e0b' }
   if (a <= -1.0) return { t: es ? 'Aguas frías · La Niña' : 'Cold waters · La Niña', c: '#38bdf8' }
   if (a <= -0.4) return { t: es ? 'Ligeramente frío' : 'Slightly cold', c: '#7dd3fc' }
@@ -367,7 +367,7 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
         <div className="lux-monitor-alert">
           <span className="lux-monitor-sev" style={{ backgroundColor: '#0ea5e9' }}>{es ? 'OCÉANO' : 'OCEAN'}</span>
           <span className="lux-monitor-title">
-            {es ? 'Temperatura del mar' : 'Sea temperature'} {coast != null && <>— <b style={{ color: ph?.c }}>{coast > 0 ? `+${coast}` : coast}°</b> <span style={{ opacity: 0.6, fontWeight: 400 }}>{es ? 'costa norte' : 'north coast'}</span></>}
+            {coast != null && <><b style={{ color: ph?.c }}>{coast > 0 ? `+${coast}` : coast}°</b> <span style={{ opacity: 0.6, fontWeight: 400 }}>{es ? 'frente al Perú' : 'off Peru'}</span></>}
           </span>
         </div>
         {ph && (
