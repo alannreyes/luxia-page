@@ -7,7 +7,11 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 const BASE = 'https://oceanwatch.pifsc.noaa.gov/erddap/griddap/CRW_sst_anom_v1_0.json'
-const QUERY = 'sea_surface_temperature_anomaly[last-155:31:last][(-30):30:(25)][(220):30:(290)]'
+const QUERY = 'sea_surface_temperature_anomaly[last-155:31:last][(-25):20:(25)][(185):20:(290)]'
+const BOXES = [
+  { name: 'Niño 1+2', latN: 0, latS: -10, lonW: -90, lonE: -80 },
+  { name: 'Niño 3.4', latN: 5, latS: -5, lonW: -170, lonE: -120 },
+]
 const TTL = 6 * 60 * 60 * 1000 // 6h
 
 type Row = [string, number, number, number | null]
@@ -34,7 +38,7 @@ async function build() {
   const dLat = nLat > 1 ? lats[1] - lats[0] : 1
   const dLon = nLon > 1 ? lonsRaw[1] - lonsRaw[0] : 1
   const conv = (lon: number) => (lon > 180 ? lon - 360 : lon)
-  return { source: 'NOAA Coral Reef Watch', latMin: lats[0], lonMin: conv(lonsRaw[0]), dLat, dLon, nLat, nLon, frames }
+  return { source: 'NOAA Coral Reef Watch', latMin: lats[0], lonMin: conv(lonsRaw[0]), dLat, dLon, nLat, nLon, frames, boxes: BOXES }
 }
 
 export async function GET() {

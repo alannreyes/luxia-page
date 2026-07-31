@@ -54,10 +54,8 @@ function buildSwell(ctx: AudioContext): GainNode {
   return master
 }
 // zonas de riesgo EN TIERRA (impacto documentado según la fase). El tamaño del símbolo = intensidad.
-const ZONES: { lat: number; lon: number; kind: 'coast' | 'sierra' }[] = [
-  { lat: -6.5, lon: -78.3, kind: 'coast' },   // norte del Perú, tierra adentro (sobre el verde, no el litoral)
-  { lat: -14.5, lon: -70.5, kind: 'sierra' }, // sierra sur (Andes, Cusco/Puno)
-]
+// nube/sol removidos (unificado con Solvayu: solo las cajas Niño rotuladas sobre el heatmap)
+const ZONES: { lat: number; lon: number; kind: 'coast' | 'sierra' }[] = []
 function rainSVG(color: string, size: number) {
   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" style="display:block"><path d="M6.5 14.5a4 4 0 0 1 .6-7.96 5.2 5.2 0 0 1 10 1.2A3.6 3.6 0 0 1 17 14.5" fill="${color}" fill-opacity="0.28"/><line x1="8" y1="17" x2="6.8" y2="20.5"/><line x1="12" y1="17.5" x2="10.8" y2="21.5"/><line x1="16" y1="17" x2="14.8" y2="20.5"/></svg>`
 }
@@ -146,7 +144,7 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
       if (cancelled || !mapEl.current || !cvRef.current) return
 
       const map = L.map(mapEl.current, {
-        center: [-6, -102], zoom: 3.4, minZoom: 2, maxZoom: 8,
+        center: [0, -122], zoom: 3, minZoom: 2, maxZoom: 8,
         zoomControl: true, attributionControl: false,
         dragging: true, doubleClickZoom: true, touchZoom: true, boxZoom: true, keyboard: true,
         scrollWheelZoom: false, zoomSnap: 0.25, fadeAnimation: false, zoomAnimation: false,
@@ -180,6 +178,16 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
         ctx.globalAlpha = (prev && blend < 1 && prevIdx !== curIdx) ? blend : 1
         ctx.drawImage(cur, tl.x, tl.y, dw, dh)
         ctx.globalAlpha = 1
+        // cajas Niño 1+2 y 3.4 rotuladas
+        const bxs = (g as unknown as { boxes?: { name: string; latN: number; latS: number; lonW: number; lonE: number }[] }).boxes || []
+        for (const bx of bxs) {
+          const q1 = map.latLngToContainerPoint([bx.latN, bx.lonW])
+          const q2 = map.latLngToContainerPoint([bx.latS, bx.lonE])
+          ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4])
+          ctx.strokeRect(q1.x, q1.y, q2.x - q1.x, q2.y - q1.y); ctx.setLineDash([])
+          ctx.font = '600 11px ui-monospace, monospace'; ctx.fillStyle = '#fff'
+          ctx.fillText(bx.name, q1.x + 5, q1.y + 14)
+        }
       }
       const redraw = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; drawField(idxRef.current, idxRef.current, 1) }) }
       const size = () => {
@@ -241,7 +249,10 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
             const a = fr.v[i * g.nLon + j]
             const idx = ((g.nLat - 1 - i) * g.nLon + j) * 4
             if (a == null) { img.data[idx + 3] = 0; continue }
-            const [r, gr, b, al] = rgba(a); img.data[idx] = r; img.data[idx + 1] = gr; img.data[idx + 2] = b; img.data[idx + 3] = al
+            const [r, gr, b, al] = rgba(a)
+            const edge = Math.min(i, g.nLat - 1 - i, j, g.nLon - 1 - j)  // difuminado del borde
+            img.data[idx] = r; img.data[idx + 1] = gr; img.data[idx + 2] = b
+            img.data[idx + 3] = edge < 7 ? Math.round(al * (edge / 7)) : al
           }
           fctx.putImageData(img, 0, 0); fields.push(f); coasts.push(canonN12(fr.date) ?? coastAt(g, fr))
         }
