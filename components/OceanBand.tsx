@@ -376,12 +376,6 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
             <span className="lux-monitor-title" style={{ fontSize: 14 }}>{ph.t}</span>
           </div>
         )}
-        {nino?.icen && (
-          <div className="lux-monitor-alert" style={{ marginTop: 6 }}>
-            <span className="lux-monitor-sev" style={{ backgroundColor: '#7dd3fc', color: '#08131c' }}>ICEN</span>
-            <span className="lux-monitor-title" style={{ fontSize: 13 }}>{es ? 'Oficial' : 'Official'}: +{nino.icen.v} · {nino.icen.cat}</span>
-          </div>
-        )}
         <div className="lux-monitor-readings" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
           <div style={{ display: 'flex', height: 8, width: '100%', borderRadius: 4, overflow: 'hidden' }}>
             {['rgba(2,132,199,0.9)', 'rgba(56,189,248,0.9)', 'rgba(125,211,252,0.9)', 'rgba(255,255,255,0.5)', 'rgba(250,204,21,0.9)', 'rgba(247,168,20,0.9)', 'rgba(236,94,20,0.9)', 'rgba(225,45,45,0.95)', 'rgba(153,27,27,0.95)', 'rgba(124,22,72,0.95)'].map((c, i) => (
