@@ -198,12 +198,15 @@ export default function OceanBand({ locale = 'es' }: { locale?: 'es' | 'en' }) {
       }
       onResize = size; window.addEventListener('resize', size); map.on('resize', size)
       map.on('move zoomend viewreset', redraw)
-      map.whenReady(() => { map.invalidateSize(); size() })
-      setTimeout(() => { map.invalidateSize(); size() }, 150)
+      // enmarca el Pacífico ecuatorial (contiene ambas cajas Niño) sin importar el ancho de la banda
+      const FIT = L.latLngBounds([[-18, -165], [12, -78]])
+      const fit = () => { try { map.fitBounds(FIT, { padding: [8, 8], animate: false }) } catch { /* noop */ } }
+      map.whenReady(() => { map.invalidateSize(); fit(); size() })
+      setTimeout(() => { map.invalidateSize(); fit(); size() }, 150)
       observer = new IntersectionObserver((es) => {
         const vis = es.some((e) => e.isIntersecting)
         visibleRef.current = vis; applyGain() // oleaje suena solo cuando la banda está a la vista
-        if (vis) { map.invalidateSize(); redraw() }
+        if (vis) { map.invalidateSize(); fit(); redraw() }
       }, { threshold: 0.15 })
       observer.observe(mapEl.current)
 
