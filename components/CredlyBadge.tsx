@@ -1,26 +1,28 @@
-'use client'
-import { useEffect } from 'react'
-
 /**
- * Badge oficial de Credly — "Claude Certified Architect – Professional" (issued by Anthropic).
- * Credly está diseñado para compartir públicamente con verificación, por lo que es la vía
- * sancionada para mostrar la certificación. El script reemplaza el div por un iframe verificado.
+ * Badge oficial de Credly, verificado. En vez de cargar el `embed.js` de Credly —que
+ * escanea el DOM y, con varios badges o el doble-render de React, inyecta iframes
+ * duplicados— renderizamos directamente el mismo iframe que ese script termina creando
+ * (`/embedded_badge/<id>`). Es determinista, sin JS de terceros y sin duplicados.
  */
-export default function CredlyBadge() {
-  useEffect(() => {
-    if (document.querySelector('script[src*="credly.com/assets/utilities/embed.js"]')) return
-    const s = document.createElement('script')
-    s.src = 'https://cdn.credly.com/assets/utilities/embed.js'
-    s.async = true
-    document.body.appendChild(s)
-  }, [])
+interface CredlyBadgeProps {
+  /** ID público del badge en Credly (data-share-badge-id) */
+  badgeId: string
+  /** Etiqueta accesible del badge */
+  title: string
+  width?: number
+  height?: number
+}
 
+export default function CredlyBadge({ badgeId, title, width = 150, height = 270 }: CredlyBadgeProps) {
   return (
-    <div
-      data-iframe-width="150"
-      data-iframe-height="270"
-      data-share-badge-id="d4f30538-390f-430d-a1c1-e2cba04b18e4"
-      data-share-badge-host="https://www.credly.com"
+    <iframe
+      src={`https://www.credly.com/embedded_badge/${badgeId}`}
+      title={title}
+      width={width}
+      height={height}
+      loading="lazy"
+      style={{ border: 0, colorScheme: 'light' }}
+      allowTransparency
     />
   )
 }

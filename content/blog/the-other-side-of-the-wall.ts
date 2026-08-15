@@ -127,6 +127,7 @@ export const theOtherSideOfTheWall: BlogPost = {
   datePublished: '2026-08-09',
   dateModified: '2026-08-09',
   videoId: 'M58VUULWpGM',
+  ogImage: '/insights/the-other-side-of-the-wall-og.jpg',
   en: {
     title: "The Other Side of the Wall: Why 'It Works' Isn't the Same as 'It's Ready'",
     description:
