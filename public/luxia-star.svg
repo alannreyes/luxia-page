@@ -1,19 +1,5 @@
-<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Estrella moderna según referencia -->
-  <g transform="translate(60,60)">
-    <!-- Puntas principales largas (4) - más prominentes -->
-    <path d="M0,-45 L6,-18 L8,-15 L0,-8 L-8,-15 L-6,-18 Z" fill="#1e293b"/>
-    <path d="M45,0 L18,6 L15,8 L8,0 L15,-8 L18,-6 Z" fill="#1e293b"/>
-    <path d="M0,45 L-6,18 L-8,15 L0,8 L8,15 L6,18 Z" fill="#1e293b"/>
-    <path d="M-45,0 L-18,-6 L-15,-8 L-8,0 L-15,8 L-18,6 Z" fill="#1e293b"/>
-    
-    <!-- Puntas secundarias (4) - más cortas y anchas -->
-    <path d="M-28,-28 L-12,-12 L-8,-16 L-16,-8 L-12,-12 L-28,-28 Z" fill="#475569"/>
-    <path d="M28,-28 L12,-12 L16,-8 L8,-16 L12,-12 L28,-28 Z" fill="#475569"/>
-    <path d="M28,28 L12,12 L8,16 L16,8 L12,12 L28,28 Z" fill="#475569"/>
-    <path d="M-28,28 L-12,12 L-16,8 L-8,16 L-12,12 L-28,28 Z" fill="#475569"/>
-    
-    <!-- Centro sólido -->
-    <circle cx="0" cy="0" r="8" fill="#334155"/>
-  </g>
-</svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M71.21,28.79 L58,50 L71.21,71.21 L50,58 L28.79,71.21 L42,50 L28.79,28.79 L50,42 Z" fill="#7C93FF"/>
+<path d="M50,50 L50,4 L55.66,44.34 Z" fill="#2E4BFF"/><path d="M50,50 L44.34,44.34 L50,4 Z" fill="#1B2FB5"/>
+<path d="M50,50 L96,50 L55.66,55.66 Z" fill="#2E4BFF"/><path d="M50,50 L55.66,44.34 L96,50 Z" fill="#1B2FB5"/>
+<path d="M50,50 L50,96 L44.34,55.66 Z" fill="#2E4BFF"/><path d="M50,50 L55.66,55.66 L50,96 Z" fill="#1B2FB5"/>
+<path d="M50,50 L4,50 L44.34,44.34 Z" fill="#2E4BFF"/><path d="M50,50 L44.34,55.66 L4,50 Z" fill="#1B2FB5"/></svg>

@@ -1,7 +1,31 @@
-Dockerfile
-.dockerignore
+# El directorio de deploy en el VPS contiene muchos proyectos ajenos (basurero).
+# Excluir TODO por defecto y luego incluir SOLO lo propio de luxia-page,
+# para que el build context sea de MBs y no arrastre 5GB de otros proyectos.
+*
+
+# --- código y config de la web ---
+!app/
+!components/
+!lib/
+!contexts/
+!types/
+!public/
+!content/
+!brand/
+!database/
+!scripts/
+!middleware.ts
+!next.config.js
+!next-env.d.ts
+!tsconfig.json
+!postcss.config.mjs
+!tailwind.config.ts
+!eslint.config.mjs
+!package.json
+!package-lock.json
+
+# --- nunca enviar (por si acaso) ---
 node_modules
-npm-debug.log
-README.md
 .next
 .git
+.env.local

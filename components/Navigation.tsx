@@ -12,13 +12,9 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
   const navLinks = [
     { href: `/${locale}/services`, label: dictionary.nav.services },
     { href: `/${locale}/cases`, label: dictionary.nav.cases },
+    { href: `/${locale}/insights`, label: dictionary.nav.insights },
     { href: `/${locale}#fundador`, label: dictionary.nav.about },
   ]
-  const eduLinks = [
-    { href: `/${locale}/learning`, label: dictionary.nav.learning, icon: '📖' },
-    { href: `/${locale}/cooking`, label: dictionary.nav.cooking, icon: '👨‍🍳' },
-  ]
-
   const linkClass = 'text-sm font-medium transition-colors'
 
   return (
@@ -38,13 +34,6 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
                 {link.label}
               </Link>
             ))}
-            <div className="flex items-center gap-1 pl-4" style={{ borderLeft: '1px solid var(--ed-line)' }}>
-              {eduLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="flex items-center gap-1 px-2 py-1 rounded-lg text-sm transition-colors hover:bg-black/5" style={{ color: 'var(--ed-gray)' }}>
-                  <span>{link.icon}</span><span>{link.label}</span>
-                </Link>
-              ))}
-            </div>
             <LanguageSelector currentLocale={locale} />
             <Link
               href={`/${locale}#contacto`}
@@ -72,13 +61,6 @@ export default function Navigation({ locale, dictionary }: BaseComponentProps) {
                 {link.label}
               </Link>
             ))}
-            <div className="flex gap-2 pt-2">
-              {eduLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-colors hover:bg-black/5" style={{ color: 'var(--ed-gray)' }} onClick={() => setIsOpen(false)}>
-                  <span>{link.icon}</span><span>{link.label}</span>
-                </Link>
-              ))}
-            </div>
             <div className="pt-2"><LanguageSelector currentLocale={locale} /></div>
             <Link href={`/${locale}#contacto`} className="block w-full text-center text-white px-6 py-3 rounded-full font-medium mt-1" style={{ backgroundColor: 'var(--ed-ink)' }} onClick={() => setIsOpen(false)}>
               {dictionary.nav.schedule}

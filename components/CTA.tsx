@@ -1,13 +1,25 @@
 'use client'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, CheckCircle, MapPin } from 'lucide-react'
+import { Send, CheckCircle, MapPin, ShieldCheck } from 'lucide-react'
 import { siteConfig } from '@/lib/config'
 import type { BaseComponentProps } from '@/types'
 
 export default function CTA({ locale, dictionary }: BaseComponentProps) {
   const isSpanish = locale === 'es'
-  const [formState, setFormState] = useState({ name: '', email: '', company: '', message: '' })
+  const [formState, setFormState] = useState({ name: '', email: '', company: '', projectType: '', industry: '', timeline: '', message: '' })
+
+  const opts = {
+    projectType: isSpanish
+      ? ['Construir o acelerar software', 'IA para una tarea concreta', 'Asesoría / aún explorando']
+      : ['Build or accelerate software', 'AI for a specific task', 'Advice / still exploring'],
+    industry: isSpanish
+      ? ['Fintech', 'Insurtech', 'Industria / Minería', 'Retail / Comercio', 'Salud', 'Sector público', 'Otro']
+      : ['Fintech', 'Insurtech', 'Industry / Mining', 'Retail / Commerce', 'Health', 'Public sector', 'Other'],
+    timeline: isSpanish
+      ? ['Piloto ahora', 'Este trimestre', 'Explorando']
+      : ['Pilot now', 'This quarter', 'Exploring'],
+  }
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -54,6 +66,13 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
           <p className="text-lg max-w-xl" style={{ color: 'var(--ed-gray)' }}>
             {dictionary.cta.subtitle}
           </p>
+
+          {/* Certificado como confianza, no como galón: tu idea en buenas manos */}
+          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-5" style={{ borderTop: '1px solid var(--ed-line)' }}>
+            <ShieldCheck className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--ed-accent)' }} />
+            <span className="text-sm font-medium" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.trust.line}</span>
+            <span className="font-data text-[11px] tracking-wide w-full sm:w-auto sm:before:content-['·'] sm:before:mr-2 sm:before:opacity-40" style={{ color: 'var(--ed-gray)' }}>{dictionary.cta.trust.creds}</span>
+          </div>
         </motion.div>
 
         <motion.div
@@ -89,6 +108,32 @@ export default function CTA({ locale, dictionary }: BaseComponentProps) {
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.form.company}</label>
                 <input type="text" value={formState.company} onChange={(e) => setFormState({ ...formState, company: e.target.value })} className={inputClass} />
               </div>
+
+              {/* Screening rápido (opcional) */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{isSpanish ? '¿Qué necesitas?' : 'What do you need?'}</label>
+                <select value={formState.projectType} onChange={(e) => setFormState({ ...formState, projectType: e.target.value })} className={`${inputClass} appearance-none`}>
+                  <option value="">{isSpanish ? '— Selecciona (opcional) —' : '— Select (optional) —'}</option>
+                  {opts.projectType.map((o) => <option key={o} value={o}>{o}</option>)}
+                </select>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{isSpanish ? 'Sector' : 'Industry'}</label>
+                  <select value={formState.industry} onChange={(e) => setFormState({ ...formState, industry: e.target.value })} className={`${inputClass} appearance-none`}>
+                    <option value="">{isSpanish ? '— Opcional —' : '— Optional —'}</option>
+                    {opts.industry.map((o) => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{isSpanish ? '¿Para cuándo?' : 'Timeframe'}</label>
+                  <select value={formState.timeline} onChange={(e) => setFormState({ ...formState, timeline: e.target.value })} className={`${inputClass} appearance-none`}>
+                    <option value="">{isSpanish ? '— Opcional —' : '— Optional —'}</option>
+                    {opts.timeline.map((o) => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ed-ink)' }}>{dictionary.cta.form.message}</label>
                 <textarea rows={4} value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className={`${inputClass} resize-none`} />

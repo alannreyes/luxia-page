@@ -55,8 +55,9 @@ export function middleware(request: NextRequest) {
   // Detectar idioma preferido del usuario
   const locale = getLocale(request) || defaultLocale
 
-  // Redireccionar con el idioma detectado
-  const newUrl = new URL(`/${locale}${pathname}`, request.url)
+  // Redireccionar con el idioma detectado — en la raíz SIN slash final, para no provocar el
+  // segundo salto 308 de Next (/es/ → /es). Un solo salto: / → /es (bug GEO, ago-2026).
+  const newUrl = new URL(pathname === '/' ? `/${locale}` : `/${locale}${pathname}`, request.url)
   
   // Agregar header para analytics
   const response = NextResponse.redirect(newUrl)

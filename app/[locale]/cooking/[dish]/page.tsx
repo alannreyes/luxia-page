@@ -22701,9 +22701,29 @@ export default async function DishPage({ params }: PageProps) {
 
   const title = isSpanish ? dishData.titleEs : dishData.titleEn
   const levelInfo = levelLabels[dishData.level as keyof typeof levelLabels]
+  const dishDesc = isSpanish ? `Tutorial práctico: ${title}. Aprende haciéndolo, paso a paso, en LuxIA.` : `Hands-on tutorial: ${title}. Learn by doing, step by step, at LuxIA.`
+  const pageUrl = `https://luxia.us/${locale}/cooking/${dishSlug}`
 
   return (
     <div className="max-w-3xl mx-auto">
+      {/* JSON-LD · Article + BreadcrumbList (capa de entendimiento SEO+GEO, act. 2026-07-28) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'Article',
+        headline: title, description: dishDesc, inLanguage: locale,
+        datePublished: '2026-01-01', dateModified: '2026-07-28',
+        author: { '@type': 'Organization', name: 'LuxIA', url: 'https://luxia.us' },
+        publisher: { '@type': 'Organization', name: 'LuxIA', logo: { '@type': 'ImageObject', url: 'https://luxia.us/logo.png' } },
+        articleSection: dishData.level, image: 'https://luxia.us/og-image.jpg',
+        mainEntityOfPage: pageUrl, url: pageUrl,
+      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: isSpanish ? 'Inicio' : 'Home', item: `https://luxia.us/${locale}` },
+          { '@type': 'ListItem', position: 2, name: 'Cooking', item: `https://luxia.us/${locale}/cooking` },
+          { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+        ],
+      }) }} />
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm">
         <ol className="flex items-center gap-2 text-slate-500">

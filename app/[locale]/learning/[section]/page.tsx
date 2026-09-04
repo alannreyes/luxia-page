@@ -16719,8 +16719,29 @@ export default async function SectionPage({ params }: PageProps) {
   const title = isSpanish ? sectionData.titleEs : sectionData.titleEn
   const levelInfo = levelLabels[sectionData.level as keyof typeof levelLabels]
 
+  const articleDesc = sectionDescriptions[sectionSlug]?.[locale] || (isSpanish ? `Aprende ${title} en LuxIA — teoría y conceptos explicados de forma clara.` : `Learn ${title} at LuxIA — theory and concepts explained clearly.`)
+  const pageUrl = `https://luxia.us/${locale}/learning/${sectionSlug}`
+
   return (
     <div className="max-w-3xl mx-auto">
+      {/* JSON-LD · Article + BreadcrumbList (capa de entendimiento SEO+GEO, act. 2026-07-28) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'Article',
+        headline: title, description: articleDesc, inLanguage: locale,
+        datePublished: '2026-01-01', dateModified: '2026-07-28',
+        author: { '@type': 'Organization', name: 'LuxIA', url: 'https://luxia.us' },
+        publisher: { '@type': 'Organization', name: 'LuxIA', logo: { '@type': 'ImageObject', url: 'https://luxia.us/logo.png' } },
+        articleSection: sectionData.level, image: 'https://luxia.us/og-image.jpg',
+        mainEntityOfPage: pageUrl, url: pageUrl,
+      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: isSpanish ? 'Inicio' : 'Home', item: `https://luxia.us/${locale}` },
+          { '@type': 'ListItem', position: 2, name: 'Learning', item: `https://luxia.us/${locale}/learning` },
+          { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+        ],
+      }) }} />
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm">
         <ol className="flex items-center gap-2 text-slate-500">

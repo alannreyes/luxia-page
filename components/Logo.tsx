@@ -1,5 +1,4 @@
-import { siteConfig } from '@/lib/config'
-import Image from 'next/image'
+import LogoMark from './LogoMark'
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -8,65 +7,49 @@ interface LogoProps {
   variant?: 'default' | 'white' | 'dark'
 }
 
-const sizeClasses = {
+const markSize = {
+  sm: 'w-7 h-7',
+  md: 'w-9 h-9',
+  lg: 'w-12 h-12',
+  xl: 'w-16 h-16',
+}
+
+const textSize = {
   sm: 'text-xl',
-  md: 'text-3xl',
-  lg: 'text-4xl',
-  xl: 'text-5xl'
+  md: 'text-2xl',
+  lg: 'text-3xl',
+  xl: 'text-4xl',
 }
 
-const iconSizes = {
-  sm: { width: 48, height: 48 },     // Duplicado: de 24 a 48
-  md: { width: 64, height: 64 },     // Duplicado: de 32 a 64
-  lg: { width: 96, height: 96 },     // Duplicado: de 48 a 96
-  xl: { width: 128, height: 128 }    // Duplicado: de 64 a 128
+// lux = tinta/blanco según variante · IA = acento
+const wordTone = {
+  default: { lux: 'var(--ed-ink)', ia: 'var(--ed-accent)' },
+  white: { lux: '#ffffff', ia: '#8fa8ff' },
+  dark: { lux: 'var(--ed-ink)', ia: 'var(--ed-accent)' },
 }
 
-const variantClasses = {
-  default: 'text-slate-900 font-black',
-  white: 'text-white font-black',
-  dark: 'text-luxia-primary font-black'
-}
-
-export default function Logo({ 
-  size = 'md', 
-  showIcon = true, 
-  className = '',
-  variant = 'default'
-}: LogoProps) {
+export default function Logo({ size = 'md', showIcon = true, className = '', variant = 'default' }: LogoProps) {
+  const tone = variant === 'white' ? 'white' : 'color'
+  const w = wordTone[variant]
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
-      {showIcon && (
-        <Image
-          src="/logo.png"
-          alt="Luxia Logo"
-          width={iconSizes[size].width}
-          height={iconSizes[size].height}
-          className="object-contain"
-          priority
-        />
-      )}
-      <div className={`${sizeClasses[size]} ${variantClasses[variant]} tracking-tight`}>
-        {siteConfig.navigation.logo}
-      </div>
+    <div className={`flex items-center gap-2.5 ${className}`}>
+      {showIcon && <LogoMark tone={tone} className={`${markSize[size]} flex-none`} />}
+      <span className={`font-editorial font-extrabold tracking-[-0.03em] leading-none ${textSize[size]}`}>
+        <span style={{ color: w.lux }}>lux</span><span style={{ color: w.ia }}>IA</span>
+      </span>
     </div>
   )
 }
 
-// Exportar también como componente individual para casos específicos
-export const LogoText = ({ size = 'md', className = '', variant = 'default' }: Omit<LogoProps, 'showIcon'>) => (
-  <div className={`${sizeClasses[size]} font-bold ${variantClasses[variant]} ${className}`}>
-    {siteConfig.navigation.logo}
-  </div>
-)
+export const LogoText = ({ size = 'md', className = '', variant = 'default' }: Omit<LogoProps, 'showIcon'>) => {
+  const w = wordTone[variant]
+  return (
+    <span className={`font-editorial font-extrabold tracking-[-0.03em] ${textSize[size]} ${className}`}>
+      <span style={{ color: w.lux }}>lux</span><span style={{ color: w.ia }}>IA</span>
+    </span>
+  )
+}
 
-export const LogoIcon = ({ size = 'md', className = '' }: Omit<LogoProps, 'showIcon' | 'variant'>) => (
-  <Image
-    src="/logo.png"
-    alt="Luxia Logo"
-    width={iconSizes[size].width}
-    height={iconSizes[size].height}
-    className={`object-contain ${className}`}
-    priority
-  />
-) 
+export const LogoIcon = ({ size = 'md', className = '', variant = 'default' }: Omit<LogoProps, 'showIcon'>) => (
+  <LogoMark tone={variant === 'white' ? 'white' : 'color'} className={`${markSize[size]} ${className}`} />
+)

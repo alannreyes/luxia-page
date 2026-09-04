@@ -72,12 +72,17 @@ export function generateLocalizedMetadata(
       title: dictionary.meta.title,
       description: dictionary.meta.description,
       url: currentUrl,
+      siteName: 'LuxIA',
+      type: 'website',
       locale: locale === 'es' ? 'es_ES' : 'en_US',
       alternateLocale: locale === 'es' ? 'en_US' : 'es_ES',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: dictionary.meta.title }],
     },
     twitter: {
+      card: 'summary_large_image',
       title: dictionary.meta.title,
       description: dictionary.meta.description,
+      images: ['/og-image.jpg'],
     },
     alternates: {
       canonical: currentUrl,

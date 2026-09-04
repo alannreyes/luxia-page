@@ -28,9 +28,11 @@ export default function Footer({ locale, dictionary }: BaseComponentProps) {
               {[
                 { href: `/${locale}/services`, label: dictionary.nav.services },
                 { href: `/${locale}/cases`, label: dictionary.nav.cases },
+                { href: `/${locale}/insights`, label: dictionary.nav.insights },
                 { href: `/${locale}#fundador`, label: dictionary.nav.about },
                 { href: `/${locale}#contacto`, label: dictionary.footer.contact },
                 { href: `/${locale}/learning`, label: 'Learning' },
+                { href: `/${locale}/cooking`, label: 'Cooking' },
               ].map((l) => (
                 <Link key={l.href} href={l.href} className="block py-2 text-sm text-white/60 hover:text-white transition-colors">
                   {l.label}

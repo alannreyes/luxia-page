@@ -53,23 +53,27 @@ ${data.message}
 Enviado desde luxia.us
 `
 
-    const { error } = await resend.emails.send({
-      from: 'luxIA Contact <onboarding@resend.dev>',
-      to: ['alann@luxia.us'],
+    // Remitente y destinatario configurables por entorno (sin tocar código).
+    // Para entrega FIABLE: verificar el dominio luxia.us en Resend y usar RESEND_FROM=LuxIA <contacto@luxia.us>.
+    const from = process.env.RESEND_FROM || 'luxIA Contact <onboarding@resend.dev>'
+    const to = (process.env.RESEND_TO || 'alann@luxia.us').split(',').map((s) => s.trim())
+
+    const { data: sent, error } = await resend.emails.send({
+      from,
+      to,
       replyTo: data.email,
       subject: `[luxIA] Nueva consulta de ${data.name}${data.company ? ` - ${data.company}` : ''}`,
       text: emailContent,
     })
 
     if (error) {
-      console.error('Resend error:', error)
-      return NextResponse.json(
-        { error: 'Error enviando el mensaje' },
-        { status: 500 }
-      )
+      console.error('[contact] Resend error:', JSON.stringify(error))
+      return NextResponse.json({ error: 'Error enviando el mensaje' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true })
+    // Rastro para verificar entregas en el dashboard de Resend
+    console.log('[contact] enviado id=%s to=%s', sent?.id, to.join(','))
+    return NextResponse.json({ success: true, id: sent?.id ?? null })
   } catch (error) {
     console.error('Contact form error:', error)
     return NextResponse.json(

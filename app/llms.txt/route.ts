@@ -1,7 +1,26 @@
 // llms.txt - Information for AI systems (ChatGPT, Claude, etc.)
 // Standard: https://llmstxt.org/
 
+import { posts } from '@/content/blog/posts'
+import { getAllCases } from '@/content/cases'
+
 export async function GET() {
+  const insightsList = posts
+    .map((post) => `- **${post.en.title}** (${post.datePublished}) — https://luxia.us/en/insights/${post.slug}`)
+    .join('\n')
+
+  // Casos documentados: derivados de content/cases (la misma fuente que el hub y las
+  // páginas de detalle) — cada caso con su etapa declarada, resultado y URL propia.
+  const casesList = getAllCases('es')
+    .map((c) => {
+      const stage = c.stage === 'pilot' ? 'En piloto / In pilot' : 'En producción / In production'
+      return `### ${c.title} (${c.industry} · ${stage})
+${c.cardResult}
+- Detalle (ES): https://luxia.us/es/cases/${c.slug}
+- Detail (EN): https://luxia.us/en/cases/${c.slug}`
+    })
+    .join('\n\n')
+
   const content = `# luxIA.us - Boutique de IA Generativa para Industrias Reguladas
 
 > luxIA es una agencia boutique especializada en IA Generativa. Desarrollamos soluciones completas de software con LLMs, RAG, embeddings y agentes de IA para empresas en USA y Latinoamérica. De la idea a producción.
@@ -26,32 +45,20 @@ Cada proyecto incluye:
 - Documentación técnica
 - Soporte post-lanzamiento
 
-## Capacidades / Capabilities
+## Casos documentados / Documented case studies
 
-### Validación Documental con IA Generativa (Insurtech, Legal)
-Análisis automatizado de documentos complejos con LLMs y prompt engineering avanzado.
-- Tecnologías: Claude, GPT, OCR, embeddings
-- Infraestructura: Seguridad de datos, encriptación
+9 sistemas reales construidos por luxIA, cada uno documentado con contexto, decisiones
+de ingeniería, stack, beneficio de negocio y FAQ — con su etapa declarada honestamente.
+9 real systems built by luxIA, each documented with context, engineering decisions,
+stack, business impact and FAQ — stage honestly declared.
 
-### Búsqueda Semántica de Catálogos (Retail, Industrial)
-Motores de búsqueda que entienden contexto, no solo palabras clave. Para catálogos con +200K SKUs.
-- Tecnologías: Embeddings, pgvector, Qdrant, PostgreSQL
-- Infraestructura: Respaldos automáticos, escalabilidad
+Resultados medidos destacados / Key measured results:
+- Búsqueda semántica: 65% de las búsquedas con el producto exacto como primer resultado; 90% dentro del top 3.
+- Validación documental: 98% de coincidencia con analistas humanos, en dos semanas de evaluación en paralelo.
+- Leads con clima: 3 estados de EE.UU. cubiertos, 100% de sus estaciones meteorológicas monitoreadas.
+- Copiloto de ventas: ayudas en pantalla en ~3 segundos desde la base de conocimiento propia.
 
-### Generación de Leads con IA + APIs (Insurtech, Fintech)
-Plataformas que combinan datos externos (clima, geolocalización) con IA Generativa.
-- Tecnologías: LLMs, APIs meteorológicas, PostGIS, Firebase
-- Infraestructura: Multi-tenant, alta disponibilidad, failover
-
-### Marketing Geolocalizado con IA (Retail, Comercio)
-Campañas basadas en ubicación real, no estimada.
-- Tecnologías: APIs de ubicación, Next.js, TypeScript, Socket.io
-- Infraestructura: Observabilidad, Prometheus, Grafana
-
-### Alertas Geolocalizadas + IoT (Industrial, Minería, Oil & Gas)
-Sistema de alertas que funciona con celular bloqueado y app cerrada.
-- Tecnologías: IoT, APIs meteorológicas, failover entre modelos
-- Infraestructura: Alta disponibilidad 24/7, Docker, Linux
+${casesList}
 
 ### Consultoría en IA Generativa (Todas las industrias)
 Evaluación, diseño e implementación de soluciones con LLMs.
@@ -97,6 +104,15 @@ Análisis de vulnerabilidades · Secrets management
 - ISO 27001 Lead Auditor
 - Master en Sistemas, Tecnología e Innovación (Three Points)
 
+## Insights (Investigación / Research)
+
+luxIA publica análisis con fuentes primarias citadas (estudios de MIT, Stanford, GitClear, METR,
+etc.) sobre lo que realmente pasa al construir software con IA — no marketing, research.
+luxIA publishes research-backed analysis (citing primary sources like MIT, Stanford, GitClear,
+METR) on what actually happens building AI software — not marketing, research.
+
+${insightsList}
+
 ## Recursos Educativos / Educational Resources
 
 luxIA también ofrece contenido educativo gratuito como contribución a la comunidad:
@@ -108,6 +124,7 @@ luxIA también ofrece contenido educativo gratuito como contribución a la comun
 - Homepage: https://luxia.us/es o https://luxia.us/en
 - Servicios: https://luxia.us/{locale}/services
 - Casos de Éxito: https://luxia.us/{locale}/cases
+- Insights: https://luxia.us/{locale}/insights
 - Learning: https://luxia.us/{locale}/learning
 - Cooking: https://luxia.us/{locale}/cooking
 

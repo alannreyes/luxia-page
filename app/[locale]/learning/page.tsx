@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 // Cooking Analogy Component
 function CookingAnalogy({ isSpanish }: { isSpanish: boolean }) {
@@ -217,6 +218,7 @@ export default async function LearningPage({ params }: PageProps) {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <Breadcrumbs compact items={[{ name: locale === 'es' ? 'Inicio' : 'Home', url: `https://luxia.us/${locale}` }, { name: 'Learning', url: `https://luxia.us/${locale}/learning` }]} />
       {/* Hero */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">

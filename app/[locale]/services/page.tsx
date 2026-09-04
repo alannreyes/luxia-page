@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import FAQ from '@/components/FAQ'
 import { FileSearch, Search, CloudLightning, Brain, Ruler, MapPin, Shield, Server, Eye, Database, ArrowRight, CheckCircle2 } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -215,8 +217,9 @@ export default async function ServicesPage({ params }: PageProps) {
 
   return (
     <div style={{ backgroundColor: 'var(--ed-paper)' }}>
+      <Breadcrumbs items={[{ name: locale === 'es' ? 'Inicio' : 'Home', url: `https://luxia.us/${locale}` }, { name: locale === 'es' ? 'Servicios' : 'Services', url: `https://luxia.us/${locale}/services` }]} />
       {/* Hero Section */}
-      <section className="px-5 sm:px-8 pt-16 pb-16 md:pt-24 md:pb-20" style={{ backgroundColor: 'var(--ed-paper)' }}>
+      <section className="px-5 sm:px-8 pt-4 pb-16 md:pt-6 md:pb-20" style={{ backgroundColor: 'var(--ed-paper)' }}>
         <div className="max-w-5xl mx-auto">
           <p className="font-data text-xs tracking-[0.2em] uppercase mb-5" style={{ color: 'var(--ed-accent)' }}>
             {isSpanish ? 'Servicios · de la idea a producción' : 'Services · from idea to production'}
@@ -427,6 +430,20 @@ export default async function ServicesPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      <FAQ
+        title={isSpanish ? 'Preguntas frecuentes sobre nuestros servicios' : 'Frequently asked questions about our services'}
+        items={isSpanish ? [
+          { q: '¿Cuál es la diferencia entre "software a medida" e "IA para una tarea"?', a: 'Software a medida es cuando necesitas construir o acelerar un producto completo, con documentación, flexibilidad y cambios ilimitados. IA para una tarea concreta resuelve un problema puntual — análisis de documentos, búsqueda semántica, visión o alertas — con una solución enfocada.' },
+          { q: '¿Cómo garantizan que no sea solo un demo?', a: 'Todo se entrega a producción: autenticación, seguridad, pruebas y monitoreo, corriendo 24/7. Esa es la diferencia entre un prototipo bonito y software del que puedes depender.' },
+          { q: '¿Trabajan con datos regulados o sensibles?', a: 'Sí. El fundador es Auditor Líder ISO 27001 y aplica NIST CSF; diseñamos los controles de seguridad y cumplimiento desde el día uno, no como un parche al final.' },
+          { q: '¿Cómo empezamos a trabajar juntos?', a: 'Con un piloto acotado: una POC en horas o días para validar tu caso antes de invertir en escala. Escríbenos tu desafío y te damos ideas concretas.' },
+        ] : [
+          { q: 'What is the difference between "custom software" and "AI for a task"?', a: 'Custom software is when you need to build or accelerate a full product, with documentation, flexibility and unlimited changes. AI for a specific task solves a single problem — document analysis, semantic search, vision or alerting — with a focused solution.' },
+          { q: 'How do you make sure it is not just a demo?', a: 'Everything ships to production: authentication, security, testing and monitoring, running 24/7. That is the difference between a nice prototype and software you can rely on.' },
+          { q: 'Do you work with regulated or sensitive data?', a: 'Yes. The founder is an ISO 27001 Lead Auditor and applies NIST CSF; we design security and compliance controls from day one, not as an afterthought.' },
+          { q: 'How do we start working together?', a: 'With a scoped pilot: a POC in hours or days to validate your case before investing in scale. Tell us your challenge and we will come back with concrete ideas.' },
+        ]}
+      />
     </div>
   )
 }

@@ -1,120 +1,74 @@
-# 🎨 Identidad Corporativa luxIA
+# Marca luxIA — fuente única
 
-## 📋 Manual de Marca
+**La identidad vigente vive en el CÓDIGO del sitio, no en esta carpeta.** Antes había tres
+identidades distintas conviviendo aquí sin que ninguna coincidiera con lo que realmente se veía en
+luxia.us — una estrella gris de 8 puntas, después un sistema azul genérico ("sala de operaciones"),
+y por fin la actual. Las dos primeras se limpiaron el 2026-08-08 (SVGs rotos/genéricos, paleta
+`#3b82f6` que no es la del sitio, plantillas de tarjetas/correo con esos colores viejos). Si un
+archivo de identidad no está en las rutas de abajo, no es oficial — no reconstruir nada a mano.
 
-**luxIA** - La IA a tu medida
+## 1 · Dónde está cada cosa (las reales)
 
-### 🎯 **Concepto de Marca**
-- **Nombre**: luxIA (resaltando "IA" como elemento clave)
-- **Tagline**: "La IA a tu medida"
-- **Posicionamiento**: Partner estratégico en IA empresarial
-- **Personalidad**: Innovador, confiable, humano, estratégico
+| Qué | Dónde |
+|---|---|
+| **Isotipo** (rosa de los vientos facetada, plana) | `components/LogoMark.tsx` — SVG inline, fuente única del arte. 3 tonos: `color` / `white` / `ink`. |
+| **Wordmark completo** (isotipo + "lux"+"IA") | `components/Logo.tsx` — usa `LogoMark` + texto en `.font-editorial` (Bricolage Grotesque). |
+| **Colores** | `app/globals.css`, bloque `--ed-*` (sistema "editorial en luz", 2026). |
+| **Logo exportado (PNG 512, SEO/JSON-LD)** | `public/logo.png` — generado del mismo arte que `LogoMark.tsx`. |
+| **Logo exportado (SVG)** | `public/luxia-star.svg` — mismo arte, vectorial. |
+| **Favicons / apple-touch-icon / og-image** | `public/favicon.*`, `public/apple-touch-icon.png`, `public/og-image.jpg` — generados en el mismo lote (2026-07-27). |
 
----
+## 2 · Colores (`--ed-*`, `app/globals.css`)
 
-## 🎨 **Elementos Visuales**
+| Rol | Token | Hex |
+|---|---|---|
+| Papel (fondo) | `--ed-paper` | `#F7F8FA` |
+| Papel banda alterna | `--ed-paper-2` | `#EEF0F4` |
+| Tinta (texto/negros) | `--ed-ink` | `#0E1116` |
+| Gris secundario | `--ed-gray` | `#5B6270` |
+| Acento (azul eléctrico, "IA") | `--ed-accent` | `#2540FF` |
+| Hairline | `--ed-line` | `#E4E7EC` |
 
-### **Logo Principal**
-- **Icono**: Estrella de 8 puntas elaborada - Representa la excelencia y precisión en IA
-- **Tipografía**: Sans-serif moderna, peso bold
-- **Composición**: Icono + texto "luxIA"
-- **Colores**: Gris slate profesional con centro claro para contraste
+El isotipo usa su propio ramp de 3 azules (no el `--ed-accent` plano): `bright #2E4BFF` /
+`dark #1B2FB5` / `light #7C93FF` — es el degradado facetado que le da volumen a la rosa de los vientos.
 
-### **Paleta de Colores**
+> Existió antes un sistema "sala de operaciones" (`--lux-noche`, `--lux-senal #3B82F6`, `--lux-alba`
+> ámbar) — quedó retirado con el rediseño editorial de 2026-07-26. Sigue en `globals.css` por si
+> algún componente viejo aún lo referencia, pero **no es la identidad vigente**.
 
-#### **Colores Primarios**
-- **Gris Oscuro Principal**: `#1e293b` (RGB: 30, 41, 59) - Color principal de la nueva estrella
-- **Gris Medio**: `#475569` (RGB: 71, 85, 105) - Color secundario de la estrella 
-- **Gris Claro**: `#64748b` (RGB: 100, 116, 139) - Color de acento
-- **Blanco**: `#f8fafc` (RGB: 248, 250, 252) - Centro de la estrella y fondos claros
+## 3 · Tipografía
 
-#### **Colores Secundarios**
-- **Gris Profundo**: `#334155` (RGB: 51, 65, 85) - Para hover y estados activos
-- **Gris Suave**: `#e2e8f0` (RGB: 226, 232, 240) - Fondos sutiles
-- **Gris Muy Claro**: `#f1f5f9` (RGB: 241, 245, 249) - Fondos de sección
+- **Display** (`.font-editorial`): **Bricolage Grotesque**, vía `next/font/google` en `app/layout.tsx`.
+- **Cuerpo**: Inter.
+- **Datos/eyebrows** (`.font-data`): IBM Plex Mono.
 
-#### **Gradientes**
-- **Principal**: Linear `#1e293b` → `#475569` (135°) - Gradiente de la nueva identidad
-- **Suave**: Linear `#f8fafc` → `#e2e8f0` (180°) - Para fondos delicados
-- **Hover**: Linear `#334155` → `#1e293b` (135°) - Para efectos de interacción
+## 4 · Escritura del nombre y el dominio
 
-### **Tipografía**
-- **Principal**: Inter (Google Fonts)
-- **Pesos**: Regular (400), Medium (500), Bold (700)
-- **Fallback**: system-ui, -apple-system, sans-serif
+- **En prosa** ("la empresa", texto corrido): **LuxIA** (L mayúscula) — así lo usa el propio sitio
+  en `<title>`, meta description y el copy del hero.
+- **El dominio**, siempre: **`luxIA.us`** — "lux" minúsculas, "IA" mayúsculas, `.us` pegado al
+  final. Nunca "Luxia.us", "LUXIA.US" ni el dominio sin el `.us`.
+- **Pronunciación al narrar** (voz/video): "lux" + "IA" (deletreada, i-a) + ".us" dicho como
+  "punto u, ese" — nunca en inglés, nunca de corrido.
 
----
+## 5 · Qué se limpió el 2026-08-08
 
-## 📁 **Estructura de Archivos**
+Se borraron (recuperables del historial de git si hiciera falta):
 
 ```
-brand/
-├── README.md                    # Este archivo
-├── logos/                       # Logotipos
-│   ├── svg/                     # Vectoriales
-│   ├── png/                     # Rasterizados
-│   └── variations/              # Variaciones
-├── colors/                      # Paletas de colores
-├── typography/                  # Fuentes y especificaciones
-├── templates/                   # Plantillas
-│   ├── business-cards/          # Tarjetas de presentación
-│   ├── letterhead/              # Papelería
-│   ├── presentations/           # Presentaciones
-│   ├── social-media/            # Redes sociales
-│   └── email-signatures/        # Firmas de correo
-├── guidelines/                  # Guías de uso
-└── assets/                      # Recursos adicionales
+brand/README.md                              (identidad vieja: estrella gris de 8 puntas)
+brand/QUICK_START.md
+brand/guidelines/brand-guidelines.md         (identidad vieja: azul genérico #3b82f6)
+brand/colors/color-palette.css
+brand/logos/svg/*.svg                        (3 con el icono "Sparkles" genérico, 1 vacío)
+brand/templates/**                           (tarjetas/carta/firma/banner, con los colores viejos)
+components/Logo-new.tsx                      (pese al nombre, era la versión VIEJA — no la usaba nadie)
+components/Logo.md                           (documentaba Logo-new.tsx)
 ```
 
----
-
-## 🚀 **Casos de Uso**
-
-### **Digital**
-- ✅ Sitio web
-- ✅ Redes sociales (LinkedIn, Twitter)
-- ✅ Firmas de correo electrónico
-- ✅ Presentaciones digitales
-- ✅ Documentos PDF
-
-### **Impreso**
-- ✅ Tarjetas de presentación
-- ✅ Papelería (cartas, facturas)
-- ✅ Folletos y brochures
-- ✅ Roll-ups y banners
-- ✅ Merchandising
-
-### **Aplicaciones**
-- ✅ Favicons
-- ✅ App icons
-- ✅ Watermarks
-- ✅ Sellos digitales
+Si se necesita una plantilla de tarjeta/firma/banner en el futuro, se construye de nuevo desde los
+tokens `--ed-*` reales — no se recupera la vieja.
 
 ---
 
-## 📐 **Especificaciones Técnicas**
-
-### **Tamaños Mínimos**
-- **Digital**: 24px de altura
-- **Impreso**: 15mm de altura
-- **Área de protección**: 1x la altura del logo
-
-### **Formatos Disponibles**
-- **SVG**: Escalable, ideal para web
-- **PNG**: Transparente, alta calidad
-- **JPG**: Fondos sólidos
-- **PDF**: Impresión profesional
-- **EPS**: Diseño gráfico
-
----
-
-## 🎯 **Próximos Pasos**
-
-1. **Descargar** los archivos de la carpeta `brand/`
-2. **Personalizar** las plantillas con tu información
-3. **Mantener** consistencia en todos los materiales
-4. **Consultar** las guías antes de crear nuevos materiales
-
----
-
-*Identidad corporativa diseñada para luxIA - La IA a tu medida* ✨ 
+*Última actualización: 2026-08-08.*
